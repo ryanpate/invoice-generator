@@ -103,5 +103,6 @@ LOGGING = {
     },
 }
 
-# Require email verification in production
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+# Email verification disabled until SMTP credentials are configured
+# Change to 'mandatory' once EMAIL_HOST_USER and EMAIL_HOST_PASSWORD are set
+ACCOUNT_EMAIL_VERIFICATION = 'none'
