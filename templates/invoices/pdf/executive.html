@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @page {
+            size: letter;
+            margin: 0.75in;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 10pt;
+            color: #1E3A5F;
+            line-height: 1.6;
+            background: #FAFAFA;
+        }
+        .header {
+            background: linear-gradient(135deg, #1E3A5F 0%, #2D4A6F 100%);
+            color: white;
+            padding: 30px;
+            margin: -0.75in -0.75in 30px -0.75in;
+            width: calc(100% + 1.5in);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .company-logo {
+            max-width: 120px;
+            max-height: 50px;
+            margin-bottom: 15px;
+        }
+        .company-name {
+            font-size: 22pt;
+            font-weight: 400;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .company-details {
+            font-size: 9pt;
+            opacity: 0.85;
+        }
+        .invoice-badge {
+            text-align: right;
+        }
+        .invoice-badge h1 {
+            font-size: 12pt;
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            color: #C9A227;
+        }
+        .invoice-number {
+            font-size: 18pt;
+            font-weight: 700;
+        }
+        .gold-bar {
+            height: 4px;
+            background: #C9A227;
+            margin: 20px 0;
+        }
+        .meta-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border: 1px solid #E5E7EB;
+        }
+        .meta-block {
+            flex: 1;
+        }
+        .meta-label {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #C9A227;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .meta-value {
+            font-size: 10pt;
+        }
+        .meta-value strong {
+            font-size: 12pt;
+            display: block;
+            margin-bottom: 3px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: white;
+        }
+        th {
+            background: #1E3A5F;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 9pt;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .totals-section {
+            margin-left: auto;
+            width: 300px;
+            background: white;
+            border: 1px solid #E5E7EB;
+            padding: 20px;
+        }
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        .totals-row.divider {
+            border-top: 1px solid #C9A227;
+            margin-top: 10px;
+            padding-top: 15px;
+        }
+        .totals-row.total {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #1E3A5F;
+        }
+        .notes-section {
+            margin-top: 40px;
+            padding: 20px;
+            border-left: 3px solid #C9A227;
+            background: white;
+        }
+        .notes-title {
+            font-size: 10pt;
+            font-weight: 700;
+            color: #1E3A5F;
+            margin-bottom: 10px;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 9pt;
+            color: #6B7280;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 8pt;
+            color: #D1D5DB;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div>
+                {% if company.logo %}
+                <img src="{{ company.logo.url }}" class="company-logo" alt="{{ company.name }}">
+                {% endif %}
+                <div class="company-name">{{ company.name }}</div>
+                <div class="company-details">
+                    {% if company.address_line1 %}{{ company.address_line1 }} | {% endif %}
+                    {% if company.city %}{{ company.city }}, {{ company.state }}{% endif %}
+                    {% if company.phone %} | {{ company.phone }}{% endif %}
+                </div>
+            </div>
+            <div class="invoice-badge">
+                <h1>INVOICE</h1>
+                <div class="invoice-number">{{ invoice.invoice_number }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="meta-section">
+        <div class="meta-block">
+            <div class="meta-label">Bill To</div>
+            <div class="meta-value">
+                <strong>{{ invoice.client_name }}</strong>
+                {% if invoice.client_address %}{{ invoice.client_address|linebreaksbr }}{% endif %}
+                {% if invoice.client_email %}<br>{{ invoice.client_email }}{% endif %}
+            </div>
+        </div>
+        <div class="meta-block">
+            <div class="meta-label">Invoice Date</div>
+            <div class="meta-value">{{ invoice.invoice_date|date:"F d, Y" }}</div>
+            <div class="meta-label" style="margin-top: 15px;">Due Date</div>
+            <div class="meta-value">{{ invoice.due_date|date:"F d, Y" }}</div>
+        </div>
+        <div class="meta-block">
+            <div class="meta-label">Amount Due</div>
+            <div class="meta-value" style="font-size: 18pt; font-weight: 700; color: #1E3A5F;">
+                {{ currency_symbol }}{{ invoice.total|floatformat:2 }}
+            </div>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 50%">Description</th>
+                <th class="text-right" style="width: 15%">Qty</th>
+                <th class="text-right" style="width: 15%">Rate</th>
+                <th class="text-right" style="width: 20%">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in line_items %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td class="text-right">{{ item.quantity }}</td>
+                <td class="text-right">{{ currency_symbol }}{{ item.rate|floatformat:2 }}</td>
+                <td class="text-right">{{ currency_symbol }}{{ item.amount|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="totals-section">
+        <div class="totals-row">
+            <span>Subtotal</span>
+            <span>{{ currency_symbol }}{{ invoice.subtotal|floatformat:2 }}</span>
+        </div>
+        {% if invoice.tax_rate > 0 %}
+        <div class="totals-row">
+            <span>Tax ({{ invoice.tax_rate }}%)</span>
+            <span>{{ currency_symbol }}{{ invoice.tax_amount|floatformat:2 }}</span>
+        </div>
+        {% endif %}
+        <div class="totals-row divider total">
+            <span>Total Due</span>
+            <span>{{ currency_symbol }}{{ invoice.total|floatformat:2 }}</span>
+        </div>
+    </div>
+
+    {% if invoice.notes %}
+    <div class="notes-section">
+        <div class="notes-title">Payment Instructions</div>
+        {{ invoice.notes|linebreaksbr }}
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        Thank you for your business
+    </div>
+
+    {% if show_watermark %}
+    <div class="watermark">
+        Generated with Invoice Pro
+    </div>
+    {% endif %}
+</body>
+</html>

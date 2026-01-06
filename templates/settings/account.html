@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Account Settings - Invoice Generator Pro{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-900">
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'dashboard:index' %}" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                    </a>
+                    <h1 class="text-xl font-semibold text-white">Account Settings</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Settings Navigation -->
+        <div class="flex space-x-1 mb-8 bg-gray-800 p-1 rounded-lg">
+            <a href="{% url 'companies:settings' %}" class="flex-1 py-2 px-4 text-center rounded-md text-gray-400 hover:text-white hover:bg-gray-700 transition">
+                Company
+            </a>
+            <a href="{% url 'accounts:settings' %}" class="flex-1 py-2 px-4 text-center rounded-md bg-blue-600 text-white font-medium">
+                Account
+            </a>
+            <a href="{% url 'billing:overview' %}" class="flex-1 py-2 px-4 text-center rounded-md text-gray-400 hover:text-white hover:bg-gray-700 transition">
+                Billing
+            </a>
+        </div>
+
+        <!-- Profile Information -->
+        <form method="POST" action="{% url 'accounts:update_profile' %}">
+            {% csrf_token %}
+            <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 mb-6">
+                <h2 class="text-lg font-semibold text-white mb-4">Profile Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">First Name</label>
+                        <input type="text" name="first_name" value="{{ user.first_name }}"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
+                        <input type="text" name="last_name" value="{{ user.last_name }}"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                        <input type="email" name="email" value="{{ user.email }}"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        Update Profile
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Change Password -->
+        <form method="POST" action="{% url 'accounts:change_password' %}">
+            {% csrf_token %}
+            <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 mb-6">
+                <h2 class="text-lg font-semibold text-white mb-4">Change Password</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
+                        <input type="password" name="current_password"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">New Password</label>
+                        <input type="password" name="new_password1"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
+                        <input type="password" name="new_password2"
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        Update Password
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- API Key (for Business plan) -->
+        {% if user.subscription_tier == 'business' or user.subscription_tier == 'enterprise' %}
+        <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-white mb-4">API Access</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">API Key</label>
+                    <div class="flex space-x-3">
+                        <input type="text" value="{{ user.api_key|default:'Click Generate to create API key' }}" readonly id="apiKey"
+                            class="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-400 font-mono text-sm">
+                        <button type="button" onclick="copyApiKey()" class="px-4 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Use this key in the X-API-Key header for API requests</p>
+                </div>
+                <div class="flex items-center justify-between pt-4 border-t border-gray-700">
+                    <div>
+                        <p class="text-sm text-gray-300">API Calls This Month</p>
+                        <p class="text-2xl font-bold text-white">{{ user.api_calls_this_month }} <span class="text-sm font-normal text-gray-500">/ 1,000</span></p>
+                    </div>
+                    <form method="POST" action="{% url 'accounts:regenerate_api_key' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition text-sm">
+                            Regenerate Key
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 mb-6">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 bg-blue-900/50 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-medium text-white">API Access</h3>
+                    <p class="text-gray-400 text-sm mt-1">Upgrade to the Business plan to access the Invoice Generator API and automate your invoicing workflow.</p>
+                    <a href="{% url 'billing:plans' %}" class="inline-block mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
+                        Upgrade to Business
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Email Preferences -->
+        <form method="POST" action="{% url 'accounts:update_preferences' %}">
+            {% csrf_token %}
+            <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 mb-6">
+                <h2 class="text-lg font-semibold text-white mb-4">Email Preferences</h2>
+                <div class="space-y-4">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" name="email_invoice_created" checked
+                            class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500">
+                        <span class="text-gray-300">Email me when an invoice is created</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" name="email_batch_complete" checked
+                            class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500">
+                        <span class="text-gray-300">Email me when batch processing completes</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" name="email_product_updates"
+                            class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500">
+                        <span class="text-gray-300">Email me about product updates and new features</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" name="email_tips"
+                            class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500">
+                        <span class="text-gray-300">Email me tips for getting more from Invoice Generator</span>
+                    </label>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        Save Preferences
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Danger Zone -->
+        <div class="bg-gray-800 rounded-xl border border-red-900/50 p-6">
+            <h2 class="text-lg font-semibold text-red-400 mb-4">Danger Zone</h2>
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-300">Delete your account</p>
+                    <p class="text-sm text-gray-500">Once deleted, all your data will be permanently removed.</p>
+                </div>
+                <button type="button" onclick="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm">
+                    Delete Account
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+function copyApiKey() {
+    const apiKey = document.getElementById('apiKey');
+    apiKey.select();
+    document.execCommand('copy');
+    alert('API key copied to clipboard!');
+}
+
+function confirmDelete() {
+    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        if (confirm('This will permanently delete all your invoices and data. Type "DELETE" to confirm.')) {
+            // Submit delete form
+            window.location.href = "{% url 'accounts:delete_account' %}";
+        }
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Pricing - Invoice Generator Pro{% endblock %}
+
+{% block content %}
+<div class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
+            <p class="text-xl text-gray-600">Choose the plan that works for you</p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {% for key, tier in subscription_tiers.items %}
+            {% if key != 'enterprise' %}
+            <div class="{% if key == 'professional' %}ring-2 ring-primary-600 scale-105{% endif %} bg-white rounded-2xl shadow-lg overflow-hidden">
+                {% if key == 'professional' %}
+                <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">Most Popular</div>
+                {% endif %}
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ tier.name }}</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">${{ tier.price }}</span>
+                        <span class="text-gray-500">/month</span>
+                    </div>
+
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-gray-600">
+                                {% if tier.invoices_per_month == -1 %}Unlimited{% else %}{{ tier.invoices_per_month }}{% endif %} invoices per month
+                            </span>
+                        </li>
+
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 {% if not tier.watermark %}text-green-500{% else %}text-red-400{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if not tier.watermark %}M5 13l4 4L19 7{% else %}M6 18L18 6M6 6l12 12{% endif %}"></path>
+                            </svg>
+                            <span class="text-gray-600">
+                                {% if tier.watermark %}Includes watermark{% else %}No watermark{% endif %}
+                            </span>
+                        </li>
+
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-gray-600">
+                                {% if tier.templates == 'all' %}All 5 templates{% else %}{{ tier.templates|length }} template{% if tier.templates|length > 1 %}s{% endif %}{% endif %}
+                            </span>
+                        </li>
+
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 {% if tier.batch_upload %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="{% if tier.batch_upload %}text-gray-600{% else %}text-gray-400{% endif %}">
+                                CSV batch upload
+                            </span>
+                        </li>
+
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 {% if tier.api_access %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="{% if tier.api_access %}text-gray-600{% else %}text-gray-400{% endif %}">
+                                {% if tier.api_access %}API access ({{ tier.api_calls_per_month }} calls/mo){% else %}API access{% endif %}
+                            </span>
+                        </li>
+                    </ul>
+
+                    {% if user.is_authenticated %}
+                        {% if user.subscription_tier == key %}
+                            <button disabled class="block w-full text-center py-3 px-6 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed">
+                                Current Plan
+                            </button>
+                        {% else %}
+                            <a href="{% url 'billing:checkout' key %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
+                                {% if tier.price == 0 %}Switch to Free{% else %}Upgrade{% endif %}
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'account_signup' %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
+                            {% if tier.price == 0 %}Get Started Free{% else %}Start Free Trial{% endif %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="mt-20 max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold text-gray-900 text-center mb-8">Frequently Asked Questions</h2>
+
+            <div class="space-y-6">
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-2">Can I upgrade or downgrade anytime?</h3>
+                    <p class="text-gray-600">Yes! You can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the end of your billing cycle.</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-2">What happens if I exceed my invoice limit?</h3>
+                    <p class="text-gray-600">You'll be prompted to upgrade your plan. Your existing invoices remain accessible, but you won't be able to create new ones until you upgrade or wait for the next billing cycle.</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-2">Is there a free trial for paid plans?</h3>
+                    <p class="text-gray-600">Yes! All paid plans come with a 14-day free trial. No credit card required to start.</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-2">What payment methods do you accept?</h3>
+                    <p class="text-gray-600">We accept all major credit cards (Visa, Mastercard, American Express) through our secure payment processor, Stripe.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

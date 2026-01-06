@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}Billing - Invoice Generator Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">Billing & Subscription</h1>
+
+    <!-- Current Plan -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex justify-between items-start">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900">Current Plan</h2>
+                <div class="mt-4">
+                    <span class="text-3xl font-bold text-gray-900">{{ tier_config.name }}</span>
+                    {% if tier_config.price > 0 %}
+                    <span class="text-gray-500 ml-2">${{ tier_config.price }}/month</span>
+                    {% else %}
+                    <span class="text-gray-500 ml-2">Free</span>
+                    {% endif %}
+                </div>
+                <p class="text-gray-600 mt-2">
+                    {% if tier_config.invoices_per_month == -1 %}
+                    Unlimited invoices
+                    {% else %}
+                    {{ tier_config.invoices_per_month }} invoices per month
+                    {% endif %}
+                </p>
+            </div>
+            <div class="flex gap-3">
+                <a href="{% url 'billing:plans' %}" class="btn-secondary">Change Plan</a>
+                {% if user.stripe_customer_id %}
+                <a href="{% url 'billing:portal' %}" class="btn-outline">Manage Billing</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Usage -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">This Month's Usage</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Invoices -->
+            <div>
+                <div class="flex justify-between text-sm mb-2">
+                    <span class="text-gray-600">Invoices Created</span>
+                    <span class="text-gray-900 font-medium">
+                        {{ usage.invoices_created }} /
+                        {% if tier_config.invoices_per_month == -1 %}Unlimited{% else %}{{ tier_config.invoices_per_month }}{% endif %}
+                    </span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    <div class="bg-primary-600 h-3 rounded-full" style="width: {{ usage.usage_percentage }}%"></div>
+                </div>
+            </div>
+
+            <!-- API Calls -->
+            {% if tier_config.api_access %}
+            <div>
+                <div class="flex justify-between text-sm mb-2">
+                    <span class="text-gray-600">API Calls</span>
+                    <span class="text-gray-900 font-medium">
+                        {{ usage.api_calls }} / {{ tier_config.api_calls_per_month }}
+                    </span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                    {% with api_percent=usage.api_calls|divisibleby:tier_config.api_calls_per_month %}
+                    <div class="bg-green-600 h-3 rounded-full" style="width: {{ api_percent }}%"></div>
+                    {% endwith %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <p class="text-sm text-gray-500 mt-4">
+            Usage resets on the 1st of each month
+        </p>
+    </div>
+
+    <!-- Features -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Plan Features</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 {% if not tier_config.watermark %}text-green-500{% else %}text-red-400{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if not tier_config.watermark %}M5 13l4 4L19 7{% else %}M6 18L18 6M6 6l12 12{% endif %}"></path>
+                </svg>
+                <span class="text-sm text-gray-600">{% if tier_config.watermark %}Has Watermark{% else %}No Watermark{% endif %}</span>
+            </div>
+
+            <div class="flex items-center">
+                <svg class="w-5 h-5 {% if tier_config.batch_upload %}text-green-500{% else %}text-gray-300{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span class="text-sm {% if tier_config.batch_upload %}text-gray-600{% else %}text-gray-400{% endif %}">Batch Upload</span>
+            </div>
+
+            <div class="flex items-center">
+                <svg class="w-5 h-5 {% if tier_config.api_access %}text-green-500{% else %}text-gray-300{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span class="text-sm {% if tier_config.api_access %}text-gray-600{% else %}text-gray-400{% endif %}">API Access</span>
+            </div>
+
+            <div class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span class="text-sm text-gray-600">
+                    {% if tier_config.templates == 'all' %}All Templates{% else %}{{ tier_config.templates|length }} Template{% if tier_config.templates|length > 1 %}s{% endif %}{% endif %}
+                </span>
+            </div>
+        </div>
+
+        {% if current_tier == 'free' %}
+        <div class="mt-6 p-4 bg-primary-50 rounded-lg">
+            <p class="text-primary-800 text-sm">
+                <strong>Upgrade to remove the watermark</strong> and unlock more features like batch upload and API access.
+            </p>
+            <a href="{% url 'billing:plans' %}" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                View Plans &rarr;
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

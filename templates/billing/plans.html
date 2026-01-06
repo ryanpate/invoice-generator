@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Choose Your Plan - Invoice Generator Pro{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center mb-12">
+        <h1 class="text-3xl font-bold text-gray-900">Choose Your Plan</h1>
+        <p class="text-gray-600 mt-2">Upgrade or downgrade anytime</p>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-6">
+        {% for key, tier in plans.items %}
+        {% if key != 'enterprise' %}
+        <div class="{% if key == 'professional' %}ring-2 ring-primary-600 scale-105{% endif %} {% if current_tier == key %}bg-primary-50{% else %}bg-white{% endif %} rounded-2xl shadow-lg overflow-hidden">
+            {% if key == 'professional' %}
+            <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">Most Popular</div>
+            {% endif %}
+            {% if current_tier == key %}
+            <div class="bg-primary-100 text-primary-800 text-center py-2 text-sm font-medium">Current Plan</div>
+            {% endif %}
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900">{{ tier.name }}</h3>
+                <div class="my-4">
+                    <span class="text-4xl font-bold text-gray-900">${{ tier.price }}</span>
+                    <span class="text-gray-500">/mo</span>
+                </div>
+
+                <ul class="space-y-3 mb-6 text-sm">
+                    <li class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        {% if tier.invoices_per_month == -1 %}Unlimited{% else %}{{ tier.invoices_per_month }}{% endif %} invoices/mo
+                    </li>
+                    <li class="flex items-center text-gray-600">
+                        <svg class="w-5 h-5 {% if not tier.watermark %}text-green-500{% else %}text-red-400{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if not tier.watermark %}M5 13l4 4L19 7{% else %}M6 18L18 6M6 6l12 12{% endif %}"></path>
+                        </svg>
+                        {% if tier.watermark %}Has watermark{% else %}No watermark{% endif %}
+                    </li>
+                    <li class="flex items-center {% if tier.batch_upload %}text-gray-600{% else %}text-gray-400{% endif %}">
+                        <svg class="w-5 h-5 {% if tier.batch_upload %}text-green-500{% else %}text-gray-300{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Batch upload
+                    </li>
+                    <li class="flex items-center {% if tier.api_access %}text-gray-600{% else %}text-gray-400{% endif %}">
+                        <svg class="w-5 h-5 {% if tier.api_access %}text-green-500{% else %}text-gray-300{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        {% if tier.api_access %}API ({{ tier.api_calls_per_month }} calls){% else %}API access{% endif %}
+                    </li>
+                </ul>
+
+                {% if current_tier == key %}
+                <button disabled class="w-full py-3 px-6 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed">
+                    Current Plan
+                </button>
+                {% else %}
+                <a href="{% url 'billing:checkout' key %}" class="block w-full text-center py-3 px-6 {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
+                    {% if tier.price == 0 %}Switch to Free{% elif tier.price > plans|get_item:current_tier|get_item:'price' %}Upgrade{% else %}Downgrade{% endif %}
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="mt-12 text-center">
+        <p class="text-gray-600">
+            Need a custom plan? <a href="#" class="text-primary-600 hover:text-primary-700">Contact us</a> for Enterprise pricing.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Batch Upload - Invoice Generator Pro{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-900">
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'dashboard:index' %}" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                    </a>
+                    <h1 class="text-xl font-semibold text-white">Batch Upload</h1>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="#" class="text-blue-400 hover:text-blue-300 text-sm font-medium">
+                        Download CSV Template
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Upload Section -->
+        <div class="bg-gray-800 rounded-xl border border-gray-700 p-8">
+            <div class="text-center mb-8">
+                <div class="mx-auto w-16 h-16 bg-blue-900/50 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2">Upload Your CSV File</h2>
+                <p class="text-gray-400">Generate multiple invoices at once from a CSV file</p>
+            </div>
+
+            <!-- Drag & Drop Zone -->
+            <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                {% csrf_token %}
+                <div id="dropZone" class="border-2 border-dashed border-gray-600 rounded-xl p-12 text-center hover:border-blue-500 transition-colors cursor-pointer">
+                    <input type="file" name="csv_file" id="csvFile" accept=".csv" class="hidden">
+                    <div id="uploadPrompt">
+                        <svg class="mx-auto w-12 h-12 text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <p class="text-gray-300 mb-2">Drag and drop your CSV file here</p>
+                        <p class="text-gray-500 text-sm mb-4">or</p>
+                        <button type="button" onclick="document.getElementById('csvFile').click()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            Browse Files
+                        </button>
+                        <p class="text-gray-500 text-xs mt-4">Maximum file size: 10MB</p>
+                    </div>
+                    <div id="fileSelected" class="hidden">
+                        <svg class="mx-auto w-12 h-12 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <p class="text-white mb-2" id="fileName">File selected</p>
+                        <p class="text-gray-400 text-sm" id="fileSize">0 KB</p>
+                    </div>
+                </div>
+
+                <!-- Template Selection -->
+                <div class="mt-8">
+                    <label class="block text-sm font-medium text-gray-300 mb-3">Invoice Template</label>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="template_style" value="clean_slate" class="peer sr-only" checked>
+                            <div class="p-3 bg-gray-700 rounded-lg border-2 border-transparent peer-checked:border-blue-500 hover:bg-gray-600 transition">
+                                <div class="w-full h-16 bg-white rounded mb-2"></div>
+                                <p class="text-xs text-center text-gray-300">Clean Slate</p>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="template_style" value="executive" class="peer sr-only">
+                            <div class="p-3 bg-gray-700 rounded-lg border-2 border-transparent peer-checked:border-blue-500 hover:bg-gray-600 transition">
+                                <div class="w-full h-16 bg-gradient-to-b from-blue-900 to-blue-950 rounded mb-2"></div>
+                                <p class="text-xs text-center text-gray-300">Executive</p>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="template_style" value="bold_modern" class="peer sr-only">
+                            <div class="p-3 bg-gray-700 rounded-lg border-2 border-transparent peer-checked:border-blue-500 hover:bg-gray-600 transition">
+                                <div class="w-full h-16 bg-gradient-to-r from-purple-600 to-pink-500 rounded mb-2"></div>
+                                <p class="text-xs text-center text-gray-300">Bold Modern</p>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="template_style" value="classic_professional" class="peer sr-only">
+                            <div class="p-3 bg-gray-700 rounded-lg border-2 border-transparent peer-checked:border-blue-500 hover:bg-gray-600 transition">
+                                <div class="w-full h-16 bg-gray-200 rounded mb-2"></div>
+                                <p class="text-xs text-center text-gray-300">Classic</p>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer">
+                            <input type="radio" name="template_style" value="neon_edge" class="peer sr-only">
+                            <div class="p-3 bg-gray-700 rounded-lg border-2 border-transparent peer-checked:border-blue-500 hover:bg-gray-600 transition">
+                                <div class="w-full h-16 bg-gray-900 border border-cyan-500 rounded mb-2"></div>
+                                <p class="text-xs text-center text-gray-300">Neon Edge</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-8 flex justify-end space-x-4">
+                    <a href="{% url 'dashboard:index' %}" class="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition">
+                        Cancel
+                    </a>
+                    <button type="submit" id="processBtn" disabled class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        Process Invoices
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- CSV Format Guide -->
+        <div class="mt-8 bg-gray-800 rounded-xl border border-gray-700 p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">CSV Format Guide</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="text-left py-2 px-3 text-gray-400 font-medium">Column</th>
+                            <th class="text-left py-2 px-3 text-gray-400 font-medium">Required</th>
+                            <th class="text-left py-2 px-3 text-gray-400 font-medium">Description</th>
+                            <th class="text-left py-2 px-3 text-gray-400 font-medium">Example</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">invoice_number</td>
+                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
+                            <td class="py-2 px-3">Unique invoice identifier</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">INV-001</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">client_name</td>
+                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
+                            <td class="py-2 px-3">Client's full name or company</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">Acme Corp</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">client_email</td>
+                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
+                            <td class="py-2 px-3">Client's email address</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">billing@acme.com</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">item_description</td>
+                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
+                            <td class="py-2 px-3">Description of service/product</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">Web Development</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">quantity</td>
+                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
+                            <td class="py-2 px-3">Number of units</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">10</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">rate</td>
+                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
+                            <td class="py-2 px-3">Price per unit</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">150.00</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">tax_rate</td>
+                            <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
+                            <td class="py-2 px-3">Tax percentage (0-100)</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">8.5</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3 font-mono text-blue-400">due_date</td>
+                            <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
+                            <td class="py-2 px-3">Payment due date (YYYY-MM-DD)</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">2024-02-15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 p-4 bg-gray-700/50 rounded-lg">
+                <p class="text-sm text-gray-400">
+                    <strong class="text-gray-300">Tip:</strong> Multiple line items for the same invoice should have the same invoice_number. Each row with a unique invoice_number will create a new invoice.
+                </p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+const dropZone = document.getElementById('dropZone');
+const csvFile = document.getElementById('csvFile');
+const uploadPrompt = document.getElementById('uploadPrompt');
+const fileSelected = document.getElementById('fileSelected');
+const fileName = document.getElementById('fileName');
+const fileSize = document.getElementById('fileSize');
+const processBtn = document.getElementById('processBtn');
+
+dropZone.addEventListener('click', () => csvFile.click());
+
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.classList.add('border-blue-500', 'bg-blue-900/20');
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-blue-500', 'bg-blue-900/20');
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('border-blue-500', 'bg-blue-900/20');
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].name.endsWith('.csv')) {
+        csvFile.files = files;
+        showFileInfo(files[0]);
+    }
+});
+
+csvFile.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        showFileInfo(e.target.files[0]);
+    }
+});
+
+function showFileInfo(file) {
+    uploadPrompt.classList.add('hidden');
+    fileSelected.classList.remove('hidden');
+    fileName.textContent = file.name;
+    fileSize.textContent = formatFileSize(file.size);
+    processBtn.disabled = false;
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+</script>
+{% endblock %}
