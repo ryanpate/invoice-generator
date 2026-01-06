@@ -1,13 +1,22 @@
 """
 PDF generation service using WeasyPrint.
+Imports are lazy to allow app to start even if WeasyPrint deps are missing.
 """
 import os
 from io import BytesIO
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.files.base import ContentFile
-from weasyprint import HTML, CSS
-from weasyprint.text.fonts import FontConfiguration
+
+
+def get_weasyprint():
+    """Lazy import WeasyPrint to avoid startup failures."""
+    try:
+        from weasyprint import HTML, CSS
+        from weasyprint.text.fonts import FontConfiguration
+        return HTML, CSS, FontConfiguration, None
+    except OSError as e:
+        return None, None, None, str(e)
 
 
 class InvoicePDFGenerator:
@@ -83,6 +92,14 @@ class InvoicePDFGenerator:
 
     def generate(self):
         """Generate PDF and return as bytes."""
+        # Lazy import WeasyPrint
+        HTML, CSS, FontConfiguration, error = get_weasyprint()
+        if error:
+            raise RuntimeError(
+                f"PDF generation unavailable: {error}. "
+                "WeasyPrint requires system libraries (Pango, Cairo, GObject)."
+            )
+
         template_name = f'invoices/pdf/{self.invoice.template_style}.html'
 
         # Fallback to clean_slate if template doesn't exist

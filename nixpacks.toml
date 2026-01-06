@@ -2,18 +2,18 @@
 # WeasyPrint requires system libraries for PDF generation
 
 [phases.setup]
-nixPkgs = [
-    "python311",
-    "gcc",
-    "pango",
-    "cairo",
-    "gdk-pixbuf",
-    "glib",
-    "fontconfig",
-    "freetype",
-    "harfbuzz",
-    "libffi",
-    "zlib"
+nixPkgs = ["python311", "gcc"]
+aptPkgs = [
+    "libpango-1.0-0",
+    "libpangocairo-1.0-0",
+    "libpangoft2-1.0-0",
+    "libcairo2",
+    "libgdk-pixbuf2.0-0",
+    "libffi-dev",
+    "libglib2.0-0",
+    "libgobject-2.0-0",
+    "shared-mime-info",
+    "fonts-liberation"
 ]
 
 [phases.install]
