@@ -1,19 +1,18 @@
 # Nixpacks configuration for Railway
-# WeasyPrint requires system libraries for PDF generation
+# WeasyPrint requires system libraries for PDF generation - using nix packages for stability
 
 [phases.setup]
-nixPkgs = ["python311", "gcc"]
-aptPkgs = [
-    "libpango-1.0-0",
-    "libpangocairo-1.0-0",
-    "libpangoft2-1.0-0",
-    "libcairo2",
-    "libgdk-pixbuf2.0-0",
-    "libffi-dev",
-    "libglib2.0-0",
-    "libgobject-2.0-0",
+nixPkgs = [
+    "python311",
+    "gcc",
+    "pango",
+    "cairo",
+    "gdk-pixbuf",
+    "glib",
+    "fontconfig",
     "shared-mime-info",
-    "fonts-liberation"
+    "liberation_ttf",
+    "libffi"
 ]
 
 [phases.install]
