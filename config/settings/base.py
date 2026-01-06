@@ -33,9 +33,12 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
-    'djstripe',
     'django_celery_results',
 ]
+
+# Only add djstripe if Stripe is configured
+if config('STRIPE_TEST_SECRET_KEY', default='') or config('STRIPE_LIVE_SECRET_KEY', default=''):
+    THIRD_PARTY_APPS.append('djstripe')
 
 LOCAL_APPS = [
     'apps.accounts',

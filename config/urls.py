@@ -28,10 +28,11 @@ urlpatterns = [
 
     # API
     path('api/v1/', include('apps.api.urls')),
-
-    # Stripe webhooks
-    path('stripe/', include('djstripe.urls', namespace='djstripe')),
 ]
+
+# Stripe webhooks - only if djstripe is installed
+if 'djstripe' in settings.INSTALLED_APPS:
+    urlpatterns.append(path('stripe/', include('djstripe.urls', namespace='djstripe')))
 
 # Serve media files in development
 if settings.DEBUG:
