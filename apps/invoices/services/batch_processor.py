@@ -10,7 +10,7 @@ from django.core.files.base import ContentFile
 from django.utils import timezone
 
 from ..models import Invoice, LineItem, InvoiceBatch
-from .pdf_generator import InvoicePDFGenerator
+# PDF generator imported lazily to avoid WeasyPrint startup issues
 
 
 class CSVValidationError(Exception):
@@ -201,20 +201,29 @@ class BatchInvoiceProcessor:
 
             # Create invoices
             pdf_files = []
+            # Lazy import to avoid WeasyPrint startup issues
+            from .pdf_generator import InvoicePDFGenerator
+
             for client_name, client_data in clients.items():
                 try:
                     invoice = self.create_invoice_from_data(client_data)
                     self.invoices_created.append(invoice)
 
-                    # Generate PDF
-                    generator = InvoicePDFGenerator(invoice)
-                    generator.save_to_invoice()
+                    # Generate PDF (may fail if WeasyPrint deps not installed)
+                    try:
+                        generator = InvoicePDFGenerator(invoice)
+                        generator.save_to_invoice()
+                    except RuntimeError:
+                        # PDF generation unavailable, continue without PDF
+                        pass
 
-                    # Collect PDF for zip
-                    pdf_files.append((
-                        f"{invoice.invoice_number}.pdf",
-                        invoice.pdf_file.read()
-                    ))
+                    # Collect PDF for zip (if generated)
+                    if invoice.pdf_file:
+                        invoice.pdf_file.seek(0)
+                        pdf_files.append((
+                            f"{invoice.invoice_number}.pdf",
+                            invoice.pdf_file.read()
+                        ))
 
                     # Increment user's invoice count
                     user.increment_invoice_count()

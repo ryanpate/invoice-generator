@@ -13,7 +13,7 @@ from django.conf import settings
 
 from .models import Invoice, LineItem, InvoiceBatch
 from .forms import InvoiceForm, LineItemFormSet, BatchUploadForm
-from .services.pdf_generator import InvoicePDFGenerator
+# PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
 
 
@@ -216,8 +216,15 @@ def generate_pdf(request, pk):
         company__user=request.user
     )
 
-    generator = InvoicePDFGenerator(invoice)
-    pdf_bytes = generator.generate()
+    # Lazy import to avoid WeasyPrint startup issues
+    from .services.pdf_generator import InvoicePDFGenerator
+
+    try:
+        generator = InvoicePDFGenerator(invoice)
+        pdf_bytes = generator.generate()
+    except RuntimeError as e:
+        messages.error(request, str(e))
+        return redirect('invoices:detail', pk=pk)
 
     response = HttpResponse(pdf_bytes, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{invoice.invoice_number}.pdf"'
@@ -234,9 +241,15 @@ def download_pdf(request, pk):
     )
 
     if not invoice.pdf_file:
-        # Generate PDF if not exists
-        generator = InvoicePDFGenerator(invoice)
-        generator.save_to_invoice()
+        # Lazy import to avoid WeasyPrint startup issues
+        from .services.pdf_generator import InvoicePDFGenerator
+
+        try:
+            generator = InvoicePDFGenerator(invoice)
+            generator.save_to_invoice()
+        except RuntimeError as e:
+            messages.error(request, str(e))
+            return redirect('invoices:detail', pk=pk)
 
     return FileResponse(
         invoice.pdf_file.open('rb'),
