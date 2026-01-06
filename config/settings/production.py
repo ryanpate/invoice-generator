@@ -4,16 +4,19 @@ Production settings for Invoice Generator Pro on Railway.
 import dj_database_url
 from .base import *
 
-DEBUG = False
+# Allow DEBUG override via env for troubleshooting (default False)
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
 ALLOWED_HOSTS += ['.railway.app']
 
-# Security settings
-SECURE_SSL_REDIRECT = True
+# Security settings (disabled when DEBUG=True for troubleshooting)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
