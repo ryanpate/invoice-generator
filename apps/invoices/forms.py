@@ -12,6 +12,12 @@ from .models import Invoice, LineItem
 class InvoiceForm(forms.ModelForm):
     """Form for creating/editing invoices."""
 
+    # Override template_style as ChoiceField (CharField in model has no choices)
+    template_style = forms.ChoiceField(
+        choices=[],  # Will be populated in __init__
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
     class Meta:
         model = Invoice
         fields = [
@@ -58,9 +64,6 @@ class InvoiceForm(forms.ModelForm):
                 'class': 'form-textarea',
                 'rows': 3,
                 'placeholder': 'Payment instructions, thank you message, etc.'
-            }),
-            'template_style': forms.Select(attrs={
-                'class': 'form-select'
             }),
         }
 
