@@ -18,7 +18,7 @@ class StaticViewSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['/', '/pricing/', '/contact/', '/help/', '/privacy/', '/terms/']
+        return ['/', '/pricing/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/']
 
     def location(self, item):
         return item
@@ -86,6 +86,7 @@ urlpatterns = [
     path('help/', TemplateView.as_view(template_name='pages/help.html'), name='help'),
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
     path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),
+    path('api/docs/', TemplateView.as_view(template_name='pages/api_docs.html'), name='api_docs'),
 ]
 
 # Stripe webhooks - only if djstripe is installed
