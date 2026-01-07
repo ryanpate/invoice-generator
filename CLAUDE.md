@@ -38,7 +38,7 @@
 - Welcome email on signup (via Resend SMTP)
 - Invoice email sending with PDF attachment and customizable message
 - Payment receipt emails (auto-sent when invoice marked as paid)
-- Social login with Google and GitHub (requires OAuth credentials in Django admin)
+- Social login with Google and GitHub (OAuth fully configured via environment variables)
 
 ### Suppressed/Disabled Features
 
@@ -47,7 +47,6 @@
 | Email Verification | Disabled | Not required for MVP | Change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
 | Celery/Redis | Disabled | No Redis configured | Add Redis service on Railway, set `REDIS_URL` env var |
-| Social Auth (Google/GitHub) | UI Only | OAuth not configured | Configure in django-allauth + provider settings |
 | Healthcheck | Removed | Startup time exceeds Railway timeout | Re-add to `railway.json` if startup is optimized |
 
 ---
@@ -78,7 +77,7 @@
   - [x] Welcome email on signup - COMPLETED (via Resend SMTP)
   - [x] Invoice sent notifications - COMPLETED (via Send Invoice feature)
   - [x] Payment receipts - COMPLETED (auto-sends to client + business owner when marked as paid)
-- [x] **Social Authentication:** Google and GitHub OAuth configured (requires OAuth app setup in Django admin)
+- [x] **Social Authentication:** Google and GitHub OAuth fully configured via env vars - COMPLETED
 - [x] **Invoice Email Sending:** Send invoices directly to clients via email with PDF attachment - COMPLETED
 - [ ] **Blog/Content Marketing:** Create `/blog/` section for SEO content
 
@@ -119,6 +118,10 @@
 - `DEFAULT_FROM_EMAIL` - InvoiceKits <noreply@invoicekits.com> (configured)
 - `SITE_URL` - https://www.invoicekits.com (configured)
 - `DOMAIN` - invoicekits.com (configured)
+- `GOOGLE_OAUTH_CLIENT_ID` - Google OAuth client ID (configured)
+- `GOOGLE_OAUTH_CLIENT_SECRET` - Google OAuth client secret (configured)
+- `GITHUB_OAUTH_CLIENT_ID` - GitHub OAuth client ID (configured)
+- `GITHUB_OAUTH_CLIENT_SECRET` - GitHub OAuth client secret (configured)
 
 ### Optional - Not Yet Configured
 ```bash
@@ -339,6 +342,8 @@ Authentication: API Key in header `X-API-Key: <key>`
 45. Configured Google and GitHub social login with django-allauth
 46. Added SOCIALACCOUNT_PROVIDERS settings for Google and GitHub OAuth
 47. Updated login and signup templates with provider login URLs
+48. Created data migration to configure OAuth apps from environment variables
+49. Fixed OAuth migration timing issue with ensure_oauth_apps migration
 
 ---
 
@@ -383,3 +388,4 @@ python manage.py test
 - [x] Configure email delivery (Resend SMTP)
 - [x] Set up Google Analytics (G-0NR5NZMNBF)
 - [x] Register with Google Search Console
+- [x] Configure Google and GitHub OAuth social login
