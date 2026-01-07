@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Complete Signup - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <!-- Logo and Header -->
+        <div class="text-center">
+            <a href="{% url 'invoices:landing' %}" class="inline-flex items-center space-x-2">
+                <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <span class="text-2xl font-bold text-gray-900 dark:text-white">Invoice<span class="text-blue-500">Kits</span></span>
+            </a>
+            <h2 class="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">Complete your signup</h2>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                You're signing up with
+                <span class="font-semibold text-blue-600 dark:text-blue-400">{{ account.get_provider.name }}</span>
+            </p>
+        </div>
+
+        <!-- Info Badge -->
+        <div class="bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 border border-blue-300 dark:border-blue-500/50 rounded-lg p-4 text-center">
+            <p class="text-blue-700 dark:text-blue-300 font-medium">Almost there! Just confirm your details below.</p>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+            <form class="space-y-5" method="POST" action="{% url 'socialaccount_signup' %}">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-100 dark:bg-red-900/50 border border-red-400 dark:border-red-500 text-red-700 dark:text-red-200 px-4 py-3 rounded-lg">
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {{ field.label }}
+                        {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+                    </label>
+                    <div class="mt-1">
+                        {% if field.field.widget.input_type == 'checkbox' %}
+                        <div class="flex items-center">
+                            <input type="checkbox" name="{{ field.name }}" id="{{ field.id_for_label }}"
+                                {% if field.value %}checked{% endif %}
+                                class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700">
+                            <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ field.help_text }}</span>
+                        </div>
+                        {% else %}
+                        <input type="{{ field.field.widget.input_type|default:'text' }}"
+                            name="{{ field.name }}"
+                            id="{{ field.id_for_label }}"
+                            value="{{ field.value|default:'' }}"
+                            {% if field.field.required %}required{% endif %}
+                            class="appearance-none block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                        {% endif %}
+                    </div>
+                    {% if field.errors %}
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ field.errors.0 }}</p>
+                    {% endif %}
+                    {% if field.help_text and field.field.widget.input_type != 'checkbox' %}
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ field.help_text }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <div class="pt-2">
+                    <button type="submit"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+                        Complete Signup
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6 text-center">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Want to use a different account?
+                    <a href="{% url 'account_signup' %}" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500">
+                        Sign up with email
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Features List -->
+        <div class="bg-white/50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">What you get with your free account:</p>
+            <ul class="space-y-2">
+                <li class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                    <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    5 professional invoices per month
+                </li>
+                <li class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                    <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    PDF download & email delivery
+                </li>
+                <li class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                    <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Company logo branding
+                </li>
+                <li class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                    <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Multiple template styles
+                </li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+            By signing up, you agree to our
+            <a href="{% url 'terms' %}" class="text-blue-600 dark:text-blue-400 hover:text-blue-500">Terms of Service</a>
+            and
+            <a href="{% url 'privacy' %}" class="text-blue-600 dark:text-blue-400 hover:text-blue-500">Privacy Policy</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
