@@ -66,7 +66,10 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@invoicegenerator.pro')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='InvoiceKits <noreply@invoicekits.com>')
+
+# Site URL for emails and links
+SITE_URL = config('SITE_URL', default='https://www.invoicekits.com')
 
 # Celery
 CELERY_BROKER_URL = config('REDIS_URL', default='')
