@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
+    <!-- Theme initialization (prevents flash) -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}InvoiceKits{% endblock %}</title>
@@ -26,6 +35,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -108,9 +118,9 @@
     </script>
     {% block extra_schema %}{% endblock %}
 </head>
-<body class="h-full bg-gray-50">
+<body class="h-full bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -118,27 +128,47 @@
                         <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        <span class="text-xl font-bold text-gray-900">Invoice<span class="text-primary-600">Kits</span></span>
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">Invoice<span class="text-primary-600">Kits</span></span>
                     </a>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-4">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'accounts:dashboard' %}" class="text-gray-600 hover:text-gray-900 px-3 py-2">Dashboard</a>
-                        <a href="{% url 'invoices:list' %}" class="text-gray-600 hover:text-gray-900 px-3 py-2">Invoices</a>
-                        <a href="{% url 'billing:overview' %}" class="text-gray-600 hover:text-gray-900 px-3 py-2">Billing</a>
+                        <a href="{% url 'accounts:dashboard' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">Dashboard</a>
+                        <a href="{% url 'invoices:list' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">Invoices</a>
+                        <a href="{% url 'billing:overview' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">Billing</a>
                         <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center space-x-2 text-gray-600 hover:text-gray-900 px-3 py-2">
+                            <button @click="open = !open" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">
                                 <span>{{ user.email }}</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
                         </div>
-                        <a href="{% url 'account_logout' %}" class="btn-secondary">Logout</a>
+                        <!-- Theme Toggle -->
+                        <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5 transition-colors" title="Toggle dark/light mode">
+                            <!-- Sun icon (shown in dark mode) -->
+                            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                            </svg>
+                            <!-- Moon icon (shown in light mode) -->
+                            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                            </svg>
+                        </button>
+                        <a href="{% url 'account_logout' %}" class="btn-secondary dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">Logout</a>
                     {% else %}
-                        <a href="{% url 'invoices:pricing' %}" class="text-gray-600 hover:text-gray-900 px-3 py-2">Pricing</a>
-                        <a href="{% url 'account_login' %}" class="text-gray-600 hover:text-gray-900 px-3 py-2">Login</a>
+                        <a href="{% url 'invoices:pricing' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">Pricing</a>
+                        <a href="{% url 'account_login' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">Login</a>
+                        <!-- Theme Toggle (for non-authenticated users) -->
+                        <button id="theme-toggle-guest" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5 transition-colors" title="Toggle dark/light mode">
+                            <svg id="theme-toggle-light-icon-guest" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+                            </svg>
+                            <svg id="theme-toggle-dark-icon-guest" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                            </svg>
+                        </button>
                         <a href="{% url 'account_signup' %}" class="btn-primary">Get Started Free</a>
                     {% endif %}
                 </div>
@@ -159,7 +189,7 @@
     {% if messages %}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
         {% for message in messages %}
-        <div class="mb-2 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+        <div class="mb-2 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300{% elif message.tags == 'success' %}bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300{% else %}bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300{% endif %}">
             {{ message }}
         </div>
         {% endfor %}
@@ -173,37 +203,37 @@
 
     <!-- Footer -->
     {% block footer %}
-    <footer class="bg-white border-t border-gray-200 mt-auto">
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Product</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Product</h3>
                     <ul class="mt-4 space-y-2">
-                        <li><a href="{% url 'invoices:pricing' %}" class="text-gray-600 hover:text-gray-900">Pricing</a></li>
-                        <li><a href="#features" class="text-gray-600 hover:text-gray-900">Features</a></li>
-                        <li><a href="/api/docs/" class="text-gray-600 hover:text-gray-900">API</a></li>
+                        <li><a href="{% url 'invoices:pricing' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Pricing</a></li>
+                        <li><a href="#features" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Features</a></li>
+                        <li><a href="/api/docs/" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">API</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Support</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Support</h3>
                     <ul class="mt-4 space-y-2">
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Help Center</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Help Center</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Contact Us</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Legal</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Legal</h3>
                     <ul class="mt-4 space-y-2">
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Terms of Service</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">InvoiceKits</h3>
-                    <p class="mt-4 text-gray-600 text-sm">Professional invoice generation for freelancers and small businesses.</p>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">InvoiceKits</h3>
+                    <p class="mt-4 text-gray-600 dark:text-gray-400 text-sm">Professional invoice generation for freelancers and small businesses.</p>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
+            <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center text-gray-500 dark:text-gray-400 text-sm">
                 &copy; {% now "Y" %} InvoiceKits. All rights reserved.
             </div>
         </div>
@@ -211,5 +241,71 @@
     {% endblock %}
 
     {% block extra_js %}{% endblock %}
+
+    <!-- Theme Toggle Script -->
+    <script>
+        (function() {
+            // Get all toggle buttons and icons
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleBtnGuest = document.getElementById('theme-toggle-guest');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIconGuest = document.getElementById('theme-toggle-light-icon-guest');
+            const darkIconGuest = document.getElementById('theme-toggle-dark-icon-guest');
+
+            // Set the initial icon visibility based on current theme
+            function updateIcons() {
+                const isDark = document.documentElement.classList.contains('dark');
+
+                // Authenticated user icons
+                if (lightIcon && darkIcon) {
+                    if (isDark) {
+                        lightIcon.classList.remove('hidden');
+                        darkIcon.classList.add('hidden');
+                    } else {
+                        lightIcon.classList.add('hidden');
+                        darkIcon.classList.remove('hidden');
+                    }
+                }
+
+                // Guest user icons
+                if (lightIconGuest && darkIconGuest) {
+                    if (isDark) {
+                        lightIconGuest.classList.remove('hidden');
+                        darkIconGuest.classList.add('hidden');
+                    } else {
+                        lightIconGuest.classList.add('hidden');
+                        darkIconGuest.classList.remove('hidden');
+                    }
+                }
+            }
+
+            // Toggle theme function
+            function toggleTheme() {
+                const isDark = document.documentElement.classList.contains('dark');
+
+                if (isDark) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+
+                updateIcons();
+            }
+
+            // Initialize icons on page load
+            updateIcons();
+
+            // Add click handlers
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', toggleTheme);
+            }
+            if (themeToggleBtnGuest) {
+                themeToggleBtnGuest.addEventListener('click', toggleTheme);
+            }
+        })();
+    </script>
 </body>
 </html>
