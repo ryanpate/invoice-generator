@@ -21,11 +21,15 @@ class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
         fields = [
-            'client_name', 'client_email', 'client_phone', 'client_address',
+            'invoice_name', 'client_name', 'client_email', 'client_phone', 'client_address',
             'invoice_date', 'payment_terms', 'currency', 'tax_rate',
             'notes', 'template_style'
         ]
         widgets = {
+            'invoice_name': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'e.g., Website Redesign Project (optional)'
+            }),
             'client_name': forms.TextInput(attrs={
                 'class': 'form-input',
                 'placeholder': 'Client or Company Name'

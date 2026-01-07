@@ -64,6 +64,11 @@
                     <h2 class="text-lg font-semibold text-gray-900 mb-4">Invoice Details</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Name</label>
+                            {{ form.invoice_name }}
+                            <p class="text-gray-500 text-xs mt-1">Optional - helps you identify this invoice (e.g., "Q1 Consulting Services")</p>
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Date</label>
                             {{ form.invoice_date }}

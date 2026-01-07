@@ -27,6 +27,11 @@ class Invoice(models.Model):
 
     # Invoice details
     invoice_number = models.CharField(max_length=50)
+    invoice_name = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text='Optional name/description for this invoice (e.g., "Website Redesign Project")'
+    )
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
@@ -84,6 +89,8 @@ class Invoice(models.Model):
         ]
 
     def __str__(self):
+        if self.invoice_name:
+            return f"{self.invoice_number} - {self.invoice_name}"
         return f"{self.invoice_number} - {self.client_name}"
 
     def save(self, *args, **kwargs):
