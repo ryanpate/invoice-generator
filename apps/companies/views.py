@@ -17,7 +17,7 @@ class CompanySettingsView(LoginRequiredMixin, UpdateView):
     """Edit company settings."""
     model = Company
     form_class = CompanyForm
-    template_name = 'companies/settings.html'
+    template_name = 'settings/company.html'
     success_url = reverse_lazy('companies:settings')
 
     def get_object(self, queryset=None):
