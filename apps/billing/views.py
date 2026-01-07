@@ -63,11 +63,11 @@ def create_checkout_session(request, plan):
     # Initialize Stripe
     stripe.api_key = settings.STRIPE_TEST_SECRET_KEY if not settings.STRIPE_LIVE_MODE else settings.STRIPE_LIVE_SECRET_KEY
 
-    # Map plan to Stripe price ID (you would create these in Stripe Dashboard)
+    # Stripe price IDs (from Stripe Dashboard)
     price_ids = {
-        'starter': 'price_starter_monthly',  # Replace with actual Stripe price IDs
-        'professional': 'price_professional_monthly',
-        'business': 'price_business_monthly',
+        'starter': 'price_1Smy2w6oOlORkbTyjs4TGG8s',       # $9/month
+        'professional': 'price_1Smy3O6oOlORkbTySI4fCIod',  # $29/month
+        'business': 'price_1Smy4p6oOlORkbTyXe9hIMKE',      # $79/month
     }
 
     price_id = price_ids.get(plan)
