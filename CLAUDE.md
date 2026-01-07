@@ -92,12 +92,74 @@
 - [ ] **Client Portal:** Allow clients to view/pay invoices online
 - [ ] **Multi-language Support:** i18n for international users
 
-### SEO Improvements - Future
-- [ ] **Dynamic Sitemap:** Add invoice public links to sitemap (if public sharing enabled)
-- [ ] **Blog Posts:** Create keyword-rich content for organic traffic
-- [ ] **Backlink Outreach:** Partner with freelancer/small business sites
-- [ ] **Page Speed Optimization:** Lazy loading, image optimization, CDN
-- [ ] **Core Web Vitals:** Monitor and improve LCP, FID, CLS scores
+### SEO - Critical (Week 1)
+- [ ] **Fix Canonical URL:** Update `templates/base.html` line 29 to use `https://www.invoicekits.com` (currently non-www)
+- [ ] **Fix Robots.txt Sitemap URL:** Update `config/urls.py` line 61 to use `https://www.invoicekits.com/sitemap.xml`
+- [ ] **Submit Sitemap to GSC:** Submit sitemap.xml via Google Search Console
+- [ ] **Request Indexing:** Use GSC URL Inspection tool for all 7 public pages
+- [ ] **Add Favicon:** Add favicon link tags to `templates/base.html`
+- [ ] **Add Open Graph Images:** Create 1200x630px images for homepage, pricing, templates
+
+### SEO - High Priority (Weeks 2-4)
+- [ ] **Update Homepage Meta Description:** Expand to 160 characters with more keywords
+- [ ] **Update Pricing Page Title:** Change from "Pricing - InvoiceKits" to "Invoice Generator Pricing - Plans from $9/mo | InvoiceKits"
+- [ ] **Add Pricing Page Meta Description:** Custom description with tier details
+- [ ] **Increase Keyword Density:** Add "invoice generator" 2-3 more times naturally to homepage
+- [ ] **Add BreadcrumbList Schema:** Implement breadcrumb navigation and schema on internal pages
+- [ ] **Add Customer Testimonials:** Social proof section on homepage
+- [ ] **Create Blog Section:** Launch `/blog/` with Django blog app
+- [ ] **Blog Post 1:** "How to Create a Professional Invoice in 2026 (Free Template)"
+- [ ] **Blog Post 2:** "Invoice Best Practices for Freelancers: 10 Tips to Get Paid Faster"
+- [ ] **Blog Post 3:** "Batch Invoice Processing: Save Hours on Client Billing"
+- [ ] **Blog Post 4:** "Small Business Invoicing Guide: Templates, Terms, and Tools"
+- [ ] **Blog Post 5:** "Invoice vs Receipt: What's the Difference?"
+
+### SEO - Content Pages (Month 2)
+- [ ] **Template Showcase - Clean Slate:** `/templates/clean-slate/` with screenshots, use cases
+- [ ] **Template Showcase - Executive:** `/templates/executive/`
+- [ ] **Template Showcase - Bold Modern:** `/templates/bold-modern/`
+- [ ] **Template Showcase - Classic Professional:** `/templates/classic-professional/`
+- [ ] **Template Showcase - Neon Edge:** `/templates/neon-edge/`
+- [ ] **Landing Page - For Freelancers:** `/for-freelancers/` role-specific benefits
+- [ ] **Landing Page - For Small Business:** `/for-small-business/`
+- [ ] **Landing Page - For Consultants:** `/for-consultants/`
+- [ ] **Comparison Page:** "InvoiceKits vs Invoice-Generator.com"
+- [ ] **Comparison Page:** "InvoiceKits vs Canva Invoice Maker"
+
+### SEO - Link Building (Month 2-3)
+- [ ] **Submit to Product Hunt:** Launch on Product Hunt
+- [ ] **Submit to Capterra:** Create business listing
+- [ ] **Submit to G2:** Create business listing
+- [ ] **Quora Presence:** Answer invoicing questions with links
+- [ ] **Reddit Presence:** Engage in r/freelance, r/smallbusiness
+- [ ] **Guest Posts:** Reach out to freelancer/entrepreneur blogs
+- [ ] **Free Resources:** Create downloadable invoice templates/checklists
+
+### SEO - Advanced (Month 3-6)
+- [ ] **FAQ Schema:** Add FAQ structured data to pricing and help pages
+- [ ] **Video Tutorials:** Create YouTube content, embed on site
+- [ ] **Industry Reports:** "State of Freelance Invoicing 2026"
+- [ ] **Free Tools:** Invoice calculator, late fee calculator
+- [ ] **Affiliate Program:** Incentivize backlinks
+- [ ] **Core Web Vitals:** Run PageSpeed Insights audit, optimize LCP/FID/CLS
+- [ ] **Dynamic Sitemap:** Add invoice public links (if public sharing enabled)
+- [ ] **International SEO:** Alternate language versions if targeting international markets
+
+### SEO Target Keywords
+**High Priority (Unique Opportunity - Low Competition):**
+- "batch invoice generator" (720/mo)
+- "CSV invoice upload" (590/mo)
+- "bulk invoice generation" (480/mo)
+
+**Medium Priority (Informational):**
+- "how to create an invoice" (33K/mo)
+- "freelance invoice template" (8K/mo)
+- "invoice best practices" (1.3K/mo)
+
+**Long-term Targets (High Competition):**
+- "free invoice generator" (110K/mo)
+- "invoice template" (90K/mo)
+- "invoice maker free" (49K/mo)
 
 ---
 
