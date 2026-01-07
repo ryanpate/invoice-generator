@@ -3,6 +3,8 @@
 ## Live Site
 **URL:** https://web-production-faa7d.up.railway.app/
 
+**Domain:** invoicekits.com (pending DNS configuration)
+
 **Deployment:** Railway with Nixpacks builder
 
 ---
@@ -13,16 +15,17 @@
 - Landing page with pricing display
 - User authentication (signup/login/logout via django-allauth)
 - User dashboard with invoice stats
-- Invoice creation with dynamic line items
-- PDF generation with 5 template styles (WeasyPrint)
-- Invoice list with search and status filters
-- Invoice detail view
+- Invoice creation with dynamic line items and optional invoice name
+- PDF generation with 5 template styles (xhtml2pdf)
+- Invoice list with search and status filters (shows invoice name)
+- Invoice detail view (shows invoice name)
 - Batch CSV upload (for Professional+ plans)
 - CSV template download
 - Company profile management
 - Billing/subscription UI pages
 - REST API endpoints with API key authentication
 - Usage tracking per user
+- Admin panel (/admin/) with superuser auto-creation from env vars
 
 ### Suppressed/Disabled Features
 
@@ -82,6 +85,8 @@
 - `DATABASE_URL` - PostgreSQL connection string (auto-set by Railway)
 - `DJANGO_SETTINGS_MODULE=config.settings.production`
 - `ALLOWED_HOSTS` - `.railway.app` added automatically
+- `DJANGO_SUPERUSER_EMAIL` - Admin user email
+- `DJANGO_SUPERUSER_PASSWORD` - Admin user password
 
 ### Need to Configure
 ```bash
@@ -102,7 +107,7 @@ AWS_STORAGE_BUCKET_NAME=...
 REDIS_URL=redis://...
 
 # Custom domain (optional)
-DOMAIN=invoicegenerator.pro
+DOMAIN=invoicekits.com
 ```
 
 ---
@@ -148,12 +153,14 @@ invoice_generator/
 | File | Purpose |
 |------|---------|
 | `config/settings/base.py` | Subscription tiers, invoice templates, core config |
-| `config/settings/production.py` | Railway-specific settings, security |
+| `config/settings/production.py` | Railway-specific settings, security, CSRF |
 | `apps/accounts/models.py` | CustomUser with subscription tracking |
-| `apps/invoices/services/pdf_generator.py` | WeasyPrint PDF generation |
+| `apps/invoices/models.py` | Invoice model with invoice_name field |
+| `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation |
 | `apps/billing/views.py` | Stripe checkout flow (needs price IDs) |
 | `apps/api/views.py` | REST API endpoints |
-| `nixpacks.toml` | Nix packages for WeasyPrint (pango, cairo, etc.) |
+| `railway.json` | Railway deploy config with startCommand |
+| `nixpacks.toml` | Nix packages for build |
 
 ---
 
@@ -177,3 +184,9 @@ invoice_generator/
 5. Fixed template URL namespaces (`landing:index` -> `invoices:landing`)
 6. Fixed allauth URL names (`accounts:login` -> `account_login`)
 7. Disabled email verification (SMTP not configured)
+8. Rebranded from "Invoice Pro" to "InvoiceKits"
+9. Fixed CSRF trusted origins for `*.up.railway.app`
+10. Added superuser auto-creation from env vars in `railway.json` startCommand
+11. Switched from WeasyPrint to xhtml2pdf (pure Python, no system library dependencies)
+12. Added `invoice_name` field to Invoice model for naming invoices
+13. Invoice name displays on list page, detail page, and all PDF templates
