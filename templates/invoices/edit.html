@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit {{ invoice.invoice_number }} - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+        <a href="{% url 'invoices:detail' invoice.pk %}" class="text-gray-500 hover:text-gray-700 text-sm mb-2 inline-block">
+            &larr; Back to Invoice
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900">Edit Invoice {{ invoice.invoice_number }}</h1>
+        {% if invoice.invoice_name %}<p class="text-gray-600">{{ invoice.invoice_name }}</p>{% endif %}
+    </div>
+
+    <form method="post" id="invoice-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if line_items.non_form_errors %}
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <p><strong>Line Items:</strong></p>
+            {% for error in line_items.non_form_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Section -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Client Information -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Client Information</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Name *</label>
+                            {{ form.client_name }}
+                            {% if form.client_name.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ form.client_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Email</label>
+                            {{ form.client_email }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Phone</label>
+                            {{ form.client_phone }}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Address</label>
+                            {{ form.client_address }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Details -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Invoice Details</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="md:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Name</label>
+                            {{ form.invoice_name }}
+                            <p class="text-gray-500 text-xs mt-1">Optional - helps you identify this invoice (e.g., "Q1 Consulting Services")</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Date</label>
+                            {{ form.invoice_date }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Payment Terms</label>
+                            {{ form.payment_terms }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                            {{ form.currency }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Line Items</h2>
+
+                    {{ line_items.management_form }}
+
+                    <div id="line-items-container">
+                        {% for item_form in line_items %}
+                        <div class="line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100">
+                            <div class="flex-1 min-w-[200px]">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                                {{ item_form.description }}
+                                {% if item_form.description.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ item_form.description.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="w-24">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Qty *</label>
+                                {{ item_form.quantity }}
+                                {% if item_form.quantity.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ item_form.quantity.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="w-32">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Rate *</label>
+                                {{ item_form.rate }}
+                                {% if item_form.rate.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ item_form.rate.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="w-8 pt-6">
+                                {% if item_form.DELETE %}
+                                {{ item_form.DELETE }}
+                                {% endif %}
+                            </div>
+                            {{ item_form.id }}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="button" id="add-line-item" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                        + Add Line Item
+                    </button>
+                </div>
+
+                <!-- Additional Settings -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Additional Settings</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tax Rate (%)</label>
+                            {{ form.tax_rate }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Template Style</label>
+                            {{ form.template_style }}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Notes / Payment Instructions</label>
+                            {{ form.notes }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-8">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Summary</h2>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Subtotal</span>
+                            <span id="subtotal">{{ invoice.get_currency_symbol }}{{ invoice.subtotal|floatformat:2 }}</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>Tax</span>
+                            <span id="tax-amount">{{ invoice.get_currency_symbol }}{{ invoice.tax_amount|floatformat:2 }}</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-semibold text-gray-900 pt-3 border-t">
+                            <span>Total</span>
+                            <span id="total">{{ invoice.get_currency_symbol }}{{ invoice.total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full mb-3">
+                        Update Invoice
+                    </button>
+                    <a href="{% url 'invoices:detail' invoice.pk %}" class="btn-secondary w-full block text-center mb-6">
+                        Cancel
+                    </a>
+
+                    <div class="pt-4 border-t border-gray-200">
+                        <a href="{% url 'invoices:delete' invoice.pk %}" class="text-red-600 hover:text-red-700 text-sm font-medium flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Delete Invoice
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const currencySymbol = '{{ invoice.get_currency_symbol }}';
+
+    function calculateTotals() {
+        let subtotal = 0;
+        document.querySelectorAll('.line-item').forEach(function(item) {
+            const deleteCheckbox = item.querySelector('[name*=DELETE]');
+            if (deleteCheckbox && deleteCheckbox.checked) return;
+
+            const qty = parseFloat(item.querySelector('[name*=quantity]').value) || 0;
+            const rate = parseFloat(item.querySelector('[name*=rate]').value) || 0;
+            subtotal += qty * rate;
+        });
+
+        const taxRate = parseFloat(document.querySelector('[name=tax_rate]').value) || 0;
+        const taxAmount = subtotal * (taxRate / 100);
+        const total = subtotal + taxAmount;
+
+        document.getElementById('subtotal').textContent = currencySymbol + subtotal.toFixed(2);
+        document.getElementById('tax-amount').textContent = currencySymbol + taxAmount.toFixed(2);
+        document.getElementById('total').textContent = currencySymbol + total.toFixed(2);
+    }
+
+    // Calculate on input change
+    document.querySelectorAll('input[name*=quantity], input[name*=rate], input[name=tax_rate]').forEach(function(input) {
+        input.addEventListener('input', calculateTotals);
+    });
+
+    // Recalculate when delete checkbox changes
+    document.querySelectorAll('input[name*=DELETE]').forEach(function(input) {
+        input.addEventListener('change', calculateTotals);
+    });
+
+    // Initial calculation
+    calculateTotals();
+});
+</script>
+{% endblock %}
