@@ -1,26 +1,15 @@
 """
-PDF generation service using WeasyPrint.
-Imports are lazy to allow app to start even if WeasyPrint deps are missing.
+PDF generation service using xhtml2pdf.
 """
-import os
 from io import BytesIO
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.files.base import ContentFile
-
-
-def get_weasyprint():
-    """Lazy import WeasyPrint to avoid startup failures."""
-    try:
-        from weasyprint import HTML, CSS
-        from weasyprint.text.fonts import FontConfiguration
-        return HTML, CSS, FontConfiguration, None
-    except OSError as e:
-        return None, None, None, str(e)
+from xhtml2pdf import pisa
 
 
 class InvoicePDFGenerator:
-    """Generate PDF invoices using WeasyPrint with HTML templates."""
+    """Generate PDF invoices using xhtml2pdf with HTML templates."""
 
     TEMPLATE_STYLES = {
         'clean_slate': {
@@ -28,7 +17,7 @@ class InvoicePDFGenerator:
             'accent_color': '#3B82F6',
             'background': '#FFFFFF',
             'text_color': '#1F2937',
-            'font_family': 'Inter, sans-serif',
+            'font_family': 'Helvetica, sans-serif',
             'header_style': 'minimal',
         },
         'executive': {
@@ -36,7 +25,7 @@ class InvoicePDFGenerator:
             'accent_color': '#C9A227',
             'background': '#FAFAFA',
             'text_color': '#1E3A5F',
-            'font_family': 'Georgia, serif',
+            'font_family': 'Times, serif',
             'header_style': 'classic',
         },
         'bold_modern': {
@@ -44,7 +33,7 @@ class InvoicePDFGenerator:
             'accent_color': '#EC4899',
             'background': '#FFFFFF',
             'text_color': '#111827',
-            'font_family': 'Poppins, sans-serif',
+            'font_family': 'Helvetica, sans-serif',
             'header_style': 'bold',
         },
         'classic_professional': {
@@ -52,7 +41,7 @@ class InvoicePDFGenerator:
             'accent_color': '#059669',
             'background': '#FFFFFF',
             'text_color': '#374151',
-            'font_family': 'Times New Roman, serif',
+            'font_family': 'Times, serif',
             'header_style': 'traditional',
         },
         'neon_edge': {
@@ -60,7 +49,7 @@ class InvoicePDFGenerator:
             'accent_color': '#22D3EE',
             'background': '#0F172A',
             'text_color': '#E2E8F0',
-            'font_family': 'Roboto Mono, monospace',
+            'font_family': 'Courier, monospace',
             'header_style': 'dark',
         },
     }
@@ -92,14 +81,6 @@ class InvoicePDFGenerator:
 
     def generate(self):
         """Generate PDF and return as bytes."""
-        # Lazy import WeasyPrint
-        HTML, CSS, FontConfiguration, error = get_weasyprint()
-        if error:
-            raise RuntimeError(
-                f"PDF generation unavailable: {error}. "
-                "WeasyPrint requires system libraries (Pango, Cairo, GObject)."
-            )
-
         template_name = f'invoices/pdf/{self.invoice.template_style}.html'
 
         # Fallback to clean_slate if template doesn't exist
@@ -111,14 +92,14 @@ class InvoicePDFGenerator:
                 self.get_context()
             )
 
-        # Configure fonts
-        font_config = FontConfiguration()
+        # Generate PDF using xhtml2pdf
+        result = BytesIO()
+        pdf = pisa.CreatePDF(BytesIO(html_content.encode('utf-8')), dest=result)
 
-        # Generate PDF
-        html = HTML(string=html_content, base_url=settings.BASE_DIR)
-        pdf_bytes = html.write_pdf(font_config=font_config)
+        if pdf.err:
+            raise RuntimeError(f"PDF generation failed: {pdf.err}")
 
-        return pdf_bytes
+        return result.getvalue()
 
     def save_to_invoice(self):
         """Generate PDF and save to invoice model."""

@@ -6,22 +6,6 @@ nixPkgs = [
     "python311",
     "gcc"
 ]
-aptPkgs = [
-    "libpango-1.0-0",
-    "libpangocairo-1.0-0",
-    "libpangoft2-1.0-0",
-    "libcairo2",
-    "libgdk-pixbuf2.0-0",
-    "libglib2.0-0",
-    "libgobject-2.0-0",
-    "libfontconfig1",
-    "libfreetype6",
-    "libffi8",
-    "libharfbuzz0b",
-    "libfribidi0",
-    "fonts-liberation",
-    "shared-mime-info"
-]
 
 [phases.install]
 cmds = [
