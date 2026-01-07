@@ -1,5 +1,5 @@
 """
-Custom User model for Invoice Generator Pro.
+Custom User model for InvoiceKits.
 """
 import secrets
 from django.contrib.auth.models import AbstractUser

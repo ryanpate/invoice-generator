@@ -1,5 +1,5 @@
 """
-Company model for Invoice Generator Pro.
+Company model for InvoiceKits.
 """
 from django.db import models
 from django.conf import settings

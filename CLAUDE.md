@@ -1,4 +1,4 @@
-# Invoice Generator Pro - Project Status
+# InvoiceKits - Project Status
 
 ## Live Site
 **URL:** https://web-production-faa7d.up.railway.app/

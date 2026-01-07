@@ -1,5 +1,5 @@
 """
-API Views for Invoice Generator Pro.
+API Views for InvoiceKits.
 """
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action, api_view, permission_classes
@@ -141,7 +141,7 @@ class UsageView(APIView):
 def api_info(request):
     """API information and version."""
     return Response({
-        'name': 'Invoice Generator Pro API',
+        'name': 'InvoiceKits API',
         'version': '1.0.0',
         'documentation': request.build_absolute_uri('/api/docs/'),
         'endpoints': {

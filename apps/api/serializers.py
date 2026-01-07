@@ -1,5 +1,5 @@
 """
-API Serializers for Invoice Generator Pro.
+API Serializers for InvoiceKits.
 """
 from rest_framework import serializers
 from apps.invoices.models import Invoice, LineItem

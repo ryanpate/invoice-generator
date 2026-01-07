@@ -1,5 +1,5 @@
 """
-Invoice models for Invoice Generator Pro.
+Invoice models for InvoiceKits.
 """
 from decimal import Decimal
 from django.db import models
@@ -91,8 +91,10 @@ class Invoice(models.Model):
         if not self.due_date:
             self.due_date = self.calculate_due_date()
 
-        # Recalculate totals
-        self.calculate_totals()
+        # Only recalculate totals if this is an existing invoice (has pk)
+        # New invoices don't have line_items yet
+        if self.pk:
+            self.calculate_totals()
 
         super().save(*args, **kwargs)
 
