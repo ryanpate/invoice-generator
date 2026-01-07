@@ -47,8 +47,6 @@
 |---------|--------|--------|-----------|
 | Email Verification | Disabled | Not required for MVP | Change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
-| Celery/Redis | Disabled | No Redis configured | Add Redis service on Railway, set `REDIS_URL`, deploy worker + beat services |
-| Recurring Invoice Auto-Generation | Disabled | Requires Celery/Redis | Deploy Celery worker and Celery Beat services on Railway |
 | Healthcheck | Removed | Startup time exceeds Railway timeout | Re-add to `railway.json` if startup is optimized |
 
 ---
@@ -370,6 +368,11 @@ Authentication: API Key in header `X-API-Key: <key>`
 56. Created recurring invoice notification emails (owner notification, client invoice)
 57. Added RecurringInvoiceAdmin with bulk pause/resume actions
 58. Updated subscription tiers with recurring invoice limits (Pro: 10, Business: unlimited)
+59. Deployed Redis service on Railway for Celery message broker
+60. Created and deployed celery-worker service for async task processing
+61. Created and deployed celery-beat service for periodic task scheduling
+62. Configured REDIS_URL environment variable for all services
+63. Recurring invoice auto-generation now fully operational
 
 ---
 
@@ -406,7 +409,7 @@ python manage.py test
 - **Database:** PostgreSQL (auto-provisioned)
 - **Static Files:** Served via WhiteNoise
 
-### Production Checklist
+### Production Checklist (All Complete)
 - [x] Set all environment variables
 - [x] Configure Stripe products and price IDs
 - [x] Set up custom domain DNS (www.invoicekits.com)
@@ -415,25 +418,21 @@ python manage.py test
 - [x] Set up Google Analytics (G-0NR5NZMNBF)
 - [x] Register with Google Search Console
 - [x] Configure Google and GitHub OAuth social login
-- [ ] Add Redis service on Railway (for recurring invoices)
-- [ ] Deploy Celery worker service
-- [ ] Deploy Celery Beat service
+- [x] Add Redis service on Railway (for recurring invoices)
+- [x] Deploy Celery worker service
+- [x] Deploy Celery Beat service
 
-### Celery Deployment (for Recurring Invoices)
-To enable automatic recurring invoice generation, deploy these Railway services:
+### Celery Infrastructure (Deployed)
+The following services are deployed on Railway for recurring invoice auto-generation:
 
-1. **Add Redis Service**
-   - In Railway dashboard, add a Redis service
-   - `REDIS_URL` will be automatically set
+| Service | Purpose | Status |
+|---------|---------|--------|
+| Redis | Message broker for Celery | Running |
+| celery-worker | Processes async tasks | Running |
+| celery-beat | Schedules periodic tasks | Running |
 
-2. **Create Celery Worker Service**
-   ```bash
-   celery -A config worker -l info
-   ```
+**Schedule:** Recurring invoices process daily at 6:00 AM UTC.
 
-3. **Create Celery Beat Service**
-   ```bash
-   celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-   ```
-
-Recurring invoices will process daily at 6:00 AM UTC.
+**Internal URLs:**
+- Redis: `redis://Redis.railway.internal:6379`
+- All services share the same `DATABASE_URL` and `REDIS_URL`
