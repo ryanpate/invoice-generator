@@ -12,20 +12,21 @@
 ## Current Status
 
 ### Working Features
-- Landing page with pricing display
+- Landing page with pricing display and FAQ section
 - User authentication (signup/login/logout via django-allauth)
 - User dashboard with invoice stats
 - Invoice creation with dynamic line items and optional invoice name
 - PDF generation with 5 template styles (xhtml2pdf)
 - Invoice list with search and status filters (shows invoice name)
-- Invoice detail view (shows invoice name)
+- Invoice detail view with status management (shows invoice name)
 - Batch CSV upload (for Professional+ plans)
 - CSV template download
-- Company profile management
+- Company profile management with logo upload
 - Billing/subscription UI pages
 - REST API endpoints with API key authentication
 - Usage tracking per user
 - Admin panel (/admin/) with superuser auto-creation from env vars
+- SEO optimizations (meta tags, Open Graph, Twitter Cards, Schema.org, sitemap, robots.txt)
 
 ### Suppressed/Disabled Features
 
@@ -43,7 +44,7 @@
 
 ## Not Yet Implemented (TODOs)
 
-### High Priority
+### Critical - Revenue Blocking
 - [ ] **Stripe Integration:** Replace placeholder price IDs in `apps/billing/views.py:67-71`:
   ```python
   price_ids = {
@@ -52,10 +53,20 @@
       'business': 'price_business_monthly',
   }
   ```
+- [ ] **Stripe Webhook Handler:** Ensure subscription lifecycle events are handled
 - [ ] **Watermark on Free Tier PDFs:** `apps/invoices/services/pdf_generator.py` - add watermark logic when `user.subscription_tier == 'free'`
-- [ ] **Stripe Subscription Cancellation on Account Delete:** `apps/accounts/views.py:88` has TODO
 
-### Medium Priority
+### High Priority - Core Functionality
+- [ ] **Invoice Edit Page:** `templates/invoices/edit.html` - needs to be created (URL exists at `/invoices/<pk>/edit/`)
+- [ ] **Invoice Delete Confirmation:** `templates/invoices/delete_confirm.html` - needs to be created
+- [ ] **Batch Result Page:** `templates/invoices/batch_result.html` - needs to be created
+- [ ] **Account Delete Confirmation:** `templates/accounts/delete_confirm.html` - needs to be created
+- [ ] **Stripe Subscription Cancellation on Account Delete:** `apps/accounts/views.py:88` has TODO
+- [ ] **Custom Domain Setup:** Configure invoicekits.com DNS to point to Railway
+
+### Medium Priority - Growth & Marketing
+- [ ] **Google Search Console:** Add verification meta tag or DNS record
+- [ ] **Google Analytics:** Add GA4 tracking code to `templates/base.html`
 - [ ] **Google AdSense Integration:** Add to landing page sidebar, dashboard (free users only)
 - [ ] **Email Notifications:**
   - Welcome email on signup
@@ -63,18 +74,25 @@
   - Payment receipts
 - [ ] **Social Authentication:** Configure Google and GitHub OAuth providers
 - [ ] **Invoice Email Sending:** Send invoices directly to clients via email
+- [ ] **Blog/Content Marketing:** Create `/blog/` section for SEO content
 
-### Lower Priority
+### Lower Priority - Feature Expansion
 - [ ] **Team Seats:** Business plan includes 3 team seats (model and UI not implemented)
 - [ ] **Enterprise Tier:** Custom pricing, white-label, dedicated support
 - [ ] **Premium Templates:** Individual template purchases ($4.99 each)
 - [ ] **Affiliate Program:** Referral tracking (20% commission)
 - [ ] **QR Code for Payment:** Optional on invoices
 - [ ] **Digital Signature Field:** On invoice PDFs
-- [ ] **Invoice Edit Page:** `templates/invoices/edit.html` - needs to be created
-- [ ] **Invoice Delete Confirmation:** `templates/invoices/delete_confirm.html` - needs to be created
-- [ ] **Batch Result Page:** `templates/invoices/batch_result.html` - needs to be created
-- [ ] **Account Delete Confirmation:** `templates/accounts/delete_confirm.html` - needs to be created
+- [ ] **Recurring Invoices:** Auto-generate invoices on schedule
+- [ ] **Client Portal:** Allow clients to view/pay invoices online
+- [ ] **Multi-language Support:** i18n for international users
+
+### SEO Improvements - Future
+- [ ] **Dynamic Sitemap:** Add invoice public links to sitemap (if public sharing enabled)
+- [ ] **Blog Posts:** Create keyword-rich content for organic traffic
+- [ ] **Backlink Outreach:** Partner with freelancer/small business sites
+- [ ] **Page Speed Optimization:** Lazy loading, image optimization, CDN
+- [ ] **Core Web Vitals:** Monitor and improve LCP, FID, CLS scores
 
 ---
 
@@ -108,6 +126,9 @@ REDIS_URL=redis://...
 
 # Custom domain (optional)
 DOMAIN=invoicekits.com
+
+# Analytics (optional)
+GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ```
 
 ---
@@ -118,10 +139,10 @@ DOMAIN=invoicekits.com
 invoice_generator/
 ├── config/
 │   ├── settings/
-│   │   ├── base.py          # Core settings
+│   │   ├── base.py          # Core settings, subscription tiers
 │   │   ├── development.py   # Local dev
 │   │   └── production.py    # Railway production
-│   ├── urls.py
+│   ├── urls.py              # Main URLs + sitemap + robots.txt
 │   ├── wsgi.py
 │   └── celery.py
 ├── apps/
@@ -129,9 +150,9 @@ invoice_generator/
 │   ├── billing/             # Subscription & Stripe
 │   ├── invoices/            # Invoice CRUD, PDF generation
 │   │   └── services/
-│   │       ├── pdf_generator.py
-│   │       └── batch_processor.py
-│   ├── companies/           # Company profiles
+│   │       ├── pdf_generator.py   # xhtml2pdf PDF generation
+│   │       └── batch_processor.py # CSV batch processing
+│   ├── companies/           # Company profiles & branding
 │   └── api/                 # REST API (DRF)
 ├── templates/
 │   ├── account/             # allauth templates (login, signup)
@@ -139,11 +160,12 @@ invoice_generator/
 │   ├── invoices/
 │   │   └── pdf/             # 5 PDF templates
 │   ├── billing/
-│   ├── landing/
+│   ├── landing/             # Home page with FAQ
 │   └── settings/
 ├── static/
+│   └── robots.txt           # Search engine instructions
 ├── nixpacks.toml            # Railway build config
-└── railway.json             # Railway deploy config
+└── railway.json             # Railway deploy config with startCommand
 ```
 
 ---
@@ -154,11 +176,15 @@ invoice_generator/
 |------|---------|
 | `config/settings/base.py` | Subscription tiers, invoice templates, core config |
 | `config/settings/production.py` | Railway-specific settings, security, CSRF |
+| `config/urls.py` | Main URL routing + sitemap + robots.txt views |
 | `apps/accounts/models.py` | CustomUser with subscription tracking |
 | `apps/invoices/models.py` | Invoice model with invoice_name field |
+| `apps/invoices/forms.py` | InvoiceForm with invoice_name field |
 | `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation |
 | `apps/billing/views.py` | Stripe checkout flow (needs price IDs) |
 | `apps/api/views.py` | REST API endpoints |
+| `templates/base.html` | Base template with SEO meta tags + Schema.org |
+| `templates/landing/index.html` | Landing page with FAQ + FAQPage schema |
 | `railway.json` | Railway deploy config with startCommand |
 | `nixpacks.toml` | Nix packages for build |
 
@@ -175,34 +201,79 @@ invoice_generator/
 
 ---
 
-## SEO Enhancements
+## SEO Implementation
 
-### Technical SEO Implemented
-- **Meta Tags:** Optimized title, description, keywords, canonical URL, robots meta
-- **Open Graph:** Facebook/social sharing metadata
-- **Twitter Cards:** Twitter sharing optimization
+### Technical SEO (Completed)
+- **Meta Tags:** Title, description, keywords, canonical URL, robots meta
+- **Open Graph:** og:type, og:url, og:title, og:description, og:site_name
+- **Twitter Cards:** twitter:card, twitter:title, twitter:description
 - **Schema.org Markup:**
   - SoftwareApplication schema on all pages (`templates/base.html`)
   - FAQPage schema on landing page (`templates/landing/index.html`)
-- **Sitemap:** XML sitemap at `/sitemap.xml` with static pages
+- **Sitemap:** XML sitemap at `/sitemap.xml` (static pages: /, /pricing/)
 - **Robots.txt:** Available at `/robots.txt` with proper allow/disallow rules
+- **FAQ Section:** 6 keyword-rich Q&As on landing page
 
-### SEO Files
+### SEO URLs
 | URL | Purpose |
 |-----|---------|
 | `/sitemap.xml` | XML sitemap for search engines |
 | `/robots.txt` | Search engine crawler instructions |
 | `/#faq` | FAQ section with structured data |
 
-### Meta Tags Override
-Templates can override default meta tags using these blocks:
+### Meta Tags Override (for child templates)
 ```html
 {% block meta_description %}Custom description{% endblock %}
 {% block meta_keywords %}custom, keywords{% endblock %}
 {% block canonical_url %}https://invoicekits.com/page{% endblock %}
 {% block og_title %}Custom OG Title{% endblock %}
+{% block og_description %}Custom OG description{% endblock %}
+{% block twitter_title %}Custom Twitter title{% endblock %}
+{% block twitter_description %}Custom Twitter description{% endblock %}
 {% block extra_schema %}Additional JSON-LD{% endblock %}
 ```
+
+### SEO TODOs
+- [ ] Register with Google Search Console
+- [ ] Add Google Analytics tracking
+- [ ] Create blog content for keyword targeting
+- [ ] Build quality backlinks
+- [ ] Monitor Core Web Vitals
+- [ ] Set up custom domain (invoicekits.com)
+
+---
+
+## Invoice Templates
+
+| Template | Style | Best For |
+|----------|-------|----------|
+| Clean Slate | Minimalist white, modern sans-serif | Tech companies, startups |
+| Executive | Navy & gold accents, serif headings | Consulting, legal, finance |
+| Bold Modern | Vibrant colors, large typography | Creative agencies, designers |
+| Classic Professional | Traditional layout, subtle grays | General business, accounting |
+| Neon Edge | Dark mode, neon accents | Gaming, tech, entertainment |
+
+All templates support:
+- Company logo display
+- Invoice name field
+- Multi-currency formatting
+- Tax calculations
+- Notes section
+- Optional watermark (for free tier - TODO)
+
+---
+
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/invoices/` | GET, POST | List/create invoices |
+| `/api/v1/invoices/{id}/` | GET, PUT, DELETE | Invoice detail/update/delete |
+| `/api/v1/invoices/{id}/pdf/` | GET | Download PDF |
+| `/api/v1/companies/` | GET, PUT | Company profile |
+| `/api/v1/usage/` | GET | API usage stats |
+
+Authentication: API Key in header `X-API-Key: <key>`
 
 ---
 
@@ -220,7 +291,49 @@ Templates can override default meta tags using these blocks:
 10. Added superuser auto-creation from env vars in `railway.json` startCommand
 11. Switched from WeasyPrint to xhtml2pdf (pure Python, no system library dependencies)
 12. Added `invoice_name` field to Invoice model for naming invoices
-13. Invoice name displays on list page, detail page, and all PDF templates
+13. Invoice name displays on list page, detail page, and all 5 PDF templates
 14. Added SEO enhancements: meta tags, Open Graph, Twitter Cards, Schema.org markup
 15. Added XML sitemap (`/sitemap.xml`) and robots.txt (`/robots.txt`)
 16. Added FAQ section to landing page with FAQPage structured data
+17. Added `django.contrib.sitemaps` to INSTALLED_APPS
+
+---
+
+## Development Commands
+
+```bash
+# Local development
+source .venv/bin/activate
+python manage.py runserver
+
+# Create migrations
+python manage.py makemigrations
+
+# Apply migrations
+python manage.py migrate
+
+# Create superuser locally
+python manage.py createsuperuser
+
+# Collect static files
+python manage.py collectstatic --noinput
+
+# Run tests
+python manage.py test
+```
+
+---
+
+## Deployment Notes
+
+### Railway Configuration
+- **Builder:** Nixpacks
+- **Start Command:** Defined in `railway.json` (runs migrations + superuser creation + gunicorn)
+- **Database:** PostgreSQL (auto-provisioned)
+- **Static Files:** Served via WhiteNoise
+
+### Required for Production
+1. Set all environment variables listed above
+2. Configure Stripe products and price IDs
+3. Set up custom domain DNS
+4. Enable HTTPS (automatic on Railway)
