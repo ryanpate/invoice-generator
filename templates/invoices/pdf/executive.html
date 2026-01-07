@@ -181,6 +181,7 @@
             <div class="invoice-badge">
                 <h1>INVOICE</h1>
                 <div class="invoice-number">{{ invoice.invoice_number }}</div>
+                {% if invoice.invoice_name %}<div style="font-size: 10pt; margin-top: 5px; opacity: 0.9;">{{ invoice.invoice_name }}</div>{% endif %}
             </div>
         </div>
     </div>

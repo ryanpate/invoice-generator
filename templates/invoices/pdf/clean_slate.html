@@ -170,6 +170,7 @@
             <h1>INVOICE</h1>
             <div class="invoice-meta">
                 <strong>Invoice #:</strong> {{ invoice.invoice_number }}<br>
+                {% if invoice.invoice_name %}<strong>Re:</strong> {{ invoice.invoice_name }}<br>{% endif %}
                 <strong>Date:</strong> {{ invoice.invoice_date|date:"F d, Y" }}<br>
                 <strong>Due Date:</strong> {{ invoice.due_date|date:"F d, Y" }}
             </div>

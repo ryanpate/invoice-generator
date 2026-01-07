@@ -210,6 +210,7 @@
             <div class="invoice-badge">
                 <h1>INVOICE</h1>
                 <div class="number">{{ invoice.invoice_number }}</div>
+                {% if invoice.invoice_name %}<div style="font-size: 9pt; margin-top: 8px; color: #94A3B8;">{{ invoice.invoice_name }}</div>{% endif %}
             </div>
         </div>
 
@@ -293,7 +294,7 @@
 
         {% if show_watermark %}
         <div class="watermark">
-            [ INVOICE PRO ]
+            [ INVOICEKITS ]
         </div>
         {% endif %}
     </div>

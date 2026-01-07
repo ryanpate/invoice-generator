@@ -183,6 +183,7 @@
         <div class="invoice-box">
             <h1>INVOICE</h1>
             <div class="number">{{ invoice.invoice_number }}</div>
+            {% if invoice.invoice_name %}<div style="font-size: 9pt; margin-top: 5px; font-weight: 400;">{{ invoice.invoice_name }}</div>{% endif %}
         </div>
     </div>
 
