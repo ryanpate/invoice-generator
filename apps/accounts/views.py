@@ -50,7 +50,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
 class AccountSettingsView(LoginRequiredMixin, TemplateView):
     """Account settings page."""
-    template_name = 'accounts/settings.html'
+    template_name = 'settings/account.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
