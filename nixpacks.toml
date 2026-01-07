@@ -9,11 +9,18 @@ nixPkgs = [
     "cairo",
     "gdk-pixbuf",
     "glib",
+    "gobject-introspection",
     "fontconfig",
     "shared-mime-info",
     "liberation_ttf",
-    "libffi"
+    "libffi",
+    "harfbuzz",
+    "fribidi"
 ]
+
+[variables]
+LD_LIBRARY_PATH = "/nix/var/nix/profiles/default/lib"
+GI_TYPELIB_PATH = "/nix/var/nix/profiles/default/lib/girepository-1.0"
 
 [phases.install]
 cmds = [
