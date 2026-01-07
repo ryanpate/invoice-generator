@@ -11,6 +11,7 @@
                 &larr; Back to Invoices
             </a>
             <h1 class="text-2xl font-bold text-gray-900">{{ invoice.invoice_number }}</h1>
+            {% if invoice.invoice_name %}<p class="text-lg text-gray-700">{{ invoice.invoice_name }}</p>{% endif %}
             <p class="text-gray-600">Created {{ invoice.created_at|date:"F d, Y" }}</p>
         </div>
         <div class="flex gap-3">
