@@ -18,7 +18,10 @@
                     <h1 class="text-xl font-semibold text-white">Batch Upload</h1>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <a href="#" class="text-blue-400 hover:text-blue-300 text-sm font-medium">
+                    <a href="{% url 'invoices:csv_template' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
                         Download CSV Template
                     </a>
                 </div>
@@ -133,34 +136,22 @@
                     </thead>
                     <tbody class="text-gray-300">
                         <tr class="border-b border-gray-700/50">
-                            <td class="py-2 px-3 font-mono text-blue-400">invoice_number</td>
-                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
-                            <td class="py-2 px-3">Unique invoice identifier</td>
-                            <td class="py-2 px-3 font-mono text-gray-500">INV-001</td>
-                        </tr>
-                        <tr class="border-b border-gray-700/50">
                             <td class="py-2 px-3 font-mono text-blue-400">client_name</td>
                             <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
                             <td class="py-2 px-3">Client's full name or company</td>
-                            <td class="py-2 px-3 font-mono text-gray-500">Acme Corp</td>
-                        </tr>
-                        <tr class="border-b border-gray-700/50">
-                            <td class="py-2 px-3 font-mono text-blue-400">client_email</td>
-                            <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
-                            <td class="py-2 px-3">Client's email address</td>
-                            <td class="py-2 px-3 font-mono text-gray-500">billing@acme.com</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">Acme Corporation</td>
                         </tr>
                         <tr class="border-b border-gray-700/50">
                             <td class="py-2 px-3 font-mono text-blue-400">item_description</td>
                             <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
                             <td class="py-2 px-3">Description of service/product</td>
-                            <td class="py-2 px-3 font-mono text-gray-500">Web Development</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">Website Development</td>
                         </tr>
                         <tr class="border-b border-gray-700/50">
                             <td class="py-2 px-3 font-mono text-blue-400">quantity</td>
                             <td class="py-2 px-3"><span class="text-green-400">Yes</span></td>
-                            <td class="py-2 px-3">Number of units</td>
-                            <td class="py-2 px-3 font-mono text-gray-500">10</td>
+                            <td class="py-2 px-3">Number of units (must be positive)</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">40</td>
                         </tr>
                         <tr class="border-b border-gray-700/50">
                             <td class="py-2 px-3 font-mono text-blue-400">rate</td>
@@ -169,23 +160,53 @@
                             <td class="py-2 px-3 font-mono text-gray-500">150.00</td>
                         </tr>
                         <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">client_email</td>
+                            <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
+                            <td class="py-2 px-3">Client's email address</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">billing@acme.com</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">client_phone</td>
+                            <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
+                            <td class="py-2 px-3">Client's phone number</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">+1 555-0100</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">client_address</td>
+                            <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
+                            <td class="py-2 px-3">Client's billing address</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">123 Business Ave, NY</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
                             <td class="py-2 px-3 font-mono text-blue-400">tax_rate</td>
                             <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
                             <td class="py-2 px-3">Tax percentage (0-100)</td>
                             <td class="py-2 px-3 font-mono text-gray-500">8.5</td>
                         </tr>
-                        <tr>
-                            <td class="py-2 px-3 font-mono text-blue-400">due_date</td>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">currency</td>
                             <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
-                            <td class="py-2 px-3">Payment due date (YYYY-MM-DD)</td>
-                            <td class="py-2 px-3 font-mono text-gray-500">2024-02-15</td>
+                            <td class="py-2 px-3">Currency code (defaults to USD)</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">USD</td>
+                        </tr>
+                        <tr class="border-b border-gray-700/50">
+                            <td class="py-2 px-3 font-mono text-blue-400">payment_terms</td>
+                            <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
+                            <td class="py-2 px-3">Payment terms (net_15, net_30, etc.)</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">net_30</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-3 font-mono text-blue-400">notes</td>
+                            <td class="py-2 px-3"><span class="text-yellow-400">Optional</span></td>
+                            <td class="py-2 px-3">Additional notes for the invoice</td>
+                            <td class="py-2 px-3 font-mono text-gray-500">Thank you!</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="mt-4 p-4 bg-gray-700/50 rounded-lg">
                 <p class="text-sm text-gray-400">
-                    <strong class="text-gray-300">Tip:</strong> Multiple line items for the same invoice should have the same invoice_number. Each row with a unique invoice_number will create a new invoice.
+                    <strong class="text-gray-300">Tip:</strong> Rows with the same client_name will be grouped into a single invoice with multiple line items. Each unique client_name creates a separate invoice.
                 </p>
             </div>
         </div>
