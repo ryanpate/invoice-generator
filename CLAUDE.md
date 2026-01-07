@@ -57,7 +57,7 @@
   }
   ```
 - [ ] **Stripe Webhook Handler:** Ensure subscription lifecycle events are handled
-- [ ] **Watermark on Free Tier PDFs:** `apps/invoices/services/pdf_generator.py` - add watermark logic when `user.subscription_tier == 'free'`
+- [x] **Watermark on Free Tier PDFs:** Diagonal "FREE PLAN" watermark on all 5 PDF templates - COMPLETED
 
 ### High Priority - Core Functionality
 - [x] **Invoice Edit Page:** `templates/invoices/edit.html` - COMPLETED
@@ -262,7 +262,7 @@ All templates support:
 - Multi-currency formatting
 - Tax calculations
 - Notes section
-- Optional watermark (for free tier - TODO)
+- "FREE PLAN" watermark (for free tier users)
 
 ---
 
@@ -305,6 +305,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 21. Created Invoice Delete Confirmation template
 22. Created Batch Result page template with status display and ZIP download
 23. Created Account Delete Confirmation template with data deletion warnings
+24. Added prominent "FREE PLAN" diagonal watermark to all 5 PDF templates for free tier users
 
 ---
 
