@@ -23,9 +23,15 @@ class Command(BaseCommand):
             )
             return
 
-        if User.objects.filter(email=email).exists():
+        existing_user = User.objects.filter(email=email).first()
+        if existing_user:
+            # Update password in case it changed
+            existing_user.set_password(password)
+            existing_user.is_staff = True
+            existing_user.is_superuser = True
+            existing_user.save()
             self.stdout.write(
-                self.style.SUCCESS(f'Superuser {email} already exists')
+                self.style.SUCCESS(f'Superuser {email} already exists - password updated')
             )
             return
 
