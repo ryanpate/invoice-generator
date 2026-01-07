@@ -24,6 +24,8 @@ X_FRAME_OPTIONS = 'DENY'
 # CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     'https://*.railway.app',
+    'https://*.up.railway.app',
+    'https://web-production-faa7d.up.railway.app',
 ]
 if config('DOMAIN', default=''):
     CSRF_TRUSTED_ORIGINS.append(f"https://{config('DOMAIN')}")
