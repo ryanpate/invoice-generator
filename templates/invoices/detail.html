@@ -15,6 +15,12 @@
             <p class="text-gray-600 dark:text-gray-400">Created {{ invoice.created_at|date:"F d, Y" }}</p>
         </div>
         <div class="flex gap-3">
+            <a href="{% url 'invoices:send_email' invoice.pk %}" class="btn-outline inline-flex items-center">
+                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                Send Email
+            </a>
             <a href="{% url 'invoices:download_pdf' invoice.pk %}" class="btn-primary">
                 Download PDF
             </a>

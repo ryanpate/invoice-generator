@@ -4,7 +4,7 @@ Views for invoices app.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, FormView
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse, JsonResponse, FileResponse
@@ -12,9 +12,10 @@ from django.db.models import Q
 from django.conf import settings
 
 from .models import Invoice, LineItem, InvoiceBatch
-from .forms import InvoiceForm, LineItemFormSet, BatchUploadForm
+from .forms import InvoiceForm, LineItemFormSet, BatchUploadForm, SendInvoiceEmailForm
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
+from .services.email_sender import InvoiceEmailService
 
 
 class LandingPageView(TemplateView):
@@ -388,3 +389,57 @@ def mark_invoice_status(request, pk, status):
         return JsonResponse({'success': True, 'status': status})
 
     return redirect('invoices:detail', pk=pk)
+
+
+class InvoiceSendEmailView(LoginRequiredMixin, FormView):
+    """View for sending invoice via email."""
+    template_name = 'invoices/send_email.html'
+    form_class = SendInvoiceEmailForm
+
+    def dispatch(self, request, *args, **kwargs):
+        # Let LoginRequiredMixin handle authentication first
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        # Get invoice after confirming user is authenticated
+        self.invoice = get_object_or_404(
+            Invoice,
+            pk=self.kwargs['pk'],
+            company__user=request.user
+        )
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        """Pre-populate form with defaults."""
+        email_service = InvoiceEmailService(self.invoice)
+        return {
+            'to_email': self.invoice.client_email or '',
+            'subject': email_service.get_default_subject(),
+            'message': email_service.get_default_message(),
+        }
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['invoice'] = self.invoice
+        return context
+
+    def form_valid(self, form):
+        email_service = InvoiceEmailService(self.invoice)
+        result = email_service.send(
+            to_email=form.cleaned_data['to_email'],
+            subject=form.cleaned_data['subject'],
+            message=form.cleaned_data['message'],
+            cc_emails=form.cleaned_data.get('cc_emails', []),
+        )
+
+        if result['success']:
+            messages.success(
+                self.request,
+                f'Invoice {self.invoice.invoice_number} sent successfully to {form.cleaned_data["to_email"]}!'
+            )
+            return redirect('invoices:detail', pk=self.invoice.pk)
+        else:
+            messages.error(
+                self.request,
+                f'Failed to send email: {result.get("error", "Unknown error")}'
+            )
+            return self.form_invalid(form)

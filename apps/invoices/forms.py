@@ -142,6 +142,58 @@ LineItemFormSet = inlineformset_factory(
 )
 
 
+class SendInvoiceEmailForm(forms.Form):
+    """Form for sending invoice via email."""
+
+    to_email = forms.EmailField(
+        label='To',
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'client@example.com'
+        })
+    )
+
+    cc_emails = forms.CharField(
+        label='CC (optional)',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'cc1@example.com, cc2@example.com'
+        }),
+        help_text='Separate multiple emails with commas'
+    )
+
+    subject = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Invoice from Your Company'
+        })
+    )
+
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-textarea',
+            'rows': 6,
+            'placeholder': 'Please find attached your invoice...'
+        })
+    )
+
+    def clean_cc_emails(self):
+        """Validate CC email addresses."""
+        cc_string = self.cleaned_data.get('cc_emails', '')
+        if not cc_string:
+            return []
+
+        emails = [e.strip() for e in cc_string.split(',') if e.strip()]
+        for email in emails:
+            try:
+                forms.EmailField().clean(email)
+            except forms.ValidationError:
+                raise forms.ValidationError(f'Invalid email address: {email}')
+        return emails
+
+
 class BatchUploadForm(forms.Form):
     """Form for batch CSV upload."""
 

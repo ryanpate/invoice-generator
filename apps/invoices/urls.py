@@ -17,6 +17,7 @@ urlpatterns = [
     path('invoices/<int:pk>/', views.InvoiceDetailView.as_view(), name='detail'),
     path('invoices/<int:pk>/edit/', views.InvoiceUpdateView.as_view(), name='edit'),
     path('invoices/<int:pk>/delete/', views.InvoiceDeleteView.as_view(), name='delete'),
+    path('invoices/<int:pk>/send/', views.InvoiceSendEmailView.as_view(), name='send_email'),
 
     # PDF generation
     path('invoices/<int:pk>/pdf/', views.generate_pdf, name='generate_pdf'),

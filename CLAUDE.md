@@ -35,12 +35,14 @@
 - Stripe webhook handling for subscription lifecycle events
 - Dark/light mode toggle with browser preference detection and localStorage persistence
 - Footer pages: Contact Us, Help Center, Privacy Policy, Terms of Service
+- Welcome email on signup (via Resend SMTP)
+- Invoice email sending with PDF attachment and customizable message
 
 ### Suppressed/Disabled Features
 
 | Feature | Status | Reason | To Enable |
 |---------|--------|--------|-----------|
-| Email Verification | Disabled | No SMTP credentials | Set `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` env vars, then change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
+| Email Verification | Disabled | Not required for MVP | Change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
 | Celery/Redis | Disabled | No Redis configured | Add Redis service on Railway, set `REDIS_URL` env var |
 | Social Auth (Google/GitHub) | UI Only | OAuth not configured | Configure in django-allauth + provider settings |
@@ -71,11 +73,11 @@
 - [x] **Google Analytics:** GA4 tracking code added (G-0NR5NZMNBF)
 - [ ] **Google AdSense Integration:** Add to landing page sidebar, dashboard (free users only)
 - [ ] **Email Notifications:**
-  - [x] Welcome email on signup (requires EMAIL_HOST_USER and EMAIL_HOST_PASSWORD)
-  - [ ] Invoice sent notifications
+  - [x] Welcome email on signup - COMPLETED (via Resend SMTP)
+  - [x] Invoice sent notifications - COMPLETED (via Send Invoice feature)
   - [ ] Payment receipts
 - [ ] **Social Authentication:** Configure Google and GitHub OAuth providers
-- [ ] **Invoice Email Sending:** Send invoices directly to clients via email
+- [x] **Invoice Email Sending:** Send invoices directly to clients via email with PDF attachment - COMPLETED
 - [ ] **Blog/Content Marketing:** Create `/blog/` section for SEO content
 
 ### Lower Priority - Feature Expansion
@@ -109,25 +111,22 @@
 - `DJANGO_SUPERUSER_PASSWORD` - Admin user password
 - `STRIPE_LIVE_SECRET_KEY` - Stripe live API key (configured)
 - `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret (configured)
+- `EMAIL_HOST` - smtp.resend.com (configured)
+- `EMAIL_HOST_USER` - resend (configured)
+- `EMAIL_HOST_PASSWORD` - Resend API key (configured)
+- `DEFAULT_FROM_EMAIL` - InvoiceKits <noreply@invoicekits.com> (configured)
+- `SITE_URL` - https://www.invoicekits.com (configured)
+- `DOMAIN` - invoicekits.com (configured)
 
-### Need to Configure
+### Optional - Not Yet Configured
 ```bash
-# Email via Resend (required for welcome emails)
-EMAIL_HOST_PASSWORD=re_your_resend_api_key
-
-# AWS S3 (optional - for media file storage)
+# AWS S3 (for media file storage - logos currently stored locally)
 AWS_ACCESS_KEY_ID=...
 AWS_SECRET_ACCESS_KEY=...
 AWS_STORAGE_BUCKET_NAME=...
 
-# Redis (optional - for Celery async tasks)
+# Redis (for Celery async tasks - not needed for current functionality)
 REDIS_URL=redis://...
-
-# Custom domain (optional)
-DOMAIN=invoicekits.com
-
-# Analytics (optional)
-GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ```
 
 ---
@@ -150,7 +149,8 @@ invoice_generator/
 │   ├── invoices/            # Invoice CRUD, PDF generation
 │   │   └── services/
 │   │       ├── pdf_generator.py   # xhtml2pdf PDF generation
-│   │       └── batch_processor.py # CSV batch processing
+│   │       ├── batch_processor.py # CSV batch processing
+│   │       └── email_sender.py    # Invoice email sending with PDF
 │   ├── companies/           # Company profiles & branding
 │   └── api/                 # REST API (DRF)
 ├── templates/
@@ -176,15 +176,18 @@ invoice_generator/
 | File | Purpose |
 |------|---------|
 | `config/settings/base.py` | Subscription tiers, invoice templates, core config |
-| `config/settings/production.py` | Railway-specific settings, security, CSRF |
+| `config/settings/production.py` | Railway-specific settings, security, CSRF, email config |
 | `config/urls.py` | Main URL routing + sitemap + robots.txt views |
 | `apps/accounts/models.py` | CustomUser with subscription tracking |
+| `apps/accounts/signals.py` | Welcome email signal handler (user_signed_up) |
 | `apps/invoices/models.py` | Invoice model with invoice_name field |
 | `apps/invoices/forms.py` | InvoiceForm with invoice_name field |
-| `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation |
+| `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation with watermark |
+| `apps/invoices/services/email_sender.py` | Invoice email sending with PDF attachment |
 | `apps/billing/views.py` | Stripe checkout flow with live price IDs |
 | `apps/api/views.py` | REST API endpoints |
-| `templates/base.html` | Base template with SEO meta tags + Schema.org |
+| `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
+| `templates/emails/welcome.html` | HTML welcome email template |
 | `templates/landing/index.html` | Landing page with FAQ + FAQPage schema |
 | `railway.json` | Railway deploy config with startCommand |
 | `nixpacks.toml` | Nix packages for build |
@@ -320,6 +323,12 @@ Authentication: API Key in header `X-API-Key: <key>`
 33. Added all new pages to sitemap and robots.txt
 34. Added Google Analytics GA4 tracking (G-0NR5NZMNBF)
 35. Added welcome email on signup (signal handler + HTML email template)
+36. Configured Resend SMTP for email delivery (EMAIL_HOST=smtp.resend.com)
+37. Fixed Railway environment variable with leading space in key name
+38. Added invoice email sending feature with PDF attachment and customizable message
+39. Created InvoiceEmailService in `apps/invoices/services/email_sender.py`
+40. Created invoice notification email template `templates/emails/invoice_notification.html`
+41. Added Send Email button to invoice detail and list pages
 
 ---
 
@@ -356,8 +365,11 @@ python manage.py test
 - **Database:** PostgreSQL (auto-provisioned)
 - **Static Files:** Served via WhiteNoise
 
-### Required for Production
-1. Set all environment variables listed above
-2. Configure Stripe products and price IDs
-3. Set up custom domain DNS
-4. Enable HTTPS (automatic on Railway)
+### Production Checklist (All Complete)
+- [x] Set all environment variables
+- [x] Configure Stripe products and price IDs
+- [x] Set up custom domain DNS (www.invoicekits.com)
+- [x] Enable HTTPS (automatic on Railway)
+- [x] Configure email delivery (Resend SMTP)
+- [x] Set up Google Analytics (G-0NR5NZMNBF)
+- [x] Register with Google Search Console
