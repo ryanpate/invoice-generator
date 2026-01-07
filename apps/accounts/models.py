@@ -158,3 +158,41 @@ class CustomUser(AbstractUser):
         if limit == -1:
             return 0
         return min(100, int((self.invoices_created_this_month / limit) * 100))
+
+    def has_recurring_invoices(self):
+        """Check if user has recurring invoices feature."""
+        from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        return tier_config.get('recurring_invoices', False)
+
+    def can_create_recurring_invoice(self):
+        """Check if user can create another recurring invoice."""
+        from django.conf import settings
+        if not self.has_recurring_invoices():
+            return False
+
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        max_recurring = tier_config.get('max_recurring', 0)
+
+        if max_recurring == -1:  # Unlimited
+            return True
+
+        # Get count from user's company recurring invoices
+        from apps.invoices.models import RecurringInvoice
+        try:
+            company = self.companies.first()
+            if not company:
+                return False
+            current_count = RecurringInvoice.objects.filter(
+                company=company,
+                status__in=['active', 'paused']
+            ).count()
+            return current_count < max_recurring
+        except Exception:
+            return False
+
+    def get_recurring_invoice_limit(self):
+        """Get the max recurring invoices allowed for this user's tier."""
+        from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        return tier_config.get('max_recurring', 0)

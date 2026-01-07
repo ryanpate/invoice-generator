@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ recurring.name }} - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <a href="{% url 'invoices:recurring_list' %}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-sm mb-2 inline-block">
+            &larr; Back to Recurring Invoices
+        </a>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ recurring.name }}</h1>
+                <p class="text-gray-600 dark:text-gray-400">{{ recurring.get_frequency_display }} recurring invoice</p>
+            </div>
+            <div class="flex gap-3">
+                {% if recurring.status != 'cancelled' %}
+                <form method="post" action="{% url 'invoices:recurring_generate_now' recurring.pk %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-secondary">
+                        Generate Now
+                    </button>
+                </form>
+                <form method="post" action="{% url 'invoices:recurring_toggle_status' recurring.pk %}" class="inline">
+                    {% csrf_token %}
+                    {% if recurring.status == 'active' %}
+                    <button type="submit" class="btn-secondary text-yellow-600 border-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/20">
+                        Pause
+                    </button>
+                    {% elif recurring.status == 'paused' %}
+                    <button type="submit" class="btn-secondary text-green-600 border-green-600 hover:bg-green-50 dark:hover:bg-green-900/20">
+                        Resume
+                    </button>
+                    {% endif %}
+                </form>
+                {% endif %}
+                <a href="{% url 'invoices:recurring_edit' recurring.pk %}" class="btn-primary">
+                    Edit
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Status Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Status</h2>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                        {% if recurring.status == 'active' %}bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400
+                        {% elif recurring.status == 'paused' %}bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-400
+                        {% else %}bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300{% endif %}">
+                        {{ recurring.get_status_display }}
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Frequency</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.get_frequency_display }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Next Run</p>
+                        <p class="font-medium text-gray-900 dark:text-white">
+                            {% if recurring.status == 'active' %}
+                            {{ recurring.next_run_date|date:"M d, Y" }}
+                            {% else %}
+                            <span class="text-gray-400">-</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Generated</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.invoices_generated }} invoices</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Last Generated</p>
+                        <p class="font-medium text-gray-900 dark:text-white">
+                            {% if recurring.last_generated_at %}
+                            {{ recurring.last_generated_at|date:"M d, Y" }}
+                            {% else %}
+                            <span class="text-gray-400">Never</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Items -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Line Items</h2>
+                </div>
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700/50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Qty</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Rate</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        {% for item in recurring.line_items.all %}
+                        <tr>
+                            <td class="px-6 py-4 text-gray-900 dark:text-white">{{ item.description }}</td>
+                            <td class="px-6 py-4 text-right text-gray-600 dark:text-gray-400">{{ item.quantity }}</td>
+                            <td class="px-6 py-4 text-right text-gray-600 dark:text-gray-400">{{ recurring.currency }} {{ item.rate|floatformat:2 }}</td>
+                            <td class="px-6 py-4 text-right font-medium text-gray-900 dark:text-white">{{ recurring.currency }} {{ item.amount|floatformat:2 }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">No line items</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="bg-gray-50 dark:bg-gray-700/50">
+                        <tr>
+                            <td colspan="3" class="px-6 py-3 text-right font-medium text-gray-900 dark:text-white">Subtotal</td>
+                            <td class="px-6 py-3 text-right font-medium text-gray-900 dark:text-white">
+                                {% with total=0 %}
+                                {% for item in recurring.line_items.all %}
+                                {% endfor %}
+                                {% endwith %}
+                                {{ recurring.currency }} {% widthratio 1 1 1 as subtotal %}
+                                {% with items=recurring.line_items.all %}
+                                {% if items %}
+                                {{ items.0.amount|floatformat:2 }}
+                                {% else %}
+                                0.00
+                                {% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                        {% if recurring.tax_rate > 0 %}
+                        <tr>
+                            <td colspan="3" class="px-6 py-3 text-right text-gray-600 dark:text-gray-400">Tax ({{ recurring.tax_rate }}%)</td>
+                            <td class="px-6 py-3 text-right text-gray-600 dark:text-gray-400">Calculated on generation</td>
+                        </tr>
+                        {% endif %}
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Generated Invoices History -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Generated Invoices</h2>
+                </div>
+                {% if generated_invoices %}
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700/50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Invoice #</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        {% for invoice in generated_invoices %}
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                            <td class="px-6 py-4">
+                                <a href="{% url 'invoices:detail' invoice.pk %}" class="text-primary-600 dark:text-primary-400 hover:text-primary-900 font-medium">
+                                    {{ invoice.invoice_number }}
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 text-gray-600 dark:text-gray-400">{{ invoice.created_at|date:"M d, Y" }}</td>
+                            <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ invoice.get_currency_symbol }}{{ invoice.total|floatformat:2 }}</td>
+                            <td class="px-6 py-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {% if invoice.status == 'paid' %}bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400
+                                    {% elif invoice.status == 'overdue' %}bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400
+                                    {% elif invoice.status == 'sent' %}bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-400
+                                    {% else %}bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300{% endif %}">
+                                    {{ invoice.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    No invoices generated yet
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Client Info -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Client Information</h3>
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Name</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.client_name }}</p>
+                    </div>
+                    {% if recurring.client_email %}
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Email</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.client_email }}</p>
+                    </div>
+                    {% endif %}
+                    {% if recurring.client_phone %}
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Phone</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.client_phone }}</p>
+                    </div>
+                    {% endif %}
+                    {% if recurring.client_address %}
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Address</p>
+                        <p class="font-medium text-gray-900 dark:text-white whitespace-pre-line">{{ recurring.client_address }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Invoice Settings -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invoice Settings</h3>
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Currency</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.currency }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Payment Terms</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.get_payment_terms_display }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Tax Rate</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.tax_rate }}%</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Template</p>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ recurring.template_style }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Notifications</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Email on generation</span>
+                        {% if recurring.send_email_on_generation %}
+                        <span class="text-green-600 dark:text-green-400">Enabled</span>
+                        {% else %}
+                        <span class="text-gray-400">Disabled</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Auto-send to client</span>
+                        {% if recurring.auto_send_to_client %}
+                        <span class="text-green-600 dark:text-green-400">Enabled</span>
+                        {% else %}
+                        <span class="text-gray-400">Disabled</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800">
+                <h3 class="text-lg font-semibold text-red-800 dark:text-red-400 mb-4">Danger Zone</h3>
+                <p class="text-sm text-red-600 dark:text-red-300 mb-4">
+                    Deleting this recurring invoice will not delete previously generated invoices.
+                </p>
+                <a href="{% url 'invoices:recurring_delete' recurring.pk %}" class="btn-danger w-full text-center">
+                    Delete Recurring Invoice
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

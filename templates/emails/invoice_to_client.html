@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice from {{ company.name }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background-color: #2563eb; padding: 40px 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">
+                                Invoice {{ invoice.invoice_number }}
+                            </h1>
+                            <p style="margin: 10px 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">
+                                from {{ company.name }}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Dear {{ invoice.client_name }},
+                            </p>
+
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Please find attached your invoice for the services provided.
+                            </p>
+
+                            <!-- Invoice Details -->
+                            <table role="presentation" style="width: 100%; background-color: #f9fafb; border-radius: 8px; margin-bottom: 30px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <h3 style="margin: 0 0 15px; color: #1f2937; font-size: 16px; font-weight: 600;">
+                                            Invoice Summary
+                                        </h3>
+                                        <table role="presentation" style="width: 100%;">
+                                            <tr>
+                                                <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Invoice Number:</td>
+                                                <td style="padding: 8px 0; color: #1f2937; font-size: 14px; font-weight: 600; text-align: right;">{{ invoice.invoice_number }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Invoice Date:</td>
+                                                <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">{{ invoice.invoice_date|date:"F d, Y" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Due Date:</td>
+                                                <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right;">{{ invoice.due_date|date:"F d, Y" }}</td>
+                                            </tr>
+                                            <tr style="border-top: 1px solid #e5e7eb;">
+                                                <td style="padding: 12px 0 8px; color: #1f2937; font-size: 16px; font-weight: 600;">Amount Due:</td>
+                                                <td style="padding: 12px 0 8px; color: #2563eb; font-size: 20px; font-weight: 700; text-align: right;">{{ invoice.get_currency_symbol }}{{ invoice.total|floatformat:2 }}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            {% if invoice.notes %}
+                            <table role="presentation" style="width: 100%; background-color: #fffbeb; border-radius: 8px; margin-bottom: 30px;">
+                                <tr>
+                                    <td style="padding: 15px 20px;">
+                                        <p style="margin: 0 0 5px; color: #92400e; font-size: 12px; font-weight: 600; text-transform: uppercase;">Payment Instructions</p>
+                                        <p style="margin: 0; color: #78350f; font-size: 14px; line-height: 1.6;">{{ invoice.notes }}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                            {% endif %}
+
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                If you have any questions regarding this invoice, please don't hesitate to contact us.
+                            </p>
+
+                            <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Thank you for your business!
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 30px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="margin: 0 0 5px; color: #374151; font-size: 14px; font-weight: 600;">
+                                {{ company.name }}
+                            </p>
+                            {% if company.email %}
+                            <p style="margin: 0 0 10px; color: #6b7280; font-size: 14px;">
+                                {{ company.email }}
+                            </p>
+                            {% endif %}
+                            <p style="margin: 0; color: #9ca3af; font-size: 12px;">
+                                Powered by InvoiceKits
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

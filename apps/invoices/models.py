@@ -236,3 +236,232 @@ class InvoiceBatch(models.Model):
 
     def __str__(self):
         return f"Batch {self.id} - {self.status}"
+
+
+class RecurringInvoice(models.Model):
+    """Recurring invoice template that auto-generates invoices on schedule."""
+
+    FREQUENCY_CHOICES = [
+        ('weekly', 'Weekly'),
+        ('biweekly', 'Bi-weekly'),
+        ('monthly', 'Monthly'),
+        ('quarterly', 'Quarterly'),
+        ('yearly', 'Yearly'),
+    ]
+
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('paused', 'Paused'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    company = models.ForeignKey(
+        'companies.Company',
+        on_delete=models.CASCADE,
+        related_name='recurring_invoices'
+    )
+
+    # Internal name for this recurring invoice
+    name = models.CharField(
+        max_length=255,
+        help_text='Internal name (e.g., "Monthly Retainer - Acme Corp")'
+    )
+
+    # Client information (copied to generated invoices)
+    client_name = models.CharField(max_length=255)
+    client_email = models.EmailField(blank=True)
+    client_phone = models.CharField(max_length=50, blank=True)
+    client_address = models.TextField(blank=True)
+
+    # Schedule
+    frequency = models.CharField(
+        max_length=20,
+        choices=FREQUENCY_CHOICES,
+        default='monthly'
+    )
+    start_date = models.DateField()
+    end_date = models.DateField(
+        blank=True,
+        null=True,
+        help_text='Leave blank for indefinite recurring'
+    )
+    next_run_date = models.DateField()
+
+    # Invoice settings (copied to generated invoices)
+    currency = models.CharField(
+        max_length=3,
+        choices=settings.CURRENCIES,
+        default='USD'
+    )
+    payment_terms = models.CharField(
+        max_length=20,
+        choices=settings.PAYMENT_TERMS,
+        default='net_30'
+    )
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    template_style = models.CharField(max_length=50, default='clean_slate')
+    notes = models.TextField(blank=True)
+
+    # Status
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='active'
+    )
+
+    # Tracking
+    invoices_generated = models.PositiveIntegerField(default=0)
+    last_generated_at = models.DateTimeField(blank=True, null=True)
+    last_invoice = models.ForeignKey(
+        Invoice,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='recurring_source'
+    )
+
+    # Notification settings
+    send_email_on_generation = models.BooleanField(
+        default=True,
+        help_text='Email owner when invoice is generated'
+    )
+    auto_send_to_client = models.BooleanField(
+        default=False,
+        help_text='Automatically send invoice to client email'
+    )
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['company', 'status']),
+            models.Index(fields=['next_run_date', 'status']),
+        ]
+
+    def __str__(self):
+        return f"{self.name} ({self.get_frequency_display()})"
+
+    def save(self, *args, **kwargs):
+        # Set next_run_date to start_date if not set
+        if not self.next_run_date:
+            self.next_run_date = self.start_date
+        super().save(*args, **kwargs)
+
+    def calculate_next_run_date(self):
+        """Calculate the next run date based on frequency."""
+        frequency_deltas = {
+            'weekly': relativedelta(weeks=1),
+            'biweekly': relativedelta(weeks=2),
+            'monthly': relativedelta(months=1),
+            'quarterly': relativedelta(months=3),
+            'yearly': relativedelta(years=1),
+        }
+        delta = frequency_deltas.get(self.frequency, relativedelta(months=1))
+        return self.next_run_date + delta
+
+    def should_run_today(self):
+        """Check if this recurring invoice should run today."""
+        if self.status != 'active':
+            return False
+        if self.end_date and timezone.now().date() > self.end_date:
+            return False
+        return self.next_run_date <= timezone.now().date()
+
+    def generate_invoice(self):
+        """Generate an invoice from this recurring template."""
+        # Generate invoice number
+        today = timezone.now()
+        prefix = today.strftime('%Y%m')
+        count = Invoice.objects.filter(
+            company=self.company,
+            invoice_number__startswith=f'INV-{prefix}'
+        ).count() + 1
+        invoice_number = f'INV-{prefix}-{count:04d}'
+
+        # Create the invoice
+        invoice = Invoice.objects.create(
+            company=self.company,
+            invoice_number=invoice_number,
+            invoice_name=self.name,
+            status='draft',
+            client_name=self.client_name,
+            client_email=self.client_email,
+            client_phone=self.client_phone,
+            client_address=self.client_address,
+            invoice_date=timezone.now().date(),
+            payment_terms=self.payment_terms,
+            currency=self.currency,
+            tax_rate=self.tax_rate,
+            template_style=self.template_style,
+            notes=self.notes,
+        )
+
+        # Copy line items
+        for recurring_item in self.line_items.all():
+            LineItem.objects.create(
+                invoice=invoice,
+                description=recurring_item.description,
+                quantity=recurring_item.quantity,
+                rate=recurring_item.rate,
+                order=recurring_item.order,
+            )
+
+        # Update tracking
+        self.invoices_generated += 1
+        self.last_generated_at = timezone.now()
+        self.last_invoice = invoice
+        self.next_run_date = self.calculate_next_run_date()
+
+        # Check if we've passed the end date
+        if self.end_date and self.next_run_date > self.end_date:
+            self.status = 'cancelled'
+
+        self.save()
+
+        return invoice
+
+    def pause(self):
+        """Pause this recurring invoice."""
+        self.status = 'paused'
+        self.save(update_fields=['status', 'updated_at'])
+
+    def resume(self):
+        """Resume this recurring invoice."""
+        self.status = 'active'
+        # If next_run_date is in the past, set it to today
+        if self.next_run_date < timezone.now().date():
+            self.next_run_date = timezone.now().date()
+        self.save(update_fields=['status', 'next_run_date', 'updated_at'])
+
+    def cancel(self):
+        """Cancel this recurring invoice."""
+        self.status = 'cancelled'
+        self.save(update_fields=['status', 'updated_at'])
+
+
+class RecurringLineItem(models.Model):
+    """Line item for recurring invoice template."""
+
+    recurring_invoice = models.ForeignKey(
+        RecurringInvoice,
+        on_delete=models.CASCADE,
+        related_name='line_items'
+    )
+    description = models.CharField(max_length=500)
+    quantity = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+    rate = models.DecimalField(max_digits=12, decimal_places=2)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+    def __str__(self):
+        return f"{self.description} ({self.quantity} x {self.rate})"
+
+    @property
+    def amount(self):
+        """Calculate line item amount."""
+        return (self.quantity * self.rate).quantize(Decimal('0.01'))

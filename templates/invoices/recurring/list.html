@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Recurring Invoices - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Recurring Invoices</h1>
+            <p class="text-gray-600 dark:text-gray-400">Auto-generate invoices on schedule</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="{% url 'invoices:list' %}" class="btn-secondary">
+                View Invoices
+            </a>
+            {% if can_create %}
+            <a href="{% url 'invoices:recurring_create' %}" class="btn-primary">
+                + New Recurring Invoice
+            </a>
+            {% else %}
+            <span class="btn-secondary opacity-50 cursor-not-allowed" title="Limit reached">
+                Limit Reached
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Usage Info -->
+    {% if max_recurring > 0 %}
+    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+        <p class="text-blue-800 dark:text-blue-300 text-sm">
+            <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            You can create up to {{ max_recurring }} recurring invoices on your current plan.
+            {% if not can_create %}
+            <a href="{% url 'billing:plans' %}" class="underline font-medium">Upgrade</a> for more.
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Filters -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 mb-6 transition-colors duration-200">
+        <form method="get" class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1">
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search recurring invoices..."
+                    class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400">
+            </div>
+            <div>
+                <select name="status" class="form-select dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="all" {% if current_status == 'all' %}selected{% endif %}>All Status</option>
+                    {% for status_key, status_label in status_choices %}
+                    <option value="{{ status_key }}" {% if current_status == status_key %}selected{% endif %}>
+                        {{ status_label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn-secondary">Filter</button>
+        </form>
+    </div>
+
+    <!-- Recurring Invoice List -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
+        {% if recurring_invoices %}
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Client</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Frequency</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Next Run</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Generated</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                {% for recurring in recurring_invoices %}
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td class="px-6 py-4">
+                        <a href="{% url 'invoices:recurring_detail' recurring.pk %}" class="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-300 font-medium">
+                            {{ recurring.name }}
+                        </a>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Created {{ recurring.created_at|date:"M d, Y" }}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-gray-900 dark:text-white">{{ recurring.client_name }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ recurring.client_email }}</p>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-400">
+                            {{ recurring.get_frequency_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        {% if recurring.status == 'active' %}
+                        {{ recurring.next_run_date|date:"M d, Y" }}
+                        {% else %}
+                        <span class="text-gray-400 dark:text-gray-500">-</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                            {% if recurring.status == 'active' %}bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400
+                            {% elif recurring.status == 'paused' %}bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-400
+                            {% else %}bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300{% endif %}">
+                            {{ recurring.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-400">
+                        {{ recurring.invoices_generated }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                        <form method="post" action="{% url 'invoices:recurring_toggle_status' recurring.pk %}" class="inline">
+                            {% csrf_token %}
+                            {% if recurring.status == 'active' %}
+                            <button type="submit" class="text-yellow-600 dark:text-yellow-400 hover:text-yellow-900 dark:hover:text-yellow-300 mr-3" title="Pause">
+                                <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            {% elif recurring.status == 'paused' %}
+                            <button type="submit" class="text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300 mr-3" title="Resume">
+                                <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            {% endif %}
+                        </form>
+                        <a href="{% url 'invoices:recurring_edit' recurring.pk %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mr-3" title="Edit">
+                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                        </a>
+                        <a href="{% url 'invoices:recurring_delete' recurring.pk %}" class="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300" title="Delete">
+                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+            <nav class="flex gap-2">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&status={{ current_status }}"
+                   class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Previous</a>
+                {% endif %}
+
+                <span class="px-4 py-2 text-gray-600 dark:text-gray-400">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&status={{ current_status }}"
+                   class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Next</a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="px-6 py-12 text-center">
+            <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-gray-500 dark:text-gray-400 mb-4">No recurring invoices yet</p>
+            {% if can_create %}
+            <a href="{% url 'invoices:recurring_create' %}" class="btn-primary">Create Your First Recurring Invoice</a>
+            {% else %}
+            <p class="text-sm text-gray-400 dark:text-gray-500">You've reached your recurring invoice limit.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

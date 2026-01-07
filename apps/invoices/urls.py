@@ -31,4 +31,13 @@ urlpatterns = [
     path('invoices/batch/<int:pk>/', views.BatchResultView.as_view(), name='batch_result'),
     path('invoices/batch/<int:pk>/download/', views.download_batch_zip, name='batch_download'),
     path('invoices/batch/template/', views.download_csv_template, name='csv_template'),
+
+    # Recurring invoices
+    path('invoices/recurring/', views.RecurringInvoiceListView.as_view(), name='recurring_list'),
+    path('invoices/recurring/create/', views.RecurringInvoiceCreateView.as_view(), name='recurring_create'),
+    path('invoices/recurring/<int:pk>/', views.RecurringInvoiceDetailView.as_view(), name='recurring_detail'),
+    path('invoices/recurring/<int:pk>/edit/', views.RecurringInvoiceUpdateView.as_view(), name='recurring_edit'),
+    path('invoices/recurring/<int:pk>/delete/', views.RecurringInvoiceDeleteView.as_view(), name='recurring_delete'),
+    path('invoices/recurring/<int:pk>/toggle-status/', views.recurring_toggle_status, name='recurring_toggle_status'),
+    path('invoices/recurring/<int:pk>/generate-now/', views.recurring_generate_now, name='recurring_generate_now'),
 ]

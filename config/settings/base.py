@@ -36,6 +36,7 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'django_filters',
     'django_celery_results',
+    'django_celery_beat',
 ]
 
 # Only add djstripe if Stripe is configured
@@ -226,6 +227,8 @@ SUBSCRIPTION_TIERS = {
         'api_access': False,
         'watermark': True,
         'api_calls_per_month': 0,
+        'recurring_invoices': False,
+        'max_recurring': 0,
     },
     'starter': {
         'name': 'Starter',
@@ -236,6 +239,8 @@ SUBSCRIPTION_TIERS = {
         'api_access': False,
         'watermark': False,
         'api_calls_per_month': 0,
+        'recurring_invoices': False,
+        'max_recurring': 0,
     },
     'professional': {
         'name': 'Professional',
@@ -246,6 +251,8 @@ SUBSCRIPTION_TIERS = {
         'api_access': False,
         'watermark': False,
         'api_calls_per_month': 0,
+        'recurring_invoices': True,
+        'max_recurring': 10,
     },
     'business': {
         'name': 'Business',
@@ -256,6 +263,8 @@ SUBSCRIPTION_TIERS = {
         'api_access': True,
         'watermark': False,
         'api_calls_per_month': 1000,
+        'recurring_invoices': True,
+        'max_recurring': -1,  # Unlimited
     },
 }
 

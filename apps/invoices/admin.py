@@ -2,7 +2,7 @@
 Admin configuration for invoices app.
 """
 from django.contrib import admin
-from .models import Invoice, LineItem, InvoiceBatch
+from .models import Invoice, LineItem, InvoiceBatch, RecurringInvoice, RecurringLineItem
 
 
 class LineItemInline(admin.TabularInline):
@@ -54,3 +54,63 @@ class InvoiceBatchAdmin(admin.ModelAdmin):
     ]
     list_filter = ['status', 'created_at']
     readonly_fields = ['created_at', 'completed_at']
+
+
+class RecurringLineItemInline(admin.TabularInline):
+    model = RecurringLineItem
+    extra = 1
+    fields = ['description', 'quantity', 'rate', 'order']
+
+
+@admin.register(RecurringInvoice)
+class RecurringInvoiceAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'client_name', 'company', 'frequency', 'status',
+        'next_run_date', 'invoices_generated', 'created_at'
+    ]
+    list_filter = ['status', 'frequency', 'currency', 'created_at']
+    search_fields = ['name', 'client_name', 'client_email']
+    readonly_fields = [
+        'invoices_generated', 'last_generated_at', 'last_invoice',
+        'created_at', 'updated_at'
+    ]
+    inlines = [RecurringLineItemInline]
+    date_hierarchy = 'next_run_date'
+
+    fieldsets = (
+        ('Recurring Invoice Details', {
+            'fields': ('company', 'name', 'status')
+        }),
+        ('Client Information', {
+            'fields': ('client_name', 'client_email', 'client_phone', 'client_address')
+        }),
+        ('Schedule', {
+            'fields': ('frequency', 'start_date', 'end_date', 'next_run_date')
+        }),
+        ('Invoice Settings', {
+            'fields': ('currency', 'payment_terms', 'tax_rate', 'template_style', 'notes')
+        }),
+        ('Notifications', {
+            'fields': ('send_email_on_generation', 'auto_send_to_client')
+        }),
+        ('Statistics', {
+            'fields': ('invoices_generated', 'last_generated_at', 'last_invoice'),
+            'classes': ('collapse',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    actions = ['pause_recurring', 'resume_recurring']
+
+    @admin.action(description='Pause selected recurring invoices')
+    def pause_recurring(self, request, queryset):
+        updated = queryset.filter(status='active').update(status='paused')
+        self.message_user(request, f'{updated} recurring invoice(s) paused.')
+
+    @admin.action(description='Resume selected recurring invoices')
+    def resume_recurring(self, request, queryset):
+        updated = queryset.filter(status='paused').update(status='active')
+        self.message_user(request, f'{updated} recurring invoice(s) resumed.')

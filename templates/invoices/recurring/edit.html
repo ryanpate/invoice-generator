@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit {{ recurring.name }} - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+        <a href="{% url 'invoices:recurring_detail' recurring.pk %}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-sm mb-2 inline-block">
+            &larr; Back to {{ recurring.name }}
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Recurring Invoice</h1>
+        <p class="text-gray-600 dark:text-gray-400">Update recurring invoice settings</p>
+    </div>
+
+    <form method="post" id="recurring-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if line_items.non_form_errors %}
+        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+            <p><strong>Line Items:</strong></p>
+            {% for error in line_items.non_form_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Section -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Recurring Invoice Name -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recurring Invoice Name</h2>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <p class="text-red-500 dark:text-red-400 text-sm mt-1">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Client Information -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Client Information</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Name *</label>
+                            {{ form.client_name }}
+                            {% if form.client_name.errors %}
+                            <p class="text-red-500 dark:text-red-400 text-sm mt-1">{{ form.client_name.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Email</label>
+                            {{ form.client_email }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Phone</label>
+                            {{ form.client_phone }}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Address</label>
+                            {{ form.client_address }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Schedule</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frequency *</label>
+                            {{ form.frequency }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start Date *</label>
+                            {{ form.start_date }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End Date</label>
+                            {{ form.end_date }}
+                            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Leave blank for indefinite</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Line Items</h2>
+
+                    {{ line_items.management_form }}
+
+                    <div id="line-items-container">
+                        {% for item_form in line_items %}
+                        <div class="line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100 dark:border-gray-700">
+                            <div class="flex-1 min-w-[200px]">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description *</label>
+                                {{ item_form.description }}
+                            </div>
+                            <div class="w-24">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qty *</label>
+                                {{ item_form.quantity }}
+                            </div>
+                            <div class="w-32">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rate *</label>
+                                {{ item_form.rate }}
+                            </div>
+                            <div class="w-8 pt-6">
+                                {% if item_form.DELETE %}
+                                {{ item_form.DELETE }}
+                                {% endif %}
+                            </div>
+                            {{ item_form.id }}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="button" id="add-line-item" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
+                        + Add Line Item
+                    </button>
+                </div>
+
+                <!-- Invoice Settings -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invoice Settings</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Currency</label>
+                            {{ form.currency }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Terms</label>
+                            {{ form.payment_terms }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tax Rate (%)</label>
+                            {{ form.tax_rate }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Template Style</label>
+                            {{ form.template_style }}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes / Payment Instructions</label>
+                            {{ form.notes }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Notification Settings</h2>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            {{ form.send_email_on_generation }}
+                            <label for="{{ form.send_email_on_generation.id_for_label }}" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                                <span class="font-medium">Email me when invoice is generated</span>
+                            </label>
+                        </div>
+                        <div class="flex items-start">
+                            {{ form.auto_send_to_client }}
+                            <label for="{{ form.auto_send_to_client.id_for_label }}" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                                <span class="font-medium">Auto-send invoice to client</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 sticky top-8 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Summary</h2>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                            <span>Subtotal</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                            <span>Tax</span>
+                            <span id="tax-amount">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-semibold text-gray-900 dark:text-white pt-3 border-t border-gray-200 dark:border-gray-700">
+                            <span>Est. Total/Invoice</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full mb-3">
+                        Save Changes
+                    </button>
+                    <a href="{% url 'invoices:recurring_detail' recurring.pk %}" class="btn-secondary w-full block text-center">
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function calculateTotals() {
+        let subtotal = 0;
+        document.querySelectorAll('.line-item').forEach(function(item) {
+            const deleteCheckbox = item.querySelector('[name*=DELETE]');
+            if (deleteCheckbox && deleteCheckbox.checked) return;
+
+            const qty = parseFloat(item.querySelector('[name*=quantity]').value) || 0;
+            const rate = parseFloat(item.querySelector('[name*=rate]').value) || 0;
+            subtotal += qty * rate;
+        });
+
+        const taxRate = parseFloat(document.querySelector('[name=tax_rate]').value) || 0;
+        const taxAmount = subtotal * (taxRate / 100);
+        const total = subtotal + taxAmount;
+
+        document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+        document.getElementById('tax-amount').textContent = '$' + taxAmount.toFixed(2);
+        document.getElementById('total').textContent = '$' + total.toFixed(2);
+    }
+
+    function attachCalculateListeners() {
+        document.querySelectorAll('input[name*=quantity], input[name*=rate], input[name=tax_rate]').forEach(function(input) {
+            input.removeEventListener('input', calculateTotals);
+            input.addEventListener('input', calculateTotals);
+        });
+    }
+    attachCalculateListeners();
+    calculateTotals();
+
+    const addButton = document.getElementById('add-line-item');
+    const container = document.getElementById('line-items-container');
+    const totalFormsInput = document.querySelector('[name="line_items-TOTAL_FORMS"]');
+
+    addButton.addEventListener('click', function() {
+        const currentFormCount = parseInt(totalFormsInput.value);
+        const newFormIndex = currentFormCount;
+
+        const template = container.querySelector('.line-item');
+        if (!template) return;
+
+        const newItem = template.cloneNode(true);
+
+        newItem.querySelectorAll('input, select, textarea').forEach(function(input) {
+            if (input.name) {
+                input.name = input.name.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+            if (input.id) {
+                input.id = input.id.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+            if (input.type === 'checkbox') {
+                input.checked = false;
+            } else if (input.type !== 'hidden' || input.name.includes('-id')) {
+                input.value = '';
+            }
+        });
+
+        newItem.querySelectorAll('label').forEach(function(label) {
+            if (label.htmlFor) {
+                label.htmlFor = label.htmlFor.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+        });
+
+        container.appendChild(newItem);
+        totalFormsInput.value = currentFormCount + 1;
+
+        attachCalculateListeners();
+        calculateTotals();
+    });
+
+    document.addEventListener('change', function(e) {
+        if (e.target.name && e.target.name.includes('DELETE')) {
+            const lineItem = e.target.closest('.line-item');
+            if (e.target.checked) {
+                lineItem.style.opacity = '0.5';
+                lineItem.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(function(input) {
+                    input.disabled = true;
+                });
+            } else {
+                lineItem.style.opacity = '1';
+                lineItem.querySelectorAll('input, select, textarea').forEach(function(input) {
+                    input.disabled = false;
+                });
+            }
+            calculateTotals();
+        }
+    });
+});
+</script>
+{% endblock %}

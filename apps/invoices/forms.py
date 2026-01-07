@@ -6,7 +6,7 @@ from django.conf import settings
 from django.forms import inlineformset_factory
 from decimal import Decimal
 
-from .models import Invoice, LineItem
+from .models import Invoice, LineItem, RecurringInvoice, RecurringLineItem
 
 
 class InvoiceForm(forms.ModelForm):
@@ -224,3 +224,148 @@ class BatchUploadForm(forms.Form):
                 raise forms.ValidationError('Invalid file type. Please upload a CSV file.')
 
         return csv_file
+
+
+class RecurringInvoiceForm(forms.ModelForm):
+    """Form for creating/editing recurring invoices."""
+
+    template_style = forms.ChoiceField(
+        choices=[],
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    class Meta:
+        model = RecurringInvoice
+        fields = [
+            'name', 'client_name', 'client_email', 'client_phone', 'client_address',
+            'frequency', 'start_date', 'end_date',
+            'currency', 'payment_terms', 'tax_rate',
+            'template_style', 'notes',
+            'send_email_on_generation', 'auto_send_to_client'
+        ]
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'e.g., Monthly Retainer - Acme Corp'
+            }),
+            'client_name': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Client or Company Name'
+            }),
+            'client_email': forms.EmailInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'client@example.com'
+            }),
+            'client_phone': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': '+1 (555) 123-4567'
+            }),
+            'client_address': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'rows': 3,
+                'placeholder': 'Client address'
+            }),
+            'frequency': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'start_date': forms.DateInput(attrs={
+                'class': 'form-input',
+                'type': 'date'
+            }),
+            'end_date': forms.DateInput(attrs={
+                'class': 'form-input',
+                'type': 'date'
+            }),
+            'currency': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'payment_terms': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'tax_rate': forms.NumberInput(attrs={
+                'class': 'form-input',
+                'step': '0.01',
+                'min': '0',
+                'max': '100',
+                'placeholder': '0.00'
+            }),
+            'notes': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'rows': 3,
+                'placeholder': 'Payment instructions, thank you message, etc.'
+            }),
+            'send_email_on_generation': forms.CheckboxInput(attrs={
+                'class': 'form-checkbox'
+            }),
+            'auto_send_to_client': forms.CheckboxInput(attrs={
+                'class': 'form-checkbox'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.company = kwargs.pop('company', None)
+        super().__init__(*args, **kwargs)
+
+        # Set defaults from company
+        if self.company and not self.instance.pk:
+            self.initial['currency'] = self.company.default_currency
+            self.initial['payment_terms'] = self.company.default_payment_terms
+            self.initial['tax_rate'] = self.company.default_tax_rate
+            self.initial['notes'] = self.company.default_notes
+            self.initial['template_style'] = self.company.default_template
+
+        # Limit template choices to user's available templates
+        if self.user:
+            available_templates = self.user.get_available_templates()
+            template_choices = [
+                (key, value['name'])
+                for key, value in settings.INVOICE_TEMPLATES.items()
+                if key in available_templates
+            ]
+            if not template_choices:
+                template_choices = [('clean_slate', 'Clean Slate')]
+            self.fields['template_style'].choices = template_choices
+        else:
+            self.fields['template_style'].choices = [
+                (key, value['name'])
+                for key, value in settings.INVOICE_TEMPLATES.items()
+            ]
+
+
+class RecurringLineItemForm(forms.ModelForm):
+    """Form for recurring invoice line items."""
+
+    class Meta:
+        model = RecurringLineItem
+        fields = ['description', 'quantity', 'rate']
+        widgets = {
+            'description': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Service or product description'
+            }),
+            'quantity': forms.NumberInput(attrs={
+                'class': 'form-input w-24',
+                'step': '0.01',
+                'min': '0.01',
+                'placeholder': '1'
+            }),
+            'rate': forms.NumberInput(attrs={
+                'class': 'form-input w-32',
+                'step': '0.01',
+                'min': '0',
+                'placeholder': '0.00'
+            }),
+        }
+
+
+# Formset for recurring invoice line items
+RecurringLineItemFormSet = inlineformset_factory(
+    RecurringInvoice,
+    RecurringLineItem,
+    form=RecurringLineItemForm,
+    extra=1,
+    can_delete=True,
+    min_num=1,
+    validate_min=True,
+)

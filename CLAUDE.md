@@ -39,6 +39,7 @@
 - Invoice email sending with PDF attachment and customizable message
 - Payment receipt emails (auto-sent when invoice marked as paid)
 - Social login with Google and GitHub (OAuth fully configured via environment variables)
+- Recurring invoices for Professional+ plans (weekly, bi-weekly, monthly, quarterly, yearly)
 
 ### Suppressed/Disabled Features
 
@@ -46,7 +47,8 @@
 |---------|--------|--------|-----------|
 | Email Verification | Disabled | Not required for MVP | Change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
-| Celery/Redis | Disabled | No Redis configured | Add Redis service on Railway, set `REDIS_URL` env var |
+| Celery/Redis | Disabled | No Redis configured | Add Redis service on Railway, set `REDIS_URL`, deploy worker + beat services |
+| Recurring Invoice Auto-Generation | Disabled | Requires Celery/Redis | Deploy Celery worker and Celery Beat services on Railway |
 | Healthcheck | Removed | Startup time exceeds Railway timeout | Re-add to `railway.json` if startup is optimized |
 
 ---
@@ -88,7 +90,7 @@
 - [ ] **Affiliate Program:** Referral tracking (20% commission)
 - [ ] **QR Code for Payment:** Optional on invoices
 - [ ] **Digital Signature Field:** On invoice PDFs
-- [ ] **Recurring Invoices:** Auto-generate invoices on schedule
+- [x] **Recurring Invoices:** Auto-generate invoices on schedule - COMPLETED (requires Celery/Redis deployment)
 - [ ] **Client Portal:** Allow clients to view/pay invoices online
 - [ ] **Multi-language Support:** i18n for international users
 
@@ -161,9 +163,10 @@ invoice_generator/
 ├── templates/
 │   ├── account/             # allauth templates (login, signup)
 │   ├── dashboard/
-│   ├── emails/              # Email templates (welcome, etc.)
+│   ├── emails/              # Email templates (welcome, recurring, etc.)
 │   ├── invoices/
-│   │   └── pdf/             # 5 PDF templates
+│   │   ├── pdf/             # 5 PDF templates
+│   │   └── recurring/       # Recurring invoice templates (list, detail, create, edit, delete)
 │   ├── billing/
 │   ├── landing/             # Home page with FAQ
 │   ├── pages/               # Static pages (contact, help, privacy, terms, api_docs)
@@ -192,9 +195,12 @@ invoice_generator/
 | `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
 | `apps/billing/views.py` | Stripe checkout flow with live price IDs |
 | `apps/api/views.py` | REST API endpoints |
+| `apps/invoices/tasks.py` | Celery tasks for recurring invoice processing |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
 | `templates/emails/welcome.html` | HTML welcome email template |
 | `templates/emails/payment_receipt.html` | Payment receipt email template |
+| `templates/emails/recurring_invoice_generated.html` | Recurring invoice notification email |
+| `templates/emails/invoice_to_client.html` | Invoice email sent to clients |
 | `templates/landing/index.html` | Landing page with FAQ + FAQPage schema |
 | `railway.json` | Railway deploy config with startCommand |
 | `nixpacks.toml` | Nix packages for build |
@@ -207,8 +213,8 @@ invoice_generator/
 |------|-------|-------------|----------|
 | Free | $0 | 5 | 1 template, watermark |
 | Starter | $9 | 50 | 2 templates, no watermark |
-| Professional | $29 | 200 | All templates, batch upload |
-| Business | $79 | Unlimited | API access (1000 calls/mo) |
+| Professional | $29 | 200 | All templates, batch upload, recurring invoices (up to 10) |
+| Business | $79 | Unlimited | API access (1000 calls/mo), unlimited recurring invoices |
 
 ---
 
@@ -236,6 +242,17 @@ invoice_generator/
 | `/privacy/` | Privacy Policy |
 | `/terms/` | Terms of Service |
 | `/api/docs/` | API documentation |
+
+### Recurring Invoice URLs (Professional+ only)
+| URL | Purpose |
+|-----|---------|
+| `/invoices/recurring/` | List all recurring invoices |
+| `/invoices/recurring/create/` | Create new recurring invoice |
+| `/invoices/recurring/<pk>/` | View recurring invoice details |
+| `/invoices/recurring/<pk>/edit/` | Edit recurring invoice |
+| `/invoices/recurring/<pk>/delete/` | Delete confirmation |
+| `/invoices/recurring/<pk>/toggle-status/` | Pause/Resume recurring |
+| `/invoices/recurring/<pk>/generate-now/` | Manual invoice generation |
 
 ### Meta Tags Override (for child templates)
 ```html
@@ -344,6 +361,15 @@ Authentication: API Key in header `X-API-Key: <key>`
 47. Updated login and signup templates with provider login URLs
 48. Created data migration to configure OAuth apps from environment variables
 49. Fixed OAuth migration timing issue with ensure_oauth_apps migration
+50. Added recurring invoices feature for Professional+ plans
+51. Created RecurringInvoice and RecurringLineItem models with scheduling logic
+52. Added django-celery-beat for periodic task scheduling
+53. Created Celery tasks for processing recurring invoices (daily at 6 AM UTC)
+54. Added recurring invoice CRUD views with subscription tier checks
+55. Created recurring invoice templates (list, detail, create, edit, delete)
+56. Created recurring invoice notification emails (owner notification, client invoice)
+57. Added RecurringInvoiceAdmin with bulk pause/resume actions
+58. Updated subscription tiers with recurring invoice limits (Pro: 10, Business: unlimited)
 
 ---
 
@@ -380,7 +406,7 @@ python manage.py test
 - **Database:** PostgreSQL (auto-provisioned)
 - **Static Files:** Served via WhiteNoise
 
-### Production Checklist (All Complete)
+### Production Checklist
 - [x] Set all environment variables
 - [x] Configure Stripe products and price IDs
 - [x] Set up custom domain DNS (www.invoicekits.com)
@@ -389,3 +415,25 @@ python manage.py test
 - [x] Set up Google Analytics (G-0NR5NZMNBF)
 - [x] Register with Google Search Console
 - [x] Configure Google and GitHub OAuth social login
+- [ ] Add Redis service on Railway (for recurring invoices)
+- [ ] Deploy Celery worker service
+- [ ] Deploy Celery Beat service
+
+### Celery Deployment (for Recurring Invoices)
+To enable automatic recurring invoice generation, deploy these Railway services:
+
+1. **Add Redis Service**
+   - In Railway dashboard, add a Redis service
+   - `REDIS_URL` will be automatically set
+
+2. **Create Celery Worker Service**
+   ```bash
+   celery -A config worker -l info
+   ```
+
+3. **Create Celery Beat Service**
+   ```bash
+   celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+   ```
+
+Recurring invoices will process daily at 6:00 AM UTC.

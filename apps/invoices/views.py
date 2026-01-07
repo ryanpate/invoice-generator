@@ -11,8 +11,11 @@ from django.http import HttpResponse, JsonResponse, FileResponse
 from django.db.models import Q
 from django.conf import settings
 
-from .models import Invoice, LineItem, InvoiceBatch
-from .forms import InvoiceForm, LineItemFormSet, BatchUploadForm, SendInvoiceEmailForm
+from .models import Invoice, LineItem, InvoiceBatch, RecurringInvoice
+from .forms import (
+    InvoiceForm, LineItemFormSet, BatchUploadForm, SendInvoiceEmailForm,
+    RecurringInvoiceForm, RecurringLineItemFormSet
+)
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
 from .services.email_sender import InvoiceEmailService
@@ -443,3 +446,280 @@ class InvoiceSendEmailView(LoginRequiredMixin, FormView):
                 f'Failed to send email: {result.get("error", "Unknown error")}'
             )
             return self.form_invalid(form)
+
+
+# =============================================================================
+# Recurring Invoice Views
+# =============================================================================
+
+class RecurringInvoiceListView(LoginRequiredMixin, ListView):
+    """List all recurring invoices for the current user."""
+    model = RecurringInvoice
+    template_name = 'invoices/recurring/list.html'
+    context_object_name = 'recurring_invoices'
+    paginate_by = 20
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+
+        if not request.user.has_recurring_invoices():
+            messages.error(
+                request,
+                'Recurring invoices require a Professional plan or higher. '
+                'Please upgrade to access this feature.'
+            )
+            return redirect('billing:plans')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = RecurringInvoice.objects.filter(
+            company__user=self.request.user
+        ).select_related('company', 'last_invoice')
+
+        # Status filter
+        status = self.request.GET.get('status')
+        if status and status != 'all':
+            queryset = queryset.filter(status=status)
+
+        # Search filter
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) |
+                Q(client_name__icontains=search)
+            )
+
+        return queryset.order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = RecurringInvoice.STATUS_CHOICES
+        context['current_status'] = self.request.GET.get('status', 'all')
+        context['search_query'] = self.request.GET.get('search', '')
+        context['can_create'] = self.request.user.can_create_recurring_invoice()
+        context['max_recurring'] = self.request.user.get_recurring_invoice_limit()
+        return context
+
+
+class RecurringInvoiceDetailView(LoginRequiredMixin, DetailView):
+    """View recurring invoice details."""
+    model = RecurringInvoice
+    template_name = 'invoices/recurring/detail.html'
+    context_object_name = 'recurring'
+
+    def get_queryset(self):
+        return RecurringInvoice.objects.filter(
+            company__user=self.request.user
+        ).select_related('company', 'last_invoice').prefetch_related('line_items')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get generated invoices
+        context['generated_invoices'] = Invoice.objects.filter(
+            invoice_name=self.object.name,
+            company=self.object.company
+        ).order_by('-created_at')[:10]
+        return context
+
+
+class RecurringInvoiceCreateView(LoginRequiredMixin, CreateView):
+    """Create a new recurring invoice."""
+    model = RecurringInvoice
+    form_class = RecurringInvoiceForm
+    template_name = 'invoices/recurring/create.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+
+        if not request.user.has_recurring_invoices():
+            messages.error(
+                request,
+                'Recurring invoices require a Professional plan or higher.'
+            )
+            return redirect('billing:plans')
+
+        if not request.user.can_create_recurring_invoice():
+            messages.error(
+                request,
+                'You have reached your limit for recurring invoices. '
+                'Please upgrade your plan or cancel an existing recurring invoice.'
+            )
+            return redirect('invoices:recurring_list')
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['company'] = getattr(self.request.user, 'company', None)
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['line_items'] = RecurringLineItemFormSet(self.request.POST)
+        else:
+            context['line_items'] = RecurringLineItemFormSet()
+        context['templates'] = settings.INVOICE_TEMPLATES
+        context['available_templates'] = self.request.user.get_available_templates()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        line_items = context['line_items']
+
+        # Get or create company
+        from apps.companies.models import Company
+        company, _ = Company.objects.get_or_create(
+            user=self.request.user,
+            defaults={'name': f"{self.request.user.username}'s Company"}
+        )
+
+        form.instance.company = company
+        form.instance.next_run_date = form.cleaned_data['start_date']
+
+        if line_items.is_valid():
+            self.object = form.save()
+            line_items.instance = self.object
+            line_items.save()
+
+            messages.success(
+                self.request,
+                f'Recurring invoice "{self.object.name}" created successfully!'
+            )
+            return redirect('invoices:recurring_detail', pk=self.object.pk)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+class RecurringInvoiceUpdateView(LoginRequiredMixin, UpdateView):
+    """Edit an existing recurring invoice."""
+    model = RecurringInvoice
+    form_class = RecurringInvoiceForm
+    template_name = 'invoices/recurring/edit.html'
+
+    def get_queryset(self):
+        return RecurringInvoice.objects.filter(company__user=self.request.user)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['company'] = self.object.company
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['line_items'] = RecurringLineItemFormSet(
+                self.request.POST, instance=self.object
+            )
+        else:
+            context['line_items'] = RecurringLineItemFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        line_items = context['line_items']
+
+        if line_items.is_valid():
+            self.object = form.save()
+            line_items.save()
+
+            messages.success(self.request, 'Recurring invoice updated successfully!')
+            return redirect('invoices:recurring_detail', pk=self.object.pk)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+class RecurringInvoiceDeleteView(LoginRequiredMixin, DeleteView):
+    """Delete a recurring invoice."""
+    model = RecurringInvoice
+    template_name = 'invoices/recurring/delete_confirm.html'
+    success_url = reverse_lazy('invoices:recurring_list')
+
+    def get_queryset(self):
+        return RecurringInvoice.objects.filter(company__user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Recurring invoice deleted successfully.')
+        return super().delete(request, *args, **kwargs)
+
+
+@login_required
+def recurring_toggle_status(request, pk):
+    """Toggle recurring invoice status between active and paused."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=405)
+
+    recurring = get_object_or_404(
+        RecurringInvoice,
+        pk=pk,
+        company__user=request.user
+    )
+
+    if recurring.status == 'active':
+        recurring.pause()
+        new_status = 'paused'
+        message = f'Recurring invoice "{recurring.name}" paused.'
+    elif recurring.status == 'paused':
+        recurring.resume()
+        new_status = 'active'
+        message = f'Recurring invoice "{recurring.name}" resumed.'
+    else:
+        return JsonResponse({'error': 'Cannot toggle cancelled invoice'}, status=400)
+
+    messages.success(request, message)
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({'success': True, 'status': new_status})
+
+    return redirect('invoices:recurring_detail', pk=pk)
+
+
+@login_required
+def recurring_generate_now(request, pk):
+    """Manually generate an invoice from a recurring invoice."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=405)
+
+    recurring = get_object_or_404(
+        RecurringInvoice,
+        pk=pk,
+        company__user=request.user
+    )
+
+    if not request.user.has_recurring_invoices():
+        messages.error(request, 'You no longer have access to recurring invoices.')
+        return redirect('billing:plans')
+
+    if not request.user.can_create_invoice():
+        messages.error(
+            request,
+            'You have reached your invoice limit for this month. '
+            'Please upgrade your plan to create more invoices.'
+        )
+        return redirect('billing:plans')
+
+    try:
+        invoice = recurring.generate_invoice()
+        request.user.increment_invoice_count()
+
+        messages.success(
+            request,
+            f'Invoice {invoice.invoice_number} generated from "{recurring.name}"!'
+        )
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'invoice_id': invoice.pk,
+                'invoice_number': invoice.invoice_number
+            })
+
+        return redirect('invoices:detail', pk=invoice.pk)
+
+    except Exception as e:
+        messages.error(request, f'Failed to generate invoice: {str(e)}')
+        return redirect('invoices:recurring_detail', pk=pk)
