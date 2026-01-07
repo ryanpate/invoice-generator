@@ -38,6 +38,7 @@
 - Welcome email on signup (via Resend SMTP)
 - Invoice email sending with PDF attachment and customizable message
 - Payment receipt emails (auto-sent when invoice marked as paid)
+- Social login with Google and GitHub (requires OAuth credentials in Django admin)
 
 ### Suppressed/Disabled Features
 
@@ -77,7 +78,7 @@
   - [x] Welcome email on signup - COMPLETED (via Resend SMTP)
   - [x] Invoice sent notifications - COMPLETED (via Send Invoice feature)
   - [x] Payment receipts - COMPLETED (auto-sends to client + business owner when marked as paid)
-- [ ] **Social Authentication:** Configure Google and GitHub OAuth providers
+- [x] **Social Authentication:** Google and GitHub OAuth configured (requires OAuth app setup in Django admin)
 - [x] **Invoice Email Sending:** Send invoices directly to clients via email with PDF attachment - COMPLETED
 - [ ] **Blog/Content Marketing:** Create `/blog/` section for SEO content
 
@@ -335,6 +336,9 @@ Authentication: API Key in header `X-API-Key: <key>`
 42. Added automatic payment receipt emails when invoice marked as paid
 43. Created payment receipt email template `templates/emails/payment_receipt.html`
 44. Added signals handler `apps/invoices/signals.py` for payment notifications
+45. Configured Google and GitHub social login with django-allauth
+46. Added SOCIALACCOUNT_PROVIDERS settings for Google and GitHub OAuth
+47. Updated login and signup templates with provider login URLs
 
 ---
 

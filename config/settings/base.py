@@ -31,6 +31,7 @@ THIRD_PARTY_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
     'rest_framework',
     'corsheaders',
     'django_filters',
@@ -142,6 +143,24 @@ ACCOUNT_SESSION_REMEMBER = True
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+# Social account providers (Google, GitHub)
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+    },
+    'github': {
+        'SCOPE': ['user:email'],
+    }
+}
+
+# Social account settings
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Django REST Framework
 REST_FRAMEWORK = {
