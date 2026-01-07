@@ -9,8 +9,25 @@
         <p class="text-gray-600">Fill in the details to generate your invoice</p>
     </div>
 
-    <form method="post" enctype="multipart/form-data" id="invoice-form">
+    <form method="post" id="invoice-form">
         {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if line_items.non_form_errors %}
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <p><strong>Line Items:</strong></p>
+            {% for error in line_items.non_form_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Form Section -->
@@ -70,18 +87,27 @@
 
                     <div id="line-items-container">
                         {% for item_form in line_items %}
-                        <div class="line-item flex gap-4 items-start mb-4 pb-4 border-b border-gray-100">
-                            <div class="flex-1">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <div class="line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100">
+                            <div class="flex-1 min-w-[200px]">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
                                 {{ item_form.description }}
+                                {% if item_form.description.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ item_form.description.errors.0 }}</p>
+                                {% endif %}
                             </div>
                             <div class="w-24">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Qty</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Qty *</label>
                                 {{ item_form.quantity }}
+                                {% if item_form.quantity.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ item_form.quantity.errors.0 }}</p>
+                                {% endif %}
                             </div>
                             <div class="w-32">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Rate</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Rate *</label>
                                 {{ item_form.rate }}
+                                {% if item_form.rate.errors %}
+                                <p class="text-red-500 text-xs mt-1">{{ item_form.rate.errors.0 }}</p>
+                                {% endif %}
                             </div>
                             <div class="w-8 pt-6">
                                 {% if item_form.DELETE %}

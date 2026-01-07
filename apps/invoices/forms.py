@@ -85,7 +85,16 @@ class InvoiceForm(forms.ModelForm):
                 for key, value in settings.INVOICE_TEMPLATES.items()
                 if key in available_templates
             ]
+            # Fallback to clean_slate if no templates available
+            if not template_choices:
+                template_choices = [('clean_slate', 'Clean Slate')]
             self.fields['template_style'].choices = template_choices
+        else:
+            # Default choices if no user
+            self.fields['template_style'].choices = [
+                (key, value['name'])
+                for key, value in settings.INVOICE_TEMPLATES.items()
+            ]
 
 
 class LineItemForm(forms.ModelForm):
