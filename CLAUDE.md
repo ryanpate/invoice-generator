@@ -30,14 +30,14 @@
 - Usage tracking per user
 - Admin panel (/admin/) with superuser auto-creation from env vars
 - SEO optimizations (meta tags, Open Graph, Twitter Cards, Schema.org, sitemap, robots.txt)
+- Stripe subscription payments (Starter $9, Professional $29, Business $79)
+- Stripe webhook handling for subscription lifecycle events
 
 ### Suppressed/Disabled Features
 
 | Feature | Status | Reason | To Enable |
 |---------|--------|--------|-----------|
 | Email Verification | Disabled | No SMTP credentials | Set `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` env vars, then change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
-| Stripe Payments | Non-functional | No Stripe keys/price IDs | Add `STRIPE_LIVE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` env vars. Create price IDs in Stripe Dashboard and update `billing/views.py:67-71` |
-| djstripe | Conditionally disabled | Only loads if Stripe keys exist | Set `STRIPE_TEST_SECRET_KEY` or `STRIPE_LIVE_SECRET_KEY` |
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
 | Celery/Redis | Disabled | No Redis configured | Add Redis service on Railway, set `REDIS_URL` env var |
 | Social Auth (Google/GitHub) | UI Only | OAuth not configured | Configure in django-allauth + provider settings |
@@ -48,15 +48,11 @@
 ## Not Yet Implemented (TODOs)
 
 ### Critical - Revenue Blocking
-- [ ] **Stripe Integration:** Replace placeholder price IDs in `apps/billing/views.py:67-71`:
-  ```python
-  price_ids = {
-      'starter': 'price_starter_monthly',      # REPLACE with actual Stripe price ID
-      'professional': 'price_professional_monthly',
-      'business': 'price_business_monthly',
-  }
-  ```
-- [ ] **Stripe Webhook Handler:** Ensure subscription lifecycle events are handled
+- [x] **Stripe Integration:** Configured with live price IDs - COMPLETED
+  - Starter: `price_1Smy2w6oOlORkbTyjs4TGG8s` ($9/month)
+  - Professional: `price_1Smy3O6oOlORkbTySI4fCIod` ($29/month)
+  - Business: `price_1Smy4p6oOlORkbTyXe9hIMKE` ($79/month)
+- [x] **Stripe Webhook Handler:** Subscription lifecycle events handled - COMPLETED
 - [x] **Watermark on Free Tier PDFs:** Diagonal "FREE PLAN" watermark on all 5 PDF templates - COMPLETED
 
 ### High Priority - Core Functionality
@@ -108,16 +104,14 @@
 - `ALLOWED_HOSTS` - `.railway.app` added automatically
 - `DJANGO_SUPERUSER_EMAIL` - Admin user email
 - `DJANGO_SUPERUSER_PASSWORD` - Admin user password
+- `STRIPE_LIVE_SECRET_KEY` - Stripe live API key (configured)
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret (configured)
 
 ### Need to Configure
 ```bash
 # Email (required for email verification)
 EMAIL_HOST_USER=your-email@gmail.com
 EMAIL_HOST_PASSWORD=your-app-password
-
-# Stripe (required for payments)
-STRIPE_LIVE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
 
 # AWS S3 (optional - for media file storage)
 AWS_ACCESS_KEY_ID=...
@@ -184,7 +178,7 @@ invoice_generator/
 | `apps/invoices/models.py` | Invoice model with invoice_name field |
 | `apps/invoices/forms.py` | InvoiceForm with invoice_name field |
 | `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation |
-| `apps/billing/views.py` | Stripe checkout flow (needs price IDs) |
+| `apps/billing/views.py` | Stripe checkout flow with live price IDs |
 | `apps/api/views.py` | REST API endpoints |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org |
 | `templates/landing/index.html` | Landing page with FAQ + FAQPage schema |
@@ -306,6 +300,8 @@ Authentication: API Key in header `X-API-Key: <key>`
 22. Created Batch Result page template with status display and ZIP download
 23. Created Account Delete Confirmation template with data deletion warnings
 24. Added prominent "FREE PLAN" diagonal watermark to all 5 PDF templates for free tier users
+25. Fixed watermark CSS for xhtml2pdf compatibility (position:absolute instead of position:fixed)
+26. Configured Stripe live price IDs for all subscription tiers
 
 ---
 
