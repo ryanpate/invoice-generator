@@ -1,9 +1,9 @@
 # InvoiceKits - Project Status
 
 ## Live Site
-**URL:** https://web-production-faa7d.up.railway.app/
+**URL:** https://www.invoicekits.com/
 
-**Domain:** invoicekits.com (pending DNS configuration)
+**Domain:** www.invoicekits.com (configured)
 
 **Deployment:** Railway with Nixpacks builder
 
@@ -63,8 +63,8 @@
 - [x] **Invoice Delete Confirmation:** `templates/invoices/delete_confirm.html` - COMPLETED
 - [x] **Batch Result Page:** `templates/invoices/batch_result.html` - COMPLETED
 - [x] **Account Delete Confirmation:** `templates/accounts/delete_confirm.html` - COMPLETED
-- [ ] **Stripe Subscription Cancellation on Account Delete:** `apps/accounts/views.py:88` has TODO
-- [ ] **Custom Domain Setup:** Configure invoicekits.com DNS to point to Railway
+- [x] **Stripe Subscription Cancellation on Account Delete:** COMPLETED
+- [x] **Custom Domain Setup:** www.invoicekits.com configured - COMPLETED
 
 ### Medium Priority - Growth & Marketing
 - [ ] **Google Search Console:** Add verification meta tag or DNS record
@@ -241,11 +241,11 @@ invoice_generator/
 
 ### SEO TODOs
 - [ ] Register with Google Search Console
-- [ ] Add Google Analytics tracking
+- [x] Add Google Analytics tracking (G-0NR5NZMNBF)
 - [ ] Create blog content for keyword targeting
 - [ ] Build quality backlinks
 - [ ] Monitor Core Web Vitals
-- [ ] Set up custom domain (invoicekits.com)
+- [x] Set up custom domain (www.invoicekits.com)
 
 ---
 
