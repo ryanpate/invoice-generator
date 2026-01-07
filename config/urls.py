@@ -5,7 +5,28 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.views.generic import TemplateView
+from django.contrib.sitemaps import Sitemap
+from django.contrib.sitemaps.views import sitemap
+
+
+class StaticViewSitemap(Sitemap):
+    """Sitemap for static pages."""
+    priority = 0.8
+    changefreq = 'weekly'
+    protocol = 'https'
+
+    def items(self):
+        return ['/', '/pricing/']
+
+    def location(self, item):
+        return item
+
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 
 def health_check(request):
@@ -13,8 +34,35 @@ def health_check(request):
     return JsonResponse({'status': 'ok'})
 
 
+def robots_txt(request):
+    """Serve robots.txt from root URL."""
+    content = """# InvoiceKits robots.txt
+# https://invoicekits.com
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /billing/
+Disallow: /invoices/
+
+# Allow search engines to crawl public pages
+Allow: /$
+Allow: /pricing/
+
+# Sitemap location
+Sitemap: https://invoicekits.com/sitemap.xml
+"""
+    return HttpResponse(content, content_type='text/plain')
+
+
 urlpatterns = [
     path('health/', health_check, name='health_check'),
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
     path('admin/', admin.site.urls),
 
     # Authentication

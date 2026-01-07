@@ -175,6 +175,37 @@ invoice_generator/
 
 ---
 
+## SEO Enhancements
+
+### Technical SEO Implemented
+- **Meta Tags:** Optimized title, description, keywords, canonical URL, robots meta
+- **Open Graph:** Facebook/social sharing metadata
+- **Twitter Cards:** Twitter sharing optimization
+- **Schema.org Markup:**
+  - SoftwareApplication schema on all pages (`templates/base.html`)
+  - FAQPage schema on landing page (`templates/landing/index.html`)
+- **Sitemap:** XML sitemap at `/sitemap.xml` with static pages
+- **Robots.txt:** Available at `/robots.txt` with proper allow/disallow rules
+
+### SEO Files
+| URL | Purpose |
+|-----|---------|
+| `/sitemap.xml` | XML sitemap for search engines |
+| `/robots.txt` | Search engine crawler instructions |
+| `/#faq` | FAQ section with structured data |
+
+### Meta Tags Override
+Templates can override default meta tags using these blocks:
+```html
+{% block meta_description %}Custom description{% endblock %}
+{% block meta_keywords %}custom, keywords{% endblock %}
+{% block canonical_url %}https://invoicekits.com/page{% endblock %}
+{% block og_title %}Custom OG Title{% endblock %}
+{% block extra_schema %}Additional JSON-LD{% endblock %}
+```
+
+---
+
 ## Recent Fixes (Deployment History)
 
 1. Fixed ALLOWED_HOSTS to include `.railway.app`
@@ -190,3 +221,6 @@ invoice_generator/
 11. Switched from WeasyPrint to xhtml2pdf (pure Python, no system library dependencies)
 12. Added `invoice_name` field to Invoice model for naming invoices
 13. Invoice name displays on list page, detail page, and all PDF templates
+14. Added SEO enhancements: meta tags, Open Graph, Twitter Cards, Schema.org markup
+15. Added XML sitemap (`/sitemap.xml`) and robots.txt (`/robots.txt`)
+16. Added FAQ section to landing page with FAQPage structured data

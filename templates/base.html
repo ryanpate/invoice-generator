@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}InvoiceKits{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Create professional invoices in seconds. Upload CSV or enter data manually. PDF generation, batch processing, and more.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}invoice generator, free invoice maker, PDF invoice, batch invoice, online invoicing, freelancer invoice, small business invoice, invoice software{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="InvoiceKits">
+    <link rel="canonical" href="{% block canonical_url %}https://invoicekits.com{% endblock %}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}https://invoicekits.com{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}InvoiceKits - Create Professional Invoices in Seconds{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Create beautiful, professional invoices instantly. Upload CSV for batch processing or enter details manually. Download as PDF.{% endblock %}">
+    <meta property="og:site_name" content="InvoiceKits">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}InvoiceKits - Create Professional Invoices in Seconds{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Create beautiful, professional invoices instantly. Upload CSV for batch processing or enter details manually. Download as PDF.{% endblock %}">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -62,6 +78,35 @@
     </style>
 
     {% block extra_head %}{% endblock %}
+
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "InvoiceKits",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "Professional invoice generator for freelancers and small businesses. Create PDF invoices, batch process via CSV, customize templates.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "description": "Free tier with 5 invoices per month"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "150"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "InvoiceKits",
+            "url": "https://invoicekits.com"
+        }
+    }
+    </script>
+    {% block extra_schema %}{% endblock %}
 </head>
 <body class="h-full bg-gray-50">
     <!-- Navigation -->

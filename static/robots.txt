@@ -1,0 +1,19 @@
+# InvoiceKits robots.txt
+# https://invoicekits.com
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /billing/
+Disallow: /invoices/
+
+# Allow search engines to crawl public pages
+Allow: /$
+Allow: /pricing/
+
+# Sitemap location
+Sitemap: https://invoicekits.com/sitemap.xml
