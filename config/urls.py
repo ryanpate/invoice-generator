@@ -37,7 +37,7 @@ def health_check(request):
 def robots_txt(request):
     """Serve robots.txt from root URL."""
     content = """# InvoiceKits robots.txt
-# https://invoicekits.com
+# https://www.invoicekits.com
 
 User-agent: *
 Allow: /
@@ -58,7 +58,7 @@ Allow: /privacy/
 Allow: /terms/
 
 # Sitemap location
-Sitemap: https://invoicekits.com/sitemap.xml
+Sitemap: https://www.invoicekits.com/sitemap.xml
 """
     return HttpResponse(content, content_type='text/plain')
 
