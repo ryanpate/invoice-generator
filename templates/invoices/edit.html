@@ -219,9 +219,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Calculate on input change
-    document.querySelectorAll('input[name*=quantity], input[name*=rate], input[name=tax_rate]').forEach(function(input) {
-        input.addEventListener('input', calculateTotals);
-    });
+    function attachCalculateListeners() {
+        document.querySelectorAll('input[name*=quantity], input[name*=rate], input[name=tax_rate]').forEach(function(input) {
+            input.removeEventListener('input', calculateTotals);
+            input.addEventListener('input', calculateTotals);
+        });
+    }
+    attachCalculateListeners();
 
     // Recalculate when delete checkbox changes
     document.querySelectorAll('input[name*=DELETE]').forEach(function(input) {
@@ -230,6 +234,83 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial calculation
     calculateTotals();
+
+    // Add Line Item functionality
+    const addButton = document.getElementById('add-line-item');
+    const container = document.getElementById('line-items-container');
+    const totalFormsInput = document.querySelector('[name="line_items-TOTAL_FORMS"]');
+
+    addButton.addEventListener('click', function() {
+        const currentFormCount = parseInt(totalFormsInput.value);
+        const newFormIndex = currentFormCount;
+
+        // Get the first line item as template
+        const template = container.querySelector('.line-item');
+        if (!template) return;
+
+        // Clone and update the template
+        const newItem = template.cloneNode(true);
+
+        // Update all input names and IDs with new index
+        newItem.querySelectorAll('input, select, textarea').forEach(function(input) {
+            if (input.name) {
+                input.name = input.name.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+            if (input.id) {
+                input.id = input.id.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+            // Clear values for new form
+            if (input.type === 'checkbox') {
+                input.checked = false;
+            } else if (input.type !== 'hidden' || input.name.includes('-id')) {
+                input.value = '';
+            }
+        });
+
+        // Update labels
+        newItem.querySelectorAll('label').forEach(function(label) {
+            if (label.htmlFor) {
+                label.htmlFor = label.htmlFor.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+        });
+
+        // Clear any error messages
+        newItem.querySelectorAll('.text-red-500, .text-red-400').forEach(function(error) {
+            error.remove();
+        });
+
+        // Reset opacity in case template was marked for deletion
+        newItem.style.opacity = '1';
+        newItem.querySelectorAll('input, select, textarea').forEach(function(input) {
+            input.disabled = false;
+        });
+
+        container.appendChild(newItem);
+        totalFormsInput.value = currentFormCount + 1;
+
+        // Reattach listeners for new inputs
+        attachCalculateListeners();
+        calculateTotals();
+    });
+
+    // Handle delete checkboxes
+    document.addEventListener('change', function(e) {
+        if (e.target.name && e.target.name.includes('DELETE')) {
+            const lineItem = e.target.closest('.line-item');
+            if (e.target.checked) {
+                lineItem.style.opacity = '0.5';
+                lineItem.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(function(input) {
+                    input.disabled = true;
+                });
+            } else {
+                lineItem.style.opacity = '1';
+                lineItem.querySelectorAll('input, select, textarea').forEach(function(input) {
+                    input.disabled = false;
+                });
+            }
+            calculateTotals();
+        }
+    });
 });
 </script>
 {% endblock %}
