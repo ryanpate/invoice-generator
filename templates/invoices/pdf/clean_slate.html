@@ -142,26 +142,27 @@
             letter-spacing: 1px;
             margin-bottom: 8px;
         }
+        .watermark-container {
+            position: absolute;
+            top: 300px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: -1;
+        }
         .watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 72pt;
+            font-size: 60pt;
             font-weight: bold;
-            color: rgba(200, 200, 200, 0.3);
+            color: #E5E7EB;
             text-transform: uppercase;
-            letter-spacing: 10px;
-            white-space: nowrap;
-            z-index: 1000;
-            pointer-events: none;
+            letter-spacing: 8px;
+            opacity: 0.5;
         }
         .watermark-footer {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 8pt;
-            color: #D1D5DB;
+            margin-top: 40px;
+            text-align: center;
+            font-size: 9pt;
+            color: #9CA3AF;
         }
     </style>
 </head>
@@ -256,7 +257,9 @@
     {% endif %}
 
     {% if show_watermark %}
-    <div class="watermark">FREE PLAN</div>
+    <div class="watermark-container">
+        <div class="watermark">FREE PLAN</div>
+    </div>
     <div class="watermark-footer">
         Created with InvoiceKits.com - Upgrade to remove watermark
     </div>
