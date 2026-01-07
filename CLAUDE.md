@@ -16,13 +16,16 @@
 - User authentication (signup/login/logout via django-allauth)
 - User dashboard with invoice stats
 - Invoice creation with dynamic line items and optional invoice name
+- Invoice editing with pre-populated forms and dynamic totals
+- Invoice deletion with confirmation page
 - PDF generation with 5 template styles (xhtml2pdf)
 - Invoice list with search and status filters (shows invoice name)
 - Invoice detail view with status management (shows invoice name)
-- Batch CSV upload (for Professional+ plans)
-- CSV template download
+- Batch CSV upload (for Professional+ plans) with results page
+- CSV template download with accurate format guide
 - Company profile management with logo upload
 - Billing/subscription UI pages
+- Account deletion with confirmation and data warning
 - REST API endpoints with API key authentication
 - Usage tracking per user
 - Admin panel (/admin/) with superuser auto-creation from env vars
@@ -57,10 +60,10 @@
 - [ ] **Watermark on Free Tier PDFs:** `apps/invoices/services/pdf_generator.py` - add watermark logic when `user.subscription_tier == 'free'`
 
 ### High Priority - Core Functionality
-- [ ] **Invoice Edit Page:** `templates/invoices/edit.html` - needs to be created (URL exists at `/invoices/<pk>/edit/`)
-- [ ] **Invoice Delete Confirmation:** `templates/invoices/delete_confirm.html` - needs to be created
-- [ ] **Batch Result Page:** `templates/invoices/batch_result.html` - needs to be created
-- [ ] **Account Delete Confirmation:** `templates/accounts/delete_confirm.html` - needs to be created
+- [x] **Invoice Edit Page:** `templates/invoices/edit.html` - COMPLETED
+- [x] **Invoice Delete Confirmation:** `templates/invoices/delete_confirm.html` - COMPLETED
+- [x] **Batch Result Page:** `templates/invoices/batch_result.html` - COMPLETED
+- [x] **Account Delete Confirmation:** `templates/accounts/delete_confirm.html` - COMPLETED
 - [ ] **Stripe Subscription Cancellation on Account Delete:** `apps/accounts/views.py:88` has TODO
 - [ ] **Custom Domain Setup:** Configure invoicekits.com DNS to point to Railway
 
@@ -296,6 +299,12 @@ Authentication: API Key in header `X-API-Key: <key>`
 15. Added XML sitemap (`/sitemap.xml`) and robots.txt (`/robots.txt`)
 16. Added FAQ section to landing page with FAQPage structured data
 17. Added `django.contrib.sitemaps` to INSTALLED_APPS
+18. Fixed batch upload CSV template download button (was broken link)
+19. Updated CSV Format Guide to match actual batch processor requirements
+20. Created Invoice Edit page template with dynamic total calculation
+21. Created Invoice Delete Confirmation template
+22. Created Batch Result page template with status display and ZIP download
+23. Created Account Delete Confirmation template with data deletion warnings
 
 ---
 
