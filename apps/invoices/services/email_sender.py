@@ -88,3 +88,67 @@ class InvoiceEmailService:
 
         except Exception as e:
             return {'success': False, 'error': str(e)}
+
+    def send_payment_receipt(self) -> dict:
+        """
+        Send payment receipt email to both client and business owner.
+
+        Automatically triggered when invoice status changes to 'paid'.
+        Includes the invoice PDF as an attachment.
+
+        Returns:
+            dict with 'success' boolean and 'error' message if failed
+        """
+        from django.utils import timezone
+
+        try:
+            # Collect recipients - both client and business owner
+            recipients = []
+            if self.invoice.client_email:
+                recipients.append(self.invoice.client_email)
+
+            # Always send to business owner
+            business_owner_email = self.company.user.email
+            if business_owner_email and business_owner_email not in recipients:
+                recipients.append(business_owner_email)
+
+            if not recipients:
+                return {'success': False, 'error': 'No recipient email addresses available'}
+
+            # Generate PDF
+            pdf_generator = InvoicePDFGenerator(self.invoice)
+            pdf_bytes = pdf_generator.generate()
+
+            # Render HTML email
+            html_content = render_to_string('emails/payment_receipt.html', {
+                'invoice': self.invoice,
+                'company': self.company,
+                'payment_date': timezone.now(),
+                'site_url': getattr(settings, 'SITE_URL', 'https://www.invoicekits.com'),
+            })
+
+            # Create subject
+            subject = f"Payment Received - Invoice {self.invoice.invoice_number}"
+
+            # Create email with attachment
+            email = EmailMessage(
+                subject=subject,
+                body=html_content,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=recipients,
+            )
+
+            # Set HTML content type
+            email.content_subtype = 'html'
+
+            # Attach PDF
+            pdf_filename = f"{self.invoice.invoice_number}.pdf"
+            email.attach(pdf_filename, pdf_bytes, 'application/pdf')
+
+            # Send email
+            email.send(fail_silently=False)
+
+            return {'success': True, 'recipients': recipients}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}

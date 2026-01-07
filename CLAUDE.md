@@ -37,6 +37,7 @@
 - Footer pages: Contact Us, Help Center, Privacy Policy, Terms of Service
 - Welcome email on signup (via Resend SMTP)
 - Invoice email sending with PDF attachment and customizable message
+- Payment receipt emails (auto-sent when invoice marked as paid)
 
 ### Suppressed/Disabled Features
 
@@ -72,10 +73,10 @@
 - [x] **Google Search Console:** Verified and configured
 - [x] **Google Analytics:** GA4 tracking code added (G-0NR5NZMNBF)
 - [ ] **Google AdSense Integration:** Add to landing page sidebar, dashboard (free users only)
-- [ ] **Email Notifications:**
+- [x] **Email Notifications:**
   - [x] Welcome email on signup - COMPLETED (via Resend SMTP)
   - [x] Invoice sent notifications - COMPLETED (via Send Invoice feature)
-  - [ ] Payment receipts
+  - [x] Payment receipts - COMPLETED (auto-sends to client + business owner when marked as paid)
 - [ ] **Social Authentication:** Configure Google and GitHub OAuth providers
 - [x] **Invoice Email Sending:** Send invoices directly to clients via email with PDF attachment - COMPLETED
 - [ ] **Blog/Content Marketing:** Create `/blog/` section for SEO content
@@ -183,11 +184,13 @@ invoice_generator/
 | `apps/invoices/models.py` | Invoice model with invoice_name field |
 | `apps/invoices/forms.py` | InvoiceForm with invoice_name field |
 | `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation with watermark |
-| `apps/invoices/services/email_sender.py` | Invoice email sending with PDF attachment |
+| `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
+| `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
 | `apps/billing/views.py` | Stripe checkout flow with live price IDs |
 | `apps/api/views.py` | REST API endpoints |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
 | `templates/emails/welcome.html` | HTML welcome email template |
+| `templates/emails/payment_receipt.html` | Payment receipt email template |
 | `templates/landing/index.html` | Landing page with FAQ + FAQPage schema |
 | `railway.json` | Railway deploy config with startCommand |
 | `nixpacks.toml` | Nix packages for build |
@@ -329,6 +332,9 @@ Authentication: API Key in header `X-API-Key: <key>`
 39. Created InvoiceEmailService in `apps/invoices/services/email_sender.py`
 40. Created invoice notification email template `templates/emails/invoice_notification.html`
 41. Added Send Email button to invoice detail and list pages
+42. Added automatic payment receipt emails when invoice marked as paid
+43. Created payment receipt email template `templates/emails/payment_receipt.html`
+44. Added signals handler `apps/invoices/signals.py` for payment notifications
 
 ---
 

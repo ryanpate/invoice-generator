@@ -88,6 +88,11 @@ class Invoice(models.Model):
             models.Index(fields=['invoice_number']),
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Track original status for detecting changes in signals
+        self._original_status = self.status
+
     def __str__(self):
         if self.invoice_name:
             return f"{self.invoice_number} - {self.invoice_name}"
