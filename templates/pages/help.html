@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Help Center - InvoiceKits{% endblock %}
+
+{% block meta_description %}Get help with InvoiceKits. Learn how to create invoices, manage subscriptions, use batch upload, and more.{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Help Center</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-400">Everything you need to know about using InvoiceKits</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <a href="#getting-started" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition group">
+                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary-200 dark:group-hover:bg-primary-800/50 transition">
+                    <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white">Getting Started</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Create your first invoice</p>
+            </a>
+
+            <a href="#invoices" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition group">
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-200 dark:group-hover:bg-green-800/50 transition">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white">Invoices</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Create, edit, and manage</p>
+            </a>
+
+            <a href="#billing" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition group">
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/50 transition">
+                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white">Billing</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Plans and subscriptions</p>
+            </a>
+        </div>
+
+        <!-- Getting Started Section -->
+        <div id="getting-started" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 transition-colors duration-200">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Getting Started</h2>
+
+            <div class="space-y-6">
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">How do I create my first invoice?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">After signing up, click "New Invoice" from your dashboard. Fill in your client's information, add line items with descriptions and amounts, select a template style, and click "Create Invoice". Your PDF will be generated instantly.</p>
+                </div>
+
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">How do I set up my company profile?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Go to Settings > Company Profile to add your business name, address, logo, and default payment information. This information will automatically appear on all your invoices.</p>
+                </div>
+
+                <div class="pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">What file formats are supported for logos?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">We support PNG, JPG, and JPEG formats for company logos. For best results, use a square image with a transparent background (PNG).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoices Section -->
+        <div id="invoices" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 transition-colors duration-200">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Working with Invoices</h2>
+
+            <div class="space-y-6">
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">How do I download an invoice as PDF?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">From the invoice detail page, click the "Download PDF" button. The PDF will be generated with your selected template style and downloaded to your device.</p>
+                </div>
+
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Can I edit an invoice after creating it?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Yes! Click on any invoice from your list, then click "Edit" to modify the details. Changes will be reflected in new PDF downloads.</p>
+                </div>
+
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">What is batch upload?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Batch upload (available on Professional and Business plans) lets you create multiple invoices at once by uploading a CSV file. This is perfect for generating invoices for multiple clients quickly.</p>
+                </div>
+
+                <div class="pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">How do invoice statuses work?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Invoices can have four statuses: <strong>Draft</strong> (just created), <strong>Sent</strong> (delivered to client), <strong>Paid</strong> (payment received), or <strong>Overdue</strong> (past due date). Update status from the invoice detail page.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing Section -->
+        <div id="billing" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 transition-colors duration-200">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Billing & Subscriptions</h2>
+
+            <div class="space-y-6">
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">What's included in the free plan?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">The free plan includes 5 invoices per month, 1 template style, and basic features. Perfect for trying out InvoiceKits or occasional invoicing needs.</p>
+                </div>
+
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">How do I upgrade my plan?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Go to Billing > Plans to see available options. Select the plan that fits your needs and follow the checkout process. Upgrades take effect immediately.</p>
+                </div>
+
+                <div class="pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Can I cancel my subscription?</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Yes, you can cancel anytime from your Billing page. Your plan will remain active until the end of your current billing period.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Still Need Help -->
+        <div class="bg-primary-50 dark:bg-primary-900/30 rounded-xl p-8 text-center">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Still need help?</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Our support team is here to assist you with any questions.</p>
+            <a href="{% url 'contact' %}" class="btn-primary inline-block">
+                Contact Support
+            </a>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
+                Email us at <a href="mailto:support@invoicekits.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@invoicekits.com</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

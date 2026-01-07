@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - InvoiceKits{% endblock %}
+
+{% block meta_description %}Get in touch with the InvoiceKits team. We're here to help with your invoicing questions and support needs.{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Contact Us</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-400">We'd love to hear from you. Get in touch with our team.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Contact Information -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors duration-200">
+                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Get in Touch</h2>
+
+                <div class="space-y-6">
+                    <!-- Email -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/50 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Email</h3>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">Send us an email anytime</p>
+                            <a href="mailto:support@invoicekits.com" class="mt-2 inline-block text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
+                                support@invoicekits.com
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Response Time -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Response Time</h3>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">We typically respond within 24-48 hours during business days.</p>
+                        </div>
+                    </div>
+
+                    <!-- Support Hours -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Support Hours</h3>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">Monday - Friday<br>9:00 AM - 5:00 PM (EST)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Help -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors duration-200">
+                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Quick Help</h2>
+
+                <div class="space-y-4">
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Account Issues</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Having trouble logging in or managing your account? Include your account email in your message.</p>
+                    </div>
+
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Billing Questions</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Questions about subscriptions, upgrades, or payments? We're happy to help clarify.</p>
+                    </div>
+
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Feature Requests</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Have an idea for a new feature? We love hearing from our users about how to improve.</p>
+                    </div>
+
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Bug Reports</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Found something that isn't working right? Please include steps to reproduce the issue.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-12 text-center">
+            <p class="text-gray-600 dark:text-gray-400 mb-4">Ready to get started with professional invoicing?</p>
+            <a href="{% url 'account_signup' %}" class="btn-primary inline-block">
+                Start Free Today
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

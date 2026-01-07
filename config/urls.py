@@ -18,7 +18,7 @@ class StaticViewSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['/', '/pricing/']
+        return ['/', '/pricing/', '/contact/', '/help/', '/privacy/', '/terms/']
 
     def location(self, item):
         return item
@@ -52,6 +52,10 @@ Disallow: /invoices/
 # Allow search engines to crawl public pages
 Allow: /$
 Allow: /pricing/
+Allow: /contact/
+Allow: /help/
+Allow: /privacy/
+Allow: /terms/
 
 # Sitemap location
 Sitemap: https://invoicekits.com/sitemap.xml
@@ -76,6 +80,12 @@ urlpatterns = [
 
     # API
     path('api/v1/', include('apps.api.urls')),
+
+    # Static pages (footer links)
+    path('contact/', TemplateView.as_view(template_name='pages/contact.html'), name='contact'),
+    path('help/', TemplateView.as_view(template_name='pages/help.html'), name='help'),
+    path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
+    path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),
 ]
 
 # Stripe webhooks - only if djstripe is installed
