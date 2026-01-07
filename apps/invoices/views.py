@@ -93,6 +93,10 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
     template_name = 'invoices/create.html'
 
     def dispatch(self, request, *args, **kwargs):
+        # Let LoginRequiredMixin handle authentication first
+        if not request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+
         # Check if user can create more invoices
         if not request.user.can_create_invoice():
             messages.error(
@@ -263,6 +267,10 @@ class BatchUploadView(LoginRequiredMixin, TemplateView):
     template_name = 'invoices/batch_upload.html'
 
     def dispatch(self, request, *args, **kwargs):
+        # Let LoginRequiredMixin handle authentication first
+        if not request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+
         # Check if user has batch upload feature
         if not request.user.has_batch_upload():
             messages.error(
