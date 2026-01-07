@@ -27,11 +27,14 @@
 - Billing/subscription UI pages
 - Account deletion with confirmation and data warning
 - REST API endpoints with API key authentication
+- API documentation page at `/api/docs/`
 - Usage tracking per user
 - Admin panel (/admin/) with superuser auto-creation from env vars
 - SEO optimizations (meta tags, Open Graph, Twitter Cards, Schema.org, sitemap, robots.txt)
 - Stripe subscription payments (Starter $9, Professional $29, Business $79)
 - Stripe webhook handling for subscription lifecycle events
+- Dark/light mode toggle with browser preference detection and localStorage persistence
+- Footer pages: Contact Us, Help Center, Privacy Policy, Terms of Service
 
 ### Suppressed/Disabled Features
 
@@ -158,6 +161,7 @@ invoice_generator/
 │   │   └── pdf/             # 5 PDF templates
 │   ├── billing/
 │   ├── landing/             # Home page with FAQ
+│   ├── pages/               # Static pages (contact, help, privacy, terms, api_docs)
 │   └── settings/
 ├── static/
 │   └── robots.txt           # Search engine instructions
@@ -207,7 +211,7 @@ invoice_generator/
 - **Schema.org Markup:**
   - SoftwareApplication schema on all pages (`templates/base.html`)
   - FAQPage schema on landing page (`templates/landing/index.html`)
-- **Sitemap:** XML sitemap at `/sitemap.xml` (static pages: /, /pricing/)
+- **Sitemap:** XML sitemap at `/sitemap.xml` (includes all public pages)
 - **Robots.txt:** Available at `/robots.txt` with proper allow/disallow rules
 - **FAQ Section:** 6 keyword-rich Q&As on landing page
 
@@ -217,6 +221,11 @@ invoice_generator/
 | `/sitemap.xml` | XML sitemap for search engines |
 | `/robots.txt` | Search engine crawler instructions |
 | `/#faq` | FAQ section with structured data |
+| `/contact/` | Contact Us page with support email |
+| `/help/` | Help Center with FAQs |
+| `/privacy/` | Privacy Policy |
+| `/terms/` | Terms of Service |
+| `/api/docs/` | API documentation |
 
 ### Meta Tags Override (for child templates)
 ```html
@@ -302,6 +311,13 @@ Authentication: API Key in header `X-API-Key: <key>`
 24. Added prominent "FREE PLAN" diagonal watermark to all 5 PDF templates for free tier users
 25. Fixed watermark CSS for xhtml2pdf compatibility (position:absolute instead of position:fixed)
 26. Configured Stripe live price IDs for all subscription tiers
+27. Added dark/light mode toggle with browser preference detection and localStorage persistence
+28. Fixed settings pages that were stuck in dark mode only
+29. Added responsive dark/light mode to all application pages (dashboard, invoices, batch upload, etc.)
+30. Created footer pages: Contact Us, Help Center, Privacy Policy, Terms of Service
+31. Created comprehensive API documentation page at `/api/docs/`
+32. Fixed Features footer link to properly navigate to landing page #features section
+33. Added all new pages to sitemap and robots.txt
 
 ---
 
