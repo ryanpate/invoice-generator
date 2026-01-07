@@ -112,9 +112,8 @@
 
 ### Need to Configure
 ```bash
-# Email (required for email verification)
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
+# Email via Resend (required for welcome emails)
+EMAIL_HOST_PASSWORD=re_your_resend_api_key
 
 # AWS S3 (optional - for media file storage)
 AWS_ACCESS_KEY_ID=...
