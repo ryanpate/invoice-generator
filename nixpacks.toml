@@ -4,23 +4,24 @@
 [phases.setup]
 nixPkgs = [
     "python311",
-    "gcc",
-    "pango",
-    "cairo",
-    "gdk-pixbuf",
-    "glib",
-    "gobject-introspection",
-    "fontconfig",
-    "shared-mime-info",
-    "liberation_ttf",
-    "libffi",
-    "harfbuzz",
-    "fribidi"
+    "gcc"
 ]
-
-[variables]
-LD_LIBRARY_PATH = "/nix/var/nix/profiles/default/lib"
-GI_TYPELIB_PATH = "/nix/var/nix/profiles/default/lib/girepository-1.0"
+aptPkgs = [
+    "libpango-1.0-0",
+    "libpangocairo-1.0-0",
+    "libpangoft2-1.0-0",
+    "libcairo2",
+    "libgdk-pixbuf2.0-0",
+    "libglib2.0-0",
+    "libgobject-2.0-0",
+    "libfontconfig1",
+    "libfreetype6",
+    "libffi8",
+    "libharfbuzz0b",
+    "libfribidi0",
+    "fonts-liberation",
+    "shared-mime-info"
+]
 
 [phases.install]
 cmds = [
