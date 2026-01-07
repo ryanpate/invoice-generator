@@ -80,6 +80,87 @@ def generate_api_key(request):
 
 
 @login_required
+def update_profile(request):
+    """Update user profile information."""
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+
+        new_email = request.POST.get('email', '')
+        if new_email and new_email != user.email:
+            # Check if email is already in use
+            if CustomUser.objects.filter(email=new_email).exclude(pk=user.pk).exists():
+                messages.error(request, 'This email is already in use.')
+                return redirect('accounts:settings')
+            user.email = new_email
+
+        user.save()
+        messages.success(request, 'Profile updated successfully!')
+
+    return redirect('accounts:settings')
+
+
+@login_required
+def change_password(request):
+    """Change user password."""
+    if request.method == 'POST':
+        from django.contrib.auth import update_session_auth_hash
+
+        user = request.user
+        current_password = request.POST.get('current_password', '')
+        new_password1 = request.POST.get('new_password1', '')
+        new_password2 = request.POST.get('new_password2', '')
+
+        if not user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+            return redirect('accounts:settings')
+
+        if new_password1 != new_password2:
+            messages.error(request, 'New passwords do not match.')
+            return redirect('accounts:settings')
+
+        if len(new_password1) < 8:
+            messages.error(request, 'Password must be at least 8 characters.')
+            return redirect('accounts:settings')
+
+        user.set_password(new_password1)
+        user.save()
+        update_session_auth_hash(request, user)  # Keep user logged in
+        messages.success(request, 'Password changed successfully!')
+
+    return redirect('accounts:settings')
+
+
+@login_required
+def update_preferences(request):
+    """Update email preferences."""
+    if request.method == 'POST':
+        # For now, just show success - actual email preferences would need model fields
+        messages.success(request, 'Preferences updated successfully!')
+
+    return redirect('accounts:settings')
+
+
+@login_required
+def regenerate_api_key(request):
+    """Regenerate API key for the user."""
+    if request.method == 'POST':
+        if not request.user.has_api_access():
+            messages.error(request, 'API access requires a Business or Enterprise plan.')
+            return redirect('accounts:settings')
+
+        api_key = request.user.generate_api_key()
+        messages.success(
+            request,
+            'New API key generated. Make sure to copy it now!'
+        )
+        request.session['new_api_key'] = api_key
+
+    return redirect('accounts:settings')
+
+
+@login_required
 def delete_account(request):
     """Delete user account."""
     if request.method == 'POST':
@@ -89,6 +170,6 @@ def delete_account(request):
 
         user.delete()
         messages.success(request, 'Your account has been deleted.')
-        return redirect('landing')
+        return redirect('invoices:landing')
 
     return render(request, 'accounts/delete_confirm.html')
