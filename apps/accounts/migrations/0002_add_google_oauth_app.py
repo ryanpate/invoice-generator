@@ -4,19 +4,10 @@ import os
 from django.db import migrations
 
 
-def add_google_oauth_app(apps, schema_editor):
-    """Add Google OAuth app configuration from environment variables."""
+def add_social_oauth_apps(apps, schema_editor):
+    """Add Google and GitHub OAuth app configurations from environment variables."""
     Site = apps.get_model('sites', 'Site')
     SocialApp = apps.get_model('socialaccount', 'SocialApp')
-
-    # Get credentials from environment variables
-    google_client_id = os.environ.get('GOOGLE_OAUTH_CLIENT_ID', '')
-    google_client_secret = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET', '')
-
-    # Skip if credentials not set
-    if not google_client_id or not google_client_secret:
-        print("Google OAuth credentials not found in environment, skipping...")
-        return
 
     # Update site domain
     site, _ = Site.objects.get_or_create(id=1, defaults={'domain': 'www.invoicekits.com', 'name': 'InvoiceKits'})
@@ -24,31 +15,55 @@ def add_google_oauth_app(apps, schema_editor):
     site.name = 'InvoiceKits'
     site.save()
 
-    # Create Google OAuth app
-    google_app, created = SocialApp.objects.get_or_create(
-        provider='google',
-        defaults={
-            'name': 'Google',
-            'client_id': google_client_id,
-            'secret': google_client_secret,
-        }
-    )
+    # Google OAuth
+    google_client_id = os.environ.get('GOOGLE_OAUTH_CLIENT_ID', '')
+    google_client_secret = os.environ.get('GOOGLE_OAUTH_CLIENT_SECRET', '')
 
-    # Update if already exists
-    if not created:
-        google_app.client_id = google_client_id
-        google_app.secret = google_client_secret
-        google_app.save()
+    if google_client_id and google_client_secret:
+        google_app, created = SocialApp.objects.get_or_create(
+            provider='google',
+            defaults={
+                'name': 'Google',
+                'client_id': google_client_id,
+                'secret': google_client_secret,
+            }
+        )
+        if not created:
+            google_app.client_id = google_client_id
+            google_app.secret = google_client_secret
+            google_app.save()
+        google_app.sites.add(site)
+        print(f"Google OAuth app {'created' if created else 'updated'} successfully!")
+    else:
+        print("Google OAuth credentials not found in environment, skipping...")
 
-    # Associate with site
-    google_app.sites.add(site)
-    print(f"Google OAuth app {'created' if created else 'updated'} successfully!")
+    # GitHub OAuth
+    github_client_id = os.environ.get('GITHUB_OAUTH_CLIENT_ID', '')
+    github_client_secret = os.environ.get('GITHUB_OAUTH_CLIENT_SECRET', '')
+
+    if github_client_id and github_client_secret:
+        github_app, created = SocialApp.objects.get_or_create(
+            provider='github',
+            defaults={
+                'name': 'GitHub',
+                'client_id': github_client_id,
+                'secret': github_client_secret,
+            }
+        )
+        if not created:
+            github_app.client_id = github_client_id
+            github_app.secret = github_client_secret
+            github_app.save()
+        github_app.sites.add(site)
+        print(f"GitHub OAuth app {'created' if created else 'updated'} successfully!")
+    else:
+        print("GitHub OAuth credentials not found in environment, skipping...")
 
 
-def remove_google_oauth_app(apps, schema_editor):
-    """Remove Google OAuth app configuration."""
+def remove_social_oauth_apps(apps, schema_editor):
+    """Remove OAuth app configurations."""
     SocialApp = apps.get_model('socialaccount', 'SocialApp')
-    SocialApp.objects.filter(provider='google').delete()
+    SocialApp.objects.filter(provider__in=['google', 'github']).delete()
 
 
 class Migration(migrations.Migration):
@@ -60,5 +75,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_google_oauth_app, remove_google_oauth_app),
+        migrations.RunPython(add_social_oauth_apps, remove_social_oauth_apps),
     ]
