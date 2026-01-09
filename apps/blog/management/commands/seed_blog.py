@@ -39,6 +39,7 @@ class Command(BaseCommand):
         self._create_invoice_guide(author, guides_category)
         self._create_batch_invoicing_post(author, guides_category)
         self._create_freelancer_tips_post(author, tips_category)
+        self._create_small_business_guide_post(author, guides_category)
 
     def _create_invoice_guide(self, author, category):
         """Create the 'How to Create a Professional Invoice' post."""
@@ -750,6 +751,374 @@ class Command(BaseCommand):
             content=post_content,
             meta_description='10 invoice tips for freelancers to get paid faster. Professional templates, payment terms, and follow-up strategies.',
             meta_keywords='freelance invoice template, invoice best practices, freelancer invoice tips, get paid faster, invoice template, freelance billing, payment terms',
+            status='published',
+        )
+
+        self.stdout.write(self.style.SUCCESS(f'Successfully created blog post: "{post_slug}"'))
+
+    def _create_small_business_guide_post(self, author, category):
+        """Create the 'Small Business Invoicing Guide' post."""
+        post_slug = 'small-business-invoicing-guide'
+        if BlogPost.objects.filter(slug=post_slug).exists():
+            self.stdout.write(self.style.WARNING(f'Blog post "{post_slug}" already exists. Skipping.'))
+            return
+
+        post_content = '''
+<p class="text-xl text-gray-700 dark:text-gray-300 mb-8">Running a small business means wearing many hats, and managing invoices is one of the most critical tasks for maintaining healthy cash flow. This comprehensive guide covers everything you need to know about <strong>small business invoicing</strong>—from choosing the right invoice template to setting payment terms that actually get you paid on time.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Why Invoicing Matters for Small Businesses</h2>
+
+<p class="mb-4">Poor invoicing practices are one of the leading causes of cash flow problems for small businesses. According to recent studies:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>64% of small businesses</strong> have unpaid invoices over 60 days old</li>
+    <li>Late payments cost US small businesses <strong>$3 trillion annually</strong></li>
+    <li>The average small business spends <strong>15 hours per month</strong> on invoicing tasks</li>
+    <li><strong>82% of businesses</strong> fail due to cash flow problems</li>
+</ul>
+
+<p class="mb-4">The good news? With the right invoicing system and practices, you can dramatically reduce late payments and reclaim hours of administrative time each month.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Essential Invoice Components for Small Businesses</h2>
+
+<p class="mb-4">A professional small business invoice should include these key elements:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Business Information</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Business name and logo:</strong> Reinforces your brand identity</li>
+    <li><strong>Contact details:</strong> Address, phone, email, website</li>
+    <li><strong>Tax ID/EIN:</strong> Required for tax compliance and B2B transactions</li>
+    <li><strong>Business registration number:</strong> If applicable in your jurisdiction</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Client Information</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Client name or company:</strong> As it appears in your contract</li>
+    <li><strong>Billing address:</strong> Where invoices should be sent</li>
+    <li><strong>Contact person:</strong> Especially for larger organizations</li>
+    <li><strong>Purchase order number:</strong> If provided by the client</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Invoice Details</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoice number:</strong> Sequential for easy tracking</li>
+    <li><strong>Invoice date:</strong> When the invoice was issued</li>
+    <li><strong>Due date:</strong> Specific date, not just "Net 30"</li>
+    <li><strong>Project or reference number:</strong> Links to specific work</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Line Items</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Description:</strong> Clear, specific details of products/services</li>
+    <li><strong>Quantity:</strong> Units, hours, or items</li>
+    <li><strong>Rate:</strong> Price per unit</li>
+    <li><strong>Amount:</strong> Line item total</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Financial Summary</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Subtotal:</strong> Sum of all line items</li>
+    <li><strong>Tax:</strong> Sales tax, VAT, or GST with rate shown</li>
+    <li><strong>Discounts:</strong> Any applied discounts</li>
+    <li><strong>Shipping:</strong> If applicable</li>
+    <li><strong>Total due:</strong> Final amount prominently displayed</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Choosing the Right Invoice Template</h2>
+
+<p class="mb-4">Your invoice template should match your business type and client expectations:</p>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Business Type</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Best Template Style</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Key Features</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Professional Services</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Executive or Classic</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Clean layout, hourly billing, detailed descriptions</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Creative Agencies</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Bold Modern</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Visual appeal, project-based, milestone billing</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Tech Companies</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Clean Slate or Neon Edge</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Minimalist, subscription support, API integration</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Retail/E-commerce</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Classic Professional</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Product lists, shipping info, order numbers</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3">Contractors</td>
+            <td class="px-4 py-3">Executive</td>
+            <td class="px-4 py-3">Materials + labor breakdown, project phases</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Payment Terms That Work</h2>
+
+<p class="mb-4">Choosing the right payment terms is crucial for maintaining cash flow while keeping clients happy.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Standard Payment Terms</h3>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Term</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Meaning</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Best For</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-mono">Due on Receipt</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Payment due immediately</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Small amounts, new clients</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-mono">Net 15</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Due within 15 days</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Ongoing relationships, smaller invoices</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-mono">Net 30</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Due within 30 days</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Industry standard, B2B transactions</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-mono">Net 60</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Due within 60 days</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Large enterprises, government contracts</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 font-mono">2/10 Net 30</td>
+            <td class="px-4 py-3">2% discount if paid in 10 days, otherwise Net 30</td>
+            <td class="px-4 py-3">Incentivizing early payment</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Pro Tips for Payment Terms</h3>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Start with shorter terms:</strong> You can always extend for good clients, but it's harder to shorten terms</li>
+    <li><strong>Match industry norms:</strong> Research what's standard in your industry</li>
+    <li><strong>Consider client size:</strong> Large companies often have fixed payment cycles (Net 45, Net 60)</li>
+    <li><strong>Offer early payment discounts:</strong> 2% off for paying in 10 days can dramatically improve cash flow</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Invoice Numbering Systems</h2>
+
+<p class="mb-4">A consistent invoice numbering system helps with organization, accounting, and tax compliance. Here are effective formats:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Popular Invoice Number Formats</h4>
+    <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+        <li><code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">INV-0001</code> Simple sequential</li>
+        <li><code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">2026-0001</code> Year + sequential</li>
+        <li><code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">202601-001</code> Year + month + sequential</li>
+        <li><code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">ACME-0001</code> Client code + sequential</li>
+        <li><code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">PRJ-WEB-001</code> Project type + sequential</li>
+    </ul>
+</div>
+
+<p class="mb-4"><strong>Important:</strong> Never skip numbers or reuse invoice numbers. Gaps in your invoice sequence can raise red flags during audits.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Tax Considerations for Small Business Invoices</h2>
+
+<p class="mb-4">Proper tax handling on invoices is essential for compliance:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Sales Tax</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Show tax as a separate line item</li>
+    <li>Include your sales tax registration number</li>
+    <li>Apply correct rates based on customer location</li>
+    <li>Note tax-exempt transactions with exemption certificate references</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">VAT/GST (International)</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Display your VAT/GST registration number</li>
+    <li>Show net amount, tax amount, and gross total separately</li>
+    <li>Note reverse charge mechanism for B2B cross-border services</li>
+    <li>Keep invoices for the required retention period (usually 5-7 years)</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Managing Multiple Clients Efficiently</h2>
+
+<p class="mb-4">As your small business grows, managing invoices for multiple clients becomes more complex. Here's how to stay organized:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">1. Create Client Profiles</h3>
+<p class="mb-4">Store client information once and reuse it for every invoice:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Company details and billing address</li>
+    <li>Primary contact for invoicing</li>
+    <li>Preferred payment terms</li>
+    <li>Tax exemption status</li>
+    <li>Purchase order requirements</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">2. Use Consistent Scheduling</h3>
+<p class="mb-4">Invoice on the same day each week or month. This creates predictability for both you and your clients, and makes tracking easier.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">3. Leverage Batch Invoicing</h3>
+<p class="mb-4">If you bill multiple clients on the same day, use <a href="/blog/batch-invoice-generator-guide/" class="text-primary-600 dark:text-primary-400 hover:underline">batch invoice generation</a> to create all invoices from a single CSV file. This can save hours each billing cycle.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">4. Set Up Recurring Invoices</h3>
+<p class="mb-4">For retainer clients or subscriptions, automate recurring invoices to save time and ensure you never miss a billing cycle.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Handling Late Payments</h2>
+
+<p class="mb-4">Even with perfect invoicing practices, some payments will be late. Here's how to handle them professionally:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Prevention Strategies</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Send invoices promptly after completing work</li>
+    <li>Offer multiple payment methods</li>
+    <li>Send reminder emails before the due date</li>
+    <li>Build relationships with accounts payable contacts</li>
+    <li>Require deposits for large projects</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Follow-Up Timeline</h3>
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+        <li><strong>Day -3:</strong> Friendly reminder that payment is coming due</li>
+        <li><strong>Day 0:</strong> Payment due today notification</li>
+        <li><strong>Day +7:</strong> First follow-up: "Checking in on invoice status"</li>
+        <li><strong>Day +14:</strong> Second follow-up: "Payment is now 2 weeks overdue"</li>
+        <li><strong>Day +30:</strong> Formal notice with late fee application</li>
+        <li><strong>Day +60:</strong> Final notice before collections action</li>
+    </ul>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Late Payment Fees</h3>
+<p class="mb-4">If you charge late fees, clearly state them on your invoices and in your contracts:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Common rates: 1.5% to 2% per month (18-24% annually)</li>
+    <li>Check local regulations—some jurisdictions cap late fees</li>
+    <li>Be consistent in applying fees to maintain credibility</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Invoicing Tools for Small Businesses</h2>
+
+<p class="mb-4">The right tools can transform your invoicing from a time sink into a streamlined process:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">What to Look For</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Professional templates:</strong> Multiple designs to match your brand</li>
+    <li><strong>Client management:</strong> Store client info for quick invoice creation</li>
+    <li><strong>Automatic calculations:</strong> No more spreadsheet errors</li>
+    <li><strong>Payment tracking:</strong> Know who's paid and who hasn't</li>
+    <li><strong>Batch processing:</strong> Create multiple invoices at once</li>
+    <li><strong>Recurring invoices:</strong> Automate regular billing</li>
+    <li><strong>Email integration:</strong> Send invoices directly from the platform</li>
+    <li><strong>PDF generation:</strong> Professional documents every time</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Manual vs. Automated Invoicing</h3>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Aspect</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Manual (Word/Excel)</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Invoice Software</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Time per invoice</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">10-15 minutes</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">2-3 minutes</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Error rate</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">High (manual calculations)</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Low (automatic)</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Payment tracking</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Separate spreadsheet</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Built-in dashboard</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Professional appearance</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Inconsistent</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Always professional</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3">Monthly cost (20 invoices)</td>
+            <td class="px-4 py-3">5+ hours of your time</td>
+            <td class="px-4 py-3">$9-29/month</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Record Keeping and Compliance</h2>
+
+<p class="mb-4">Proper invoice records are essential for tax compliance and business management:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Retention period:</strong> Keep invoice records for at least 7 years</li>
+    <li><strong>Digital backups:</strong> Store copies in cloud storage</li>
+    <li><strong>Organization:</strong> Maintain chronological and client-based filing systems</li>
+    <li><strong>Matching:</strong> Link invoices to corresponding payments and contracts</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Getting Started with Better Invoicing</h2>
+
+<p class="mb-4">Ready to improve your small business invoicing? Here's a quick action plan:</p>
+
+<ol class="list-decimal pl-6 mb-4 space-y-2">
+    <li><strong>Audit your current process:</strong> How long does invoicing take? What's your late payment rate?</li>
+    <li><strong>Choose the right tool:</strong> Select an invoice generator that matches your business needs</li>
+    <li><strong>Set up client profiles:</strong> Enter all client information once</li>
+    <li><strong>Standardize your terms:</strong> Decide on payment terms and stick to them</li>
+    <li><strong>Create a follow-up schedule:</strong> Automate reminders when possible</li>
+    <li><strong>Track your metrics:</strong> Monitor days to payment and outstanding amounts</li>
+</ol>
+
+<p class="mb-4">InvoiceKits makes small business invoicing simple with professional templates, batch processing for multiple clients, and built-in payment tracking. <a href="/accounts/signup/" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">Start your free account</a> and create your first invoice in under 2 minutes.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+        <li>Professional invoices include complete business info, clear line items, and specific due dates</li>
+        <li>Choose payment terms that balance cash flow needs with client expectations</li>
+        <li>Use consistent invoice numbering for easy tracking and audit compliance</li>
+        <li>Handle taxes properly with separate line items and required registration numbers</li>
+        <li>Automate with invoicing software to save 80% of invoicing time</li>
+        <li>Follow up systematically on late payments with a clear escalation timeline</li>
+    </ul>
+</div>
+'''
+
+        BlogPost.objects.create(
+            title='Small Business Invoicing Guide: Templates, Terms, and Tools',
+            slug=post_slug,
+            author=author,
+            category=category,
+            excerpt='Complete guide to small business invoicing. Learn about professional invoice templates, payment terms that work, tax considerations, and tools to streamline your billing process.',
+            content=post_content,
+            meta_description='Small business invoicing guide with templates, payment terms, tax tips, and tools. Get paid faster with professional invoices.',
+            meta_keywords='small business invoice, invoice template, payment terms, business invoicing, invoice software, billing guide, invoice generator',
             status='published',
         )
 
