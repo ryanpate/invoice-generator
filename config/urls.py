@@ -20,7 +20,7 @@ class StaticViewSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['/', '/pricing/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/']
+        return ['/', '/pricing/', '/for-freelancers/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/']
 
     def location(self, item):
         return item
@@ -55,6 +55,7 @@ Disallow: /invoices/
 # Allow search engines to crawl public pages
 Allow: /$
 Allow: /pricing/
+Allow: /for-freelancers/
 Allow: /contact/
 Allow: /help/
 Allow: /privacy/
