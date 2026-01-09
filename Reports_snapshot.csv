@@ -1,0 +1,253 @@
+# ----------------------------------------
+# Reports snapshot
+# Account: ryanpate
+# Property: Invoicekits
+# ----------------------------------------
+#  
+# Start date: 20251211
+# End date: 20260107
+Nth day,Active users
+0000,0
+0001,0
+0002,0
+0003,0
+0004,0
+0005,0
+0006,0
+0007,0
+0008,0
+0009,0
+0010,0
+0011,0
+0012,0
+0013,0
+0014,0
+0015,0
+0016,0
+0017,0
+0018,0
+0019,0
+0020,0
+0021,0
+0022,0
+0023,0
+0024,0
+0025,0
+0026,0
+0027,8
+
+# Start date: 20251211
+# End date: 20260107
+Nth day,New users
+0000,0
+0001,0
+0002,0
+0003,0
+0004,0
+0005,0
+0006,0
+0007,0
+0008,0
+0009,0
+0010,0
+0011,0
+0012,0
+0013,0
+0014,0
+0015,0
+0016,0
+0017,0
+0018,0
+0019,0
+0020,0
+0021,0
+0022,0
+0023,0
+0024,0
+0025,0
+0026,0
+0027,8
+
+# Start date: 20251211
+# End date: 20260107
+Nth day,Average engagement time per active user
+0000,0
+0001,0
+0002,0
+0003,0
+0004,0
+0005,0
+0006,0
+0007,0
+0008,0
+0009,0
+0010,0
+0011,0
+0012,0
+0013,0
+0014,0
+0015,0
+0016,0
+0017,0
+0018,0
+0019,0
+0020,0
+0021,0
+0022,0
+0023,0
+0024,0
+0025,0
+0026,0
+0027,41.25
+
+# Start date: 20251211
+# End date: 20260107
+Nth day,Total revenue
+0000,0
+0001,0
+0002,0
+0003,0
+0004,0
+0005,0
+0006,0
+0007,0
+0008,0
+0009,0
+0010,0
+0011,0
+0012,0
+0013,0
+0014,0
+0015,0
+0016,0
+0017,0
+0018,0
+0019,0
+0020,0
+0021,0
+0022,0
+0023,0
+0024,0
+0025,0
+0026,0
+0027,0
+
+# Where do your new users come from?
+# Start date: 20251211
+# End date: 20260107
+First user primary channel group (Default Channel Group),New users
+Direct,8
+
+#  
+# Start date: 20251211
+# End date: 20260107
+Session primary channel group (Default Channel Group),Sessions
+Direct,11
+
+#  
+# Start date: 20251211
+# End date: 20260107
+Country ID,Active users
+CA,1
+KR,1
+US,4
+
+# Start date: 20251211
+# End date: 20260107
+Country,Active users
+US,4
+CA,1
+KR,1
+
+# How are active users trending?
+# Start date: 20251211
+# End date: 20260107
+Nth day,30 days,7 days,1 day
+0000,0,0,0
+0001,0,0,0
+0002,0,0,0
+0003,0,0,0
+0004,0,0,0
+0005,0,0,0
+0006,0,0,0
+0007,0,0,0
+0008,0,0,0
+0009,0,0,0
+0010,0,0,0
+0011,0,0,0
+0012,0,0,0
+0013,0,0,0
+0014,0,0,0
+0015,0,0,0
+0016,0,0,0
+0017,0,0,0
+0018,0,0,0
+0019,0,0,0
+0020,0,0,0
+0021,0,0,0
+0022,0,0,0
+0023,0,0,0
+0024,0,0,0
+0025,0,0,0
+0026,0,0,0
+0027,8,8,8
+
+# How well do you retain your users?
+# Start date: 20251123
+# End date: 20260103
+Date,Week 0,Week 1,Week 2,Week 3,Week 4,Week 5
+Nov 23 - Nov 29,0,0,0,0,0,0
+Nov 30 - Dec 6,0,0,0,0,0,-1
+Dec 7 - Dec 13,0,0,0,0,-1,-1
+Dec 14 - Dec 20,0,0,0,-1,-1,-1
+Dec 21 - Dec 27,0,0,-1,-1,-1,-1
+Dec 28 - Jan 3,0,-1,-1,-1,-1,-1
+
+#  
+# Start date: 20251211
+# End date: 20260107
+Page title and screen class,Views
+InvoiceKits - Create Professional Invoices in Seconds,13
+Create Invoice - InvoiceKits,7
+Create Account - InvoiceKits,4
+Dashboard - InvoiceKits,3
+INV-00006 - InvoiceKits,2
+Sign Out - InvoiceKits,2
+Invoices - InvoiceKits,1
+Send Invoice INV-00006 - InvoiceKits,1
+Sign In - InvoiceKits,1
+
+#  
+# Start date: 20251211
+# End date: 20260107
+Event name,Event count
+page_view,34
+user_engagement,22
+scroll,13
+session_start,11
+form_start,10
+form_submit,10
+first_visit,8
+
+# What are your top performing key events?
+# Start date: 20251211
+# End date: 20260107
+Event name,Key events
+
+
+# Where does your average 120d value come from?
+# Start date: 20251211
+# End date: 20260107
+First user primary channel group (Default Channel Group),Average 120d value
+
+
+#  
+# Start date: 20251211
+# End date: 20260107
+Item name,Items purchased
+
+
+# How does activity on your platforms compare?
+# Start date: 20251211
+# End date: 20260107
+Platform,Key events
