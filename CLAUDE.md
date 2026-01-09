@@ -113,7 +113,7 @@
 - [x] **Homepage Template Previews:** Added styled CSS mockups for all 5 templates - COMPLETED
 - [x] **Blog Post 5:** "Invoice vs Receipt: What's the Difference?" - COMPLETED
 - [x] **Increase Keyword Density:** Added "invoice generator" 4 more times naturally to homepage - COMPLETED
-- [ ] **Add BreadcrumbList Schema:** Implement breadcrumb navigation and schema on internal pages
+- [x] **Add BreadcrumbList Schema:** Implement breadcrumb navigation and schema on internal pages - COMPLETED
 
 ### SEO - Content Pages (Month 2)
 - [ ] **Template Showcase - Clean Slate:** `/templates/clean-slate/` with screenshots, use cases
@@ -477,6 +477,8 @@ Authentication: API Key in header `X-API-Key: <key>`
 75. Fixed homepage template previews with styled CSS mockups
 76. Added internal cross-linking between blog posts
 77. Blog Post 5: "Invoice vs Receipt: What's the Difference?" - comprehensive guide comparing invoices and receipts
+78. Increased keyword density on homepage - added "invoice generator" 4 more times naturally
+79. Added BreadcrumbList schema and visual breadcrumb navigation to all internal pages (pricing, help, contact, privacy, terms, API docs, blog list, blog detail)
 
 ---
 
