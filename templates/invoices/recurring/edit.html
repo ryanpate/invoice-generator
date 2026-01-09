@@ -116,10 +116,15 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rate *</label>
                                 {{ item_form.rate }}
                             </div>
-                            <div class="w-8 pt-6">
+                            <div class="w-10 pt-6 flex items-center">
                                 {% if item_form.DELETE %}
-                                {{ item_form.DELETE }}
+                                <div class="hidden">{{ item_form.DELETE }}</div>
                                 {% endif %}
+                                <button type="button" class="delete-line-item text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors p-1" title="Remove line item">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
                             </div>
                             {{ item_form.id }}
                         </div>
@@ -216,7 +221,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     function calculateTotals() {
         let subtotal = 0;
-        document.querySelectorAll('.line-item').forEach(function(item) {
+        document.querySelectorAll('.line-item:not(.deleted)').forEach(function(item) {
             const deleteCheckbox = item.querySelector('[name*=DELETE]');
             if (deleteCheckbox && deleteCheckbox.checked) return;
 
@@ -251,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentFormCount = parseInt(totalFormsInput.value);
         const newFormIndex = currentFormCount;
 
-        const template = container.querySelector('.line-item');
+        const template = container.querySelector('.line-item:not(.deleted)');
         if (!template) return;
 
         const newItem = template.cloneNode(true);
@@ -276,30 +281,50 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        newItem.classList.remove('deleted');
+        newItem.style.display = '';
+
         container.appendChild(newItem);
         totalFormsInput.value = currentFormCount + 1;
 
         attachCalculateListeners();
+        attachDeleteListeners();
         calculateTotals();
     });
 
-    document.addEventListener('change', function(e) {
-        if (e.target.name && e.target.name.includes('DELETE')) {
-            const lineItem = e.target.closest('.line-item');
-            if (e.target.checked) {
-                lineItem.style.opacity = '0.5';
-                lineItem.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(function(input) {
-                    input.disabled = true;
-                });
-            } else {
-                lineItem.style.opacity = '1';
-                lineItem.querySelectorAll('input, select, textarea').forEach(function(input) {
-                    input.disabled = false;
-                });
-            }
-            calculateTotals();
+    // Handle delete button clicks
+    function attachDeleteListeners() {
+        document.querySelectorAll('.delete-line-item').forEach(function(btn) {
+            btn.removeEventListener('click', handleDelete);
+            btn.addEventListener('click', handleDelete);
+        });
+    }
+
+    function handleDelete(e) {
+        e.preventDefault();
+        const lineItem = e.target.closest('.line-item');
+        const idInput = lineItem.querySelector('[name*="-id"]');
+        const deleteCheckbox = lineItem.querySelector('[name*=DELETE]');
+        const visibleItems = container.querySelectorAll('.line-item:not(.deleted)');
+
+        if (visibleItems.length <= 1) {
+            return;
         }
-    });
+
+        if (idInput && idInput.value) {
+            if (deleteCheckbox) {
+                deleteCheckbox.checked = true;
+            }
+            lineItem.classList.add('deleted');
+            lineItem.style.display = 'none';
+        } else {
+            lineItem.remove();
+        }
+
+        calculateTotals();
+    }
+
+    attachDeleteListeners();
 });
 </script>
 {% endblock %}
