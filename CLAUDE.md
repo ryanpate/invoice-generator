@@ -40,6 +40,7 @@
 - Payment receipt emails (auto-sent when invoice marked as paid)
 - Social login with Google and GitHub (OAuth fully configured via environment variables)
 - Recurring invoices for Professional+ plans (weekly, bi-weekly, monthly, quarterly, yearly)
+- Blog section with SEO-optimized content (`/blog/`)
 
 ### Suppressed/Disabled Features
 
@@ -79,7 +80,7 @@
   - [x] Payment receipts - COMPLETED (auto-sends to client + business owner when marked as paid)
 - [x] **Social Authentication:** Google and GitHub OAuth fully configured via env vars - COMPLETED
 - [x] **Invoice Email Sending:** Send invoices directly to clients via email with PDF attachment - COMPLETED
-- [ ] **Blog/Content Marketing:** Create `/blog/` section for SEO content
+- [x] **Blog/Content Marketing:** Created `/blog/` section with 4 SEO-optimized posts - COMPLETED
 
 ### Lower Priority - Feature Expansion
 - [ ] **Team Seats:** Business plan includes 3 team seats (model and UI not implemented)
@@ -102,17 +103,17 @@
 
 ### SEO - High Priority (Weeks 2-4)
 - [x] **Update Homepage Meta Description:** Expanded to 174 characters with keywords - COMPLETED
-- [ ] **Update Pricing Page Title:** Change from "Pricing - InvoiceKits" to "Invoice Generator Pricing - Plans from $9/mo | InvoiceKits"
-- [ ] **Add Pricing Page Meta Description:** Custom description with tier details
+- [x] **Update Pricing Page SEO:** Added keyword-rich title, meta description, OG tags - COMPLETED
+- [x] **Add Customer Testimonials:** Social proof section on homepage - COMPLETED
+- [x] **Create Blog Section:** Launched `/blog/` with Django blog app - COMPLETED
+- [x] **Blog Post 1:** "How to Create a Professional Invoice in 2026" - COMPLETED
+- [x] **Blog Post 2:** "Batch Invoice Generator: How to Create 100+ Invoices in Minutes" - COMPLETED
+- [x] **Blog Post 3:** "Invoice Best Practices for Freelancers: 10 Tips to Get Paid Faster" - COMPLETED
+- [x] **Blog Post 4:** "Small Business Invoicing Guide: Templates, Terms, and Tools" - COMPLETED
+- [x] **Homepage Template Previews:** Added styled CSS mockups for all 5 templates - COMPLETED
+- [ ] **Blog Post 5:** "Invoice vs Receipt: What's the Difference?"
 - [ ] **Increase Keyword Density:** Add "invoice generator" 2-3 more times naturally to homepage
 - [ ] **Add BreadcrumbList Schema:** Implement breadcrumb navigation and schema on internal pages
-- [ ] **Add Customer Testimonials:** Social proof section on homepage
-- [ ] **Create Blog Section:** Launch `/blog/` with Django blog app
-- [ ] **Blog Post 1:** "How to Create a Professional Invoice in 2026 (Free Template)"
-- [ ] **Blog Post 2:** "Invoice Best Practices for Freelancers: 10 Tips to Get Paid Faster"
-- [ ] **Blog Post 3:** "Batch Invoice Processing: Save Hours on Client Billing"
-- [ ] **Blog Post 4:** "Small Business Invoicing Guide: Templates, Terms, and Tools"
-- [ ] **Blog Post 5:** "Invoice vs Receipt: What's the Difference?"
 
 ### SEO - Content Pages (Month 2)
 - [ ] **Template Showcase - Clean Slate:** `/templates/clean-slate/` with screenshots, use cases
@@ -219,16 +220,23 @@ invoice_generator/
 │   │       ├── batch_processor.py # CSV batch processing
 │   │       └── email_sender.py    # Invoice email sending with PDF
 │   ├── companies/           # Company profiles & branding
-│   └── api/                 # REST API (DRF)
+│   ├── api/                 # REST API (DRF)
+│   └── blog/                # SEO blog content
+│       ├── models.py        # BlogPost, BlogCategory
+│       ├── views.py         # List, Detail, Category views
+│       ├── urls.py          # Blog URL routing
+│       ├── sitemaps.py      # Blog sitemap for SEO
+│       └── management/commands/seed_blog.py  # Blog post seeder
 ├── templates/
 │   ├── account/             # allauth templates (login, signup)
+│   ├── blog/                # Blog templates (list, detail)
 │   ├── dashboard/
 │   ├── emails/              # Email templates (welcome, recurring, etc.)
 │   ├── invoices/
 │   │   ├── pdf/             # 5 PDF templates
 │   │   └── recurring/       # Recurring invoice templates (list, detail, create, edit, delete)
 │   ├── billing/
-│   ├── landing/             # Home page with FAQ
+│   ├── landing/             # Home page with FAQ + pricing
 │   ├── pages/               # Static pages (contact, help, privacy, terms, api_docs)
 │   └── settings/
 ├── static/
@@ -262,6 +270,12 @@ invoice_generator/
 | `templates/emails/recurring_invoice_generated.html` | Recurring invoice notification email |
 | `templates/emails/invoice_to_client.html` | Invoice email sent to clients |
 | `templates/landing/index.html` | Landing page with FAQ + FAQPage schema |
+| `templates/landing/pricing.html` | Pricing page with SEO meta tags |
+| `templates/blog/list.html` | Blog listing page with search/filter |
+| `templates/blog/detail.html` | Blog post detail with Schema.org BlogPosting |
+| `apps/blog/models.py` | BlogPost, BlogCategory models |
+| `apps/blog/sitemaps.py` | BlogPostSitemap for SEO |
+| `apps/blog/management/commands/seed_blog.py` | Seeds blog posts on deploy |
 | `railway.json` | Railway deploy config with startCommand |
 | `nixpacks.toml` | Nix packages for build |
 
@@ -302,6 +316,17 @@ invoice_generator/
 | `/privacy/` | Privacy Policy |
 | `/terms/` | Terms of Service |
 | `/api/docs/` | API documentation |
+| `/blog/` | Blog listing page |
+| `/blog/<slug>/` | Individual blog post |
+| `/blog/category/<slug>/` | Posts by category |
+
+### Blog Posts (Live)
+| URL | Title | Target Keyword |
+|-----|-------|----------------|
+| `/blog/how-to-create-professional-invoice/` | How to Create a Professional Invoice in 2026 | "how to create an invoice" (33K/mo) |
+| `/blog/batch-invoice-generator-guide/` | Batch Invoice Generator: How to Create 100+ Invoices | "batch invoice generator" (720/mo) |
+| `/blog/freelancer-invoice-tips-get-paid-faster/` | Invoice Best Practices for Freelancers | "freelance invoice template" (8K/mo) |
+| `/blog/small-business-invoicing-guide/` | Small Business Invoicing Guide | "small business invoice" |
 
 ### Recurring Invoice URLs (Professional+ only)
 | URL | Purpose |
@@ -329,10 +354,12 @@ invoice_generator/
 ### SEO TODOs
 - [x] Register with Google Search Console
 - [x] Add Google Analytics tracking (G-0NR5NZMNBF)
-- [ ] Create blog content for keyword targeting
-- [ ] Build quality backlinks
-- [ ] Monitor Core Web Vitals
+- [x] Create blog content for keyword targeting (4 posts live)
 - [x] Set up custom domain (www.invoicekits.com)
+- [ ] Submit sitemap to Google Search Console
+- [ ] Request indexing for all public pages via GSC URL Inspection
+- [ ] Build quality backlinks (Product Hunt, directories)
+- [ ] Monitor Core Web Vitals via PageSpeed Insights
 
 ---
 
@@ -435,6 +462,19 @@ Authentication: API Key in header `X-API-Key: <key>`
 61. Created and deployed celery-beat service for periodic task scheduling
 62. Configured REDIS_URL environment variable for all services
 63. Recurring invoice auto-generation now fully operational
+64. Updated Pricing page with SEO title, meta description, Open Graph tags
+65. Added customer testimonials section to homepage
+66. Created Django blog app with BlogPost and BlogCategory models
+67. Added blog templates (list.html, detail.html) with full SEO support
+68. Created BlogPostSitemap for automatic sitemap inclusion
+69. Added seed_blog management command for automated blog seeding on deploy
+70. Blog Post 1: "How to Create a Professional Invoice in 2026"
+71. Blog Post 2: "Batch Invoice Generator Guide"
+72. Blog Post 3: "Invoice Best Practices for Freelancers"
+73. Blog Post 4: "Small Business Invoicing Guide"
+74. Added Blog link to footer navigation
+75. Fixed homepage template previews with styled CSS mockups
+76. Added internal cross-linking between blog posts
 
 ---
 
