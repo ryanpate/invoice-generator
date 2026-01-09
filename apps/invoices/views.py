@@ -62,6 +62,16 @@ class SmallBusinessLandingPageView(TemplateView):
         return context
 
 
+class ConsultantsLandingPageView(TemplateView):
+    """Landing page for consultants."""
+    template_name = 'landing/for-consultants.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+        return context
+
+
 class InvoiceListView(LoginRequiredMixin, ListView):
     """List all invoices for the current user."""
     model = Invoice
