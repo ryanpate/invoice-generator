@@ -122,7 +122,7 @@
 - [ ] **Template Showcase - Classic Professional:** `/templates/classic-professional/`
 - [ ] **Template Showcase - Neon Edge:** `/templates/neon-edge/`
 - [x] **Landing Page - For Freelancers:** `/for-freelancers/` role-specific benefits - COMPLETED
-- [ ] **Landing Page - For Small Business:** `/for-small-business/`
+- [x] **Landing Page - For Small Business:** `/for-small-business/` - COMPLETED
 - [ ] **Landing Page - For Consultants:** `/for-consultants/`
 - [ ] **Comparison Page:** "InvoiceKits vs Invoice-Generator.com"
 - [ ] **Comparison Page:** "InvoiceKits vs Canva Invoice Maker"
@@ -317,6 +317,7 @@ invoice_generator/
 | `/terms/` | Terms of Service |
 | `/api/docs/` | API documentation |
 | `/for-freelancers/` | Landing page for freelancers |
+| `/for-small-business/` | Landing page for small businesses |
 | `/blog/` | Blog listing page |
 | `/blog/<slug>/` | Individual blog post |
 | `/blog/category/<slug>/` | Posts by category |
@@ -482,6 +483,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 79. Added BreadcrumbList schema and visual breadcrumb navigation to all internal pages (pricing, help, contact, privacy, terms, API docs, blog list, blog detail)
 80. Added FAQPage schema to pricing page (4 FAQs) and help page (10 FAQs) for rich search results
 81. Created `/for-freelancers/` landing page with SEO-optimized content targeting freelancers (BreadcrumbList + FAQPage schema, pain points, features, testimonials, pricing)
+82. Created `/for-small-business/` landing page with SEO-optimized content targeting small businesses (batch processing, API, recurring invoices focus)
 
 ---
 

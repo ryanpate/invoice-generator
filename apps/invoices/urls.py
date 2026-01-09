@@ -11,6 +11,7 @@ urlpatterns = [
     path('', views.LandingPageView.as_view(), name='landing'),
     path('pricing/', views.PricingPageView.as_view(), name='pricing'),
     path('for-freelancers/', views.FreelancersLandingPageView.as_view(), name='for_freelancers'),
+    path('for-small-business/', views.SmallBusinessLandingPageView.as_view(), name='for_small_business'),
 
     # Invoice CRUD
     path('invoices/', views.InvoiceListView.as_view(), name='list'),
