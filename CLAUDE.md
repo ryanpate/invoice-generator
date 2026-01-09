@@ -96,8 +96,8 @@
 ### SEO - Critical (Week 1)
 - [x] **Fix Canonical URL:** Updated `templates/base.html` to use `https://www.invoicekits.com` - COMPLETED
 - [x] **Fix Robots.txt Sitemap URL:** Updated `config/urls.py` to use `https://www.invoicekits.com/sitemap.xml` - COMPLETED
-- [ ] **Submit Sitemap to GSC:** Submit sitemap.xml via Google Search Console
-- [ ] **Request Indexing:** Use GSC URL Inspection tool for all 7 public pages
+- [x] **Submit Sitemap to GSC:** Submit sitemap.xml via Google Search Console - COMPLETED
+- [x] **Request Indexing:** Use GSC URL Inspection tool for all 7 public pages - COMPLETED
 - [x] **Add Favicon:** Added SVG inline favicon + PNG fallbacks (16x16, 32x32, 180x180) - COMPLETED
 - [x] **Add Open Graph Images:** Created og-image.png (1200x630) for social sharing - COMPLETED
 
@@ -357,8 +357,8 @@ invoice_generator/
 - [x] Add Google Analytics tracking (G-0NR5NZMNBF)
 - [x] Create blog content for keyword targeting (5 posts live)
 - [x] Set up custom domain (www.invoicekits.com)
-- [ ] Submit sitemap to Google Search Console
-- [ ] Request indexing for all public pages via GSC URL Inspection
+- [x] Submit sitemap to Google Search Console - COMPLETED
+- [x] Request indexing for all public pages via GSC URL Inspection - COMPLETED
 - [ ] Build quality backlinks (Product Hunt, directories)
 - [ ] Monitor Core Web Vitals via PageSpeed Insights
 
