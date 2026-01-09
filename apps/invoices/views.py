@@ -72,6 +72,16 @@ class ConsultantsLandingPageView(TemplateView):
         return context
 
 
+class CompareLandingPageView(TemplateView):
+    """Comparison page vs competitors."""
+    template_name = 'landing/compare.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+        return context
+
+
 class InvoiceListView(LoginRequiredMixin, ListView):
     """List all invoices for the current user."""
     model = Invoice

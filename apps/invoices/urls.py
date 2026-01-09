@@ -13,6 +13,7 @@ urlpatterns = [
     path('for-freelancers/', views.FreelancersLandingPageView.as_view(), name='for_freelancers'),
     path('for-small-business/', views.SmallBusinessLandingPageView.as_view(), name='for_small_business'),
     path('for-consultants/', views.ConsultantsLandingPageView.as_view(), name='for_consultants'),
+    path('compare/', views.CompareLandingPageView.as_view(), name='compare'),
 
     # Invoice CRUD
     path('invoices/', views.InvoiceListView.as_view(), name='list'),

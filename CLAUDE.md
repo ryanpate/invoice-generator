@@ -124,8 +124,7 @@
 - [x] **Landing Page - For Freelancers:** `/for-freelancers/` role-specific benefits - COMPLETED
 - [x] **Landing Page - For Small Business:** `/for-small-business/` - COMPLETED
 - [x] **Landing Page - For Consultants:** `/for-consultants/` - COMPLETED
-- [ ] **Comparison Page:** "InvoiceKits vs Invoice-Generator.com"
-- [ ] **Comparison Page:** "InvoiceKits vs Canva Invoice Maker"
+- [x] **Comparison Page:** `/compare/` - Comprehensive comparison vs Invoice-Generator.com, Canva, Wave, Zoho - COMPLETED
 
 ### SEO - Link Building (Month 2-3)
 - [ ] **Submit to Product Hunt:** Launch on Product Hunt
@@ -319,6 +318,7 @@ invoice_generator/
 | `/for-freelancers/` | Landing page for freelancers |
 | `/for-small-business/` | Landing page for small businesses |
 | `/for-consultants/` | Landing page for consultants |
+| `/compare/` | Competitor comparison page |
 | `/blog/` | Blog listing page |
 | `/blog/<slug>/` | Individual blog post |
 | `/blog/category/<slug>/` | Posts by category |
@@ -486,6 +486,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 81. Created `/for-freelancers/` landing page with SEO-optimized content targeting freelancers (BreadcrumbList + FAQPage schema, pain points, features, testimonials, pricing)
 82. Created `/for-small-business/` landing page with SEO-optimized content targeting small businesses (batch processing, API, recurring invoices focus)
 83. Created `/for-consultants/` landing page with SEO-optimized content targeting consultants (hourly billing, retainers, Executive template showcase)
+84. Created `/compare/` competitor comparison page with feature comparison table (vs Invoice-Generator.com, Canva, Wave, Zoho Invoice), FAQPage schema
 
 ---
 

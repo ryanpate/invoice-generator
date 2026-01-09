@@ -20,7 +20,7 @@ class StaticViewSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['/', '/pricing/', '/for-freelancers/', '/for-small-business/', '/for-consultants/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/']
+        return ['/', '/pricing/', '/for-freelancers/', '/for-small-business/', '/for-consultants/', '/compare/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/']
 
     def location(self, item):
         return item
@@ -58,6 +58,7 @@ Allow: /pricing/
 Allow: /for-freelancers/
 Allow: /for-small-business/
 Allow: /for-consultants/
+Allow: /compare/
 Allow: /contact/
 Allow: /help/
 Allow: /privacy/
