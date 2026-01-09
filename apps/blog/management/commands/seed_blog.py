@@ -250,7 +250,7 @@ class Command(BaseCommand):
             category=category,
             excerpt='Learn how to create professional invoices that get you paid faster. This step-by-step guide covers everything from essential invoice elements to best practices for freelancers and small businesses.',
             content=post_content,
-            meta_description='Learn how to create a professional invoice in 2026. Step-by-step guide covering essential elements, best practices, and tips to get paid faster as a freelancer or small business.',
+            meta_description='Learn how to create a professional invoice. Step-by-step guide with essential elements, best practices, and tips to get paid faster.',
             meta_keywords='how to create an invoice, invoice template, professional invoice, invoice generator, freelance invoice, small business invoice, invoice best practices',
             status='published',
         )
@@ -481,7 +481,7 @@ class Command(BaseCommand):
             category=category,
             excerpt='Learn how batch invoicing can save you hours every billing cycle. This guide covers CSV invoice upload, bulk invoice generation best practices, and step-by-step instructions for processing multiple invoices at once.',
             content=post_content,
-            meta_description='Save hours with batch invoice generation. Learn how to create 100+ invoices in minutes using CSV upload. Complete guide to bulk invoicing for businesses.',
+            meta_description='Save hours with batch invoice generation. Create 100+ invoices in minutes using CSV upload. Complete guide to bulk invoicing.',
             meta_keywords='batch invoice generator, CSV invoice upload, bulk invoice generation, batch invoicing, multiple invoices, bulk billing, invoice automation',
             status='published',
         )
