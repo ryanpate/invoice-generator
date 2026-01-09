@@ -40,7 +40,9 @@
 - Payment receipt emails (auto-sent when invoice marked as paid)
 - Social login with Google and GitHub (OAuth fully configured via environment variables)
 - Recurring invoices for Professional+ plans (weekly, bi-weekly, monthly, quarterly, yearly)
-- Blog section with SEO-optimized content (`/blog/`)
+- Blog section with SEO-optimized content (`/blog/`) - 5 posts live
+- Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
+- Competitor comparison page (`/compare/`)
 
 ### Suppressed/Disabled Features
 
