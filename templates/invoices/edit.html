@@ -5,18 +5,18 @@
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="mb-8">
-        <a href="{% url 'invoices:detail' invoice.pk %}" class="text-gray-500 hover:text-gray-700 text-sm mb-2 inline-block">
+        <a href="{% url 'invoices:detail' invoice.pk %}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm mb-2 inline-block">
             &larr; Back to Invoice
         </a>
-        <h1 class="text-2xl font-bold text-gray-900">Edit Invoice {{ invoice.invoice_number }}</h1>
-        {% if invoice.invoice_name %}<p class="text-gray-600">{{ invoice.invoice_name }}</p>{% endif %}
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Invoice {{ invoice.invoice_number }}</h1>
+        {% if invoice.invoice_name %}<p class="text-gray-600 dark:text-gray-400">{{ invoice.invoice_name }}</p>{% endif %}
     </div>
 
     <form method="post" id="invoice-form">
         {% csrf_token %}
 
         {% if form.non_field_errors %}
-        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
             {% for error in form.non_field_errors %}
             <p>{{ error }}</p>
             {% endfor %}
@@ -24,7 +24,7 @@
         {% endif %}
 
         {% if line_items.non_form_errors %}
-        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
             <p><strong>Line Items:</strong></p>
             {% for error in line_items.non_form_errors %}
             <p>{{ error }}</p>
@@ -36,117 +36,122 @@
             <!-- Form Section -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Client Information -->
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Client Information</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Client Information</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Name *</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Name *</label>
                             {{ form.client_name }}
                             {% if form.client_name.errors %}
-                            <p class="text-red-500 text-sm mt-1">{{ form.client_name.errors.0 }}</p>
+                            <p class="text-red-500 dark:text-red-400 text-sm mt-1">{{ form.client_name.errors.0 }}</p>
                             {% endif %}
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Email</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Email</label>
                             {{ form.client_email }}
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Phone</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Phone</label>
                             {{ form.client_phone }}
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Client Address</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Address</label>
                             {{ form.client_address }}
                         </div>
                     </div>
                 </div>
 
                 <!-- Invoice Details -->
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Invoice Details</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invoice Details</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="md:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Name</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Invoice Name</label>
                             {{ form.invoice_name }}
-                            <p class="text-gray-500 text-xs mt-1">Optional - helps you identify this invoice (e.g., "Q1 Consulting Services")</p>
+                            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">Optional - helps you identify this invoice (e.g., "Q1 Consulting Services")</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Invoice Date</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Invoice Date</label>
                             {{ form.invoice_date }}
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Payment Terms</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Terms</label>
                             {{ form.payment_terms }}
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Currency</label>
                             {{ form.currency }}
                         </div>
                     </div>
                 </div>
 
                 <!-- Line Items -->
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Line Items</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Line Items</h2>
 
                     {{ line_items.management_form }}
 
                     <div id="line-items-container">
                         {% for item_form in line_items %}
-                        <div class="line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100">
+                        <div class="line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100 dark:border-gray-700">
                             <div class="flex-1 min-w-[200px]">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description *</label>
                                 {{ item_form.description }}
                                 {% if item_form.description.errors %}
-                                <p class="text-red-500 text-xs mt-1">{{ item_form.description.errors.0 }}</p>
+                                <p class="text-red-500 dark:text-red-400 text-xs mt-1">{{ item_form.description.errors.0 }}</p>
                                 {% endif %}
                             </div>
                             <div class="w-24">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Qty *</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qty *</label>
                                 {{ item_form.quantity }}
                                 {% if item_form.quantity.errors %}
-                                <p class="text-red-500 text-xs mt-1">{{ item_form.quantity.errors.0 }}</p>
+                                <p class="text-red-500 dark:text-red-400 text-xs mt-1">{{ item_form.quantity.errors.0 }}</p>
                                 {% endif %}
                             </div>
                             <div class="w-32">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Rate *</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rate *</label>
                                 {{ item_form.rate }}
                                 {% if item_form.rate.errors %}
-                                <p class="text-red-500 text-xs mt-1">{{ item_form.rate.errors.0 }}</p>
+                                <p class="text-red-500 dark:text-red-400 text-xs mt-1">{{ item_form.rate.errors.0 }}</p>
                                 {% endif %}
                             </div>
-                            <div class="w-8 pt-6">
+                            <div class="w-10 pt-6 flex items-center">
                                 {% if item_form.DELETE %}
-                                {{ item_form.DELETE }}
+                                <div class="hidden">{{ item_form.DELETE }}</div>
                                 {% endif %}
+                                <button type="button" class="delete-line-item text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors p-1" title="Remove line item">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
                             </div>
                             {{ item_form.id }}
                         </div>
                         {% endfor %}
                     </div>
 
-                    <button type="button" id="add-line-item" class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                    <button type="button" id="add-line-item" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
                         + Add Line Item
                     </button>
                 </div>
 
                 <!-- Additional Settings -->
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Additional Settings</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Additional Settings</h2>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Tax Rate (%)</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tax Rate (%)</label>
                             {{ form.tax_rate }}
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Template Style</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Template Style</label>
                             {{ form.template_style }}
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Notes / Payment Instructions</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes / Payment Instructions</label>
                             {{ form.notes }}
                         </div>
                     </div>
@@ -155,19 +160,19 @@
 
             <!-- Sidebar -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-xl shadow-sm p-6 sticky top-8">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Summary</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 sticky top-8 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Summary</h2>
 
                     <div class="space-y-3 mb-6">
-                        <div class="flex justify-between text-gray-600">
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
                             <span>Subtotal</span>
                             <span id="subtotal">{{ invoice.get_currency_symbol }}{{ invoice.subtotal|floatformat:2 }}</span>
                         </div>
-                        <div class="flex justify-between text-gray-600">
+                        <div class="flex justify-between text-gray-600 dark:text-gray-400">
                             <span>Tax</span>
                             <span id="tax-amount">{{ invoice.get_currency_symbol }}{{ invoice.tax_amount|floatformat:2 }}</span>
                         </div>
-                        <div class="flex justify-between text-lg font-semibold text-gray-900 pt-3 border-t">
+                        <div class="flex justify-between text-lg font-semibold text-gray-900 dark:text-white pt-3 border-t border-gray-200 dark:border-gray-700">
                             <span>Total</span>
                             <span id="total">{{ invoice.get_currency_symbol }}{{ invoice.total|floatformat:2 }}</span>
                         </div>
@@ -180,8 +185,8 @@
                         Cancel
                     </a>
 
-                    <div class="pt-4 border-t border-gray-200">
-                        <a href="{% url 'invoices:delete' invoice.pk %}" class="text-red-600 hover:text-red-700 text-sm font-medium flex items-center justify-center">
+                    <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <a href="{% url 'invoices:delete' invoice.pk %}" class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium flex items-center justify-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -200,7 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function calculateTotals() {
         let subtotal = 0;
-        document.querySelectorAll('.line-item').forEach(function(item) {
+        document.querySelectorAll('.line-item:not(.deleted)').forEach(function(item) {
+            // Skip items marked for deletion
             const deleteCheckbox = item.querySelector('[name*=DELETE]');
             if (deleteCheckbox && deleteCheckbox.checked) return;
 
@@ -227,11 +233,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     attachCalculateListeners();
 
-    // Recalculate when delete checkbox changes
-    document.querySelectorAll('input[name*=DELETE]').forEach(function(input) {
-        input.addEventListener('change', calculateTotals);
-    });
-
     // Initial calculation
     calculateTotals();
 
@@ -244,8 +245,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentFormCount = parseInt(totalFormsInput.value);
         const newFormIndex = currentFormCount;
 
-        // Get the first line item as template
-        const template = container.querySelector('.line-item');
+        // Get a visible line item as template (not deleted)
+        const template = container.querySelector('.line-item:not(.deleted)');
         if (!template) return;
 
         // Clone and update the template
@@ -279,38 +280,56 @@ document.addEventListener('DOMContentLoaded', function() {
             error.remove();
         });
 
-        // Reset opacity in case template was marked for deletion
-        newItem.style.opacity = '1';
-        newItem.querySelectorAll('input, select, textarea').forEach(function(input) {
-            input.disabled = false;
-        });
+        // Make sure delete button is visible
+        newItem.classList.remove('deleted');
+        newItem.style.display = '';
 
         container.appendChild(newItem);
         totalFormsInput.value = currentFormCount + 1;
 
         // Reattach listeners for new inputs
         attachCalculateListeners();
+        attachDeleteListeners();
         calculateTotals();
     });
 
-    // Handle delete checkboxes
-    document.addEventListener('change', function(e) {
-        if (e.target.name && e.target.name.includes('DELETE')) {
-            const lineItem = e.target.closest('.line-item');
-            if (e.target.checked) {
-                lineItem.style.opacity = '0.5';
-                lineItem.querySelectorAll('input:not([type=checkbox]), select, textarea').forEach(function(input) {
-                    input.disabled = true;
-                });
-            } else {
-                lineItem.style.opacity = '1';
-                lineItem.querySelectorAll('input, select, textarea').forEach(function(input) {
-                    input.disabled = false;
-                });
-            }
-            calculateTotals();
+    // Handle delete button clicks
+    function attachDeleteListeners() {
+        document.querySelectorAll('.delete-line-item').forEach(function(btn) {
+            btn.removeEventListener('click', handleDelete);
+            btn.addEventListener('click', handleDelete);
+        });
+    }
+
+    function handleDelete(e) {
+        e.preventDefault();
+        const lineItem = e.target.closest('.line-item');
+        const idInput = lineItem.querySelector('[name*="-id"]');
+        const deleteCheckbox = lineItem.querySelector('[name*=DELETE]');
+        const visibleItems = container.querySelectorAll('.line-item:not(.deleted)');
+
+        // Don't allow deleting the last visible item
+        if (visibleItems.length <= 1) {
+            return;
         }
-    });
+
+        // Check if this is an existing item (has an ID) or a new item
+        if (idInput && idInput.value) {
+            // Existing item: mark for deletion but keep in DOM for form submission
+            if (deleteCheckbox) {
+                deleteCheckbox.checked = true;
+            }
+            lineItem.classList.add('deleted');
+            lineItem.style.display = 'none';
+        } else {
+            // New item: remove from DOM entirely
+            lineItem.remove();
+        }
+
+        calculateTotals();
+    }
+
+    attachDeleteListeners();
 });
 </script>
 {% endblock %}
