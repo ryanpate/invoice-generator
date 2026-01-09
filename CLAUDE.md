@@ -137,7 +137,7 @@
 - [ ] **Free Resources:** Create downloadable invoice templates/checklists
 
 ### SEO - Advanced (Month 3-6)
-- [ ] **FAQ Schema:** Add FAQ structured data to pricing and help pages
+- [x] **FAQ Schema:** Add FAQ structured data to pricing and help pages - COMPLETED
 - [ ] **Video Tutorials:** Create YouTube content, embed on site
 - [ ] **Industry Reports:** "State of Freelance Invoicing 2026"
 - [ ] **Free Tools:** Invoice calculator, late fee calculator
@@ -479,6 +479,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 77. Blog Post 5: "Invoice vs Receipt: What's the Difference?" - comprehensive guide comparing invoices and receipts
 78. Increased keyword density on homepage - added "invoice generator" 4 more times naturally
 79. Added BreadcrumbList schema and visual breadcrumb navigation to all internal pages (pricing, help, contact, privacy, terms, API docs, blog list, blog detail)
+80. Added FAQPage schema to pricing page (4 FAQs) and help page (10 FAQs) for rich search results
 
 ---
 
