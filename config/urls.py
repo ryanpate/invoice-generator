@@ -10,6 +10,8 @@ from django.views.generic import TemplateView
 from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps.views import sitemap
 
+from apps.blog.sitemaps import BlogPostSitemap
+
 
 class StaticViewSitemap(Sitemap):
     """Sitemap for static pages."""
@@ -18,7 +20,7 @@ class StaticViewSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['/', '/pricing/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/']
+        return ['/', '/pricing/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/']
 
     def location(self, item):
         return item
@@ -26,6 +28,7 @@ class StaticViewSitemap(Sitemap):
 
 sitemaps = {
     'static': StaticViewSitemap,
+    'blog': BlogPostSitemap,
 }
 
 
@@ -56,6 +59,7 @@ Allow: /contact/
 Allow: /help/
 Allow: /privacy/
 Allow: /terms/
+Allow: /blog/
 
 # Sitemap location
 Sitemap: https://www.invoicekits.com/sitemap.xml
@@ -74,6 +78,7 @@ urlpatterns = [
 
     # Main app URLs
     path('', include('apps.invoices.urls')),
+    path('', include('apps.blog.urls')),
     path('dashboard/', include('apps.accounts.urls')),
     path('billing/', include('apps.billing.urls')),
     path('settings/', include('apps.companies.urls')),

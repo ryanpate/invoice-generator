@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} | InvoiceKits Blog{% endblock %}
+
+{% block meta_description %}{{ post.get_meta_description }}{% endblock %}
+
+{% block meta_keywords %}{{ post.meta_keywords|default:"invoicing, invoice tips, small business" }}{% endblock %}
+
+{% block canonical_url %}https://www.invoicekits.com/blog/{{ post.slug }}/{% endblock %}
+
+{% block og_title %}{{ post.title }}{% endblock %}
+
+{% block og_description %}{{ post.get_meta_description }}{% endblock %}
+
+{% block og_image %}{% if post.featured_image %}{{ post.featured_image.url }}{% endif %}{% endblock %}
+
+{% block twitter_title %}{{ post.title }}{% endblock %}
+
+{% block twitter_description %}{{ post.get_meta_description }}{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ post.title }}",
+    "description": "{{ post.get_meta_description }}",
+    "datePublished": "{{ post.published_date|date:'Y-m-d' }}T00:00:00Z",
+    "dateModified": "{{ post.updated_at|date:'Y-m-d' }}T00:00:00Z",
+    "author": {
+        "@type": "Person",
+        "name": "{{ post.author.get_full_name|default:post.author.email }}"
+    },
+    {% if post.featured_image %}
+    "image": "{{ post.featured_image.url }}",
+    {% endif %}
+    "publisher": {
+        "@type": "Organization",
+        "name": "InvoiceKits",
+        "url": "https://www.invoicekits.com"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.invoicekits.com/blog/{{ post.slug }}/"
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 transition-colors duration-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+            <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                <li><a href="{% url 'blog:list' %}" class="hover:text-primary-600 dark:hover:text-primary-400">Blog</a></li>
+                {% if post.category %}
+                <li><span class="mx-2">/</span></li>
+                <li><a href="{% url 'blog:category' post.category.slug %}" class="hover:text-primary-600 dark:hover:text-primary-400">{{ post.category.name }}</a></li>
+                {% endif %}
+                <li><span class="mx-2">/</span></li>
+                <li class="text-gray-900 dark:text-white truncate">{{ post.title }}</li>
+            </ol>
+        </nav>
+
+        <!-- Article -->
+        <article class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
+            {% if post.featured_image %}
+            <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="w-full h-64 sm:h-96 object-cover">
+            {% endif %}
+
+            <div class="p-8 sm:p-12">
+                <!-- Header -->
+                <header class="mb-8">
+                    {% if post.category %}
+                    <a href="{% url 'blog:category' post.category.slug %}"
+                       class="inline-block text-sm font-medium text-primary-600 dark:text-primary-400 mb-3 hover:text-primary-700 dark:hover:text-primary-300">
+                        {{ post.category.name }}
+                    </a>
+                    {% endif %}
+                    <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ post.title }}</h1>
+                    <div class="flex items-center text-gray-500 dark:text-gray-400 text-sm">
+                        <span>By {{ post.author.get_full_name|default:post.author.email }}</span>
+                        <span class="mx-2">&middot;</span>
+                        <time datetime="{{ post.published_date|date:'Y-m-d' }}">{{ post.published_date|date:"F d, Y" }}</time>
+                        <span class="mx-2">&middot;</span>
+                        <span>{{ post.view_count }} views</span>
+                    </div>
+                </header>
+
+                <!-- Content -->
+                <div class="prose prose-lg dark:prose-invert max-w-none">
+                    {{ post.content|safe }}
+                </div>
+            </div>
+        </article>
+
+        <!-- Related Posts -->
+        {% if related_posts %}
+        <section class="mt-12">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Related Articles</h2>
+            <div class="grid sm:grid-cols-3 gap-6">
+                {% for related in related_posts %}
+                <article class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200 hover:shadow-md">
+                    <div class="p-6">
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-2">
+                            <a href="{% url 'blog:detail' related.slug %}" class="hover:text-primary-600 dark:hover:text-primary-400">
+                                {{ related.title }}
+                            </a>
+                        </h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ related.published_date|date:"M d, Y" }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- CTA -->
+        <section class="mt-12 bg-primary-600 dark:bg-primary-700 rounded-xl p-8 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">Ready to Create Professional Invoices?</h2>
+            <p class="text-primary-100 mb-6">Join thousands of freelancers and small businesses using InvoiceKits.</p>
+            <a href="{% url 'account_signup' %}" class="inline-block bg-white text-primary-600 font-semibold px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors">
+                Start Free Today
+            </a>
+        </section>
+
+        <!-- Back to Blog -->
+        <div class="mt-8 text-center">
+            <a href="{% url 'blog:list' %}" class="text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300">
+                &larr; Back to Blog
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
