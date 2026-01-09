@@ -38,6 +38,7 @@ class Command(BaseCommand):
         # Seed all blog posts
         self._create_invoice_guide(author, guides_category)
         self._create_batch_invoicing_post(author, guides_category)
+        self._create_freelancer_tips_post(author, tips_category)
 
     def _create_invoice_guide(self, author, category):
         """Create the 'How to Create a Professional Invoice' post."""
@@ -483,6 +484,272 @@ class Command(BaseCommand):
             content=post_content,
             meta_description='Save hours with batch invoice generation. Create 100+ invoices in minutes using CSV upload. Complete guide to bulk invoicing.',
             meta_keywords='batch invoice generator, CSV invoice upload, bulk invoice generation, batch invoicing, multiple invoices, bulk billing, invoice automation',
+            status='published',
+        )
+
+        self.stdout.write(self.style.SUCCESS(f'Successfully created blog post: "{post_slug}"'))
+
+    def _create_freelancer_tips_post(self, author, category):
+        """Create the 'Invoice Best Practices for Freelancers' post."""
+        post_slug = 'freelancer-invoice-tips-get-paid-faster'
+        if BlogPost.objects.filter(slug=post_slug).exists():
+            self.stdout.write(self.style.WARNING(f'Blog post "{post_slug}" already exists. Skipping.'))
+            return
+
+        post_content = '''
+<p class="text-xl text-gray-700 dark:text-gray-300 mb-8">As a freelancer, getting paid on time is crucial for keeping your business running. Yet many independent professionals struggle with late payments, unclear invoices, and awkward payment conversations. This guide shares 10 proven <strong>invoice best practices</strong> that will help you get paid faster and maintain professional relationships with your clients.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Why Invoice Best Practices Matter for Freelancers</h2>
+
+<p class="mb-4">According to industry research, freelancers spend an average of 20 days per year chasing late payments. That's nearly a full month of unpaid work! The right invoicing practices can dramatically reduce this wasted time and improve your cash flow.</p>
+
+<p class="mb-4">Poor invoicing habits lead to:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Delayed payments that strain your finances</li>
+    <li>Confusion and disputes over charges</li>
+    <li>Unprofessional appearance to clients</li>
+    <li>Time wasted on follow-ups and corrections</li>
+    <li>Strained client relationships</li>
+</ul>
+
+<p class="mb-4">Let's fix that with these 10 essential tips.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">10 Invoice Tips to Get Paid Faster</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">1. Send Your Invoice Immediately After Completing Work</h3>
+
+<p class="mb-4">The single most effective way to get paid faster is to invoice promptly. Studies show that invoices sent within 24 hours of project completion are paid <strong>1.5x faster</strong> than those sent a week later.</p>
+
+<p class="mb-4">Why? When you invoice immediately:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>The work is fresh in your client's mind</li>
+    <li>They can verify deliverables easily</li>
+    <li>Your invoice enters their payment cycle sooner</li>
+    <li>You demonstrate professionalism and organization</li>
+</ul>
+
+<p class="mb-4"><strong>Pro tip:</strong> Use an invoice generator like InvoiceKits to create and send invoices in under 2 minutes, right when you finish the work.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">2. Use a Professional Freelance Invoice Template</h3>
+
+<p class="mb-4">Your invoice is an extension of your brand. A well-designed <strong>freelance invoice template</strong> signals professionalism and builds trust. Key elements include:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Your logo and branding:</strong> Consistent with your other materials</li>
+    <li><strong>Clean, readable layout:</strong> Easy for accounts payable to process</li>
+    <li><strong>Clear hierarchy:</strong> Important information (total due, due date) prominently displayed</li>
+    <li><strong>Professional typography:</strong> Avoid Comic Sans and other casual fonts</li>
+</ul>
+
+<p class="mb-4">Avoid creating invoices in Word or Excel—the formatting often breaks, and they look unprofessional. Use a dedicated <strong>invoice template</strong> or generator instead.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">3. Be Crystal Clear About What You're Billing For</h3>
+
+<p class="mb-4">Vague line items like "Consulting" or "Design Work" invite questions and delays. Instead, be specific:</p>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Vague</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Specific</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Design Work</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Homepage Redesign - Desktop and Mobile Mockups</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Consulting</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Marketing Strategy Session - Q1 Campaign Planning (2 hrs)</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Writing</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Blog Post: "10 SEO Tips for E-commerce" (1,500 words)</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3">Development</td>
+            <td class="px-4 py-3">User Authentication Feature - Login, Signup, Password Reset</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<p class="mb-4">Clear descriptions reduce back-and-forth questions and make approval faster.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">4. Set Clear Payment Terms Upfront</h3>
+
+<p class="mb-4">Don't surprise clients with payment terms on your invoice. Discuss and agree on terms before starting work:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Net 15:</strong> Payment due within 15 days (recommended for new clients)</li>
+    <li><strong>Net 30:</strong> Payment due within 30 days (standard for established relationships)</li>
+    <li><strong>Due on Receipt:</strong> Payment due immediately (for small projects)</li>
+    <li><strong>50% Upfront:</strong> For larger projects, require a deposit before starting</li>
+</ul>
+
+<p class="mb-4"><strong>Pro tip:</strong> Include your payment terms in your contract or proposal, then reference them on every invoice.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">5. Make It Ridiculously Easy to Pay You</h3>
+
+<p class="mb-4">Every obstacle between your client and payment costs you time. Offer multiple payment options:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Bank transfer:</strong> Include full account details and reference number</li>
+    <li><strong>Credit/debit card:</strong> Use Stripe or PayPal for instant payments</li>
+    <li><strong>PayPal:</strong> Still popular, especially for international clients</li>
+    <li><strong>Digital wallets:</strong> Venmo, Zelle for US clients</li>
+</ul>
+
+<p class="mb-4">Include payment instructions directly on your invoice—don't make clients hunt for how to pay you.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">6. Use Sequential Invoice Numbers</h3>
+
+<p class="mb-4">A proper invoice numbering system helps you and your clients track payments. Good formats include:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><code>INV-001</code>, <code>INV-002</code>, <code>INV-003</code> (simple sequential)</li>
+    <li><code>2026-001</code>, <code>2026-002</code> (year-prefixed)</li>
+    <li><code>ACME-001</code> (client-prefixed for multiple clients)</li>
+</ul>
+
+<p class="mb-4">Never reuse invoice numbers or skip numbers in your sequence. An invoice generator handles this automatically, preventing errors.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">7. Include All Required Information</h3>
+
+<p class="mb-4">Missing information is a common cause of payment delays. Every <strong>freelance invoice</strong> should include:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Invoice Checklist</h4>
+    <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+        <li>Your full name or business name</li>
+        <li>Your contact information (email, phone, address)</li>
+        <li>Client's name and billing address</li>
+        <li>Unique invoice number</li>
+        <li>Invoice date</li>
+        <li>Due date (not just "Net 30"—include the actual date)</li>
+        <li>Itemized list of services with descriptions</li>
+        <li>Quantity and rate for each line item</li>
+        <li>Subtotal, taxes (if applicable), and total</li>
+        <li>Payment instructions and accepted methods</li>
+        <li>Your tax ID or business number (if required)</li>
+    </ul>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">8. Follow Up on Overdue Invoices (Without Being Awkward)</h3>
+
+<p class="mb-4">Don't let unpaid invoices linger. Set up a follow-up schedule:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>3 days before due date:</strong> Friendly reminder that payment is coming up</li>
+    <li><strong>Due date:</strong> Payment due today notification</li>
+    <li><strong>7 days overdue:</strong> Polite follow-up asking if they received the invoice</li>
+    <li><strong>14 days overdue:</strong> Direct message asking when to expect payment</li>
+    <li><strong>30 days overdue:</strong> Formal notice with late fee warning</li>
+</ul>
+
+<p class="mb-4"><strong>Sample follow-up email:</strong></p>
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 mb-4 text-sm">
+    <p class="mb-2"><strong>Subject:</strong> Invoice #INV-042 - Payment Reminder</p>
+    <p class="mb-2">Hi [Client Name],</p>
+    <p class="mb-2">I hope you're doing well! I wanted to follow up on Invoice #INV-042 for [Project Name], which was due on [Date].</p>
+    <p class="mb-2">If you've already sent payment, please disregard this message. Otherwise, could you let me know when I can expect it?</p>
+    <p>Best,<br>[Your Name]</p>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">9. Consider Requiring Deposits for Large Projects</h3>
+
+<p class="mb-4">For projects over $1,000, consider requiring a deposit before starting work. Common structures:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>50/50:</strong> 50% upfront, 50% on completion</li>
+    <li><strong>30/30/40:</strong> 30% upfront, 30% at milestone, 40% on completion</li>
+    <li><strong>Monthly retainer:</strong> Payment at the start of each month</li>
+</ul>
+
+<p class="mb-4">Deposits protect you from scope creep and client ghosting, while ensuring clients have skin in the game.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3">10. Track Your Invoices and Know Your Numbers</h3>
+
+<p class="mb-4">You can't improve what you don't measure. Track key metrics:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Average days to payment:</strong> How long clients typically take to pay</li>
+    <li><strong>Outstanding amount:</strong> Total unpaid invoices</li>
+    <li><strong>Late payment rate:</strong> Percentage of invoices paid after due date</li>
+    <li><strong>Problem clients:</strong> Which clients consistently pay late</li>
+</ul>
+
+<p class="mb-4">This data helps you make better decisions about payment terms, deposits, and which clients to continue working with.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Bonus: Invoice Best Practices Checklist</h2>
+
+<p class="mb-4">Use this quick checklist before sending any invoice:</p>
+
+<div class="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-6 mb-6">
+    <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+        <li>Invoice sent within 24 hours of project completion</li>
+        <li>Professional template with my branding</li>
+        <li>Clear, specific line item descriptions</li>
+        <li>Correct client name and billing address</li>
+        <li>Unique, sequential invoice number</li>
+        <li>Specific due date (not just "Net 30")</li>
+        <li>All calculations double-checked</li>
+        <li>Payment instructions clearly visible</li>
+        <li>Sent to the right person (billing contact)</li>
+        <li>PDF format for consistent formatting</li>
+    </ul>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Tools to Streamline Your Freelance Invoicing</h2>
+
+<p class="mb-4">Manual invoicing in Word or Excel is time-consuming and error-prone. Modern tools can help:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoice generators:</strong> Create professional invoices in minutes (like InvoiceKits)</li>
+    <li><strong>Time tracking apps:</strong> Automatically log billable hours</li>
+    <li><strong>Accounting software:</strong> Track expenses, revenue, and taxes</li>
+    <li><strong>Payment processors:</strong> Accept credit cards and bank transfers</li>
+</ul>
+
+<p class="mb-4">The right tools pay for themselves in time saved and faster payments.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Start Getting Paid Faster Today</h2>
+
+<p class="mb-4">Implementing these <strong>invoice best practices</strong> doesn't require a complete overhaul of your business. Start with the biggest impact items:</p>
+
+<ol class="list-decimal pl-6 mb-4 space-y-2">
+    <li>Switch to a professional invoice template or generator</li>
+    <li>Send invoices within 24 hours of completing work</li>
+    <li>Add multiple payment options to make paying easy</li>
+    <li>Set up a follow-up schedule for overdue invoices</li>
+</ol>
+
+<p class="mb-4">Ready to professionalize your invoicing? <a href="/accounts/signup/" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">Create your free InvoiceKits account</a> and start sending professional invoices in minutes. No credit card required.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+        <li>Send invoices within 24 hours of completing work for 1.5x faster payment</li>
+        <li>Use a professional freelance invoice template with your branding</li>
+        <li>Be specific in line item descriptions to avoid questions and delays</li>
+        <li>Make it easy to pay you by offering multiple payment methods</li>
+        <li>Follow up systematically on overdue invoices—it's professional, not awkward</li>
+        <li>Track your invoicing metrics to identify problems and improve over time</li>
+    </ul>
+</div>
+'''
+
+        BlogPost.objects.create(
+            title='Invoice Best Practices for Freelancers: 10 Tips to Get Paid Faster',
+            slug=post_slug,
+            author=author,
+            category=category,
+            excerpt='Stop chasing late payments. These 10 proven invoice best practices help freelancers get paid faster, maintain professional client relationships, and improve cash flow.',
+            content=post_content,
+            meta_description='10 invoice tips for freelancers to get paid faster. Professional templates, payment terms, and follow-up strategies.',
+            meta_keywords='freelance invoice template, invoice best practices, freelancer invoice tips, get paid faster, invoice template, freelance billing, payment terms',
             status='published',
         )
 
