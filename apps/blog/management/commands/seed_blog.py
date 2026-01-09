@@ -40,6 +40,7 @@ class Command(BaseCommand):
         self._create_batch_invoicing_post(author, guides_category)
         self._create_freelancer_tips_post(author, tips_category)
         self._create_small_business_guide_post(author, guides_category)
+        self._create_invoice_vs_receipt_post(author, guides_category)
 
     def _create_invoice_guide(self, author, category):
         """Create the 'How to Create a Professional Invoice' post."""
@@ -1119,6 +1120,397 @@ class Command(BaseCommand):
             content=post_content,
             meta_description='Small business invoicing guide with templates, payment terms, tax tips, and tools. Get paid faster with professional invoices.',
             meta_keywords='small business invoice, invoice template, payment terms, business invoicing, invoice software, billing guide, invoice generator',
+            status='published',
+        )
+
+        self.stdout.write(self.style.SUCCESS(f'Successfully created blog post: "{post_slug}"'))
+
+    def _create_invoice_vs_receipt_post(self, author, category):
+        """Create the 'Invoice vs Receipt: What's the Difference?' post."""
+        post_slug = 'invoice-vs-receipt-difference'
+        if BlogPost.objects.filter(slug=post_slug).exists():
+            self.stdout.write(self.style.WARNING(f'Blog post "{post_slug}" already exists. Skipping.'))
+            return
+
+        post_content = '''
+<p class="text-xl text-gray-700 dark:text-gray-300 mb-8">Invoices and receipts are both essential business documents, but they serve very different purposes. Confusing them can lead to accounting errors, tax problems, and frustrated clients. This guide explains the key differences between <strong>invoices vs receipts</strong>, when to use each, and how to manage both effectively in your business.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Invoice vs Receipt: The Quick Answer</h2>
+
+<p class="mb-4">Here's the fundamental difference:</p>
+
+<div class="grid md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-blue-900 dark:text-blue-100 mb-2">Invoice</h3>
+        <p class="text-blue-800 dark:text-blue-200">A <strong>request for payment</strong> sent BEFORE payment is received. It tells your client what they owe and when to pay.</p>
+    </div>
+    <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
+        <h3 class="text-lg font-bold text-green-900 dark:text-green-100 mb-2">Receipt</h3>
+        <p class="text-green-800 dark:text-green-200"><strong>Proof of payment</strong> sent AFTER payment is received. It confirms that a transaction has been completed.</p>
+    </div>
+</div>
+
+<p class="mb-4">Think of it this way: an invoice says "please pay me," while a receipt says "thank you for paying."</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">What Is an Invoice?</h2>
+
+<p class="mb-4">An <strong>invoice</strong> is a commercial document that itemizes a transaction and requests payment from a buyer. It's issued by the seller (you) to the buyer (your client) before payment is made.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Key Characteristics of an Invoice</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Timing:</strong> Sent before or upon delivery of goods/services</li>
+    <li><strong>Purpose:</strong> Requests payment and specifies payment terms</li>
+    <li><strong>Legal status:</strong> Creates a legal obligation for the buyer to pay</li>
+    <li><strong>Contains:</strong> Due date, payment terms, itemized charges</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Essential Invoice Elements</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Your business name and contact information</li>
+    <li>Client's name and billing address</li>
+    <li>Unique invoice number</li>
+    <li>Invoice date and due date</li>
+    <li>Itemized list of products or services</li>
+    <li>Quantities and prices</li>
+    <li>Subtotal, taxes, and total amount due</li>
+    <li>Payment terms (Net 30, Due on Receipt, etc.)</li>
+    <li>Accepted payment methods</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">When to Use an Invoice</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>After completing a service for a client</li>
+    <li>When shipping products to a customer</li>
+    <li>For milestone payments on ongoing projects</li>
+    <li>When requesting a deposit before starting work</li>
+    <li>For recurring subscription or retainer billing</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">What Is a Receipt?</h2>
+
+<p class="mb-4">A <strong>receipt</strong> is a document that confirms a payment has been made. It's issued by the seller to the buyer after the transaction is complete.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Key Characteristics of a Receipt</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Timing:</strong> Issued after payment is received</li>
+    <li><strong>Purpose:</strong> Confirms payment and serves as proof of purchase</li>
+    <li><strong>Legal status:</strong> Evidence that the transaction is complete</li>
+    <li><strong>Contains:</strong> Payment date, amount paid, payment method</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Essential Receipt Elements</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Your business name and contact information</li>
+    <li>Receipt number (different from invoice number)</li>
+    <li>Date of payment</li>
+    <li>Description of products or services purchased</li>
+    <li>Amount paid</li>
+    <li>Payment method used</li>
+    <li>Reference to original invoice number (if applicable)</li>
+    <li>"PAID" or "Payment Received" notation</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">When to Use a Receipt</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>After receiving payment for an invoice</li>
+    <li>For point-of-sale transactions (retail)</li>
+    <li>When a client needs proof of payment for their records</li>
+    <li>For cash transactions where no invoice was issued</li>
+    <li>When clients request documentation for expense reports</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Invoice vs Receipt: Side-by-Side Comparison</h2>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Aspect</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Invoice</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Receipt</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">When issued</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Before payment</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">After payment</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Primary purpose</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Request payment</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Confirm payment</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Contains due date</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Yes</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">No (payment already made)</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Payment terms</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Included (Net 30, etc.)</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Not applicable</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Shows "Amount Due"</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Yes</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">No (shows "Amount Paid")</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Legal function</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Creates debt obligation</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Proves debt is settled</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Used for</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Accounts receivable</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Expense tracking, tax records</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 font-medium">Typical industries</td>
+            <td class="px-4 py-3">B2B, services, freelance</td>
+            <td class="px-4 py-3">Retail, e-commerce, hospitality</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">The Invoice-to-Receipt Workflow</h2>
+
+<p class="mb-4">In most B2B transactions, there's a natural progression from invoice to receipt:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <ol class="space-y-4">
+        <li class="flex items-start">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold mr-3">1</span>
+            <div>
+                <strong class="text-gray-900 dark:text-white">You complete work or deliver products</strong>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">The service is rendered or goods are shipped</p>
+            </div>
+        </li>
+        <li class="flex items-start">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold mr-3">2</span>
+            <div>
+                <strong class="text-gray-900 dark:text-white">You send an invoice</strong>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Requesting payment with itemized charges and due date</p>
+            </div>
+        </li>
+        <li class="flex items-start">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold mr-3">3</span>
+            <div>
+                <strong class="text-gray-900 dark:text-white">Client pays the invoice</strong>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Via bank transfer, credit card, or other method</p>
+            </div>
+        </li>
+        <li class="flex items-start">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold mr-3">4</span>
+            <div>
+                <strong class="text-gray-900 dark:text-white">You issue a receipt (or mark invoice as paid)</strong>
+                <p class="text-gray-600 dark:text-gray-400 text-sm">Confirming payment was received</p>
+            </div>
+        </li>
+    </ol>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Common Scenarios: Invoice, Receipt, or Both?</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Scenario 1: Freelance Web Design Project</h3>
+<p class="mb-4">You complete a website redesign for a client.</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoice:</strong> Send after completing the project, requesting $5,000 with Net 30 terms</li>
+    <li><strong>Receipt:</strong> Send after client pays, confirming the $5,000 was received</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Scenario 2: Retail Store Purchase</h3>
+<p class="mb-4">A customer buys a product at your store and pays immediately.</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoice:</strong> Not typically needed (payment is immediate)</li>
+    <li><strong>Receipt:</strong> Issued immediately at point of sale</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Scenario 3: Monthly Retainer Client</h3>
+<p class="mb-4">You provide ongoing marketing services for a monthly fee.</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoice:</strong> Send at the start of each month, requesting that month's retainer</li>
+    <li><strong>Receipt:</strong> Send each time the retainer payment is received</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Scenario 4: Deposit + Final Payment</h3>
+<p class="mb-4">Client pays 50% upfront and 50% upon completion.</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoice 1:</strong> For the 50% deposit before starting</li>
+    <li><strong>Receipt 1:</strong> After receiving the deposit</li>
+    <li><strong>Invoice 2:</strong> For the remaining 50% after completion</li>
+    <li><strong>Receipt 2:</strong> After receiving the final payment</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Do You Always Need Both?</h2>
+
+<p class="mb-4">Not always. Whether you need both an invoice and a receipt depends on your business type and transaction flow:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Invoice Only (No Separate Receipt)</h3>
+<p class="mb-4">Many businesses simply mark their invoice as "PAID" instead of issuing a separate receipt. This is common when:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>You use invoicing software that tracks payment status</li>
+    <li>Your client doesn't specifically request a receipt</li>
+    <li>The paid invoice serves as sufficient proof of payment</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Receipt Only (No Invoice)</h3>
+<p class="mb-4">Receipts without invoices are typical for:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Retail transactions with immediate payment</li>
+    <li>Cash payments at point of sale</li>
+    <li>Online purchases with instant payment</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Both Invoice and Receipt</h3>
+<p class="mb-4">Use both documents when:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Client explicitly requests a receipt for their records</li>
+    <li>Large transactions requiring formal documentation</li>
+    <li>Corporate clients needing receipts for expense reporting</li>
+    <li>International transactions requiring separate documentation</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Tax and Accounting Implications</h2>
+
+<p class="mb-4">Understanding the <strong>invoice vs receipt</strong> distinction is crucial for proper accounting:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">For Your Business (Seller)</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoices:</strong> Record revenue when issued (accrual accounting) or when paid (cash accounting)</li>
+    <li><strong>Receipts:</strong> Confirm cash received, update accounts receivable</li>
+    <li><strong>Tax purposes:</strong> Both should be retained for audit trails</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">For Your Clients (Buyer)</h3>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Invoices:</strong> Record expenses when received (may need approval before payment)</li>
+    <li><strong>Receipts:</strong> Proof of payment for expense reports and tax deductions</li>
+    <li><strong>Audit defense:</strong> Receipts are critical evidence if audited</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Related Documents You Should Know</h2>
+
+<p class="mb-4">Beyond invoices and receipts, here are other business documents you might encounter:</p>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Document</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Purpose</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">When Used</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Quote/Estimate</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Proposes pricing before work begins</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Before agreement</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Purchase Order (PO)</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Buyer's formal order commitment</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Before invoice</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Pro Forma Invoice</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Preliminary invoice for prepayment</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Before delivery</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700 font-medium">Credit Note</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Reduces amount owed (refund/correction)</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">After invoice</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 font-medium">Statement</td>
+            <td class="px-4 py-3">Summary of all outstanding invoices</td>
+            <td class="px-4 py-3">Periodic (monthly)</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Best Practices for Managing Invoices and Receipts</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">1. Use Separate Numbering Systems</h3>
+<p class="mb-4">Keep invoice and receipt numbers distinct:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Invoices: <code>INV-0001</code>, <code>INV-0002</code></li>
+    <li>Receipts: <code>REC-0001</code>, <code>REC-0002</code></li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">2. Link Receipts to Invoices</h3>
+<p class="mb-4">Always reference the original invoice number on receipts so both parties can easily match payments to charges.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">3. Automate When Possible</h3>
+<p class="mb-4">Use invoicing software that automatically:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Sends payment receipts when invoices are marked paid</li>
+    <li>Updates invoice status when payment is received</li>
+    <li>Tracks which invoices are paid vs. outstanding</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">4. Store Documents Properly</h3>
+<p class="mb-4">Keep organized records of both invoices and receipts:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Retain all documents for at least 7 years for tax purposes</li>
+    <li>Use cloud storage for backup and easy access</li>
+    <li>Organize by client, date, or project for quick retrieval</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Common Mistakes to Avoid</h2>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Using invoices as receipts:</strong> An unpaid invoice is not proof of payment</li>
+    <li><strong>Missing documentation:</strong> Always provide receipts when requested</li>
+    <li><strong>Inconsistent numbering:</strong> Mixed-up numbers create confusion in record-keeping</li>
+    <li><strong>Not linking documents:</strong> Receipts should reference the original invoice</li>
+    <li><strong>Inadequate record retention:</strong> Keep both documents for at least 7 years</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Streamline Your Invoice and Receipt Process</h2>
+
+<p class="mb-4">Managing invoices and receipts doesn't have to be complicated. With the right tools, you can:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>Create professional invoices in minutes</li>
+    <li>Automatically send payment receipts when invoices are paid</li>
+    <li>Track which invoices are outstanding vs. paid</li>
+    <li>Keep organized records for tax time</li>
+</ul>
+
+<p class="mb-4">Ready to simplify your invoicing? <a href="/accounts/signup/" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">Create your free InvoiceKits account</a> and start sending professional invoices today. When clients pay, our system automatically tracks payment status and can send payment confirmations—no separate receipt management needed.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways: Invoice vs Receipt</h3>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+        <li><strong>Invoice:</strong> Request for payment sent BEFORE payment is received</li>
+        <li><strong>Receipt:</strong> Proof of payment sent AFTER payment is received</li>
+        <li>Invoices create a legal obligation to pay; receipts prove the obligation is fulfilled</li>
+        <li>Many businesses mark invoices as "PAID" instead of issuing separate receipts</li>
+        <li>Both documents are important for tax compliance and should be retained for 7+ years</li>
+        <li>Use invoicing software to automate payment tracking and receipt generation</li>
+    </ul>
+</div>
+
+<div class="mt-8 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg">
+    <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Related reading:</strong> Learn more about creating professional invoices in our <a href="/blog/how-to-create-professional-invoice/" class="text-primary-600 dark:text-primary-400 hover:underline">complete invoice guide</a>, or explore <a href="/blog/freelancer-invoice-tips-get-paid-faster/" class="text-primary-600 dark:text-primary-400 hover:underline">invoice best practices for freelancers</a>.</p>
+</div>
+'''
+
+        BlogPost.objects.create(
+            title='Invoice vs Receipt: What\'s the Difference? (Complete Guide)',
+            slug=post_slug,
+            author=author,
+            category=category,
+            excerpt='Invoices request payment before it\'s received; receipts confirm payment after it\'s made. Learn when to use each, key differences, and how to manage both for your business.',
+            content=post_content,
+            meta_description='Invoice vs receipt explained. Invoices request payment; receipts confirm it. Learn differences, when to use each, and best practices.',
+            meta_keywords='invoice vs receipt, receipt vs invoice, difference between invoice and receipt, what is an invoice, what is a receipt, invoice definition, receipt definition',
             status='published',
         )
 

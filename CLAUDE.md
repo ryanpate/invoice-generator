@@ -80,7 +80,7 @@
   - [x] Payment receipts - COMPLETED (auto-sends to client + business owner when marked as paid)
 - [x] **Social Authentication:** Google and GitHub OAuth fully configured via env vars - COMPLETED
 - [x] **Invoice Email Sending:** Send invoices directly to clients via email with PDF attachment - COMPLETED
-- [x] **Blog/Content Marketing:** Created `/blog/` section with 4 SEO-optimized posts - COMPLETED
+- [x] **Blog/Content Marketing:** Created `/blog/` section with 5 SEO-optimized posts - COMPLETED
 
 ### Lower Priority - Feature Expansion
 - [ ] **Team Seats:** Business plan includes 3 team seats (model and UI not implemented)
@@ -111,7 +111,7 @@
 - [x] **Blog Post 3:** "Invoice Best Practices for Freelancers: 10 Tips to Get Paid Faster" - COMPLETED
 - [x] **Blog Post 4:** "Small Business Invoicing Guide: Templates, Terms, and Tools" - COMPLETED
 - [x] **Homepage Template Previews:** Added styled CSS mockups for all 5 templates - COMPLETED
-- [ ] **Blog Post 5:** "Invoice vs Receipt: What's the Difference?"
+- [x] **Blog Post 5:** "Invoice vs Receipt: What's the Difference?" - COMPLETED
 - [ ] **Increase Keyword Density:** Add "invoice generator" 2-3 more times naturally to homepage
 - [ ] **Add BreadcrumbList Schema:** Implement breadcrumb navigation and schema on internal pages
 
@@ -327,6 +327,7 @@ invoice_generator/
 | `/blog/batch-invoice-generator-guide/` | Batch Invoice Generator: How to Create 100+ Invoices | "batch invoice generator" (720/mo) |
 | `/blog/freelancer-invoice-tips-get-paid-faster/` | Invoice Best Practices for Freelancers | "freelance invoice template" (8K/mo) |
 | `/blog/small-business-invoicing-guide/` | Small Business Invoicing Guide | "small business invoice" |
+| `/blog/invoice-vs-receipt-difference/` | Invoice vs Receipt: What's the Difference? | "invoice vs receipt" |
 
 ### Recurring Invoice URLs (Professional+ only)
 | URL | Purpose |
@@ -354,7 +355,7 @@ invoice_generator/
 ### SEO TODOs
 - [x] Register with Google Search Console
 - [x] Add Google Analytics tracking (G-0NR5NZMNBF)
-- [x] Create blog content for keyword targeting (4 posts live)
+- [x] Create blog content for keyword targeting (5 posts live)
 - [x] Set up custom domain (www.invoicekits.com)
 - [ ] Submit sitemap to Google Search Console
 - [ ] Request indexing for all public pages via GSC URL Inspection
@@ -475,6 +476,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 74. Added Blog link to footer navigation
 75. Fixed homepage template previews with styled CSS mockups
 76. Added internal cross-linking between blog posts
+77. Blog Post 5: "Invoice vs Receipt: What's the Difference?" - comprehensive guide comparing invoices and receipts
 
 ---
 
