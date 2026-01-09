@@ -112,7 +112,7 @@
 - [x] **Blog Post 4:** "Small Business Invoicing Guide: Templates, Terms, and Tools" - COMPLETED
 - [x] **Homepage Template Previews:** Added styled CSS mockups for all 5 templates - COMPLETED
 - [x] **Blog Post 5:** "Invoice vs Receipt: What's the Difference?" - COMPLETED
-- [ ] **Increase Keyword Density:** Add "invoice generator" 2-3 more times naturally to homepage
+- [x] **Increase Keyword Density:** Added "invoice generator" 4 more times naturally to homepage - COMPLETED
 - [ ] **Add BreadcrumbList Schema:** Implement breadcrumb navigation and schema on internal pages
 
 ### SEO - Content Pages (Month 2)
