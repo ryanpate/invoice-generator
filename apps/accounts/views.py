@@ -44,6 +44,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             'revenue_this_month': monthly_invoices.aggregate(Sum('total'))['total__sum'] or 0,
             'usage_percentage': user.get_usage_percentage(),
             'tier_config': settings.SUBSCRIPTION_TIERS.get(user.subscription_tier, {}),
+            # Credit system info
+            'is_subscriber': user.is_active_subscriber(),
+            'credits': {
+                'total_available': user.get_available_credits(),
+                'free_remaining': user.free_credits_remaining,
+                'purchased_balance': user.credits_balance,
+            },
         })
         return context
 

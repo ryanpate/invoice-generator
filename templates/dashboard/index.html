@@ -59,6 +59,8 @@
             </div>
         </div>
 
+        {% if is_subscriber %}
+        <!-- Subscriber: Show usage percentage -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
             <div class="flex items-center justify-between">
                 <div>
@@ -77,6 +79,27 @@
                 </div>
             </div>
         </div>
+        {% else %}
+        <!-- Credit User: Show credits remaining -->
+        <a href="{% url 'billing:credits' %}" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200 hover:shadow-md">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Credits</p>
+                    <p class="text-2xl font-bold {% if credits.total_available < 3 %}text-yellow-600{% else %}text-gray-900 dark:text-white{% endif %}">
+                        {{ credits.total_available }}
+                    </p>
+                </div>
+                <div class="w-12 h-12 {% if credits.total_available < 3 %}bg-yellow-100 dark:bg-yellow-900/50{% else %}bg-primary-100 dark:bg-primary-900/50{% endif %} rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 {% if credits.total_available < 3 %}text-yellow-600 dark:text-yellow-400{% else %}text-primary-600 dark:text-primary-400{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            {% if credits.total_available < 3 %}
+            <p class="text-xs text-yellow-600 mt-2">Low credits - buy more</p>
+            {% endif %}
+        </a>
+        {% endif %}
     </div>
 
     <!-- Quick Actions -->

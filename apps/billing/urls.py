@@ -14,4 +14,9 @@ urlpatterns = [
     path('success/', views.CheckoutSuccessView.as_view(), name='success'),
     path('cancel/', views.CheckoutCancelView.as_view(), name='cancel'),
     path('webhook/', views.stripe_webhook, name='webhook'),
+
+    # Credit purchase routes
+    path('credits/', views.CreditsView.as_view(), name='credits'),
+    path('credits/purchase/<str:pack_id>/', views.purchase_credits, name='purchase_credits'),
+    path('credits/success/', views.CreditPurchaseSuccessView.as_view(), name='credits_success'),
 ]

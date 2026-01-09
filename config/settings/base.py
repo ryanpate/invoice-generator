@@ -218,15 +218,17 @@ CORS_ALLOWED_ORIGINS = config(
 )
 
 # Subscription Tiers Configuration
+# Note: Free tier now uses credit system instead of monthly quota
 SUBSCRIPTION_TIERS = {
     'free': {
         'name': 'Free',
         'price': 0,
-        'invoices_per_month': 5,
+        'invoices_per_month': 0,  # Uses credits instead of monthly quota
+        'uses_credits': True,  # Indicates this tier uses credit system
         'templates': ['clean_slate'],
         'batch_upload': False,
         'api_access': False,
-        'watermark': True,
+        'watermark': True,  # Only for users who haven't purchased credits
         'api_calls_per_month': 0,
         'recurring_invoices': False,
         'max_recurring': 0,
@@ -266,6 +268,35 @@ SUBSCRIPTION_TIERS = {
         'api_calls_per_month': 1000,
         'recurring_invoices': True,
         'max_recurring': -1,  # Unlimited
+    },
+}
+
+# Credit Packs Configuration (Pay-as-you-go option)
+# Stripe price IDs need to be created in Stripe Dashboard and added here
+CREDIT_PACKS = {
+    'pack_10': {
+        'name': '10 Credits',
+        'credits': 10,
+        'price': 9,
+        'price_per_credit': 0.90,
+        'stripe_price_id': config('STRIPE_CREDIT_PACK_10_PRICE_ID', default=''),
+        'popular': False,
+    },
+    'pack_25': {
+        'name': '25 Credits',
+        'credits': 25,
+        'price': 19,
+        'price_per_credit': 0.76,
+        'stripe_price_id': config('STRIPE_CREDIT_PACK_25_PRICE_ID', default=''),
+        'popular': True,  # Best value indicator
+    },
+    'pack_50': {
+        'name': '50 Credits',
+        'credits': 50,
+        'price': 35,
+        'price_per_credit': 0.70,
+        'stripe_price_id': config('STRIPE_CREDIT_PACK_50_PRICE_ID', default=''),
+        'popular': False,
     },
 }
 

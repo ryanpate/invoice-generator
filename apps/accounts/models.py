@@ -39,10 +39,15 @@ class CustomUser(AbstractUser):
     api_key = models.CharField(max_length=64, unique=True, blank=True, null=True)
     api_key_created_at = models.DateTimeField(blank=True, null=True)
 
-    # Usage tracking
+    # Usage tracking (for subscribers)
     invoices_created_this_month = models.PositiveIntegerField(default=0)
     api_calls_this_month = models.PositiveIntegerField(default=0)
     usage_reset_date = models.DateField(default=timezone.now)
+
+    # Credit system (for pay-as-you-go users)
+    credits_balance = models.PositiveIntegerField(default=0)  # Purchased credits
+    free_credits_remaining = models.PositiveIntegerField(default=5)  # Lifetime free credits
+    total_credits_purchased = models.PositiveIntegerField(default=0)  # Lifetime stats
 
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
@@ -65,6 +70,36 @@ class CustomUser(AbstractUser):
         self.save(update_fields=['api_key', 'api_key_created_at'])
         return self.api_key
 
+    # Credit system methods
+    def is_active_subscriber(self):
+        """Check if user has an active paid subscription."""
+        return (
+            self.subscription_tier != 'free' and
+            self.subscription_status == 'active'
+        )
+
+    def get_available_credits(self):
+        """Get total available credits (free + purchased)."""
+        return self.free_credits_remaining + self.credits_balance
+
+    def deduct_credit(self):
+        """Deduct one credit, prioritizing free credits first."""
+        if self.free_credits_remaining > 0:
+            self.free_credits_remaining -= 1
+            self.save(update_fields=['free_credits_remaining'])
+            return True
+        elif self.credits_balance > 0:
+            self.credits_balance -= 1
+            self.save(update_fields=['credits_balance'])
+            return True
+        return False
+
+    def add_credits(self, amount):
+        """Add purchased credits to balance."""
+        self.credits_balance += amount
+        self.total_credits_purchased += amount
+        self.save(update_fields=['credits_balance', 'total_credits_purchased'])
+
     def reset_monthly_usage(self):
         """Reset monthly usage counters."""
         self.invoices_created_this_month = 0
@@ -83,22 +118,36 @@ class CustomUser(AbstractUser):
             self.reset_monthly_usage()
 
     def can_create_invoice(self):
-        """Check if user can create another invoice this month."""
+        """Check if user can create another invoice.
+
+        For active subscribers: Uses monthly quota from subscription tier.
+        For credit users (free tier or inactive subscription): Uses credits.
+        """
         from django.conf import settings
-        self.check_usage_reset()
 
-        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
-        limit = tier_config.get('invoices_per_month', 5)
+        # Active subscribers use monthly quota
+        if self.is_active_subscriber():
+            self.check_usage_reset()
+            tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+            limit = tier_config.get('invoices_per_month', 0)
 
-        if limit == -1:  # Unlimited
-            return True
-        return self.invoices_created_this_month < limit
+            if limit == -1:  # Unlimited
+                return True
+            return self.invoices_created_this_month < limit
+
+        # Credit users (free tier or canceled subscription) use credits
+        return self.get_available_credits() > 0
 
     def increment_invoice_count(self):
-        """Increment the invoice count for the month."""
-        self.check_usage_reset()
-        self.invoices_created_this_month += 1
-        self.save(update_fields=['invoices_created_this_month'])
+        """Increment invoice count (subscribers) or deduct credit (credit users)."""
+        # Active subscribers use monthly quota
+        if self.is_active_subscriber():
+            self.check_usage_reset()
+            self.invoices_created_this_month += 1
+            self.save(update_fields=['invoices_created_this_month'])
+        else:
+            # Credit users deduct from credits
+            self.deduct_credit()
 
     def can_make_api_call(self):
         """Check if user can make another API call this month."""
@@ -144,19 +193,42 @@ class CustomUser(AbstractUser):
         return tier_config.get('api_access', False)
 
     def shows_watermark(self):
-        """Check if invoices should show watermark."""
-        from django.conf import settings
-        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
-        return tier_config.get('watermark', True)
+        """Check if invoices should show watermark.
+
+        Watermarks shown only for users using free credits (never purchased).
+        Subscribers and users who have purchased credits get no watermark.
+        """
+        # Active subscribers never see watermarks
+        if self.is_active_subscriber():
+            return False
+        # Users who have purchased credits don't see watermarks
+        if self.total_credits_purchased > 0:
+            return False
+        # Users who have purchased credits balance don't see watermarks
+        if self.credits_balance > 0:
+            return False
+        # Only show watermark for users on free credits only
+        return True
 
     def get_usage_percentage(self):
-        """Get percentage of invoice limit used."""
+        """Get percentage of invoice limit used.
+
+        For subscribers: percentage of monthly quota used.
+        For credit users: returns 0 (credits don't have a percentage concept).
+        """
         from django.conf import settings
+
+        # Credit users don't have a percentage-based limit
+        if not self.is_active_subscriber():
+            return 0
+
         tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
-        limit = tier_config.get('invoices_per_month', 5)
+        limit = tier_config.get('invoices_per_month', 0)
 
         if limit == -1:
             return 0
+        if limit == 0:
+            return 100
         return min(100, int((self.invoices_created_this_month / limit) * 100))
 
     def has_recurring_invoices(self):

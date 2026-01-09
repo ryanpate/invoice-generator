@@ -30,6 +30,17 @@ class BillingOverviewView(LoginRequiredMixin, TemplateView):
             'api_calls': user.api_calls_this_month,
             'usage_percentage': user.get_usage_percentage(),
         }
+
+        # Credit system info
+        context['is_subscriber'] = user.is_active_subscriber()
+        context['credits'] = {
+            'total_available': user.get_available_credits(),
+            'free_remaining': user.free_credits_remaining,
+            'purchased_balance': user.credits_balance,
+            'total_purchased': user.total_credits_purchased,
+        }
+        context['credit_packs'] = settings.CREDIT_PACKS
+
         return context
 
 
@@ -182,12 +193,36 @@ def stripe_webhook(request):
 
 
 def handle_checkout_completed(session):
-    """Handle successful checkout."""
+    """Handle successful checkout (subscriptions and credit purchases)."""
     from apps.accounts.models import CustomUser
+    from .models import CreditPurchase
 
-    user_id = session.get('metadata', {}).get('user_id')
-    plan = session.get('metadata', {}).get('plan')
+    metadata = session.get('metadata', {})
+    user_id = metadata.get('user_id')
 
+    if not user_id:
+        return
+
+    # Check if this is a credit purchase
+    if 'credits' in metadata:
+        try:
+            purchase = CreditPurchase.objects.get(stripe_session_id=session['id'])
+            purchase.complete_purchase(
+                payment_intent_id=session.get('payment_intent', '')
+            )
+        except CreditPurchase.DoesNotExist:
+            # Fallback: create credits directly if purchase record not found
+            try:
+                user = CustomUser.objects.get(id=user_id)
+                credits = int(metadata.get('credits', 0))
+                if credits > 0:
+                    user.add_credits(credits)
+            except (CustomUser.DoesNotExist, ValueError):
+                pass
+        return
+
+    # Handle subscription checkout
+    plan = metadata.get('plan')
     if user_id and plan:
         try:
             user = CustomUser.objects.get(id=user_id)
@@ -261,3 +296,111 @@ def handle_payment_failed(invoice):
         user.save()
     except CustomUser.DoesNotExist:
         pass
+
+
+# Credit Purchase Views
+
+class CreditsView(LoginRequiredMixin, TemplateView):
+    """View and purchase credit packs."""
+    template_name = 'billing/credits.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['credit_packs'] = settings.CREDIT_PACKS
+        context['credits_balance'] = user.credits_balance
+        context['free_credits_remaining'] = user.free_credits_remaining
+        context['total_available'] = user.get_available_credits()
+        context['total_purchased'] = user.total_credits_purchased
+        context['is_subscriber'] = user.is_active_subscriber()
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+
+        return context
+
+
+@login_required
+def purchase_credits(request, pack_id):
+    """Create Stripe checkout session for credit pack purchase."""
+    pack = settings.CREDIT_PACKS.get(pack_id)
+    if not pack:
+        messages.error(request, 'Invalid credit pack selected.')
+        return redirect('billing:credits')
+
+    # Check if Stripe price ID is configured
+    if not pack.get('stripe_price_id'):
+        messages.error(request, 'Credit packs are not yet available. Please try again later.')
+        return redirect('billing:credits')
+
+    # Initialize Stripe
+    stripe.api_key = settings.STRIPE_TEST_SECRET_KEY if not settings.STRIPE_LIVE_MODE else settings.STRIPE_LIVE_SECRET_KEY
+
+    try:
+        # Create or get Stripe customer
+        if not request.user.stripe_customer_id:
+            customer = stripe.Customer.create(
+                email=request.user.email,
+                metadata={'user_id': request.user.id}
+            )
+            request.user.stripe_customer_id = customer.id
+            request.user.save()
+
+        # Create checkout session for one-time payment
+        checkout_session = stripe.checkout.Session.create(
+            customer=request.user.stripe_customer_id,
+            payment_method_types=['card'],
+            line_items=[{
+                'price': pack['stripe_price_id'],
+                'quantity': 1,
+            }],
+            mode='payment',  # One-time payment, not subscription
+            success_url=request.build_absolute_uri('/billing/credits/success/'),
+            cancel_url=request.build_absolute_uri('/billing/credits/'),
+            metadata={
+                'user_id': str(request.user.id),
+                'pack_id': pack_id,
+                'credits': str(pack['credits']),
+                'type': 'credit_purchase',
+            }
+        )
+
+        # Create pending purchase record
+        from .models import CreditPurchase
+        CreditPurchase.objects.create(
+            user=request.user,
+            stripe_session_id=checkout_session.id,
+            pack_id=pack_id,
+            credits_amount=pack['credits'],
+            price_paid=pack['price'],
+            status='pending',
+        )
+
+        return redirect(checkout_session.url)
+
+    except stripe.error.StripeError as e:
+        messages.error(request, f'Error creating checkout: {str(e)}')
+        return redirect('billing:credits')
+
+
+class CreditPurchaseSuccessView(LoginRequiredMixin, TemplateView):
+    """Credit purchase success page."""
+    template_name = 'billing/credits_success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['credits_balance'] = user.credits_balance
+        context['free_credits_remaining'] = user.free_credits_remaining
+        context['total_available'] = user.get_available_credits()
+
+        # Get the most recent completed purchase
+        from .models import CreditPurchase
+        recent_purchase = CreditPurchase.objects.filter(
+            user=user,
+            status='completed'
+        ).order_by('-completed_at').first()
+
+        context['recent_purchase'] = recent_purchase
+
+        return context

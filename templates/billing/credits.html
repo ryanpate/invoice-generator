@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% block title %}Buy Credits - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Credit Balance Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Your Credits</h1>
+                <p class="text-gray-600 dark:text-gray-300 mt-1">Pay only for what you use, no monthly commitment</p>
+            </div>
+            <div class="mt-4 md:mt-0 text-right">
+                <div class="text-4xl font-bold text-primary-600">{{ total_available }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">credits available</div>
+            </div>
+        </div>
+
+        {% if not is_subscriber %}
+        <div class="mt-6 grid grid-cols-2 gap-4 text-center">
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ free_credits_remaining }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Free credits</div>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                <div class="text-2xl font-semibold text-gray-900 dark:text-white">{{ credits_balance }}</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Purchased credits</div>
+            </div>
+        </div>
+        {% else %}
+        <div class="mt-4 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+            <p class="text-primary-800 dark:text-primary-200">
+                <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                You're on an active subscription. Credits are for users without subscriptions.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Credit Packs Section -->
+    <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Buy Credit Packs</h2>
+        <p class="text-gray-600 dark:text-gray-300 mt-2">Credits never expire. 1 credit = 1 invoice.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+        {% for pack_id, pack in credit_packs.items %}
+        <div class="{% if pack.popular %}ring-2 ring-primary-600 scale-105{% endif %} bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+            {% if pack.popular %}
+            <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">Best Value</div>
+            {% endif %}
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ pack.name }}</h3>
+                <div class="my-4">
+                    <span class="text-4xl font-bold text-gray-900 dark:text-white">${{ pack.price }}</span>
+                    <span class="text-gray-500 dark:text-gray-400">one-time</span>
+                </div>
+
+                <ul class="space-y-3 mb-6 text-sm">
+                    <li class="flex items-center text-gray-600 dark:text-gray-300">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        {{ pack.credits }} invoices
+                    </li>
+                    <li class="flex items-center text-gray-600 dark:text-gray-300">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        All templates
+                    </li>
+                    <li class="flex items-center text-gray-600 dark:text-gray-300">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        No watermark
+                    </li>
+                    <li class="flex items-center text-gray-600 dark:text-gray-300">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Never expires
+                    </li>
+                </ul>
+
+                <div class="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    ${{ pack.price_per_credit|floatformat:2 }} per invoice
+                </div>
+
+                <a href="{% url 'billing:purchase_credits' pack_id %}" class="block w-full text-center py-3 px-6 {% if pack.popular %}btn-primary{% else %}btn-outline{% endif %}">
+                    Buy {{ pack.credits }} Credits
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Comparison Section -->
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 mb-8">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center">Credits vs. Subscription</h3>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Credits are great if you:</h4>
+                <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Invoice occasionally (1-10 per month)
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Have seasonal or project-based work
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Don't want monthly commitments
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Subscription is better if you:</h4>
+                <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-primary-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Invoice regularly (20+ per month)
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-primary-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Need batch upload or recurring invoices
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-primary-500 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Want lower per-invoice cost ($0.18 vs $0.70)
+                    </li>
+                </ul>
+                <div class="mt-4">
+                    <a href="{% url 'billing:plans' %}" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 font-medium">
+                        View subscription plans &rarr;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase History -->
+    {% if total_purchased > 0 %}
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Purchase History</h3>
+        <p class="text-gray-600 dark:text-gray-300">
+            Total credits purchased: <span class="font-semibold">{{ total_purchased }}</span>
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

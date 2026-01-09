@@ -43,6 +43,12 @@
 - Blog section with SEO-optimized content (`/blog/`) - 5 posts live
 - Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
 - Competitor comparison page (`/compare/`)
+- **Hybrid Credits + Subscriptions billing model:**
+  - Credit system for pay-as-you-go users (5 free lifetime credits on signup)
+  - Credit packs: 10 credits ($9), 25 credits ($19), 50 credits ($35)
+  - Subscriptions for regular users (better per-invoice value)
+  - Credits never expire, no watermark after purchase
+  - Dashboard shows credits for credit users, usage % for subscribers
 
 ### Suppressed/Disabled Features
 
@@ -63,6 +69,12 @@
   - Business: `price_1Smy4p6oOlORkbTyXe9hIMKE` ($79/month)
 - [x] **Stripe Webhook Handler:** Subscription lifecycle events handled - COMPLETED
 - [x] **Watermark on Free Tier PDFs:** Diagonal "FREE PLAN" watermark on all 5 PDF templates - COMPLETED
+- [x] **Hybrid Credits + Subscriptions Model:** Code implemented - COMPLETED
+- [ ] **Stripe Credit Pack Products:** Create one-time payment products in Stripe Dashboard
+  - 10 Credit Pack: $9.00 one-time
+  - 25 Credit Pack: $19.00 one-time
+  - 50 Credit Pack: $35.00 one-time
+  - Set env vars: `STRIPE_CREDIT_PACK_10_PRICE_ID`, `STRIPE_CREDIT_PACK_25_PRICE_ID`, `STRIPE_CREDIT_PACK_50_PRICE_ID`
 
 ### High Priority - Core Functionality
 - [x] **Invoice Edit Page:** `templates/invoices/edit.html` - COMPLETED
@@ -187,6 +199,14 @@
 - `GITHUB_OAUTH_CLIENT_ID` - GitHub OAuth client ID (configured)
 - `GITHUB_OAUTH_CLIENT_SECRET` - GitHub OAuth client secret (configured)
 
+### Required - Not Yet Configured
+```bash
+# Stripe Credit Pack Products (create in Stripe Dashboard first)
+STRIPE_CREDIT_PACK_10_PRICE_ID=price_...  # 10 credits for $9
+STRIPE_CREDIT_PACK_25_PRICE_ID=price_...  # 25 credits for $19
+STRIPE_CREDIT_PACK_50_PRICE_ID=price_...  # 50 credits for $35
+```
+
 ### Optional - Not Yet Configured
 ```bash
 # AWS S3 (for media file storage - logos currently stored locally)
@@ -252,17 +272,18 @@ invoice_generator/
 
 | File | Purpose |
 |------|---------|
-| `config/settings/base.py` | Subscription tiers, invoice templates, core config |
+| `config/settings/base.py` | Subscription tiers, credit packs, invoice templates, core config |
 | `config/settings/production.py` | Railway-specific settings, security, CSRF, email config |
 | `config/urls.py` | Main URL routing + sitemap + robots.txt views |
-| `apps/accounts/models.py` | CustomUser with subscription tracking |
+| `apps/accounts/models.py` | CustomUser with subscription tracking + credit system |
 | `apps/accounts/signals.py` | Welcome email signal handler (user_signed_up) |
 | `apps/invoices/models.py` | Invoice model with invoice_name field |
 | `apps/invoices/forms.py` | InvoiceForm with invoice_name field |
 | `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation with watermark |
 | `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
 | `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
-| `apps/billing/views.py` | Stripe checkout flow with live price IDs |
+| `apps/billing/models.py` | CreditPurchase model for tracking credit pack purchases |
+| `apps/billing/views.py` | Stripe checkout for subscriptions + credit pack purchases |
 | `apps/api/views.py` | REST API endpoints |
 | `apps/invoices/tasks.py` | Celery tasks for recurring invoice processing |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
@@ -272,6 +293,10 @@ invoice_generator/
 | `templates/emails/invoice_to_client.html` | Invoice email sent to clients |
 | `templates/landing/index.html` | Landing page with FAQ + FAQPage schema |
 | `templates/landing/pricing.html` | Pricing page with SEO meta tags |
+| `templates/billing/credits.html` | Credit pack purchase page |
+| `templates/billing/credits_success.html` | Credit purchase success page |
+| `templates/billing/overview.html` | Billing overview (credits + subscription) |
+| `templates/billing/plans.html` | Subscription plans + pay-as-you-go section |
 | `templates/blog/list.html` | Blog listing page with search/filter |
 | `templates/blog/detail.html` | Blog post detail with Schema.org BlogPosting |
 | `apps/blog/models.py` | BlogPost, BlogCategory models |
@@ -282,14 +307,28 @@ invoice_generator/
 
 ---
 
-## Subscription Tiers
+## Pricing Model (Hybrid Credits + Subscriptions)
 
-| Tier | Price | Invoices/mo | Features |
-|------|-------|-------------|----------|
-| Free | $0 | 5 | 1 template, watermark |
-| Starter | $9 | 50 | 2 templates, no watermark |
-| Professional | $29 | 200 | All templates, batch upload, recurring invoices (up to 10) |
-| Business | $79 | Unlimited | API access (1000 calls/mo), unlimited recurring invoices |
+### Credit Packs (Pay-as-you-go)
+| Pack | Price | Credits | Per-Invoice | Features |
+|------|-------|---------|-------------|----------|
+| Free | $0 | 5 (lifetime) | — | 1 template, watermark |
+| 10 Credits | $9 | 10 | $0.90 | All templates, no watermark |
+| 25 Credits | $19 | 25 | $0.76 | All templates, no watermark |
+| 50 Credits | $35 | 50 | $0.70 | All templates, no watermark |
+
+### Subscriptions (Monthly)
+| Tier | Price | Invoices/mo | Per-Invoice | Features |
+|------|-------|-------------|-------------|----------|
+| Starter | $9/mo | 50 | $0.18 | All templates, no watermark |
+| Professional | $29/mo | 200 | $0.15 | + Batch upload, recurring invoices (up to 10) |
+| Business | $79/mo | Unlimited | — | + API access (1000 calls/mo), unlimited recurring |
+
+**Notes:**
+- Credits never expire
+- New users get 5 free lifetime credits
+- Watermark removed after any credit purchase
+- Subscriptions offer better per-invoice value for regular users
 
 ---
 
@@ -344,6 +383,13 @@ invoice_generator/
 | `/invoices/recurring/<pk>/delete/` | Delete confirmation |
 | `/invoices/recurring/<pk>/toggle-status/` | Pause/Resume recurring |
 | `/invoices/recurring/<pk>/generate-now/` | Manual invoice generation |
+
+### Credit System URLs
+| URL | Purpose |
+|-----|---------|
+| `/billing/credits/` | View credit balance and purchase credit packs |
+| `/billing/credits/purchase/<pack_id>/` | Initiate credit pack purchase |
+| `/billing/credits/success/` | Credit purchase success page |
 
 ### Meta Tags Override (for child templates)
 ```html
@@ -489,6 +535,18 @@ Authentication: API Key in header `X-API-Key: <key>`
 82. Created `/for-small-business/` landing page with SEO-optimized content targeting small businesses (batch processing, API, recurring invoices focus)
 83. Created `/for-consultants/` landing page with SEO-optimized content targeting consultants (hourly billing, retainers, Executive template showcase)
 84. Created `/compare/` competitor comparison page with feature comparison table (vs Invoice-Generator.com, Canva, Wave, Zoho Invoice), FAQPage schema
+85. Implemented hybrid credits + subscriptions billing model for maximum revenue capture
+86. Added credit fields to CustomUser model (credits_balance, free_credits_remaining, total_credits_purchased)
+87. Created CreditPurchase model for tracking credit pack purchases
+88. Added credit system methods: get_available_credits(), deduct_credit(), add_credits(), is_active_subscriber()
+89. Modified can_create_invoice() and increment_invoice_count() for hybrid billing logic
+90. Created database migrations for credit system (includes data migration for existing free users)
+91. Added CREDIT_PACKS configuration to settings (10/$9, 25/$19, 50/$35)
+92. Created credit purchase Stripe checkout flow (one-time payments)
+93. Updated Stripe webhook handler for credit purchase completion
+94. Created credit purchase templates (credits.html, credits_success.html)
+95. Updated billing overview and plans pages for hybrid credit/subscription display
+96. Updated dashboard to show credits for credit users, monthly usage for subscribers
 
 ---
 
