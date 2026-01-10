@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Invoice Generator Pricing - Free Plan & Pro Plans from $9/mo | InvoiceKits{% endblock %}
+{% block title %}Invoice Generator Pricing - Subscriptions & Pay-As-You-Go Credits | InvoiceKits{% endblock %}
 
-{% block meta_description %}Compare InvoiceKits pricing plans. Free invoice generator with 5 invoices/month, or upgrade to Pro for batch invoicing, recurring invoices, and API access. Start free today.{% endblock %}
+{% block meta_description %}Flexible invoice generator pricing. Start free with 5 credits, buy credit packs from $9, or subscribe from $9/mo for better value. No monthly commitment required. Credits never expire.{% endblock %}
 
-{% block meta_keywords %}invoice generator pricing, invoice software pricing, free invoice maker, invoicing plans, batch invoice pricing{% endblock %}
+{% block meta_keywords %}invoice generator pricing, invoice software pricing, free invoice maker, invoicing plans, batch invoice pricing, pay as you go invoicing, invoice credits{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/pricing/{% endblock %}
 
-{% block og_title %}Invoice Generator Pricing - Plans for Every Business | InvoiceKits{% endblock %}
+{% block og_title %}Invoice Generator Pricing - Flexible Plans for Every Business | InvoiceKits{% endblock %}
 
-{% block og_description %}Free invoice generator or paid plans from $9/mo. Get batch invoicing, recurring invoices, 5 PDF templates, and API access. No credit card required.{% endblock %}
+{% block og_description %}Pay-as-you-go credits or monthly subscriptions. Start free with 5 credits, buy more from $9, or subscribe for unlimited value. No credit card required.{% endblock %}
 
-{% block twitter_title %}Invoice Generator Pricing - Free & Pro Plans | InvoiceKits{% endblock %}
+{% block twitter_title %}Invoice Generator Pricing - Credits & Subscriptions | InvoiceKits{% endblock %}
 
-{% block twitter_description %}Create professional invoices free or upgrade for batch processing & recurring invoices. Plans from $9/mo.{% endblock %}
+{% block twitter_description %}Flexible invoicing: pay-as-you-go credits from $9 or subscriptions from $9/mo. Start free, no commitment.{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -44,10 +44,34 @@
     "mainEntity": [
         {
             "@type": "Question",
+            "name": "What are invoice credits?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Credits are pay-as-you-go tokens for creating invoices. 1 credit = 1 invoice. Buy credits when you need them with no monthly commitment. Credits never expire and include all 5 templates with no watermark."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do credits expire?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No! Credits never expire. Use them whenever you need to create an invoice, whether that's tomorrow or next year."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Should I buy credits or subscribe?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "If you invoice regularly (10+ per month), subscriptions offer better per-invoice value ($0.18/invoice on Starter vs $0.90/invoice on credits). For occasional invoicing, credits are more flexible with no monthly commitment."
+            }
+        },
+        {
+            "@type": "Question",
             "name": "Can I upgrade or downgrade anytime?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! You can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the end of your billing cycle."
+                "text": "Yes! You can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the end of your billing cycle. You can also switch between credits and subscriptions."
             }
         },
         {
@@ -55,15 +79,7 @@
             "name": "What happens if I exceed my invoice limit?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "You'll be prompted to upgrade your plan. Your existing invoices remain accessible, but you won't be able to create new ones until you upgrade or wait for the next billing cycle."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Is there a free trial for paid plans?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes! All paid plans come with a 14-day free trial. No credit card required to start."
+                "text": "For subscribers, you can purchase credit packs to create additional invoices beyond your monthly limit. For credit users, simply buy another credit pack when you run low."
             }
         },
         {
@@ -73,6 +89,37 @@
                 "@type": "Answer",
                 "text": "We accept all major credit cards (Visa, Mastercard, American Express) through our secure payment processor, Stripe."
             }
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "InvoiceKits Credit Packs",
+    "description": "Pay-as-you-go invoice credits. No subscription required.",
+    "offers": [
+        {
+            "@type": "Offer",
+            "name": "10 Credit Pack",
+            "price": "9.00",
+            "priceCurrency": "USD",
+            "description": "10 invoice credits, never expire, all templates, no watermark"
+        },
+        {
+            "@type": "Offer",
+            "name": "25 Credit Pack",
+            "price": "19.00",
+            "priceCurrency": "USD",
+            "description": "25 invoice credits, never expire, all templates, no watermark"
+        },
+        {
+            "@type": "Offer",
+            "name": "50 Credit Pack",
+            "price": "35.00",
+            "priceCurrency": "USD",
+            "description": "50 invoice credits, never expire, all templates, no watermark"
         }
     ]
 }
@@ -91,111 +138,365 @@
             </ol>
         </nav>
 
-        <div class="text-center mb-16">
+        <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">Invoice Generator Pricing</h1>
-            <p class="text-xl text-gray-600">Simple, transparent plans for freelancers and small businesses</p>
+            <p class="text-xl text-gray-600">Choose your style: pay-as-you-go credits or monthly subscriptions</p>
         </div>
 
-        <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {% for key, tier in subscription_tiers.items %}
-            {% if key != 'enterprise' %}
-            <div class="{% if key == 'professional' %}ring-2 ring-primary-600 scale-105{% endif %} bg-white rounded-2xl shadow-lg overflow-hidden">
-                {% if key == 'professional' %}
-                <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">Most Popular</div>
-                {% endif %}
-                <div class="p-8">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ tier.name }}</h3>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">${{ tier.price }}</span>
-                        <span class="text-gray-500">/month</span>
-                    </div>
-
-                    <ul class="space-y-3 mb-8 text-sm">
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span class="text-gray-600">
-                                {% if tier.invoices_per_month == -1 %}Unlimited{% else %}{{ tier.invoices_per_month }}{% endif %} invoices per month
-                            </span>
-                        </li>
-
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 {% if not tier.watermark %}text-green-500{% else %}text-red-400{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if not tier.watermark %}M5 13l4 4L19 7{% else %}M6 18L18 6M6 6l12 12{% endif %}"></path>
-                            </svg>
-                            <span class="text-gray-600">
-                                {% if tier.watermark %}Includes watermark{% else %}No watermark{% endif %}
-                            </span>
-                        </li>
-
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span class="text-gray-600">
-                                {% if tier.templates == 'all' %}All 5 templates{% else %}{{ tier.templates|length }} template{% if tier.templates|length > 1 %}s{% endif %}{% endif %}
-                            </span>
-                        </li>
-
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 {% if tier.batch_upload %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span class="{% if tier.batch_upload %}text-gray-600{% else %}text-gray-400{% endif %}">
-                                CSV batch upload
-                            </span>
-                        </li>
-
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 {% if tier.api_access %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span class="{% if tier.api_access %}text-gray-600{% else %}text-gray-400{% endif %}">
-                                {% if tier.api_access %}API access ({{ tier.api_calls_per_month }} calls/mo){% else %}API access{% endif %}
-                            </span>
-                        </li>
-                    </ul>
-
-                    {% if user.is_authenticated %}
-                        {% if user.subscription_tier == key %}
-                            <button disabled class="block w-full text-center py-3 px-6 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed">
-                                Current Plan
-                            </button>
-                        {% else %}
-                            <a href="{% url 'billing:checkout' key %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
-                                {% if tier.price == 0 %}Switch to Free{% else %}Upgrade{% endif %}
-                            </a>
-                        {% endif %}
-                    {% else %}
-                        <a href="{% url 'account_signup' %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
-                            {% if tier.price == 0 %}Get Started Free{% else %}Start Free Trial{% endif %}
-                        </a>
-                    {% endif %}
+        <!-- Pricing Toggle/Explanation -->
+        <div class="max-w-2xl mx-auto mb-12 bg-white rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-center gap-8 text-center">
+                <div>
+                    <div class="text-2xl font-bold text-primary-600">Credits</div>
+                    <div class="text-sm text-gray-500">Pay only when you invoice</div>
+                </div>
+                <div class="text-gray-300 text-2xl">or</div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-900">Subscriptions</div>
+                    <div class="text-sm text-gray-500">Best value for regular use</div>
                 </div>
             </div>
-            {% endif %}
-            {% endfor %}
+        </div>
+
+        <!-- Pay-As-You-Go Credit Packs Section -->
+        <div class="mb-20">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Pay-As-You-Go Credits</h2>
+                <p class="text-gray-600">No subscription required. Buy credits, use them anytime. <strong>Credits never expire.</strong></p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <!-- Free Credits -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Free Start</h3>
+                        <div class="mb-4">
+                            <span class="text-4xl font-bold text-gray-900">$0</span>
+                        </div>
+                        <div class="text-3xl font-bold text-primary-600 mb-4">5 credits</div>
+                        <ul class="space-y-2 mb-6 text-sm">
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Lifetime credits
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                1 template
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Includes watermark
+                            </li>
+                        </ul>
+                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">
+                            Get Started Free
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 10 Credit Pack -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">10 Credits</h3>
+                        <div class="mb-1">
+                            <span class="text-4xl font-bold text-gray-900">$9</span>
+                        </div>
+                        <div class="text-sm text-gray-500 mb-4">$0.90 per invoice</div>
+                        <ul class="space-y-2 mb-6 text-sm">
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Never expire
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                All 5 templates
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                No watermark
+                            </li>
+                        </ul>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'billing:purchase_credits' 'pack_10' %}" class="block w-full text-center btn-outline">
+                            Buy Credits
+                        </a>
+                        {% else %}
+                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">
+                            Get Started
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 25 Credit Pack - Best Value -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden ring-2 ring-green-500 scale-105">
+                    <div class="bg-green-500 text-white text-center py-2 text-sm font-medium">Best Value</div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">25 Credits</h3>
+                        <div class="mb-1">
+                            <span class="text-4xl font-bold text-gray-900">$19</span>
+                        </div>
+                        <div class="text-sm text-gray-500 mb-4">$0.76 per invoice</div>
+                        <ul class="space-y-2 mb-6 text-sm">
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Never expire
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                All 5 templates
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                No watermark
+                            </li>
+                        </ul>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'billing:purchase_credits' 'pack_25' %}" class="block w-full text-center btn-primary">
+                            Buy Credits
+                        </a>
+                        {% else %}
+                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-primary">
+                            Get Started
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 50 Credit Pack -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">50 Credits</h3>
+                        <div class="mb-1">
+                            <span class="text-4xl font-bold text-gray-900">$35</span>
+                        </div>
+                        <div class="text-sm text-gray-500 mb-4">$0.70 per invoice</div>
+                        <ul class="space-y-2 mb-6 text-sm">
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Never expire
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                All 5 templates
+                            </li>
+                            <li class="flex items-center text-gray-600">
+                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                No watermark
+                            </li>
+                        </ul>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'billing:purchase_credits' 'pack_50' %}" class="block w-full text-center btn-outline">
+                            Buy Credits
+                        </a>
+                        {% else %}
+                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">
+                            Get Started
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-center text-gray-500 text-sm mt-6">
+                Perfect for occasional invoicing. No monthly fees, no commitment.
+            </p>
+        </div>
+
+        <!-- Divider -->
+        <div class="relative mb-16">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center">
+                <span class="bg-gray-50 px-6 text-lg font-medium text-gray-500">Or subscribe for better value</span>
+            </div>
+        </div>
+
+        <!-- Monthly Subscriptions Section -->
+        <div class="mb-16">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Monthly Subscriptions</h2>
+                <p class="text-gray-600">Best per-invoice value for businesses that invoice regularly</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                {% for key, tier in subscription_tiers.items %}
+                {% if key != 'enterprise' %}
+                <div class="{% if key == 'professional' %}ring-2 ring-primary-600 scale-105{% endif %} bg-white rounded-2xl shadow-lg overflow-hidden">
+                    {% if key == 'professional' %}
+                    <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">Most Popular</div>
+                    {% endif %}
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ tier.name }}</h3>
+                        <div class="mb-1">
+                            <span class="text-4xl font-bold text-gray-900">${{ tier.price }}</span>
+                            <span class="text-gray-500">/month</span>
+                        </div>
+                        {% if tier.price > 0 %}
+                        <div class="text-sm text-green-600 font-medium mb-4">
+                            {% if tier.invoices_per_month == -1 %}Unlimited invoices{% else %}${{ tier.price|divisibleby:tier.invoices_per_month|default:"0.18" }} per invoice{% endif %}
+                        </div>
+                        {% else %}
+                        <div class="text-sm text-gray-500 mb-4">5 invoices/month</div>
+                        {% endif %}
+
+                        <ul class="space-y-3 mb-8 text-sm">
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">
+                                    {% if tier.invoices_per_month == -1 %}Unlimited{% else %}{{ tier.invoices_per_month }}{% endif %} invoices per month
+                                </span>
+                            </li>
+
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 {% if not tier.watermark %}text-green-500{% else %}text-red-400{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if not tier.watermark %}M5 13l4 4L19 7{% else %}M6 18L18 6M6 6l12 12{% endif %}"></path>
+                                </svg>
+                                <span class="text-gray-600">
+                                    {% if tier.watermark %}Includes watermark{% else %}No watermark{% endif %}
+                                </span>
+                            </li>
+
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">
+                                    {% if tier.templates == 'all' %}All 5 templates{% else %}{{ tier.templates|length }} template{% if tier.templates|length > 1 %}s{% endif %}{% endif %}
+                                </span>
+                            </li>
+
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 {% if tier.batch_upload %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="{% if tier.batch_upload %}text-gray-600{% else %}text-gray-400{% endif %}">
+                                    CSV batch upload
+                                </span>
+                            </li>
+
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 {% if tier.api_access %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="{% if tier.api_access %}text-gray-600{% else %}text-gray-400{% endif %}">
+                                    {% if tier.api_access %}API access ({{ tier.api_calls_per_month }} calls/mo){% else %}API access{% endif %}
+                                </span>
+                            </li>
+                        </ul>
+
+                        {% if user.is_authenticated %}
+                            {% if user.subscription_tier == key %}
+                                <button disabled class="block w-full text-center py-3 px-6 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed">
+                                    Current Plan
+                                </button>
+                            {% else %}
+                                <a href="{% url 'billing:checkout' key %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
+                                    {% if tier.price == 0 %}Switch to Free{% else %}Upgrade{% endif %}
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'account_signup' %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
+                                {% if tier.price == 0 %}Get Started Free{% else %}Start Free Trial{% endif %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Comparison Box -->
+        <div class="max-w-3xl mx-auto mb-16 bg-white rounded-2xl p-8 shadow-sm">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">Credits vs Subscriptions: Which is Right for You?</h3>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
+                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Choose Credits If:
+                    </h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>- You invoice occasionally (1-10/month)</li>
+                        <li>- You want no monthly commitment</li>
+                        <li>- Your invoicing needs are unpredictable</li>
+                        <li>- You're a seasonal business</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
+                        <svg class="w-5 h-5 text-primary-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Choose a Subscription If:
+                    </h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>- You invoice regularly (10+/month)</li>
+                        <li>- You want the best per-invoice value</li>
+                        <li>- You need batch upload or recurring invoices</li>
+                        <li>- You need API access</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- FAQ Section -->
-        <div class="mt-20 max-w-3xl mx-auto">
+        <div class="max-w-3xl mx-auto">
             <h2 class="text-2xl font-bold text-gray-900 text-center mb-8">Frequently Asked Questions</h2>
 
             <div class="space-y-6">
                 <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-2">What are invoice credits?</h3>
+                    <p class="text-gray-600">Credits are pay-as-you-go tokens for creating invoices. 1 credit = 1 invoice. Buy credits when you need them with no monthly commitment. Credits never expire and include all 5 templates with no watermark.</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-2">Do credits expire?</h3>
+                    <p class="text-gray-600">No! Credits never expire. Use them whenever you need to create an invoice, whether that's tomorrow or next year.</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-2">Should I buy credits or subscribe?</h3>
+                    <p class="text-gray-600">If you invoice regularly (10+ per month), subscriptions offer better per-invoice value ($0.18/invoice on Starter vs $0.90/invoice on credits). For occasional invoicing, credits are more flexible with no monthly commitment.</p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
                     <h3 class="font-semibold text-gray-900 mb-2">Can I upgrade or downgrade anytime?</h3>
-                    <p class="text-gray-600">Yes! You can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the end of your billing cycle.</p>
+                    <p class="text-gray-600">Yes! You can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the end of your billing cycle. You can also switch between credits and subscriptions anytime.</p>
                 </div>
 
                 <div class="bg-white rounded-lg p-6 shadow-sm">
                     <h3 class="font-semibold text-gray-900 mb-2">What happens if I exceed my invoice limit?</h3>
-                    <p class="text-gray-600">You'll be prompted to upgrade your plan. Your existing invoices remain accessible, but you won't be able to create new ones until you upgrade or wait for the next billing cycle.</p>
-                </div>
-
-                <div class="bg-white rounded-lg p-6 shadow-sm">
-                    <h3 class="font-semibold text-gray-900 mb-2">Is there a free trial for paid plans?</h3>
-                    <p class="text-gray-600">Yes! All paid plans come with a 14-day free trial. No credit card required to start.</p>
+                    <p class="text-gray-600">For subscribers, you can purchase credit packs to create additional invoices beyond your monthly limit. For credit users, simply buy another credit pack when you run low.</p>
                 </div>
 
                 <div class="bg-white rounded-lg p-6 shadow-sm">
