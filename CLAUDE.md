@@ -70,11 +70,10 @@
 - [x] **Stripe Webhook Handler:** Subscription lifecycle events handled - COMPLETED
 - [x] **Watermark on Free Tier PDFs:** Diagonal "FREE PLAN" watermark on all 5 PDF templates - COMPLETED
 - [x] **Hybrid Credits + Subscriptions Model:** Code implemented - COMPLETED
-- [ ] **Stripe Credit Pack Products:** Create one-time payment products in Stripe Dashboard
-  - 10 Credit Pack: $9.00 one-time
-  - 25 Credit Pack: $19.00 one-time
-  - 50 Credit Pack: $35.00 one-time
-  - Set env vars: `STRIPE_CREDIT_PACK_10_PRICE_ID`, `STRIPE_CREDIT_PACK_25_PRICE_ID`, `STRIPE_CREDIT_PACK_50_PRICE_ID`
+- [x] **Stripe Credit Pack Products:** Created in Stripe Dashboard - COMPLETED
+  - 10 Credit Pack ($9): `price_1SnqlJ6oOlORkbTyjaW6sjR4`
+  - 25 Credit Pack ($19): `price_1Snqlh6oOlORkbTyeaL4R5dQ`
+  - 50 Credit Pack ($35): `price_1Snqm46oOlORkbTycROhS9fV`
 
 ### High Priority - Core Functionality
 - [x] **Invoice Edit Page:** `templates/invoices/edit.html` - COMPLETED
