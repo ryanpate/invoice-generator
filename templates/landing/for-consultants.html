@@ -52,6 +52,14 @@
         },
         {
             "@type": "Question",
+            "name": "Should consultants use credits or subscribe?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It depends on your billing pattern. Project-based consultants often prefer credits ($0.70-$0.90/invoice) since they never expire. Consultants with retainer clients get better value from subscriptions ($0.15-$0.18/invoice) plus recurring invoice automation."
+            }
+        },
+        {
+            "@type": "Question",
             "name": "How do I invoice retainer clients?",
             "acceptedAnswer": {
                 "@type": "Answer",
@@ -64,6 +72,14 @@
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Our Executive template is popular with consultants - it features a professional navy and gold design that conveys expertise and credibility. The Classic Professional template is also excellent for corporate clients."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do credits expire?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No! Credits never expire. Perfect for consultants who work on projects with variable timelines. Buy a credit pack and use them whenever your next project wraps up."
             }
         },
         {
@@ -114,7 +130,7 @@
                     </a>
                 </div>
                 <p class="mt-6 text-slate-400 text-sm">
-                    Free plan available. No credit card required.
+                    Start with 5 free credits. Buy more as needed or subscribe for best value.
                 </p>
             </div>
             <div class="hidden lg:block">
@@ -449,110 +465,153 @@
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Pricing for Consultants</h2>
-            <p class="text-xl text-slate-600">Start free, upgrade as your practice grows</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">Flexible Pricing for Consultants</h2>
+            <p class="text-xl text-slate-600">Pay-as-you-go credits or monthly subscriptions - your choice</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <!-- Free Plan -->
-            <div class="bg-slate-50 rounded-2xl shadow-lg p-8">
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Free</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-slate-900">$0</span>
-                    <span class="text-slate-500">/month</span>
-                </div>
-                <p class="text-slate-600 mb-6">Perfect for new consultants</p>
-                <ul class="space-y-3 mb-8 text-sm">
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        5 invoices per month
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        1 template style
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Email invoices to clients
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        PDF download
-                    </li>
-                </ul>
-                <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition">
-                    Get Started Free
-                </a>
+        <!-- Pay-As-You-Go Credits -->
+        <div class="mb-16">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Pay-As-You-Go Credits</h3>
+                <p class="text-slate-600">Perfect for project-based consulting. Buy credits when you need them - they never expire.</p>
             </div>
+            <div class="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <!-- Free Credits -->
+                <div class="bg-slate-50 rounded-2xl shadow-lg p-6 text-center">
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">Free Start</h4>
+                    <div class="mb-4">
+                        <span class="text-3xl font-bold text-slate-900">5</span>
+                        <span class="text-slate-500">credits</span>
+                    </div>
+                    <p class="text-green-600 font-medium mb-4">FREE forever</p>
+                    <p class="text-slate-500 text-sm">One-time signup bonus</p>
+                </div>
 
-            <!-- Professional Plan -->
-            <div class="bg-white rounded-2xl shadow-lg p-8 ring-2 ring-amber-500 relative">
-                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-amber-500 text-slate-900 text-sm font-medium px-4 py-1 rounded-full">
-                    Best for Consultants
+                <!-- 10 Credits -->
+                <div class="bg-slate-50 rounded-2xl shadow-lg p-6 text-center">
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">10 Credits</h4>
+                    <div class="mb-4">
+                        <span class="text-3xl font-bold text-slate-900">$9</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-4">$0.90/invoice</p>
+                    <a href="{% url 'billing:credits' %}" class="block w-full text-center py-2 px-4 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition text-sm">
+                        Buy Credits
+                    </a>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Professional</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-slate-900">$29</span>
-                    <span class="text-slate-500">/month</span>
+
+                <!-- 25 Credits -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 text-center ring-2 ring-amber-500 relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-amber-500 text-slate-900 text-xs font-medium px-3 py-1 rounded-full">
+                        Best Value
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">25 Credits</h4>
+                    <div class="mb-4">
+                        <span class="text-3xl font-bold text-slate-900">$19</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-4">$0.76/invoice</p>
+                    <a href="{% url 'billing:credits' %}" class="block w-full text-center py-2 px-4 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition text-sm">
+                        Buy Credits
+                    </a>
                 </div>
-                <p class="text-slate-600 mb-6">For established consultants</p>
-                <ul class="space-y-3 mb-8 text-sm">
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        200 invoices per month
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        All 5 templates (incl. Executive)
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Recurring invoices (retainers)
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        No watermark
-                    </li>
-                </ul>
-                <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition">
-                    Start 14-Day Free Trial
-                </a>
+
+                <!-- 50 Credits -->
+                <div class="bg-slate-50 rounded-2xl shadow-lg p-6 text-center">
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">50 Credits</h4>
+                    <div class="mb-4">
+                        <span class="text-3xl font-bold text-slate-900">$35</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-4">$0.70/invoice</p>
+                    <a href="{% url 'billing:credits' %}" class="block w-full text-center py-2 px-4 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition text-sm">
+                        Buy Credits
+                    </a>
+                </div>
             </div>
+            <p class="text-center text-slate-500 mt-4 text-sm">All credit packs: All 5 templates including Executive, no watermark, credits never expire</p>
+        </div>
 
-            <!-- Business Plan -->
-            <div class="bg-slate-50 rounded-2xl shadow-lg p-8">
-                <h3 class="text-xl font-bold text-slate-900 mb-2">Business</h3>
-                <div class="mb-6">
-                    <span class="text-4xl font-bold text-slate-900">$79</span>
-                    <span class="text-slate-500">/month</span>
+        <!-- Monthly Subscriptions -->
+        <div>
+            <div class="text-center mb-8">
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">Monthly Subscriptions</h3>
+                <p class="text-slate-600">Best value for consultants with retainer clients or regular invoicing needs.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="bg-slate-50 rounded-2xl shadow-lg p-8">
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Starter</h4>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-slate-900">$9</span>
+                        <span class="text-slate-500">/month</span>
+                    </div>
+                    <p class="text-green-600 text-sm mb-6">$0.18/invoice (50/mo)</p>
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center text-slate-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            50 invoices/month
+                        </li>
+                        <li class="flex items-center text-slate-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            All templates, no watermark
+                        </li>
+                    </ul>
+                    <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition">
+                        Start Free Trial
+                    </a>
                 </div>
-                <p class="text-slate-600 mb-6">For consulting firms</p>
-                <ul class="space-y-3 mb-8 text-sm">
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Unlimited invoices
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        API access
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Batch invoice processing
-                    </li>
-                    <li class="flex items-center text-slate-600">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Priority support
-                    </li>
-                </ul>
-                <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition">
-                    Start 14-Day Free Trial
-                </a>
+
+                <!-- Professional Plan -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 ring-2 ring-amber-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-amber-500 text-slate-900 text-sm font-medium px-4 py-1 rounded-full">
+                        Best for Consultants
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Professional</h4>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-slate-900">$29</span>
+                        <span class="text-slate-500">/month</span>
+                    </div>
+                    <p class="text-green-600 text-sm mb-6">$0.15/invoice (200/mo)</p>
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center text-slate-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            200 invoices/month
+                        </li>
+                        <li class="flex items-center text-slate-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Recurring invoices (retainers)
+                        </li>
+                    </ul>
+                    <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition">
+                        Start Free Trial
+                    </a>
+                </div>
+
+                <!-- Business Plan -->
+                <div class="bg-slate-50 rounded-2xl shadow-lg p-8">
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">Business</h4>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-slate-900">$79</span>
+                        <span class="text-slate-500">/month</span>
+                    </div>
+                    <p class="text-green-600 text-sm mb-6">Unlimited invoices</p>
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center text-slate-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Unlimited invoices
+                        </li>
+                        <li class="flex items-center text-slate-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            API + batch processing
+                        </li>
+                    </ul>
+                    <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition">
+                        Start Free Trial
+                    </a>
+                </div>
             </div>
         </div>
 
         <p class="text-center text-slate-500 mt-8">
-            All plans include email support. <a href="{% url 'invoices:pricing' %}" class="text-amber-600 hover:underline">View full pricing details</a>
+            <a href="{% url 'invoices:pricing' %}" class="text-amber-600 hover:underline">View full pricing details</a> | Need more? <a href="{% url 'pages:contact' %}" class="text-amber-600 hover:underline">Contact us</a> for Enterprise pricing.
         </p>
     </div>
 </section>
@@ -571,6 +630,11 @@
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
+                <h3 class="font-semibold text-slate-900 mb-2">Should consultants use credits or subscribe?</h3>
+                <p class="text-slate-600">It depends on your billing pattern. Project-based consultants often prefer credits ($0.70-$0.90/invoice) since they never expire. Consultants with retainer clients get better value from subscriptions ($0.15-$0.18/invoice) plus recurring invoice automation.</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm">
                 <h3 class="font-semibold text-slate-900 mb-2">How do I invoice retainer clients?</h3>
                 <p class="text-slate-600">Set up recurring invoices for retainer agreements. Choose weekly, monthly, or quarterly billing cycles. Your clients receive professional invoices automatically.</p>
             </div>
@@ -578,6 +642,11 @@
             <div class="bg-white rounded-xl p-6 shadow-sm">
                 <h3 class="font-semibold text-slate-900 mb-2">Which invoice template is best for consultants?</h3>
                 <p class="text-slate-600">Our Executive template is popular with consultants - it features a professional navy and gold design that conveys expertise and credibility. The Classic Professional template is also excellent for corporate clients.</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <h3 class="font-semibold text-slate-900 mb-2">Do credits expire?</h3>
+                <p class="text-slate-600">No! Credits never expire. Perfect for consultants who work on projects with variable timelines. Buy a credit pack and use them whenever your next project wraps up.</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
