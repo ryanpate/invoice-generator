@@ -279,7 +279,7 @@ CREDIT_PACKS = {
         'credits': 10,
         'price': 9,
         'price_per_credit': 0.90,
-        'stripe_price_id': config('STRIPE_CREDIT_PACK_10_PRICE_ID', default=''),
+        'stripe_price_id': config('STRIPE_CREDIT_PACK_10_PRICE_ID', default='price_1SnqlJ6oOlORkbTyjaW6sjR4'),
         'popular': False,
     },
     'pack_25': {
@@ -287,7 +287,7 @@ CREDIT_PACKS = {
         'credits': 25,
         'price': 19,
         'price_per_credit': 0.76,
-        'stripe_price_id': config('STRIPE_CREDIT_PACK_25_PRICE_ID', default=''),
+        'stripe_price_id': config('STRIPE_CREDIT_PACK_25_PRICE_ID', default='price_1Snqlh6oOlORkbTyeaL4R5dQ'),
         'popular': True,  # Best value indicator
     },
     'pack_50': {
@@ -295,7 +295,7 @@ CREDIT_PACKS = {
         'credits': 50,
         'price': 35,
         'price_per_credit': 0.70,
-        'stripe_price_id': config('STRIPE_CREDIT_PACK_50_PRICE_ID', default=''),
+        'stripe_price_id': config('STRIPE_CREDIT_PACK_50_PRICE_ID', default='price_1Snqm46oOlORkbTycROhS9fV'),
         'popular': False,
     },
 }
