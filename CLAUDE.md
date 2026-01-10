@@ -43,6 +43,7 @@
 - Blog section with SEO-optimized content (`/blog/`) - 5 posts live
 - Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
 - Competitor comparison page (`/compare/`)
+- Template showcase pages (`/templates/clean-slate/`, `/templates/executive/`, `/templates/bold-modern/`, `/templates/classic-professional/`, `/templates/neon-edge/`)
 - **Hybrid Credits + Subscriptions billing model:**
   - Credit system for pay-as-you-go users (5 free lifetime credits on signup)
   - Credit packs: 10 credits ($9), 25 credits ($19), 50 credits ($35)
@@ -198,12 +199,11 @@
 - `GITHUB_OAUTH_CLIENT_ID` - GitHub OAuth client ID (configured)
 - `GITHUB_OAUTH_CLIENT_SECRET` - GitHub OAuth client secret (configured)
 
-### Required - Not Yet Configured
+### Stripe Credit Pack Products (Configured)
 ```bash
-# Stripe Credit Pack Products (create in Stripe Dashboard first)
-STRIPE_CREDIT_PACK_10_PRICE_ID=price_...  # 10 credits for $9
-STRIPE_CREDIT_PACK_25_PRICE_ID=price_...  # 25 credits for $19
-STRIPE_CREDIT_PACK_50_PRICE_ID=price_...  # 50 credits for $35
+STRIPE_CREDIT_PACK_10_PRICE_ID=price_1SnqlJ6oOlORkbTyjaW6sjR4  # 10 credits for $9
+STRIPE_CREDIT_PACK_25_PRICE_ID=price_1Snqlh6oOlORkbTyeaL4R5dQ  # 25 credits for $19
+STRIPE_CREDIT_PACK_50_PRICE_ID=price_1Snqm46oOlORkbTycROhS9fV  # 50 credits for $35
 ```
 
 ### Optional - Not Yet Configured
@@ -258,6 +258,7 @@ invoice_generator/
 │   ├── billing/
 │   ├── landing/             # Home page with FAQ + pricing
 │   ├── pages/               # Static pages (contact, help, privacy, terms, api_docs)
+│   ├── showcase/            # Template showcase pages (clean-slate, executive, bold-modern, classic-professional, neon-edge)
 │   └── settings/
 ├── static/
 │   └── robots.txt           # Search engine instructions
@@ -303,6 +304,11 @@ invoice_generator/
 | `apps/blog/management/commands/seed_blog.py` | Seeds blog posts on deploy |
 | `railway.json` | Railway deploy config with startCommand |
 | `nixpacks.toml` | Nix packages for build |
+| `templates/showcase/clean-slate.html` | Clean Slate template showcase page |
+| `templates/showcase/executive.html` | Executive template showcase page |
+| `templates/showcase/bold-modern.html` | Bold Modern template showcase page |
+| `templates/showcase/classic-professional.html` | Classic Professional template showcase page |
+| `templates/showcase/neon-edge.html` | Neon Edge template showcase page |
 
 ---
 
@@ -407,6 +413,17 @@ invoice_generator/
 {% block extra_schema %}Additional JSON-LD{% endblock %}
 ```
 
+### URLs Pending Google Search Console Indexing
+The following new pages need to be submitted for indexing via GSC URL Inspection tool:
+
+| URL | Page Type | Added |
+|-----|-----------|-------|
+| `https://www.invoicekits.com/templates/clean-slate/` | Template Showcase | 2026-01-09 |
+| `https://www.invoicekits.com/templates/executive/` | Template Showcase | 2026-01-09 |
+| `https://www.invoicekits.com/templates/bold-modern/` | Template Showcase | 2026-01-09 |
+| `https://www.invoicekits.com/templates/classic-professional/` | Template Showcase | 2026-01-09 |
+| `https://www.invoicekits.com/templates/neon-edge/` | Template Showcase | 2026-01-09 |
+
 ### SEO TODOs
 - [x] Register with Google Search Console
 - [x] Add Google Analytics tracking (G-0NR5NZMNBF)
@@ -414,6 +431,7 @@ invoice_generator/
 - [x] Set up custom domain (www.invoicekits.com)
 - [x] Submit sitemap to Google Search Console - COMPLETED
 - [x] Request indexing for all public pages via GSC URL Inspection - COMPLETED
+- [ ] **Request indexing for template showcase pages** (5 new URLs above)
 - [ ] Build quality backlinks (Product Hunt, directories)
 - [ ] Monitor Core Web Vitals via PageSpeed Insights
 
