@@ -2,7 +2,7 @@
 
 {% block title %}InvoiceKits vs Competitors - Invoice Generator Comparison 2026 | InvoiceKits{% endblock %}
 
-{% block meta_description %}Compare InvoiceKits to Invoice-Generator.com, Canva, Wave, Zoho Invoice, and FreshBooks. See features, pricing, and why 10,000+ businesses choose InvoiceKits.{% endblock %}
+{% block meta_description %}Compare InvoiceKits to Invoice-Generator.com, Canva, Wave, Zoho Invoice. See features, pricing, pay-as-you-go credits, and why 10,000+ businesses choose InvoiceKits.{% endblock %}
 
 {% block meta_keywords %}invoicekits vs invoice generator, invoice software comparison, best invoice generator, invoicekits vs canva, invoicekits vs wave, invoice maker comparison{% endblock %}
 
@@ -72,6 +72,22 @@
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "InvoiceKits focuses on doing invoicing exceptionally well rather than being a full accounting suite. If you need expense tracking, bank reconciliation, or tax filing, pair InvoiceKits with your preferred accounting software via our API."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What's the difference between credits and subscriptions?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Credits are pay-as-you-go: buy them when you need them, they never expire. Subscriptions offer better value if you invoice regularly - as low as $0.15/invoice vs $0.70-0.90 with credits. Subscriptions also include premium features like batch upload and recurring invoices."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do other invoice tools offer pay-as-you-go credits?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. InvoiceKits is unique in offering a credit-based pay-as-you-go model. Other tools either require monthly subscriptions (Zoho, FreshBooks) or have limited free tiers with no upgrade path besides subscriptions. Our credits give you flexibility without commitment."
             }
         }
     ]
@@ -156,7 +172,7 @@
                     <tr class="border-b hover:bg-gray-50">
                         <td class="py-4 px-6 text-gray-900 font-medium">Free Plan Available</td>
                         <td class="py-4 px-6 text-center bg-primary-50">
-                            <span class="text-green-600 font-bold">5/month</span>
+                            <span class="text-green-600 font-bold">5 free credits</span>
                         </td>
                         <td class="py-4 px-6 text-center">
                             <span class="text-green-600 font-bold">Unlimited*</span>
@@ -169,6 +185,29 @@
                         </td>
                         <td class="py-4 px-6 text-center">
                             <span class="text-green-600 font-bold">5/month</span>
+                        </td>
+                    </tr>
+
+                    <!-- Pay-As-You-Go -->
+                    <tr class="border-b hover:bg-gray-50 bg-green-50">
+                        <td class="py-4 px-6 text-gray-900 font-medium">
+                            Pay-As-You-Go Option
+                            <span class="ml-2 text-xs bg-green-400 text-green-900 px-2 py-0.5 rounded-full">Unique</span>
+                        </td>
+                        <td class="py-4 px-6 text-center bg-primary-50">
+                            <span class="text-green-600 font-bold">Yes (credits)</span>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <span class="text-gray-500">N/A</span>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <span class="text-red-500">No</span>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <span class="text-red-500">No</span>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <span class="text-red-500">No</span>
                         </td>
                     </tr>
 
@@ -538,31 +577,64 @@
 
 <!-- Pricing Reminder -->
 <section class="py-16 bg-gray-50">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+            <p class="text-xl text-gray-600">Pay-as-you-go with credits or subscribe for better per-invoice value</p>
         </div>
 
-        <div class="grid md:grid-cols-4 gap-6">
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
-                <h3 class="font-bold text-gray-900 mb-2">Free</h3>
-                <p class="text-3xl font-bold text-gray-900 mb-4">$0</p>
-                <p class="text-gray-600 text-sm">5 invoices/month</p>
+        <!-- Pay-As-You-Go Credits -->
+        <div class="mb-10">
+            <h3 class="text-lg font-semibold text-gray-700 text-center mb-6">Pay-As-You-Go Credits</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+                    <p class="text-2xl font-bold text-gray-900">5</p>
+                    <p class="text-gray-500 text-sm mb-2">credits</p>
+                    <p class="text-lg font-bold text-green-600">FREE</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+                    <p class="text-2xl font-bold text-gray-900">10</p>
+                    <p class="text-gray-500 text-sm mb-2">credits</p>
+                    <p class="text-lg font-bold text-gray-900">$9</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-4 text-center ring-2 ring-primary-500">
+                    <p class="text-2xl font-bold text-gray-900">25</p>
+                    <p class="text-gray-500 text-sm mb-2">credits</p>
+                    <p class="text-lg font-bold text-gray-900">$19</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-4 text-center">
+                    <p class="text-2xl font-bold text-gray-900">50</p>
+                    <p class="text-gray-500 text-sm mb-2">credits</p>
+                    <p class="text-lg font-bold text-gray-900">$35</p>
+                </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
-                <h3 class="font-bold text-gray-900 mb-2">Starter</h3>
-                <p class="text-3xl font-bold text-gray-900 mb-4">$9</p>
-                <p class="text-gray-600 text-sm">50 invoices/month</p>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center ring-2 ring-primary-500">
-                <h3 class="font-bold text-primary-600 mb-2">Professional</h3>
-                <p class="text-3xl font-bold text-gray-900 mb-4">$29</p>
-                <p class="text-gray-600 text-sm">200 invoices + batch</p>
-            </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 text-center">
-                <h3 class="font-bold text-gray-900 mb-2">Business</h3>
-                <p class="text-3xl font-bold text-gray-900 mb-4">$79</p>
-                <p class="text-gray-600 text-sm">Unlimited + API</p>
+            <p class="text-center text-sm text-gray-500 mt-4">Credits never expire. No monthly commitment.</p>
+        </div>
+
+        <!-- Monthly Subscriptions -->
+        <div>
+            <h3 class="text-lg font-semibold text-gray-700 text-center mb-6">Monthly Subscriptions (Better Value)</h3>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                    <h3 class="font-bold text-gray-900 mb-2">Free</h3>
+                    <p class="text-3xl font-bold text-gray-900 mb-4">$0</p>
+                    <p class="text-gray-600 text-sm">5 credits (lifetime)</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                    <h3 class="font-bold text-gray-900 mb-2">Starter</h3>
+                    <p class="text-3xl font-bold text-gray-900 mb-4">$9</p>
+                    <p class="text-gray-600 text-sm">50 invoices/month</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center ring-2 ring-primary-500">
+                    <h3 class="font-bold text-primary-600 mb-2">Professional</h3>
+                    <p class="text-3xl font-bold text-gray-900 mb-4">$29</p>
+                    <p class="text-gray-600 text-sm">200 invoices + batch</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+                    <h3 class="font-bold text-gray-900 mb-2">Business</h3>
+                    <p class="text-3xl font-bold text-gray-900 mb-4">$79</p>
+                    <p class="text-gray-600 text-sm">Unlimited + API</p>
+                </div>
             </div>
         </div>
 
@@ -598,6 +670,16 @@
             <div class="bg-gray-50 rounded-xl p-6">
                 <h3 class="font-semibold text-gray-900 mb-2">Does InvoiceKits have accounting features like Wave or QuickBooks?</h3>
                 <p class="text-gray-600">InvoiceKits focuses on doing invoicing exceptionally well rather than being a full accounting suite. If you need expense tracking, bank reconciliation, or tax filing, pair InvoiceKits with your preferred accounting software via our API.</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="font-semibold text-gray-900 mb-2">What's the difference between credits and subscriptions?</h3>
+                <p class="text-gray-600">Credits are pay-as-you-go: buy them when you need them, they never expire. Subscriptions offer better value if you invoice regularly - as low as $0.15/invoice vs $0.70-0.90 with credits. Subscriptions also include premium features like batch upload and recurring invoices.</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-6">
+                <h3 class="font-semibold text-gray-900 mb-2">Do other invoice tools offer pay-as-you-go credits?</h3>
+                <p class="text-gray-600">No. InvoiceKits is unique in offering a credit-based pay-as-you-go model. Other tools either require monthly subscriptions (Zoho, FreshBooks) or have limited free tiers with no upgrade path besides subscriptions. Our credits give you flexibility without commitment.</p>
             </div>
         </div>
     </div>
