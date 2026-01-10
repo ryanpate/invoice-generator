@@ -15,6 +15,13 @@ urlpatterns = [
     path('for-consultants/', views.ConsultantsLandingPageView.as_view(), name='for_consultants'),
     path('compare/', views.CompareLandingPageView.as_view(), name='compare'),
 
+    # Template showcase pages
+    path('templates/clean-slate/', views.CleanSlateShowcaseView.as_view(), name='template_clean_slate'),
+    path('templates/executive/', views.ExecutiveShowcaseView.as_view(), name='template_executive'),
+    path('templates/bold-modern/', views.BoldModernShowcaseView.as_view(), name='template_bold_modern'),
+    path('templates/classic-professional/', views.ClassicProfessionalShowcaseView.as_view(), name='template_classic_professional'),
+    path('templates/neon-edge/', views.NeonEdgeShowcaseView.as_view(), name='template_neon_edge'),
+
     # Invoice CRUD
     path('invoices/', views.InvoiceListView.as_view(), name='list'),
     path('invoices/create/', views.InvoiceCreateView.as_view(), name='create'),

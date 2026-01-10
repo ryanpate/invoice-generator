@@ -20,7 +20,12 @@ class StaticViewSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return ['/', '/pricing/', '/for-freelancers/', '/for-small-business/', '/for-consultants/', '/compare/', '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/']
+        return [
+            '/', '/pricing/', '/for-freelancers/', '/for-small-business/', '/for-consultants/', '/compare/',
+            '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/',
+            '/templates/clean-slate/', '/templates/executive/', '/templates/bold-modern/',
+            '/templates/classic-professional/', '/templates/neon-edge/',
+        ]
 
     def location(self, item):
         return item
@@ -64,6 +69,7 @@ Allow: /help/
 Allow: /privacy/
 Allow: /terms/
 Allow: /blog/
+Allow: /templates/
 
 # Sitemap location
 Sitemap: https://www.invoicekits.com/sitemap.xml

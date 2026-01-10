@@ -82,6 +82,42 @@ class CompareLandingPageView(TemplateView):
         return context
 
 
+# Template Showcase Views
+class TemplateShowcaseView(TemplateView):
+    """Base view for template showcase pages."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+        context['templates'] = settings.INVOICE_TEMPLATES
+        return context
+
+
+class CleanSlateShowcaseView(TemplateShowcaseView):
+    """Showcase page for Clean Slate template."""
+    template_name = 'showcase/clean-slate.html'
+
+
+class ExecutiveShowcaseView(TemplateShowcaseView):
+    """Showcase page for Executive template."""
+    template_name = 'showcase/executive.html'
+
+
+class BoldModernShowcaseView(TemplateShowcaseView):
+    """Showcase page for Bold Modern template."""
+    template_name = 'showcase/bold-modern.html'
+
+
+class ClassicProfessionalShowcaseView(TemplateShowcaseView):
+    """Showcase page for Classic Professional template."""
+    template_name = 'showcase/classic-professional.html'
+
+
+class NeonEdgeShowcaseView(TemplateShowcaseView):
+    """Showcase page for Neon Edge template."""
+    template_name = 'showcase/neon-edge.html'
+
+
 class InvoiceListView(LoginRequiredMixin, ListView):
     """List all invoices for the current user."""
     model = Invoice
