@@ -414,15 +414,33 @@ invoice_generator/
 ```
 
 ### URLs Pending Google Search Console Indexing
-The following new pages need to be submitted for indexing via GSC URL Inspection tool:
+The following pages need to be submitted for indexing via GSC URL Inspection tool:
 
-| URL | Page Type | Added |
-|-----|-----------|-------|
-| `https://www.invoicekits.com/templates/clean-slate/` | Template Showcase | 2026-01-09 |
-| `https://www.invoicekits.com/templates/executive/` | Template Showcase | 2026-01-09 |
-| `https://www.invoicekits.com/templates/bold-modern/` | Template Showcase | 2026-01-09 |
-| `https://www.invoicekits.com/templates/classic-professional/` | Template Showcase | 2026-01-09 |
-| `https://www.invoicekits.com/templates/neon-edge/` | Template Showcase | 2026-01-09 |
+**Role-Specific Landing Pages:**
+| URL | Page Type | Status |
+|-----|-----------|--------|
+| `https://www.invoicekits.com/for-small-business/` | Landing Page | Pending |
+| `https://www.invoicekits.com/for-consultants/` | Landing Page | Pending |
+| `https://www.invoicekits.com/compare/` | Comparison Page | Pending |
+
+**Template Showcase Pages:**
+| URL | Page Type | Status |
+|-----|-----------|--------|
+| `https://www.invoicekits.com/templates/clean-slate/` | Template Showcase | Pending |
+| `https://www.invoicekits.com/templates/executive/` | Template Showcase | Pending |
+| `https://www.invoicekits.com/templates/bold-modern/` | Template Showcase | Pending |
+| `https://www.invoicekits.com/templates/classic-professional/` | Template Showcase | Pending |
+| `https://www.invoicekits.com/templates/neon-edge/` | Template Showcase | Pending |
+
+**Blog Posts:**
+| URL | Page Type | Status |
+|-----|-----------|--------|
+| `https://www.invoicekits.com/blog/` | Blog Index | Pending |
+| `https://www.invoicekits.com/blog/how-to-create-professional-invoice/` | Blog Post | Pending |
+| `https://www.invoicekits.com/blog/batch-invoice-generator-guide/` | Blog Post | Pending |
+| `https://www.invoicekits.com/blog/freelancer-invoice-tips-get-paid-faster/` | Blog Post | Pending |
+| `https://www.invoicekits.com/blog/small-business-invoicing-guide/` | Blog Post | Pending |
+| `https://www.invoicekits.com/blog/invoice-vs-receipt-difference/` | Blog Post | Pending |
 
 ### SEO TODOs
 - [x] Register with Google Search Console
@@ -430,8 +448,8 @@ The following new pages need to be submitted for indexing via GSC URL Inspection
 - [x] Create blog content for keyword targeting (5 posts live)
 - [x] Set up custom domain (www.invoicekits.com)
 - [x] Submit sitemap to Google Search Console - COMPLETED
-- [x] Request indexing for all public pages via GSC URL Inspection - COMPLETED
-- [ ] **Request indexing for template showcase pages** (5 new URLs above)
+- [x] Request indexing for core public pages (/, /pricing/, /for-freelancers/, /privacy/, /terms/, /contact/, /help/, /api/docs/) - COMPLETED
+- [ ] **Request indexing for remaining 14 pages** (see URLs Pending section above)
 - [ ] Build quality backlinks (Product Hunt, directories)
 - [ ] Monitor Core Web Vitals via PageSpeed Insights
 
@@ -571,6 +589,14 @@ Authentication: API Key in header `X-API-Key: <key>`
 96. Updated dashboard to show credits for credit users, monthly usage for subscribers
 97. Created 5 template showcase pages (`/templates/<slug>/`) with SEO meta tags, Product schema, invoice mockups, and CTAs
 98. Added template showcase URLs to sitemap and robots.txt
+99. Fixed missing `image` field in Product schema on pricing page (GSC validation error)
+100. Fixed missing `image` field in Product schema on all 5 template showcase pages
+101. Fixed BlogPosting schema - added fallback image when featured_image is empty
+102. Fixed Publisher schema - added required `logo` field to Organization
+103. Removed unverified `aggregateRating` from SoftwareApplication schema
+104. Added `image` and `url` fields to SoftwareApplication schema
+105. Fixed robots.txt blocking `/api/docs/` - added explicit `Allow: /api/docs/` rule
+106. Fixed 500 error on `/for-small-business/` and `/for-consultants/` pages (invalid `pages:contact` URL reference)
 
 ---
 
