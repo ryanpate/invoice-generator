@@ -69,13 +69,15 @@
         "@type": "Person",
         "name": "{{ post.author.get_full_name|default:post.author.email }}"
     },
-    {% if post.featured_image %}
-    "image": "{{ post.featured_image.url }}",
-    {% endif %}
+    "image": "{% if post.featured_image %}{{ post.featured_image.url }}{% else %}https://www.invoicekits.com/static/images/og-image.png{% endif %}",
     "publisher": {
         "@type": "Organization",
         "name": "InvoiceKits",
-        "url": "https://www.invoicekits.com"
+        "url": "https://www.invoicekits.com",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.invoicekits.com/static/images/og-image.png"
+        }
     },
     "mainEntityOfPage": {
         "@type": "WebPage",
