@@ -68,6 +68,7 @@ Allow: /contact/
 Allow: /help/
 Allow: /privacy/
 Allow: /terms/
+Allow: /api/docs/
 Allow: /blog/
 Allow: /templates/
 
