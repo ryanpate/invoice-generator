@@ -42,6 +42,16 @@ def health_check(request):
     return JsonResponse({'status': 'ok'})
 
 
+def bing_site_auth(request):
+    """Serve Bing Webmaster Tools verification file."""
+    content = """<?xml version="1.0"?>
+<users>
+	<user>29ACAC7E27CA9CB577CE5708757F488A</user>
+</users>
+"""
+    return HttpResponse(content, content_type='application/xml')
+
+
 def robots_txt(request):
     """Serve robots.txt from root URL."""
     content = """# InvoiceKits robots.txt
@@ -81,6 +91,7 @@ Sitemap: https://www.invoicekits.com/sitemap.xml
 urlpatterns = [
     path('health/', health_check, name='health_check'),
     path('robots.txt', robots_txt, name='robots_txt'),
+    path('BingSiteAuth.xml', bing_site_auth, name='bing_site_auth'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
     path('admin/', admin.site.urls),
 
