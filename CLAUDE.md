@@ -86,6 +86,7 @@
 
 ### Medium Priority - Growth & Marketing
 - [x] **Google Search Console:** Verified and configured
+- [x] **Bing Webmaster Tools:** Verified and configured (BingSiteAuth.xml served at `/BingSiteAuth.xml`)
 - [x] **Google Analytics:** GA4 tracking code added (G-0NR5NZMNBF)
 - [ ] **Google AdSense Integration:** Add to landing page sidebar, dashboard (free users only)
 - [x] **Email Notifications:**
@@ -597,6 +598,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 104. Added `image` and `url` fields to SoftwareApplication schema
 105. Fixed robots.txt blocking `/api/docs/` - added explicit `Allow: /api/docs/` rule
 106. Fixed 500 error on `/for-small-business/` and `/for-consultants/` pages (invalid `pages:contact` URL reference)
+107. Added Bing Webmaster Tools verification endpoint at `/BingSiteAuth.xml`
 
 ---
 
