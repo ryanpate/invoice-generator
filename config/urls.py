@@ -11,6 +11,7 @@ from django.contrib.sitemaps import Sitemap
 from django.contrib.sitemaps.views import sitemap
 
 from apps.blog.sitemaps import BlogPostSitemap
+from apps.companies.views import AcceptInvitationView
 
 
 class StaticViewSitemap(Sitemap):
@@ -114,6 +115,9 @@ urlpatterns = [
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
     path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),
     path('api/docs/', TemplateView.as_view(template_name='pages/api_docs.html'), name='api_docs'),
+
+    # Team invitation acceptance (public URL)
+    path('invitation/<uuid:token>/', AcceptInvitationView.as_view(), name='accept_invitation'),
 ]
 
 # Stripe webhooks - only if djstripe is installed

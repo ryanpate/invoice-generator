@@ -27,6 +27,11 @@
             <a href="{% url 'companies:settings' %}" class="flex-1 py-2 px-4 text-center rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition">
                 Company
             </a>
+            {% if request.user.has_team_seats %}
+            <a href="{% url 'companies:team' %}" class="flex-1 py-2 px-4 text-center rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                Team
+            </a>
+            {% endif %}
             <a href="{% url 'accounts:settings' %}" class="flex-1 py-2 px-4 text-center rounded-md bg-blue-600 text-white font-medium">
                 Account
             </a>

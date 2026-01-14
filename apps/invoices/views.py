@@ -12,6 +12,36 @@ from django.db.models import Q
 from django.conf import settings
 
 from .models import Invoice, LineItem, InvoiceBatch, RecurringInvoice
+
+
+class TeamAwareQuerysetMixin:
+    """
+    Mixin that provides team-aware queryset filtering.
+
+    This allows both company owners and team members to access
+    their company's invoices and related objects.
+    """
+
+    def get_company(self):
+        """Get the user's company (owned or member of)."""
+        return self.request.user.get_company()
+
+    def get_team_aware_queryset(self, model_class):
+        """
+        Get a queryset filtered by the user's company.
+
+        Args:
+            model_class: The model class to query (Invoice, RecurringInvoice, InvoiceBatch)
+
+        Returns:
+            QuerySet filtered by company, or empty if no company
+        """
+        company = self.get_company()
+        if not company:
+            return model_class.objects.none()
+        return model_class.objects.filter(company=company)
+
+
 from .forms import (
     InvoiceForm, LineItemFormSet, BatchUploadForm, SendInvoiceEmailForm,
     RecurringInvoiceForm, RecurringLineItemFormSet
@@ -118,17 +148,15 @@ class NeonEdgeShowcaseView(TemplateShowcaseView):
     template_name = 'showcase/neon-edge.html'
 
 
-class InvoiceListView(LoginRequiredMixin, ListView):
-    """List all invoices for the current user."""
+class InvoiceListView(LoginRequiredMixin, TeamAwareQuerysetMixin, ListView):
+    """List all invoices for the current user's company (including team members)."""
     model = Invoice
     template_name = 'invoices/list.html'
     context_object_name = 'invoices'
     paginate_by = 20
 
     def get_queryset(self):
-        queryset = Invoice.objects.filter(
-            company__user=self.request.user
-        ).select_related('company')
+        queryset = self.get_team_aware_queryset(Invoice).select_related('company')
 
         # Search filter
         search = self.request.GET.get('search')
@@ -154,19 +182,17 @@ class InvoiceListView(LoginRequiredMixin, ListView):
         return context
 
 
-class InvoiceDetailView(LoginRequiredMixin, DetailView):
+class InvoiceDetailView(LoginRequiredMixin, TeamAwareQuerysetMixin, DetailView):
     """View single invoice details."""
     model = Invoice
     template_name = 'invoices/detail.html'
     context_object_name = 'invoice'
 
     def get_queryset(self):
-        return Invoice.objects.filter(
-            company__user=self.request.user
-        ).prefetch_related('line_items')
+        return self.get_team_aware_queryset(Invoice).prefetch_related('line_items')
 
 
-class InvoiceCreateView(LoginRequiredMixin, CreateView):
+class InvoiceCreateView(LoginRequiredMixin, TeamAwareQuerysetMixin, CreateView):
     """Create a new invoice."""
     model = Invoice
     form_class = InvoiceForm
@@ -190,7 +216,7 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
-        kwargs['company'] = getattr(self.request.user, 'company', None)
+        kwargs['company'] = self.get_company()
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -207,12 +233,16 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
         context = self.get_context_data()
         line_items = context['line_items']
 
-        # Get or create company
-        from apps.companies.models import Company
-        company, _ = Company.objects.get_or_create(
-            user=self.request.user,
-            defaults={'name': f"{self.request.user.username}'s Company"}
-        )
+        # Get company (team-aware: owned or member of)
+        company = self.get_company()
+        if not company:
+            # Create company for owner if none exists
+            from apps.companies.models import Company
+            company = Company.objects.create(
+                user=self.request.user,
+                owner=self.request.user,
+                name=f"{self.request.user.username}'s Company"
+            )
 
         form.instance.company = company
         form.instance.invoice_number = company.get_next_invoice_number()
@@ -236,14 +266,14 @@ class InvoiceCreateView(LoginRequiredMixin, CreateView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
+class InvoiceUpdateView(LoginRequiredMixin, TeamAwareQuerysetMixin, UpdateView):
     """Edit an existing invoice."""
     model = Invoice
     form_class = InvoiceForm
     template_name = 'invoices/edit.html'
 
     def get_queryset(self):
-        return Invoice.objects.filter(company__user=self.request.user)
+        return self.get_team_aware_queryset(Invoice)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -277,28 +307,39 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class InvoiceDeleteView(LoginRequiredMixin, DeleteView):
+class InvoiceDeleteView(LoginRequiredMixin, TeamAwareQuerysetMixin, DeleteView):
     """Delete an invoice."""
     model = Invoice
     template_name = 'invoices/delete_confirm.html'
     success_url = reverse_lazy('invoices:list')
 
     def get_queryset(self):
-        return Invoice.objects.filter(company__user=self.request.user)
+        return self.get_team_aware_queryset(Invoice)
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Invoice deleted successfully.')
         return super().delete(request, *args, **kwargs)
 
 
+def get_team_aware_object(model_class, pk, user):
+    """
+    Get an object by pk, filtered by the user's company.
+
+    Helper function for function-based views to enforce team-aware access.
+    """
+    company = user.get_company()
+    if not company:
+        return None
+    return model_class.objects.filter(company=company, pk=pk).first()
+
+
 @login_required
 def generate_pdf(request, pk):
     """Generate PDF for an invoice."""
-    invoice = get_object_or_404(
-        Invoice,
-        pk=pk,
-        company__user=request.user
-    )
+    invoice = get_team_aware_object(Invoice, pk, request.user)
+    if not invoice:
+        messages.error(request, 'Invoice not found.')
+        return redirect('invoices:list')
 
     # Lazy import to avoid WeasyPrint startup issues
     from .services.pdf_generator import InvoicePDFGenerator
@@ -318,11 +359,10 @@ def generate_pdf(request, pk):
 @login_required
 def download_pdf(request, pk):
     """Download saved PDF for an invoice."""
-    invoice = get_object_or_404(
-        Invoice,
-        pk=pk,
-        company__user=request.user
-    )
+    invoice = get_team_aware_object(Invoice, pk, request.user)
+    if not invoice:
+        messages.error(request, 'Invoice not found.')
+        return redirect('invoices:list')
 
     if not invoice.pdf_file:
         # Lazy import to avoid WeasyPrint startup issues
@@ -342,7 +382,7 @@ def download_pdf(request, pk):
     )
 
 
-class BatchUploadView(LoginRequiredMixin, TemplateView):
+class BatchUploadView(LoginRequiredMixin, TeamAwareQuerysetMixin, TemplateView):
     """Batch invoice upload page."""
     template_name = 'invoices/batch_upload.html'
 
@@ -364,8 +404,8 @@ class BatchUploadView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = BatchUploadForm()
-        context['recent_batches'] = InvoiceBatch.objects.filter(
-            company__user=self.request.user
+        context['recent_batches'] = self.get_team_aware_queryset(
+            InvoiceBatch
         ).order_by('-created_at')[:5]
         return context
 
@@ -373,12 +413,16 @@ class BatchUploadView(LoginRequiredMixin, TemplateView):
         form = BatchUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
-            # Get or create company
-            from apps.companies.models import Company
-            company, _ = Company.objects.get_or_create(
-                user=request.user,
-                defaults={'name': f"{request.user.username}'s Company"}
-            )
+            # Get company (team-aware: owned or member of)
+            company = self.get_company()
+            if not company:
+                # Create company for owner if none exists
+                from apps.companies.models import Company
+                company = Company.objects.create(
+                    user=request.user,
+                    owner=request.user,
+                    name=f"{request.user.username}'s Company"
+                )
 
             # Create batch record
             batch = InvoiceBatch.objects.create(
@@ -404,14 +448,14 @@ class BatchUploadView(LoginRequiredMixin, TemplateView):
         return self.render_to_response(context)
 
 
-class BatchResultView(LoginRequiredMixin, DetailView):
+class BatchResultView(LoginRequiredMixin, TeamAwareQuerysetMixin, DetailView):
     """View batch processing results."""
     model = InvoiceBatch
     template_name = 'invoices/batch_result.html'
     context_object_name = 'batch'
 
     def get_queryset(self):
-        return InvoiceBatch.objects.filter(company__user=self.request.user)
+        return self.get_team_aware_queryset(InvoiceBatch)
 
 
 @login_required
@@ -426,11 +470,10 @@ def download_csv_template(request):
 @login_required
 def download_batch_zip(request, pk):
     """Download ZIP file from batch processing."""
-    batch = get_object_or_404(
-        InvoiceBatch,
-        pk=pk,
-        company__user=request.user
-    )
+    batch = get_team_aware_object(InvoiceBatch, pk, request.user)
+    if not batch:
+        messages.error(request, 'Batch not found.')
+        return redirect('invoices:batch')
 
     if not batch.zip_file:
         messages.error(request, 'No ZIP file available for this batch.')
@@ -449,11 +492,9 @@ def mark_invoice_status(request, pk, status):
     if request.method != 'POST':
         return JsonResponse({'error': 'POST required'}, status=405)
 
-    invoice = get_object_or_404(
-        Invoice,
-        pk=pk,
-        company__user=request.user
-    )
+    invoice = get_team_aware_object(Invoice, pk, request.user)
+    if not invoice:
+        return JsonResponse({'error': 'Invoice not found'}, status=404)
 
     valid_statuses = [s[0] for s in Invoice.STATUS_CHOICES]
     if status not in valid_statuses:
@@ -470,7 +511,7 @@ def mark_invoice_status(request, pk, status):
     return redirect('invoices:detail', pk=pk)
 
 
-class InvoiceSendEmailView(LoginRequiredMixin, FormView):
+class InvoiceSendEmailView(LoginRequiredMixin, TeamAwareQuerysetMixin, FormView):
     """View for sending invoice via email."""
     template_name = 'invoices/send_email.html'
     form_class = SendInvoiceEmailForm
@@ -479,12 +520,11 @@ class InvoiceSendEmailView(LoginRequiredMixin, FormView):
         # Let LoginRequiredMixin handle authentication first
         if not request.user.is_authenticated:
             return self.handle_no_permission()
-        # Get invoice after confirming user is authenticated
-        self.invoice = get_object_or_404(
-            Invoice,
-            pk=self.kwargs['pk'],
-            company__user=request.user
-        )
+        # Get invoice after confirming user is authenticated (team-aware)
+        self.invoice = get_team_aware_object(Invoice, self.kwargs['pk'], request.user)
+        if not self.invoice:
+            messages.error(request, 'Invoice not found.')
+            return redirect('invoices:list')
         return super().dispatch(request, *args, **kwargs)
 
     def get_initial(self):
@@ -528,8 +568,8 @@ class InvoiceSendEmailView(LoginRequiredMixin, FormView):
 # Recurring Invoice Views
 # =============================================================================
 
-class RecurringInvoiceListView(LoginRequiredMixin, ListView):
-    """List all recurring invoices for the current user."""
+class RecurringInvoiceListView(LoginRequiredMixin, TeamAwareQuerysetMixin, ListView):
+    """List all recurring invoices for the current user's company."""
     model = RecurringInvoice
     template_name = 'invoices/recurring/list.html'
     context_object_name = 'recurring_invoices'
@@ -549,8 +589,8 @@ class RecurringInvoiceListView(LoginRequiredMixin, ListView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = RecurringInvoice.objects.filter(
-            company__user=self.request.user
+        queryset = self.get_team_aware_queryset(
+            RecurringInvoice
         ).select_related('company', 'last_invoice')
 
         # Status filter
@@ -578,15 +618,15 @@ class RecurringInvoiceListView(LoginRequiredMixin, ListView):
         return context
 
 
-class RecurringInvoiceDetailView(LoginRequiredMixin, DetailView):
+class RecurringInvoiceDetailView(LoginRequiredMixin, TeamAwareQuerysetMixin, DetailView):
     """View recurring invoice details."""
     model = RecurringInvoice
     template_name = 'invoices/recurring/detail.html'
     context_object_name = 'recurring'
 
     def get_queryset(self):
-        return RecurringInvoice.objects.filter(
-            company__user=self.request.user
+        return self.get_team_aware_queryset(
+            RecurringInvoice
         ).select_related('company', 'last_invoice').prefetch_related('line_items')
 
     def get_context_data(self, **kwargs):
@@ -599,7 +639,7 @@ class RecurringInvoiceDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class RecurringInvoiceCreateView(LoginRequiredMixin, CreateView):
+class RecurringInvoiceCreateView(LoginRequiredMixin, TeamAwareQuerysetMixin, CreateView):
     """Create a new recurring invoice."""
     model = RecurringInvoice
     form_class = RecurringInvoiceForm
@@ -629,7 +669,7 @@ class RecurringInvoiceCreateView(LoginRequiredMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
-        kwargs['company'] = getattr(self.request.user, 'company', None)
+        kwargs['company'] = self.get_company()
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -646,12 +686,16 @@ class RecurringInvoiceCreateView(LoginRequiredMixin, CreateView):
         context = self.get_context_data()
         line_items = context['line_items']
 
-        # Get or create company
-        from apps.companies.models import Company
-        company, _ = Company.objects.get_or_create(
-            user=self.request.user,
-            defaults={'name': f"{self.request.user.username}'s Company"}
-        )
+        # Get company (team-aware: owned or member of)
+        company = self.get_company()
+        if not company:
+            # Create company for owner if none exists
+            from apps.companies.models import Company
+            company = Company.objects.create(
+                user=self.request.user,
+                owner=self.request.user,
+                name=f"{self.request.user.username}'s Company"
+            )
 
         form.instance.company = company
         form.instance.next_run_date = form.cleaned_data['start_date']
@@ -670,14 +714,14 @@ class RecurringInvoiceCreateView(LoginRequiredMixin, CreateView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class RecurringInvoiceUpdateView(LoginRequiredMixin, UpdateView):
+class RecurringInvoiceUpdateView(LoginRequiredMixin, TeamAwareQuerysetMixin, UpdateView):
     """Edit an existing recurring invoice."""
     model = RecurringInvoice
     form_class = RecurringInvoiceForm
     template_name = 'invoices/recurring/edit.html'
 
     def get_queryset(self):
-        return RecurringInvoice.objects.filter(company__user=self.request.user)
+        return self.get_team_aware_queryset(RecurringInvoice)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -709,14 +753,14 @@ class RecurringInvoiceUpdateView(LoginRequiredMixin, UpdateView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class RecurringInvoiceDeleteView(LoginRequiredMixin, DeleteView):
+class RecurringInvoiceDeleteView(LoginRequiredMixin, TeamAwareQuerysetMixin, DeleteView):
     """Delete a recurring invoice."""
     model = RecurringInvoice
     template_name = 'invoices/recurring/delete_confirm.html'
     success_url = reverse_lazy('invoices:recurring_list')
 
     def get_queryset(self):
-        return RecurringInvoice.objects.filter(company__user=self.request.user)
+        return self.get_team_aware_queryset(RecurringInvoice)
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, 'Recurring invoice deleted successfully.')
@@ -729,11 +773,9 @@ def recurring_toggle_status(request, pk):
     if request.method != 'POST':
         return JsonResponse({'error': 'POST required'}, status=405)
 
-    recurring = get_object_or_404(
-        RecurringInvoice,
-        pk=pk,
-        company__user=request.user
-    )
+    recurring = get_team_aware_object(RecurringInvoice, pk, request.user)
+    if not recurring:
+        return JsonResponse({'error': 'Recurring invoice not found'}, status=404)
 
     if recurring.status == 'active':
         recurring.pause()
@@ -760,11 +802,10 @@ def recurring_generate_now(request, pk):
     if request.method != 'POST':
         return JsonResponse({'error': 'POST required'}, status=405)
 
-    recurring = get_object_or_404(
-        RecurringInvoice,
-        pk=pk,
-        company__user=request.user
-    )
+    recurring = get_team_aware_object(RecurringInvoice, pk, request.user)
+    if not recurring:
+        messages.error(request, 'Recurring invoice not found.')
+        return redirect('invoices:recurring_list')
 
     if not request.user.has_recurring_invoices():
         messages.error(request, 'You no longer have access to recurring invoices.')

@@ -1,8 +1,11 @@
 """
 Company model for InvoiceKits.
 """
+import uuid
+from datetime import timedelta
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 
 class Company(models.Model):
@@ -11,7 +14,18 @@ class Company(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='company'
+        related_name='company',
+        null=True,
+        blank=True,
+        help_text='Legacy field - use owner instead'
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='owned_companies',
+        null=True,  # Nullable initially for migration
+        blank=True,
+        help_text='Company owner (subscription holder)'
     )
     name = models.CharField(max_length=255)
     logo = models.ImageField(
@@ -124,3 +138,139 @@ class Company(models.Model):
             except Company.DoesNotExist:
                 pass
         super().save(*args, **kwargs)
+
+    def get_effective_owner(self):
+        """Get the company owner (supports legacy user field)."""
+        return self.owner or self.user
+
+    def get_team_member_count(self):
+        """Return count of team members (excluding owner)."""
+        return self.team_members.count()
+
+    def get_pending_invitation_count(self):
+        """Return count of pending (non-expired) invitations."""
+        return self.pending_invitations.filter(
+            accepted=False,
+            expires_at__gt=timezone.now()
+        ).count()
+
+    def get_total_seat_usage(self):
+        """Return total seats used (members + pending invitations)."""
+        return self.get_team_member_count() + self.get_pending_invitation_count()
+
+    def can_add_team_member(self):
+        """Check if company can add more team members."""
+        owner = self.get_effective_owner()
+        if not owner:
+            return False
+        limit = owner.get_team_seat_limit()
+        if limit == 0:
+            return False
+        if limit == -1:  # Unlimited
+            return True
+        return self.get_total_seat_usage() < limit
+
+    def is_admin(self, user):
+        """Check if user is an admin (owner or has admin role)."""
+        if user == self.get_effective_owner():
+            return True
+        membership = self.team_members.filter(user=user).first()
+        return membership and membership.role == 'admin'
+
+    def is_member(self, user):
+        """Check if user belongs to this company (owner or team member)."""
+        if user == self.get_effective_owner():
+            return True
+        return self.team_members.filter(user=user).exists()
+
+
+class TeamMember(models.Model):
+    """Team member associated with a company."""
+
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('member', 'Member'),
+    ]
+
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='team_members'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='team_memberships'
+    )
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES,
+        default='member'
+    )
+    invited_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='invitations_sent'
+    )
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['company', 'user']
+        verbose_name = 'Team Member'
+        verbose_name_plural = 'Team Members'
+
+    def __str__(self):
+        return f"{self.user.email} - {self.company.name} ({self.role})"
+
+
+class TeamInvitation(models.Model):
+    """Pending invitation to join a company team."""
+
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='pending_invitations'
+    )
+    email = models.EmailField()
+    role = models.CharField(
+        max_length=20,
+        choices=TeamMember.ROLE_CHOICES,
+        default='member'
+    )
+    token = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+        editable=False
+    )
+    invited_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='team_invitations_sent'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    accepted = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Team Invitation'
+        verbose_name_plural = 'Team Invitations'
+
+    def __str__(self):
+        return f"Invitation: {self.email} to {self.company.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(days=7)
+        super().save(*args, **kwargs)
+
+    @property
+    def is_expired(self):
+        """Check if the invitation has expired."""
+        return timezone.now() > self.expires_at
+
+    @property
+    def is_valid(self):
+        """Check if invitation is still valid (not accepted and not expired)."""
+        return not self.accepted and not self.is_expired

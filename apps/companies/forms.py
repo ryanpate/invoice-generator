@@ -3,7 +3,7 @@ Forms for companies app.
 """
 from django import forms
 from django.conf import settings
-from .models import Company
+from .models import Company, TeamMember
 
 
 class CompanyForm(forms.ModelForm):
@@ -135,3 +135,21 @@ class CompanyForm(forms.ModelForm):
                 raise forms.ValidationError('Only JPEG, PNG, and WebP images are allowed.')
 
         return signature
+
+
+class TeamInviteForm(forms.Form):
+    """Form for inviting team members."""
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'colleague@company.com'
+        })
+    )
+    role = forms.ChoiceField(
+        choices=TeamMember.ROLE_CHOICES,
+        initial='member',
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )

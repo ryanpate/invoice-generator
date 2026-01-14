@@ -268,3 +268,52 @@ class CustomUser(AbstractUser):
         from django.conf import settings
         tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
         return tier_config.get('max_recurring', 0)
+
+    # Team seat methods
+    def get_team_seat_limit(self):
+        """Get the max team seats allowed for this user's tier."""
+        from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        return tier_config.get('team_seats', 0)
+
+    def has_team_seats(self):
+        """Check if user's tier includes team seats."""
+        return self.get_team_seat_limit() > 0
+
+    def get_company(self):
+        """Get the company this user belongs to (owned or member of).
+
+        Returns the company the user owns first, then checks team memberships.
+        """
+        # First check if user owns a company
+        owned_company = self.owned_companies.first()
+        if owned_company:
+            return owned_company
+
+        # Check legacy company field
+        if hasattr(self, 'company'):
+            try:
+                return self.company
+            except Exception:
+                pass
+
+        # Check if user is a team member
+        membership = self.team_memberships.select_related('company').first()
+        if membership:
+            return membership.company
+
+        return None
+
+    def is_team_admin(self, company=None):
+        """Check if user is an admin for the given company (or their own company)."""
+        company = company or self.get_company()
+        if not company:
+            return False
+        return company.is_admin(self)
+
+    def is_company_owner(self, company=None):
+        """Check if user is the owner of the given company."""
+        company = company or self.get_company()
+        if not company:
+            return False
+        return company.get_effective_owner() == self

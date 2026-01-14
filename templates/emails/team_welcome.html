@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to {{ company.name }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background-color: #059669; padding: 40px 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">
+                                Welcome to the Team!
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Hi{% if user.first_name %} {{ user.first_name }}{% endif %},
+                            </p>
+
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                You've successfully joined <strong>{{ company.name }}</strong> as a team {{ role }}. You can now collaborate with your team on invoicing.
+                            </p>
+
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Here's what you can do:
+                            </p>
+
+                            <ul style="margin: 0 0 20px; padding-left: 20px; color: #374151; font-size: 16px; line-height: 1.8;">
+                                <li>Create invoices for {{ company.name }}</li>
+                                <li>View and manage existing invoices</li>
+                                <li>Download and send PDF invoices to clients</li>
+                                <li>Track payments and invoice status</li>
+                                {% if role == 'Admin' %}
+                                <li>Manage team members and invitations</li>
+                                <li>Edit company settings and branding</li>
+                                {% endif %}
+                            </ul>
+
+                            <p style="margin: 0 0 30px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Ready to get started? Head to your dashboard:
+                            </p>
+
+                            <!-- CTA Button -->
+                            <table role="presentation" style="margin: 0 auto;">
+                                <tr>
+                                    <td style="background-color: #059669; border-radius: 8px;">
+                                        <a href="{{ dashboard_url }}" style="display: inline-block; padding: 16px 32px; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600;">
+                                            Go to Dashboard
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Team Info Section -->
+                    <tr>
+                        <td style="padding: 0 40px 40px;">
+                            <table role="presentation" style="width: 100%; background-color: #f9fafb; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <h3 style="margin: 0 0 10px; color: #1f2937; font-size: 16px; font-weight: 600;">
+                                            Team Details
+                                        </h3>
+                                        <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.6;">
+                                            <strong>Company:</strong> {{ company.name }}<br>
+                                            <strong>Your Role:</strong> {{ role }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 30px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="margin: 0 0 10px; color: #6b7280; font-size: 14px;">
+                                Need help? Contact us at <a href="mailto:support@invoicekits.com" style="color: #059669; text-decoration: none;">support@invoicekits.com</a>
+                            </p>
+                            <p style="margin: 0; color: #9ca3af; font-size: 12px;">
+                                &copy; {% now "Y" %} InvoiceKits. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

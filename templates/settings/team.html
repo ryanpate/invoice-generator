@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Team Settings - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'accounts:dashboard' %}" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                    </a>
+                    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Team Settings</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Settings Navigation -->
+        <div class="flex space-x-1 mb-8 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg transition-colors duration-200">
+            <a href="{% url 'companies:settings' %}" class="flex-1 py-2 px-4 text-center rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                Company
+            </a>
+            {% if request.user.has_team_seats %}
+            <a href="{% url 'companies:team' %}" class="flex-1 py-2 px-4 text-center rounded-md bg-blue-600 text-white font-medium">
+                Team
+            </a>
+            {% endif %}
+            <a href="{% url 'accounts:settings' %}" class="flex-1 py-2 px-4 text-center rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                Account
+            </a>
+            <a href="{% url 'billing:overview' %}" class="flex-1 py-2 px-4 text-center rounded-md text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                Billing
+            </a>
+        </div>
+
+        <!-- Team Seats Usage -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Team Seats</h2>
+                <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+                    {{ seats_used }}/{{ seats_total }} seats used
+                </span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                <div class="bg-blue-600 h-2.5 rounded-full" style="width: {% widthratio seats_used seats_total 100 %}%"></div>
+            </div>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                {% if seats_used >= seats_total %}
+                    All team seats are in use. Remove a member or upgrade your plan to add more.
+                {% else %}
+                    You can invite {{ seats_remaining }} more team member{{ seats_remaining|pluralize }}.
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Invite New Member -->
+        {% if is_admin and can_invite %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invite Team Member</h2>
+            <form method="POST" action="{% url 'companies:team_invite' %}">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                        <input type="email" name="email" required placeholder="colleague@company.com"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role</label>
+                        <select name="role"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+                            <option value="member">Member</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <strong>Admin:</strong> Can manage team members and company settings<br>
+                        <strong>Member:</strong> Can create and view invoices
+                    </p>
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        Send Invitation
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- Team Members -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Team Members</h2>
+
+            {% if team_members %}
+            <div class="space-y-4">
+                <!-- Owner -->
+                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                            <span class="text-blue-600 dark:text-blue-300 font-semibold text-sm">
+                                {{ owner.first_name|slice:":1"|upper }}{{ owner.last_name|slice:":1"|upper }}
+                            </span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white">
+                                {{ owner.get_full_name|default:owner.email }}
+                                {% if owner == request.user %}
+                                    <span class="text-gray-500 dark:text-gray-400">(you)</span>
+                                {% endif %}
+                            </p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ owner.email }}</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">
+                        Owner
+                    </span>
+                </div>
+
+                <!-- Other Team Members -->
+                {% for member in team_members %}
+                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                            <span class="text-green-600 dark:text-green-300 font-semibold text-sm">
+                                {{ member.user.first_name|slice:":1"|upper }}{{ member.user.last_name|slice:":1"|upper }}
+                            </span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white">
+                                {{ member.user.get_full_name|default:member.user.email }}
+                                {% if member.user == request.user %}
+                                    <span class="text-gray-500 dark:text-gray-400">(you)</span>
+                                {% endif %}
+                            </p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ member.user.email }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="px-3 py-1 {% if member.role == 'admin' %}bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200{% else %}bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200{% endif %} rounded-full text-sm font-medium">
+                            {{ member.get_role_display }}
+                        </span>
+                        {% if is_admin and member.user != request.user %}
+                        <form method="POST" action="{% url 'companies:team_remove' member.pk %}" class="inline" onsubmit="return confirm('Are you sure you want to remove this team member?');">
+                            {% csrf_token %}
+                            <button type="submit" class="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-500 dark:text-gray-400 text-center py-8">
+                No team members yet. Invite someone to get started!
+            </p>
+            {% endif %}
+        </div>
+
+        <!-- Pending Invitations -->
+        {% if pending_invitations %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Pending Invitations</h2>
+            <div class="space-y-4">
+                {% for invitation in pending_invitations %}
+                <div class="flex items-center justify-between p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white">{{ invitation.email }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Invited as {{ invitation.get_role_display }} &bull; Expires {{ invitation.expires_at|date:"M d, Y" }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="px-3 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-sm font-medium">
+                            Pending
+                        </span>
+                        {% if is_admin %}
+                        <form method="POST" action="{% url 'companies:team_cancel_invitation' invitation.pk %}" class="inline" onsubmit="return confirm('Are you sure you want to cancel this invitation?');">
+                            {% csrf_token %}
+                            <button type="submit" class="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

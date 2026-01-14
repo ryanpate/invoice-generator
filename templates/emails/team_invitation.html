@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Invited to Join {{ company.name }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background-color: #7c3aed; padding: 40px 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">
+                                You're Invited!
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Hello,
+                            </p>
+
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                <strong>{{ inviter.email }}</strong> has invited you to join <strong>{{ company.name }}</strong> on InvoiceKits as a team {{ role }}.
+                            </p>
+
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                As a team member, you'll be able to:
+                            </p>
+
+                            <ul style="margin: 0 0 20px; padding-left: 20px; color: #374151; font-size: 16px; line-height: 1.8;">
+                                <li>Create and manage invoices for {{ company.name }}</li>
+                                <li>Download professional PDF invoices</li>
+                                <li>Track invoice status and payments</li>
+                                {% if role == 'Admin' %}
+                                <li>Manage team members and company settings</li>
+                                {% endif %}
+                            </ul>
+
+                            <p style="margin: 0 0 30px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Click the button below to accept this invitation:
+                            </p>
+
+                            <!-- CTA Button -->
+                            <table role="presentation" style="margin: 0 auto;">
+                                <tr>
+                                    <td style="background-color: #7c3aed; border-radius: 8px;">
+                                        <a href="{{ accept_url }}" style="display: inline-block; padding: 16px 32px; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600;">
+                                            Accept Invitation
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin: 30px 0 0; color: #6b7280; font-size: 14px; line-height: 1.6;">
+                                This invitation will expire in 7 days. If you don't recognize this invitation, you can safely ignore this email.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Info Section -->
+                    <tr>
+                        <td style="padding: 0 40px 40px;">
+                            <table role="presentation" style="width: 100%; background-color: #f9fafb; border-radius: 8px;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.6;">
+                                            <strong>Don't have an account?</strong><br>
+                                            No problem! When you click the button above, you'll be able to create a free account to join the team.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 30px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="margin: 0 0 10px; color: #6b7280; font-size: 14px;">
+                                Questions? Contact us at <a href="mailto:support@invoicekits.com" style="color: #7c3aed; text-decoration: none;">support@invoicekits.com</a>
+                            </p>
+                            <p style="margin: 0; color: #9ca3af; font-size: 12px;">
+                                &copy; {% now "Y" %} InvoiceKits. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

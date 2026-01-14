@@ -232,6 +232,7 @@ SUBSCRIPTION_TIERS = {
         'api_calls_per_month': 0,
         'recurring_invoices': False,
         'max_recurring': 0,
+        'team_seats': 0,
     },
     'starter': {
         'name': 'Starter',
@@ -244,6 +245,7 @@ SUBSCRIPTION_TIERS = {
         'api_calls_per_month': 0,
         'recurring_invoices': False,
         'max_recurring': 0,
+        'team_seats': 0,
     },
     'professional': {
         'name': 'Professional',
@@ -256,6 +258,7 @@ SUBSCRIPTION_TIERS = {
         'api_calls_per_month': 0,
         'recurring_invoices': True,
         'max_recurring': 10,
+        'team_seats': 0,
     },
     'business': {
         'name': 'Business',
@@ -268,6 +271,7 @@ SUBSCRIPTION_TIERS = {
         'api_calls_per_month': 1000,
         'recurring_invoices': True,
         'max_recurring': -1,  # Unlimited
+        'team_seats': 3,  # Business tier includes 3 team seats
     },
 }
 

@@ -52,6 +52,12 @@
   - Subscriptions for regular users (better per-invoice value)
   - Credits never expire, no watermark after purchase
   - Dashboard shows credits for credit users, usage % for subscribers
+- **Team Seats for Business plan:**
+  - Up to 3 team members per company
+  - Roles: Admin (full access) and Member (create/view invoices)
+  - Team management at `/settings/team/`
+  - Email invitations with secure token-based acceptance
+  - Team members share company invoices and settings
 
 ### Suppressed/Disabled Features
 
@@ -100,7 +106,12 @@
 - [x] **Blog/Content Marketing:** Created `/blog/` section with 5 SEO-optimized posts - COMPLETED
 
 ### Lower Priority - Feature Expansion
-- [ ] **Team Seats:** Business plan includes 3 team seats (model and UI not implemented)
+- [x] **Team Seats:** Business plan includes 3 team seats - COMPLETED
+  - Team members can create/view invoices for the same company
+  - Roles: Admin (manage team + settings) and Member (create/view invoices)
+  - Team management at `/settings/team/`
+  - Email invitations with 7-day expiration
+  - Auto-accept invitations on signup/login
 - [ ] **Enterprise Tier:** Custom pricing, white-label, dedicated support
 - [ ] **Premium Templates:** Individual template purchases ($4.99 each)
 - [ ] **Affiliate Program:** Referral tracking (20% commission)
@@ -313,6 +324,13 @@ invoice_generator/
 | `templates/showcase/bold-modern.html` | Bold Modern template showcase page |
 | `templates/showcase/classic-professional.html` | Classic Professional template showcase page |
 | `templates/showcase/neon-edge.html` | Neon Edge template showcase page |
+| `apps/companies/models.py` | Company, TeamMember, TeamInvitation models |
+| `apps/companies/views.py` | Team management views (invite, accept, remove) |
+| `apps/companies/signals.py` | Auto-accept invitations on signup/login |
+| `apps/companies/services/team_email.py` | Team invitation and welcome emails |
+| `templates/settings/team.html` | Team management UI page |
+| `templates/emails/team_invitation.html` | Team invitation email template |
+| `templates/emails/team_welcome.html` | Team welcome email template |
 
 ---
 
@@ -331,7 +349,7 @@ invoice_generator/
 |------|-------|-------------|-------------|----------|
 | Starter | $9/mo | 50 | $0.18 | All templates, no watermark |
 | Professional | $29/mo | 200 | $0.15 | + Batch upload, recurring invoices (up to 10) |
-| Business | $79/mo | Unlimited | — | + API access (1000 calls/mo), unlimited recurring |
+| Business | $79/mo | Unlimited | — | + API access (1000 calls/mo), unlimited recurring, 3 team seats |
 
 **Notes:**
 - Credits never expire
@@ -377,6 +395,15 @@ invoice_generator/
 | `/templates/bold-modern/` | Bold Modern template showcase |
 | `/templates/classic-professional/` | Classic Professional template showcase |
 | `/templates/neon-edge/` | Neon Edge template showcase |
+
+### Team Management URLs (Business Tier Only)
+| URL | Purpose |
+|-----|---------|
+| `/settings/team/` | Team management page |
+| `/settings/team/invite/` | Send team invitation (POST) |
+| `/settings/team/member/<pk>/remove/` | Remove team member (POST) |
+| `/settings/team/invitation/<pk>/cancel/` | Cancel invitation (POST) |
+| `/invitation/<uuid>/` | Accept team invitation (public) |
 
 ### Public Invoice URLs (No Auth Required)
 | URL | Purpose |
@@ -623,6 +650,16 @@ Authentication: API Key in header `X-API-Key: <key>`
 118. Added signature upload UI to company settings template with live preview
 119. Added remove_signature view and URL route
 120. Added signature section to all 5 PDF templates with template-specific styling (Clean Slate, Executive, Bold Modern, Classic Professional, Neon Edge)
+121. Implemented Team Seats feature for Business tier (3 team seats per company)
+122. Created TeamMember and TeamInvitation models with role-based access (Admin/Member)
+123. Added `owner` field to Company model with backwards-compatible migration
+124. Created team management views (invite, accept, remove, cancel invitation)
+125. Created team email service for invitation and welcome emails
+126. Created team settings template with seat usage indicator
+127. Updated settings navigation to show Team tab for Business tier users
+128. Implemented auto-accept invitations on signup/login via signals
+129. Updated all invoice views with TeamAwareQuerysetMixin for shared company access
+130. Added team-related admin configuration for TeamMember and TeamInvitation models
 
 ---
 
