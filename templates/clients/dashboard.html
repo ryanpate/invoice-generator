@@ -1,0 +1,178 @@
+{% extends 'clients/base_portal.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Welcome back, {{ client.get_display_name }}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mt-1">Here's an overview of your account</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Outstanding</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">${{ total_outstanding|floatformat:2 }}</p>
+            </div>
+            <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Paid</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">${{ total_paid|floatformat:2 }}</p>
+            </div>
+            <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Invoices</p>
+                <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1">{{ invoice_count }}</p>
+            </div>
+            <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overdue Invoices Alert -->
+{% if overdue_invoices %}
+<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-8">
+    <div class="flex items-start gap-3">
+        <svg class="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        <div>
+            <h3 class="font-medium text-red-800 dark:text-red-300">You have {{ overdue_invoices|length }} overdue invoice{{ overdue_invoices|length|pluralize }}</h3>
+            <p class="text-sm text-red-700 dark:text-red-400 mt-1">Please make payment to avoid any late fees.</p>
+            <div class="mt-3">
+                {% for invoice in overdue_invoices %}
+                <a href="{% url 'clients:invoice_detail' invoice.id %}" class="inline-flex items-center text-sm text-red-700 dark:text-red-400 hover:text-red-800 font-medium mr-4">
+                    {{ invoice.invoice_number }} - ${{ invoice.total|floatformat:2 }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Recent Invoices -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="font-semibold text-gray-900 dark:text-white">Recent Invoices</h2>
+            <a href="{% url 'clients:invoice_list' %}" class="text-sm text-primary-600 hover:text-primary-700">View all</a>
+        </div>
+        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for invoice in recent_invoices %}
+            <a href="{% url 'clients:invoice_detail' invoice.id %}" class="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                <div>
+                    <p class="font-medium text-gray-900 dark:text-white">{{ invoice.invoice_number }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ invoice.company.name }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-medium text-gray-900 dark:text-white">${{ invoice.total|floatformat:2 }}</p>
+                    <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full
+                        {% if invoice.status == 'paid' %}bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
+                        {% elif invoice.status == 'overdue' %}bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
+                        {% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400{% endif %}">
+                        {{ invoice.status|title }}
+                    </span>
+                </div>
+            </a>
+            {% empty %}
+            <div class="p-4 text-center text-gray-500 dark:text-gray-400">No invoices yet</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Payments -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="font-semibold text-gray-900 dark:text-white">Recent Payments</h2>
+            <a href="{% url 'clients:payment_history' %}" class="text-sm text-primary-600 hover:text-primary-700">View all</a>
+        </div>
+        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for payment in recent_payments %}
+            <div class="flex items-center justify-between p-4">
+                <div>
+                    <p class="font-medium text-gray-900 dark:text-white">{{ payment.invoice.invoice_number }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ payment.completed_at|date:"M d, Y" }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-medium text-green-600 dark:text-green-400">${{ payment.amount|floatformat:2 }}</p>
+                    <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                        Paid
+                    </span>
+                </div>
+            </div>
+            {% empty %}
+            <div class="p-4 text-center text-gray-500 dark:text-gray-400">No payments yet</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Companies -->
+{% if companies %}
+<div class="mt-8">
+    <h2 class="font-semibold text-gray-900 dark:text-white mb-4">Your Vendors</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for company in companies %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
+            <div class="flex items-center gap-3">
+                {% if company.logo %}
+                <img src="{{ company.logo.url }}" alt="{{ company.name }}" class="w-10 h-10 rounded-lg object-contain bg-gray-100">
+                {% else %}
+                <div class="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                    <span class="text-lg font-bold text-gray-400">{{ company.name|slice:":1" }}</span>
+                </div>
+                {% endif %}
+                <div>
+                    <p class="font-medium text-gray-900 dark:text-white">{{ company.name }}</p>
+                    {% if company.email %}
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ company.email }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Download Statement -->
+<div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="font-semibold text-gray-900 dark:text-white">Download Statement</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Get a PDF summary of all your invoices and payments</p>
+        </div>
+        <a href="{% url 'clients:download_statement' %}" class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition font-medium text-sm">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Download PDF
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -58,6 +58,13 @@
   - Team management at `/settings/team/`
   - Email invitations with secure token-based acceptance
   - Team members share company invoices and settings
+- **Client Portal for invoice recipients:**
+  - Magic link authentication (no passwords needed)
+  - Client dashboard at `/portal/` with invoice overview
+  - View all invoices from all businesses in one place
+  - Online payments via Stripe Connect (paid directly to business)
+  - Payment history and downloadable PDF statements
+  - Businesses connect Stripe at `/billing/stripe-connect/`
 
 ### Suppressed/Disabled Features
 
@@ -118,7 +125,14 @@
 - [x] **QR Code on Invoice PDFs:** Links to public invoice page for viewing and marking as paid - COMPLETED
 - [x] **Digital Signature Field:** On invoice PDFs - COMPLETED (upload in Company Settings, displays on all templates)
 - [x] **Recurring Invoices:** Auto-generate invoices on schedule - COMPLETED (requires Celery/Redis deployment)
-- [ ] **Client Portal:** Allow clients to view/pay invoices online
+- [x] **Client Portal:** Allow clients to view/pay invoices online - COMPLETED
+  - Magic link authentication (passwordless, 30-min expiry, rate-limited)
+  - Client dashboard with invoice overview and payment history
+  - Stripe Connect for direct payments to businesses
+  - Invoice list with search, status, and company filters
+  - Online payment via Stripe Checkout with transfer to business
+  - Downloadable PDF statements
+  - Available at `/portal/`
 - [ ] **Multi-language Support:** i18n for international users
 
 ### SEO - Critical (Week 1)
@@ -331,6 +345,15 @@ invoice_generator/
 | `templates/settings/team.html` | Team management UI page |
 | `templates/emails/team_invitation.html` | Team invitation email template |
 | `templates/emails/team_welcome.html` | Team welcome email template |
+| `apps/clients/models.py` | Client, MagicLinkToken, ClientSession, ClientPayment models |
+| `apps/clients/views.py` | Client portal views (dashboard, invoices, payments) |
+| `apps/clients/services/magic_link.py` | Magic link authentication service |
+| `apps/billing/services/stripe_connect.py` | Stripe Connect service for business payments |
+| `templates/clients/base_portal.html` | Client portal base template |
+| `templates/clients/dashboard.html` | Client portal dashboard |
+| `templates/clients/invoice_detail.html` | Client invoice view with pay button |
+| `templates/emails/client_magic_link.html` | Magic link email template |
+| `templates/billing/stripe_connect_status.html` | Stripe Connect management page |
 
 ---
 

@@ -189,17 +189,29 @@ def stripe_webhook(request):
         invoice = event['data']['object']
         handle_payment_failed(invoice)
 
+    # Stripe Connect events
+    elif event['type'] == 'account.updated':
+        account = event['data']['object']
+        handle_connect_account_updated(account)
+
     return JsonResponse({'status': 'success'})
 
 
 def handle_checkout_completed(session):
-    """Handle successful checkout (subscriptions and credit purchases)."""
+    """Handle successful checkout (subscriptions, credit purchases, and client payments)."""
     from apps.accounts.models import CustomUser
     from .models import CreditPurchase
 
     metadata = session.get('metadata', {})
-    user_id = metadata.get('user_id')
 
+    # Check if this is a client portal payment
+    if metadata.get('type') == 'client_portal_payment':
+        from .services.stripe_connect import StripeConnectService
+        service = StripeConnectService()
+        service.handle_checkout_completed(session)
+        return
+
+    user_id = metadata.get('user_id')
     if not user_id:
         return
 
@@ -296,6 +308,13 @@ def handle_payment_failed(invoice):
         user.save()
     except CustomUser.DoesNotExist:
         pass
+
+
+def handle_connect_account_updated(account):
+    """Handle Stripe Connect account updates."""
+    from .services.stripe_connect import StripeConnectService
+    service = StripeConnectService()
+    service.handle_account_updated(account)
 
 
 # Credit Purchase Views
@@ -404,3 +423,145 @@ class CreditPurchaseSuccessView(LoginRequiredMixin, TemplateView):
         context['recent_purchase'] = recent_purchase
 
         return context
+
+
+# ============================================================================
+# Stripe Connect Views (for businesses to receive payments)
+# ============================================================================
+
+class StripeConnectStatusView(LoginRequiredMixin, TemplateView):
+    """View Stripe Connect status and manage connection."""
+    template_name = 'billing/stripe_connect_status.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Get or create company for user
+        try:
+            company = self.request.user.company
+        except:
+            company = None
+
+        if company:
+            from .services.stripe_connect import StripeConnectService
+            service = StripeConnectService()
+            status = service.get_account_status(company)
+            context['connect_status'] = status
+            context['company'] = company
+        else:
+            context['connect_status'] = {'connected': False}
+            context['company'] = None
+
+        return context
+
+
+@login_required
+def stripe_connect_start(request):
+    """Start Stripe Connect onboarding."""
+    try:
+        company = request.user.company
+    except:
+        messages.error(request, 'Please create a company profile first.')
+        return redirect('companies:settings')
+
+    from .services.stripe_connect import StripeConnectService
+    service = StripeConnectService()
+
+    return_url = request.build_absolute_uri('/billing/stripe-connect/return/')
+    refresh_url = request.build_absolute_uri('/billing/stripe-connect/refresh/')
+
+    result = service.create_account_link(company, return_url, refresh_url)
+
+    if result['success']:
+        return redirect(result['url'])
+    else:
+        messages.error(request, result.get('error', 'Unable to start Stripe Connect.'))
+        return redirect('billing:stripe_connect_status')
+
+
+@login_required
+def stripe_connect_return(request):
+    """Handle return from Stripe Connect onboarding."""
+    try:
+        company = request.user.company
+    except:
+        return redirect('billing:overview')
+
+    from .services.stripe_connect import StripeConnectService
+    service = StripeConnectService()
+
+    # Refresh account status
+    status = service.get_account_status(company)
+
+    if status.get('charges_enabled'):
+        messages.success(
+            request,
+            'Stripe Connect setup complete! You can now receive payments from clients.'
+        )
+    elif status.get('onboarding_complete'):
+        messages.info(
+            request,
+            'Your Stripe account is under review. You\'ll be able to accept payments once approved.'
+        )
+    else:
+        messages.warning(
+            request,
+            'Stripe Connect setup is incomplete. Please complete all required steps.'
+        )
+
+    return redirect('billing:stripe_connect_status')
+
+
+@login_required
+def stripe_connect_refresh(request):
+    """Handle expired onboarding link - create new one."""
+    return redirect('billing:stripe_connect_start')
+
+
+@login_required
+def stripe_connect_dashboard(request):
+    """Redirect to Stripe Express Dashboard."""
+    try:
+        company = request.user.company
+    except:
+        messages.error(request, 'No company found.')
+        return redirect('billing:overview')
+
+    if not company.stripe_connect_account_id:
+        messages.error(request, 'Please connect your Stripe account first.')
+        return redirect('billing:stripe_connect_status')
+
+    from .services.stripe_connect import StripeConnectService
+    service = StripeConnectService()
+
+    result = service.create_login_link(company)
+
+    if result['success']:
+        return redirect(result['url'])
+    else:
+        messages.error(request, result.get('error', 'Unable to access Stripe Dashboard.'))
+        return redirect('billing:stripe_connect_status')
+
+
+@login_required
+def stripe_connect_disconnect(request):
+    """Disconnect Stripe Connect account."""
+    if request.method != 'POST':
+        return redirect('billing:stripe_connect_status')
+
+    try:
+        company = request.user.company
+    except:
+        return redirect('billing:overview')
+
+    from .services.stripe_connect import StripeConnectService
+    service = StripeConnectService()
+
+    result = service.disconnect_account(company)
+
+    if result['success']:
+        messages.success(request, 'Stripe Connect account disconnected.')
+    else:
+        messages.error(request, result.get('error', 'Unable to disconnect account.'))
+
+    return redirect('billing:stripe_connect_status')

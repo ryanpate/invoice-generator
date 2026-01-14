@@ -67,6 +67,7 @@ Disallow: /dashboard/
 Disallow: /settings/
 Disallow: /billing/
 Disallow: /invoices/
+Disallow: /portal/
 
 # Allow search engines to crawl public pages
 Allow: /$
@@ -82,6 +83,7 @@ Allow: /terms/
 Allow: /api/docs/
 Allow: /blog/
 Allow: /templates/
+Allow: /portal/request-access/
 
 # Sitemap location
 Sitemap: https://www.invoicekits.com/sitemap.xml
@@ -102,6 +104,7 @@ urlpatterns = [
     # Main app URLs
     path('', include('apps.invoices.urls')),
     path('', include('apps.blog.urls')),
+    path('', include('apps.clients.urls')),  # Client Portal
     path('dashboard/', include('apps.accounts.urls')),
     path('billing/', include('apps.billing.urls')),
     path('settings/', include('apps.companies.urls')),

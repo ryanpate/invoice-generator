@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Account Statement</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 1in;
+        }
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            color: #333;
+            line-height: 1.4;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2563eb;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #2563eb;
+            margin: 0 0 5px 0;
+        }
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+        .client-info {
+            margin-bottom: 30px;
+        }
+        .client-info h2 {
+            font-size: 14px;
+            margin: 0 0 5px 0;
+        }
+        .client-info p {
+            margin: 0;
+            color: #666;
+        }
+        .summary-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid #e2e8f0;
+            font-weight: bold;
+        }
+        .summary-label {
+            color: #64748b;
+        }
+        .summary-value {
+            font-weight: 600;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th {
+            background-color: #f1f5f9;
+            padding: 8px;
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .status-paid {
+            color: #16a34a;
+            font-weight: 600;
+        }
+        .status-pending {
+            color: #ca8a04;
+            font-weight: 600;
+        }
+        .status-overdue {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 10px;
+        }
+        .date-range {
+            color: #64748b;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Account Statement</h1>
+        <p>Generated on {{ generated_at|date:"F d, Y" }}</p>
+        {% if start_date or end_date %}
+        <p class="date-range">
+            Period: {{ start_date|default:"Beginning" }} to {{ end_date|default:"Present" }}
+        </p>
+        {% endif %}
+    </div>
+
+    <div class="client-info">
+        <h2>{{ client.get_display_name }}</h2>
+        <p>{{ client.email }}</p>
+    </div>
+
+    <div class="summary-box">
+        <table style="margin: 0;">
+            <tr>
+                <td style="border: none; padding: 4px 0;">
+                    <span class="summary-label">Total Outstanding:</span>
+                </td>
+                <td style="border: none; padding: 4px 0; text-align: right;">
+                    <span class="summary-value">${{ total_outstanding|floatformat:2 }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: none; padding: 4px 0;">
+                    <span class="summary-label">Total Paid:</span>
+                </td>
+                <td style="border: none; padding: 4px 0; text-align: right;">
+                    <span class="summary-value">${{ total_paid|floatformat:2 }}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <h3 class="section-title">Invoices</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Invoice #</th>
+                <th>Company</th>
+                <th>Date</th>
+                <th>Due Date</th>
+                <th class="text-right">Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr>
+                <td>{{ invoice.invoice_number }}</td>
+                <td>{{ invoice.company.name }}</td>
+                <td>{{ invoice.invoice_date|date:"M d, Y" }}</td>
+                <td>{{ invoice.due_date|date:"M d, Y" }}</td>
+                <td class="text-right">${{ invoice.total|floatformat:2 }}</td>
+                <td>
+                    <span class="status-{{ invoice.status }}">{{ invoice.status|title }}</span>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: #94a3b8;">No invoices found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if payments %}
+    <h3 class="section-title">Payments</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Invoice #</th>
+                <th>Company</th>
+                <th class="text-right">Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td>{{ payment.completed_at|date:"M d, Y" }}</td>
+                <td>{{ payment.invoice.invoice_number }}</td>
+                <td>{{ payment.invoice.company.name }}</td>
+                <td class="text-right">${{ payment.amount|floatformat:2 }}</td>
+                <td>
+                    <span class="status-paid">{{ payment.status|title }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <div class="footer">
+        <p>This statement was generated by InvoiceKits - www.invoicekits.com</p>
+    </div>
+</body>
+</html>

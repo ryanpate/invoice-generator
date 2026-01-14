@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block title %}Stripe Connect - Receive Payments{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <a href="{% url 'billing:overview' %}" class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Back to Billing
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Receive Client Payments</h1>
+        <p class="text-gray-600 dark:text-gray-400 mt-1">Connect your Stripe account to receive payments directly from clients</p>
+    </div>
+
+    {% if not company %}
+    <!-- No Company -->
+    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6">
+        <div class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <div>
+                <h3 class="font-medium text-yellow-800 dark:text-yellow-300">Company Profile Required</h3>
+                <p class="text-sm text-yellow-700 dark:text-yellow-400 mt-1">Please set up your company profile before connecting Stripe.</p>
+                <a href="{% url 'companies:settings' %}" class="inline-flex items-center mt-3 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition text-sm font-medium">
+                    Set Up Company
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% elif connect_status.charges_enabled %}
+    <!-- Connected and Active -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Stripe Connected</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">You can receive payments from clients</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase mb-2">Account Status</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">Charges enabled</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        {% if connect_status.payouts_enabled %}
+                        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">Payouts enabled</span>
+                        {% else %}
+                        <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700 dark:text-gray-300">Payouts pending verification</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase mb-2">Connected Since</h3>
+                <p class="text-sm text-gray-700 dark:text-gray-300">
+                    {{ company.stripe_connect_connected_at|date:"F d, Y" }}
+                </p>
+            </div>
+        </div>
+
+        <div class="p-6 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex flex-wrap gap-3">
+                <a href="{% url 'billing:stripe_connect_dashboard' %}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition text-sm font-medium">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                    Stripe Dashboard
+                </a>
+                <form method="post" action="{% url 'billing:stripe_connect_disconnect' %}" class="inline" onsubmit="return confirm('Are you sure you want to disconnect your Stripe account? Clients will no longer be able to pay invoices online.');">
+                    {% csrf_token %}
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition text-sm font-medium">
+                        Disconnect Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% elif connect_status.connected %}
+    <!-- Connected but not fully set up -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Setup Incomplete</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Please complete your Stripe onboarding to receive payments</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                Your Stripe account is connected but requires additional information before you can accept payments.
+            </p>
+            <a href="{% url 'billing:stripe_connect_start' %}" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition text-sm font-medium">
+                Complete Setup
+            </a>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Not Connected -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+        <div class="p-8 text-center">
+            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Connect Stripe</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                Connect your Stripe account to let clients pay invoices online. Payments go directly to your bank account.
+            </p>
+            <a href="{% url 'billing:stripe_connect_start' %}" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                </svg>
+                Connect with Stripe
+            </a>
+        </div>
+
+        <div class="p-6 bg-gray-50 dark:bg-gray-700/50 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="font-medium text-gray-900 dark:text-white mb-4">How it works</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-primary-600 dark:text-primary-400 font-semibold text-sm">1</span>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900 dark:text-white text-sm">Connect Account</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Link your existing Stripe account or create a new one</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-primary-600 dark:text-primary-400 font-semibold text-sm">2</span>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900 dark:text-white text-sm">Clients Pay Online</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Clients can pay invoices via the Client Portal</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-primary-600 dark:text-primary-400 font-semibold text-sm">3</span>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-gray-900 dark:text-white text-sm">Get Paid</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Funds are deposited directly to your bank</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

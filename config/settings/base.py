@@ -50,6 +50,7 @@ LOCAL_APPS = [
     'apps.billing',
     'apps.api',
     'apps.blog',
+    'apps.clients',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -303,6 +304,12 @@ CREDIT_PACKS = {
         'popular': False,
     },
 }
+
+# Client Portal Configuration
+CLIENT_PORTAL_MAGIC_LINK_EXPIRY_MINUTES = 30  # Magic link expires after 30 minutes
+CLIENT_PORTAL_SESSION_EXPIRY_DAYS = 30  # Session expires after 30 days
+CLIENT_PORTAL_MAGIC_LINK_RATE_LIMIT = 5  # Max magic links per email per hour
+CLIENT_PORTAL_PLATFORM_FEE_PERCENT = 0  # Optional platform fee on payments (0 = no fee)
 
 # Invoice Templates
 INVOICE_TEMPLATES = {

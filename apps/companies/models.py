@@ -90,6 +90,31 @@ class Company(models.Model):
         help_text='Hex color code for invoice accent color'
     )
 
+    # Stripe Connect (for receiving client payments)
+    stripe_connect_account_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        help_text='Stripe Connect account ID for receiving payments'
+    )
+    stripe_connect_onboarding_complete = models.BooleanField(
+        default=False,
+        help_text='Whether Stripe Connect onboarding is complete'
+    )
+    stripe_connect_charges_enabled = models.BooleanField(
+        default=False,
+        help_text='Whether the account can accept charges'
+    )
+    stripe_connect_payouts_enabled = models.BooleanField(
+        default=False,
+        help_text='Whether the account can receive payouts'
+    )
+    stripe_connect_connected_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='When Stripe Connect was connected'
+    )
+
     # Invoice numbering
     invoice_prefix = models.CharField(
         max_length=10,
