@@ -1,6 +1,7 @@
 """
 Invoice models for InvoiceKits.
 """
+import uuid
 from decimal import Decimal
 from django.db import models
 from django.conf import settings
@@ -74,6 +75,14 @@ class Invoice(models.Model):
         upload_to='invoices/pdfs/%Y/%m/',
         blank=True,
         null=True
+    )
+
+    # Public access token for QR code links
+    public_token = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+        help_text='Unique token for public invoice access'
     )
 
     # Timestamps
@@ -161,6 +170,11 @@ class Invoice(models.Model):
         """Mark invoice as paid."""
         self.status = 'paid'
         self.save(update_fields=['status', 'updated_at'])
+
+    def get_public_url(self):
+        """Get public URL for this invoice (used in QR codes)."""
+        site_url = getattr(settings, 'SITE_URL', 'https://www.invoicekits.com')
+        return f"{site_url}/invoice/{self.public_token}/"
 
 
 class LineItem(models.Model):

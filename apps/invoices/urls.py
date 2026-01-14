@@ -51,4 +51,9 @@ urlpatterns = [
     path('invoices/recurring/<int:pk>/delete/', views.RecurringInvoiceDeleteView.as_view(), name='recurring_delete'),
     path('invoices/recurring/<int:pk>/toggle-status/', views.recurring_toggle_status, name='recurring_toggle_status'),
     path('invoices/recurring/<int:pk>/generate-now/', views.recurring_generate_now, name='recurring_generate_now'),
+
+    # Public invoice views (for QR code links - no auth required)
+    path('invoice/<uuid:token>/', views.PublicInvoiceView.as_view(), name='public_invoice'),
+    path('invoice/<uuid:token>/mark-paid/', views.PublicInvoiceMarkPaidView.as_view(), name='public_mark_paid'),
+    path('invoice/<uuid:token>/pdf/', views.public_invoice_pdf, name='public_invoice_pdf'),
 ]

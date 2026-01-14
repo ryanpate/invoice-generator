@@ -179,6 +179,28 @@
             font-size: 9pt;
             color: #9CA3AF;
         }
+        .qr-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #F9FAFB;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .qr-code {
+            width: 80px;
+            height: 80px;
+        }
+        .qr-text {
+            margin-left: 15px;
+            font-size: 9pt;
+            color: #6B7280;
+        }
+        .qr-text strong {
+            display: block;
+            color: #7C3AED;
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 <body>
@@ -267,6 +289,16 @@
     <div class="notes">
         <h3>Notes</h3>
         <p>{{ invoice.notes|linebreaksbr }}</p>
+    </div>
+    {% endif %}
+
+    {% if qr_code_image %}
+    <div class="qr-section">
+        <img src="{{ qr_code_image }}" class="qr-code" alt="QR Code">
+        <div class="qr-text">
+            <strong>Scan to View Invoice</strong>
+            View this invoice online or mark as paid
+        </div>
     </div>
     {% endif %}
 

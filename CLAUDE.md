@@ -44,6 +44,7 @@
 - Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
 - Competitor comparison page (`/compare/`)
 - Template showcase pages (`/templates/clean-slate/`, `/templates/executive/`, `/templates/bold-modern/`, `/templates/classic-professional/`, `/templates/neon-edge/`)
+- QR code on invoice PDFs linking to public invoice view page (available to all users)
 - **Hybrid Credits + Subscriptions billing model:**
   - Credit system for pay-as-you-go users (5 free lifetime credits on signup)
   - Credit packs: 10 credits ($9), 25 credits ($19), 50 credits ($35)
@@ -102,7 +103,7 @@
 - [ ] **Enterprise Tier:** Custom pricing, white-label, dedicated support
 - [ ] **Premium Templates:** Individual template purchases ($4.99 each)
 - [ ] **Affiliate Program:** Referral tracking (20% commission)
-- [ ] **QR Code for Payment:** Optional on invoices
+- [x] **QR Code on Invoice PDFs:** Links to public invoice page for viewing and marking as paid - COMPLETED
 - [ ] **Digital Signature Field:** On invoice PDFs
 - [x] **Recurring Invoices:** Auto-generate invoices on schedule - COMPLETED (requires Celery/Redis deployment)
 - [ ] **Client Portal:** Allow clients to view/pay invoices online
@@ -280,7 +281,8 @@ invoice_generator/
 | `apps/accounts/signals.py` | Welcome email signal handler (user_signed_up) |
 | `apps/invoices/models.py` | Invoice model with invoice_name field |
 | `apps/invoices/forms.py` | InvoiceForm with invoice_name field |
-| `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation with watermark |
+| `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation with watermark + QR code |
+| `templates/invoices/public_view.html` | Public invoice view page (for QR code links) |
 | `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
 | `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
 | `apps/billing/models.py` | CreditPurchase model for tracking credit pack purchases |
@@ -374,6 +376,13 @@ invoice_generator/
 | `/templates/bold-modern/` | Bold Modern template showcase |
 | `/templates/classic-professional/` | Classic Professional template showcase |
 | `/templates/neon-edge/` | Neon Edge template showcase |
+
+### Public Invoice URLs (No Auth Required)
+| URL | Purpose |
+|-----|---------|
+| `/invoice/<uuid>/` | Public invoice view (from QR code) |
+| `/invoice/<uuid>/mark-paid/` | Mark invoice as paid (POST) |
+| `/invoice/<uuid>/pdf/` | Download PDF from public view |
 
 ### Blog Posts (Live)
 | URL | Title | Target Keyword |
@@ -473,6 +482,7 @@ All templates support:
 - Tax calculations
 - Notes section
 - "FREE PLAN" watermark (for free tier users)
+- QR code linking to public invoice view page
 
 ---
 
@@ -601,6 +611,13 @@ Authentication: API Key in header `X-API-Key: <key>`
 107. Added Bing Webmaster Tools verification endpoint at `/BingSiteAuth.xml`
 108. Changed template showcase schema from `Product` to `CreativeWork` on all 5 pages (fixes GSC warnings for missing shippingDetails and hasMerchantReturnPolicy - not applicable to digital templates)
 109. Changed pricing page schema from `Product` to `Service` with full OfferCatalog (includes all credit packs and subscriptions, fixes same GSC warnings)
+110. Added QR code feature to invoice PDFs - links to public invoice view page where clients can view invoice details and mark as paid
+111. Added `public_token` UUID field to Invoice model for secure public access
+112. Created public invoice views (PublicInvoiceView, PublicInvoiceMarkPaidView, public_invoice_pdf)
+113. Added QR code generation using qrcode library (base64 data URI embedded in PDF)
+114. Created public invoice template with Tailwind CSS styling
+115. Added QR code section to all 5 PDF templates with template-appropriate styling
+116. Updated robots.txt to disallow `/invoice/` path (public invoice pages not indexed)
 
 ---
 

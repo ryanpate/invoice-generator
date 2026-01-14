@@ -205,6 +205,29 @@
             font-size: 9pt;
             color: #475569;
         }
+        .qr-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1E293B;
+            border-left: 2px solid #22D3EE;
+            display: flex;
+            align-items: center;
+        }
+        .qr-code {
+            width: 80px;
+            height: 80px;
+            filter: invert(1);
+        }
+        .qr-text {
+            margin-left: 15px;
+            font-size: 9pt;
+            color: #94A3B8;
+        }
+        .qr-text strong {
+            display: block;
+            color: #22D3EE;
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 <body>
@@ -306,6 +329,16 @@
         <div class="footer">
             // GENERATED {{ invoice.created_at|date:"Y.m.d H:i" }} //
         </div>
+
+        {% if qr_code_image %}
+        <div class="qr-section">
+            <img src="{{ qr_code_image }}" class="qr-code" alt="QR Code">
+            <div class="qr-text">
+                <strong>// SCAN TO VIEW //</strong>
+                View invoice online or mark as paid
+            </div>
+        </div>
+        {% endif %}
 
         {% if show_watermark %}
         <div class="watermark-container">

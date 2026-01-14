@@ -1,11 +1,19 @@
 """
 PDF generation service using xhtml2pdf.
 """
+import io
+import base64
 from io import BytesIO
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.files.base import ContentFile
 from xhtml2pdf import pisa
+
+try:
+    import qrcode
+    HAS_QRCODE = True
+except ImportError:
+    HAS_QRCODE = False
 
 
 class InvoicePDFGenerator:
@@ -62,6 +70,41 @@ class InvoicePDFGenerator:
             self.TEMPLATE_STYLES['clean_slate']
         )
 
+    def generate_qr_code(self):
+        """Generate QR code for invoice public URL as base64 data URI."""
+        if not HAS_QRCODE:
+            return None
+
+        # Check if invoice has public_token (for existing invoices before migration)
+        if not hasattr(self.invoice, 'public_token') or not self.invoice.public_token:
+            return None
+
+        try:
+            url = self.invoice.get_public_url()
+
+            # Create QR code with appropriate settings for small size
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=8,
+                border=2,
+            )
+            qr.add_data(url)
+            qr.make(fit=True)
+
+            # Create image
+            img = qr.make_image(fill_color="black", back_color="white")
+
+            # Convert to base64 data URI
+            buffer = io.BytesIO()
+            img.save(buffer, format='PNG')
+            img_str = base64.b64encode(buffer.getvalue()).decode()
+
+            return f"data:image/png;base64,{img_str}"
+        except Exception:
+            # If QR code generation fails, return None (PDF will just not have QR)
+            return None
+
     def get_context(self):
         """Build context for PDF template."""
         # Use company's accent color if set
@@ -77,6 +120,7 @@ class InvoicePDFGenerator:
             },
             'show_watermark': self.company.user.shows_watermark(),
             'currency_symbol': self.invoice.get_currency_symbol(),
+            'qr_code_image': self.generate_qr_code(),
         }
 
     def generate(self):

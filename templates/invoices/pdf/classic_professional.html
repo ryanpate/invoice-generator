@@ -169,6 +169,28 @@
             font-size: 9pt;
             color: #9CA3AF;
         }
+        .qr-section {
+            margin-top: 30px;
+            padding: 15px;
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+        }
+        .qr-code {
+            width: 80px;
+            height: 80px;
+        }
+        .qr-text {
+            margin-left: 15px;
+            font-size: 9pt;
+            color: #6B7280;
+        }
+        .qr-text strong {
+            display: block;
+            color: #059669;
+            margin-bottom: 4px;
+        }
     </style>
 </head>
 <body>
@@ -265,6 +287,16 @@
     <div class="footer">
         Thank you for your business. Please remit payment by the due date.
     </div>
+
+    {% if qr_code_image %}
+    <div class="qr-section">
+        <img src="{{ qr_code_image }}" class="qr-code" alt="QR Code">
+        <div class="qr-text">
+            <strong>Scan to View Invoice</strong>
+            View this invoice online or mark as paid
+        </div>
+    </div>
+    {% endif %}
 
     {% if show_watermark %}
     <div class="watermark-container">

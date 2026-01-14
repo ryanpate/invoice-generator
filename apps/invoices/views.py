@@ -4,7 +4,7 @@ Views for invoices app.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, FormView, View
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse, JsonResponse, FileResponse
@@ -799,3 +799,68 @@ def recurring_generate_now(request, pk):
     except Exception as e:
         messages.error(request, f'Failed to generate invoice: {str(e)}')
         return redirect('invoices:recurring_detail', pk=pk)
+
+
+# =============================================================================
+# Public Invoice Views (for QR code links - no auth required)
+# =============================================================================
+
+class PublicInvoiceView(DetailView):
+    """Public invoice view accessible via QR code link."""
+    model = Invoice
+    template_name = 'invoices/public_view.html'
+    context_object_name = 'invoice'
+    slug_field = 'public_token'
+    slug_url_kwarg = 'token'
+
+    def get_queryset(self):
+        return Invoice.objects.select_related('company').prefetch_related('line_items')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = self.object.company
+        context['line_items'] = self.object.line_items.all()
+        return context
+
+
+class PublicInvoiceMarkPaidView(View):
+    """Allow clients to mark invoice as paid from public view."""
+
+    def post(self, request, token):
+        invoice = get_object_or_404(Invoice, public_token=token)
+
+        # Only allow marking as paid if not already paid or cancelled
+        if invoice.status in ['paid', 'cancelled']:
+            return JsonResponse({
+                'success': False,
+                'error': 'Invoice is already paid or cancelled'
+            }, status=400)
+
+        invoice.mark_as_paid()
+
+        # Check if request is AJAX
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': 'Invoice marked as paid'
+            })
+
+        # For non-AJAX, redirect back to public view
+        return redirect('invoices:public_invoice', token=token)
+
+
+def public_invoice_pdf(request, token):
+    """Download PDF from public invoice view."""
+    invoice = get_object_or_404(Invoice, public_token=token)
+
+    from .services.pdf_generator import InvoicePDFGenerator
+
+    try:
+        generator = InvoicePDFGenerator(invoice)
+        pdf_bytes = generator.generate()
+    except RuntimeError as e:
+        return HttpResponse(f'Error generating PDF: {str(e)}', status=500)
+
+    response = HttpResponse(pdf_bytes, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{invoice.invoice_number}.pdf"'
+    return response
