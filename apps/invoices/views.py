@@ -148,6 +148,26 @@ class NeonEdgeShowcaseView(TemplateShowcaseView):
     template_name = 'showcase/neon-edge.html'
 
 
+# Free Tools Views
+class FreeToolView(TemplateView):
+    """Base view for free SEO tools."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+        return context
+
+
+class InvoiceCalculatorView(FreeToolView):
+    """Invoice calculator tool - calculates invoice totals with line items or hourly rates."""
+    template_name = 'tools/invoice-calculator.html'
+
+
+class LateFeeCalculatorView(FreeToolView):
+    """Late fee calculator tool - calculates late payment fees and interest."""
+    template_name = 'tools/late-fee-calculator.html'
+
+
 class InvoiceListView(LoginRequiredMixin, TeamAwareQuerysetMixin, ListView):
     """List all invoices for the current user's company (including team members)."""
     model = Invoice

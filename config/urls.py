@@ -26,6 +26,7 @@ class StaticViewSitemap(Sitemap):
             '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/',
             '/templates/clean-slate/', '/templates/executive/', '/templates/bold-modern/',
             '/templates/classic-professional/', '/templates/neon-edge/',
+            '/tools/invoice-calculator/', '/tools/late-fee-calculator/',
         ]
 
     def location(self, item):
@@ -83,6 +84,7 @@ Allow: /terms/
 Allow: /api/docs/
 Allow: /blog/
 Allow: /templates/
+Allow: /tools/
 Allow: /portal/request-access/
 
 # Sitemap location

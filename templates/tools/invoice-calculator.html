@@ -1,0 +1,498 @@
+{% extends 'base.html' %}
+
+{% block title %}Free Invoice Calculator - Calculate Invoice Totals Instantly | InvoiceKits{% endblock %}
+
+{% block meta_description %}Free online invoice calculator. Add line items, calculate subtotals, apply tax and discounts, get instant totals. Supports hourly rates. No signup required.{% endblock %}
+
+{% block meta_keywords %}invoice calculator, calculate invoice total, invoice tax calculator, free invoice calculator, invoice total calculator, hourly rate calculator{% endblock %}
+
+{% block canonical_url %}https://www.invoicekits.com/tools/invoice-calculator/{% endblock %}
+
+{% block og_title %}Free Invoice Calculator - Calculate Invoice Totals Instantly | InvoiceKits{% endblock %}
+
+{% block og_description %}Free online invoice calculator. Add line items, apply tax and discounts, calculate totals instantly. No signup required.{% endblock %}
+
+{% block twitter_title %}Free Invoice Calculator | InvoiceKits{% endblock %}
+
+{% block twitter_description %}Calculate invoice totals instantly. Add line items, apply tax and discounts. Free, no signup required.{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.invoicekits.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Free Tools",
+            "item": "https://www.invoicekits.com/tools/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Invoice Calculator",
+            "item": "https://www.invoicekits.com/tools/invoice-calculator/"
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Invoice Calculator",
+    "description": "Free online invoice calculator to calculate invoice totals with line items, tax, and discounts",
+    "url": "https://www.invoicekits.com/tools/invoice-calculator/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "provider": {
+        "@type": "Organization",
+        "name": "InvoiceKits",
+        "url": "https://www.invoicekits.com"
+    }
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "How do I use the invoice calculator?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Simply add line items with descriptions, quantities, and rates. The calculator automatically computes subtotals. Then add tax percentage and any discounts to get your final invoice total."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I calculate hourly billing?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Switch to Hourly Mode and enter your hourly rate and hours worked. The calculator will compute your subtotal, then you can apply tax and discounts."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is this invoice calculator free?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, this invoice calculator is completely free to use. No signup or credit card required. Use it as many times as you need."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How do I add tax to my invoice?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Enter your tax rate as a percentage (e.g., 8.25 for 8.25% sales tax). The calculator automatically applies tax to your subtotal."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I apply discounts?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! You can apply either a percentage discount or a flat dollar amount discount. The discount is applied before tax is calculated."
+            }
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-primary-600 to-primary-800 overflow-hidden">
+    <div class="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <!-- Breadcrumb -->
+        <nav class="mb-6">
+            <ol class="flex items-center space-x-2 text-sm text-primary-200">
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">Home</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li><span>Free Tools</span></li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-white">Invoice Calculator</li>
+            </ol>
+        </nav>
+
+        <div class="text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Free Invoice Calculator
+            </h1>
+            <p class="text-lg text-primary-100 max-w-2xl mx-auto">
+                Calculate invoice totals instantly. Add line items, apply tax and discounts,
+                switch between itemized and hourly billing modes.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Calculator Section -->
+<section class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8">
+
+            <!-- Mode Toggle -->
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-lg bg-gray-100 dark:bg-gray-700 p-1">
+                    <button type="button" id="mode-simple" onclick="switchMode('simple')"
+                            class="px-6 py-2 text-sm font-medium rounded-md transition-colors bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow">
+                        Line Items
+                    </button>
+                    <button type="button" id="mode-hourly" onclick="switchMode('hourly')"
+                            class="px-6 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-300">
+                        Hourly Rate
+                    </button>
+                </div>
+            </div>
+
+            <!-- Simple Mode (Line Items) -->
+            <div id="simple-mode">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Line Items</h2>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full" id="line-items-table">
+                        <thead>
+                            <tr class="text-left text-sm text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
+                                <th class="pb-3 font-medium">Description</th>
+                                <th class="pb-3 font-medium w-24">Qty</th>
+                                <th class="pb-3 font-medium w-32">Rate ($)</th>
+                                <th class="pb-3 font-medium w-32 text-right">Amount</th>
+                                <th class="pb-3 w-12"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="line-items-body">
+                            <tr class="line-item border-b dark:border-gray-700">
+                                <td class="py-3 pr-2">
+                                    <input type="text" placeholder="Item description"
+                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </td>
+                                <td class="py-3 pr-2">
+                                    <input type="number" value="1" min="0" step="0.01" onchange="calculateTotals()"
+                                           class="qty-input w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </td>
+                                <td class="py-3 pr-2">
+                                    <input type="number" value="0" min="0" step="0.01" onchange="calculateTotals()"
+                                           class="rate-input w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </td>
+                                <td class="py-3 text-right font-medium text-gray-900 dark:text-white line-amount">$0.00</td>
+                                <td class="py-3 pl-2">
+                                    <button type="button" onclick="removeLineItem(this)" class="text-red-500 hover:text-red-700 p-1">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button type="button" onclick="addLineItem()"
+                        class="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Add Line Item
+                </button>
+            </div>
+
+            <!-- Hourly Mode -->
+            <div id="hourly-mode" class="hidden">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Hourly Billing</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hourly Rate ($)</label>
+                        <input type="number" id="hourly-rate" value="0" min="0" step="0.01" onchange="calculateTotals()"
+                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hours Worked</label>
+                        <input type="number" id="hours-worked" value="0" min="0" step="0.25" onchange="calculateTotals()"
+                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr class="my-8 border-gray-200 dark:border-gray-700">
+
+            <!-- Tax & Discount -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Discount</label>
+                    <div class="flex">
+                        <input type="number" id="discount-value" value="0" min="0" step="0.01" onchange="calculateTotals()"
+                               class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                        <select id="discount-type" onchange="calculateTotals()"
+                                class="px-4 py-3 border-l-0 border border-gray-300 dark:border-gray-600 rounded-r-lg bg-gray-50 dark:bg-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <option value="percent">%</option>
+                            <option value="flat">$</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tax Rate (%)</label>
+                    <input type="number" id="tax-rate" value="0" min="0" max="100" step="0.01" onchange="calculateTotals()"
+                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                <div class="space-y-3">
+                    <div class="flex justify-between text-gray-600 dark:text-gray-300">
+                        <span>Subtotal</span>
+                        <span id="result-subtotal" class="font-medium">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600 dark:text-gray-300">
+                        <span>Discount</span>
+                        <span id="result-discount" class="font-medium text-green-600 dark:text-green-400">-$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600 dark:text-gray-300">
+                        <span>Tax (<span id="result-tax-rate">0</span>%)</span>
+                        <span id="result-tax" class="font-medium">$0.00</span>
+                    </div>
+                    <hr class="border-gray-300 dark:border-gray-600">
+                    <div class="flex justify-between text-xl font-bold text-gray-900 dark:text-white">
+                        <span>Total</span>
+                        <span id="result-total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                <button type="button" onclick="window.print()"
+                        class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                    </svg>
+                    Print Results
+                </button>
+                <a href="{% url 'account_signup' %}"
+                   class="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Create a Real Invoice
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How to Use Section -->
+<section class="py-16 bg-white dark:bg-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">How to Use the Invoice Calculator</h2>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="text-center">
+                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-400">1</span>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Add Line Items</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Enter your products or services with quantities and rates. Use Hourly Mode for time-based billing.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-400">2</span>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Apply Tax & Discounts</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Add your local tax rate and any discounts (percentage or flat amount).</p>
+            </div>
+            <div class="text-center">
+                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-xl font-bold text-primary-600 dark:text-primary-400">3</span>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Get Your Total</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">See your invoice total instantly. Print the results or create a real invoice.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Frequently Asked Questions</h2>
+
+        <div class="space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How do I use the invoice calculator?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Simply add line items with descriptions, quantities, and rates. The calculator automatically computes subtotals. Then add tax percentage and any discounts to get your final invoice total.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I calculate hourly billing?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Yes! Switch to Hourly Mode and enter your hourly rate and hours worked. The calculator will compute your subtotal, then you can apply tax and discounts.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Is this invoice calculator free?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Yes, this invoice calculator is completely free to use. No signup or credit card required. Use it as many times as you need.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How do I add tax to my invoice?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Enter your tax rate as a percentage (e.g., 8.25 for 8.25% sales tax). The calculator automatically applies tax to your subtotal after any discounts.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I apply discounts?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Yes! You can apply either a percentage discount or a flat dollar amount discount. The discount is applied to the subtotal before tax is calculated.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-primary-600">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">Need to Create Real Invoices?</h2>
+        <p class="text-primary-100 mb-8 max-w-2xl mx-auto">Turn your calculations into professional PDF invoices. Track payments, send reminders, and get paid faster with InvoiceKits.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Start Free - 5 Invoices Included
+            </a>
+            <a href="{% url 'invoices:late_fee_calculator' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
+                Try Late Fee Calculator
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+let currentMode = 'simple';
+
+function switchMode(mode) {
+    currentMode = mode;
+    const simpleMode = document.getElementById('simple-mode');
+    const hourlyMode = document.getElementById('hourly-mode');
+    const btnSimple = document.getElementById('mode-simple');
+    const btnHourly = document.getElementById('mode-hourly');
+
+    if (mode === 'simple') {
+        simpleMode.classList.remove('hidden');
+        hourlyMode.classList.add('hidden');
+        btnSimple.classList.add('bg-white', 'dark:bg-gray-600', 'text-gray-900', 'dark:text-white', 'shadow');
+        btnSimple.classList.remove('text-gray-600', 'dark:text-gray-300');
+        btnHourly.classList.remove('bg-white', 'dark:bg-gray-600', 'text-gray-900', 'dark:text-white', 'shadow');
+        btnHourly.classList.add('text-gray-600', 'dark:text-gray-300');
+    } else {
+        simpleMode.classList.add('hidden');
+        hourlyMode.classList.remove('hidden');
+        btnHourly.classList.add('bg-white', 'dark:bg-gray-600', 'text-gray-900', 'dark:text-white', 'shadow');
+        btnHourly.classList.remove('text-gray-600', 'dark:text-gray-300');
+        btnSimple.classList.remove('bg-white', 'dark:bg-gray-600', 'text-gray-900', 'dark:text-white', 'shadow');
+        btnSimple.classList.add('text-gray-600', 'dark:text-gray-300');
+    }
+    calculateTotals();
+}
+
+function addLineItem() {
+    const tbody = document.getElementById('line-items-body');
+    const row = document.createElement('tr');
+    row.className = 'line-item border-b dark:border-gray-700';
+    row.innerHTML = `
+        <td class="py-3 pr-2">
+            <input type="text" placeholder="Item description"
+                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+        </td>
+        <td class="py-3 pr-2">
+            <input type="number" value="1" min="0" step="0.01" onchange="calculateTotals()"
+                   class="qty-input w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+        </td>
+        <td class="py-3 pr-2">
+            <input type="number" value="0" min="0" step="0.01" onchange="calculateTotals()"
+                   class="rate-input w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+        </td>
+        <td class="py-3 text-right font-medium text-gray-900 dark:text-white line-amount">$0.00</td>
+        <td class="py-3 pl-2">
+            <button type="button" onclick="removeLineItem(this)" class="text-red-500 hover:text-red-700 p-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+            </button>
+        </td>
+    `;
+    tbody.appendChild(row);
+}
+
+function removeLineItem(button) {
+    const rows = document.querySelectorAll('.line-item');
+    if (rows.length > 1) {
+        button.closest('tr').remove();
+        calculateTotals();
+    }
+}
+
+function formatCurrency(amount) {
+    return '$' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function calculateTotals() {
+    let subtotal = 0;
+
+    if (currentMode === 'simple') {
+        const rows = document.querySelectorAll('.line-item');
+        rows.forEach(row => {
+            const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
+            const rate = parseFloat(row.querySelector('.rate-input').value) || 0;
+            const amount = qty * rate;
+            row.querySelector('.line-amount').textContent = formatCurrency(amount);
+            subtotal += amount;
+        });
+    } else {
+        const hourlyRate = parseFloat(document.getElementById('hourly-rate').value) || 0;
+        const hoursWorked = parseFloat(document.getElementById('hours-worked').value) || 0;
+        subtotal = hourlyRate * hoursWorked;
+    }
+
+    // Calculate discount
+    const discountValue = parseFloat(document.getElementById('discount-value').value) || 0;
+    const discountType = document.getElementById('discount-type').value;
+    let discount = 0;
+
+    if (discountType === 'percent') {
+        discount = subtotal * (discountValue / 100);
+    } else {
+        discount = discountValue;
+    }
+
+    const afterDiscount = subtotal - discount;
+
+    // Calculate tax
+    const taxRate = parseFloat(document.getElementById('tax-rate').value) || 0;
+    const tax = afterDiscount * (taxRate / 100);
+
+    // Calculate total
+    const total = afterDiscount + tax;
+
+    // Update display
+    document.getElementById('result-subtotal').textContent = formatCurrency(subtotal);
+    document.getElementById('result-discount').textContent = '-' + formatCurrency(discount);
+    document.getElementById('result-tax-rate').textContent = taxRate;
+    document.getElementById('result-tax').textContent = formatCurrency(tax);
+    document.getElementById('result-total').textContent = formatCurrency(total);
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    calculateTotals();
+});
+</script>
+{% endblock %}

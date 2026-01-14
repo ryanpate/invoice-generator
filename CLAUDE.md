@@ -72,6 +72,9 @@
   - Template store at `/billing/templates/`
   - Purchased templates persist indefinitely
   - Subscription tiers (Pro/Business) include all templates automatically
+- **Free SEO Tools (no login required):**
+  - Invoice Calculator (`/tools/invoice-calculator/`) - Line items mode & hourly rate mode, tax/discount, live totals
+  - Late Fee Calculator (`/tools/late-fee-calculator/`) - Flat fee, percentage, compound interest, payment terms presets
 
 ### Suppressed/Disabled Features
 
@@ -192,7 +195,7 @@
 - [x] **FAQ Schema:** Add FAQ structured data to pricing and help pages - COMPLETED
 - [ ] **Video Tutorials:** Create YouTube content, embed on site
 - [ ] **Industry Reports:** "State of Freelance Invoicing 2026"
-- [ ] **Free Tools:** Invoice calculator, late fee calculator
+- [x] **Free Tools:** Invoice calculator, late fee calculator - COMPLETED
 - [ ] **Affiliate Program:** Incentivize backlinks
 - [ ] **Core Web Vitals:** Run PageSpeed Insights audit, optimize LCP/FID/CLS
 - [ ] **Dynamic Sitemap:** Add invoice public links (if public sharing enabled)
@@ -439,6 +442,8 @@ invoice_generator/
 | `/templates/bold-modern/` | Bold Modern template showcase |
 | `/templates/classic-professional/` | Classic Professional template showcase |
 | `/templates/neon-edge/` | Neon Edge template showcase |
+| `/tools/invoice-calculator/` | Free invoice calculator tool |
+| `/tools/late-fee-calculator/` | Free late fee calculator tool |
 
 ### Team Management URLs (Business Tier Only)
 | URL | Purpose |
@@ -719,6 +724,13 @@ Authentication: API Key in header `X-API-Key: <key>`
 136. Updated Stripe webhook handler for template purchase completion
 137. Created template store templates (templates.html, templates_success.html)
 138. Registered TemplatePurchase in admin with CreditPurchase
+139. Created Free SEO Tools: Invoice Calculator and Late Fee Calculator
+140. Added InvoiceCalculatorView and LateFeeCalculatorView to invoices/views.py
+141. Created `/tools/invoice-calculator/` with line items mode, hourly rate mode, tax/discount, live totals
+142. Created `/tools/late-fee-calculator/` with flat fee, percentage, compound interest, payment terms presets
+143. Added BreadcrumbList, WebApplication, and FAQPage JSON-LD schemas to both tool pages
+144. Added Free Tools section to footer navigation
+145. Updated sitemap and robots.txt to include `/tools/` URLs
 
 ---
 

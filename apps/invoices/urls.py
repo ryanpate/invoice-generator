@@ -22,6 +22,10 @@ urlpatterns = [
     path('templates/classic-professional/', views.ClassicProfessionalShowcaseView.as_view(), name='template_classic_professional'),
     path('templates/neon-edge/', views.NeonEdgeShowcaseView.as_view(), name='template_neon_edge'),
 
+    # Free tools (SEO pages - no auth required)
+    path('tools/invoice-calculator/', views.InvoiceCalculatorView.as_view(), name='invoice_calculator'),
+    path('tools/late-fee-calculator/', views.LateFeeCalculatorView.as_view(), name='late_fee_calculator'),
+
     # Invoice CRUD
     path('invoices/', views.InvoiceListView.as_view(), name='list'),
     path('invoices/create/', views.InvoiceCreateView.as_view(), name='create'),
