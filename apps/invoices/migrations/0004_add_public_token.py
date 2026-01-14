@@ -4,6 +4,14 @@ from django.db import migrations, models
 import uuid
 
 
+def generate_unique_tokens(apps, schema_editor):
+    """Generate unique public_token for each existing invoice."""
+    Invoice = apps.get_model('invoices', 'Invoice')
+    for invoice in Invoice.objects.all():
+        invoice.public_token = uuid.uuid4()
+        invoice.save(update_fields=['public_token'])
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -11,7 +19,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # Step 1: Add the field as nullable without unique constraint
         migrations.AddField(
+            model_name='invoice',
+            name='public_token',
+            field=models.UUIDField(null=True, editable=False, help_text='Unique token for public invoice access'),
+        ),
+        # Step 2: Generate unique tokens for existing invoices
+        migrations.RunPython(generate_unique_tokens, migrations.RunPython.noop),
+        # Step 3: Make field non-nullable with default for new invoices and add unique constraint
+        migrations.AlterField(
             model_name='invoice',
             name='public_token',
             field=models.UUIDField(default=uuid.uuid4, editable=False, help_text='Unique token for public invoice access', unique=True),
