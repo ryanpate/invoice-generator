@@ -536,6 +536,12 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 | `https://www.invoicekits.com/blog/small-business-invoicing-guide/` | Blog Post | Pending |
 | `https://www.invoicekits.com/blog/invoice-vs-receipt-difference/` | Blog Post | Pending |
 
+**Free Tools:**
+| URL | Page Type | Status |
+|-----|-----------|--------|
+| `https://www.invoicekits.com/tools/invoice-calculator/` | Free Tool | Pending |
+| `https://www.invoicekits.com/tools/late-fee-calculator/` | Free Tool | Pending |
+
 ### SEO TODOs
 - [x] Register with Google Search Console
 - [x] Add Google Analytics tracking (G-0NR5NZMNBF)
@@ -543,7 +549,7 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 - [x] Set up custom domain (www.invoicekits.com)
 - [x] Submit sitemap to Google Search Console - COMPLETED
 - [x] Request indexing for core public pages (/, /pricing/, /for-freelancers/, /privacy/, /terms/, /contact/, /help/, /api/docs/) - COMPLETED
-- [ ] **Request indexing for remaining 14 pages** (see URLs Pending section above)
+- [ ] **Request indexing for remaining 16 pages** (see URLs Pending section above)
 - [ ] Build quality backlinks (Product Hunt, directories)
 - [ ] Monitor Core Web Vitals via PageSpeed Insights
 
