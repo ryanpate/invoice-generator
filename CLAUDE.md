@@ -599,6 +599,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 105. Fixed robots.txt blocking `/api/docs/` - added explicit `Allow: /api/docs/` rule
 106. Fixed 500 error on `/for-small-business/` and `/for-consultants/` pages (invalid `pages:contact` URL reference)
 107. Added Bing Webmaster Tools verification endpoint at `/BingSiteAuth.xml`
+108. Changed template showcase schema from `Product` to `CreativeWork` on all 5 pages (fixes GSC warnings for missing shippingDetails and hasMerchantReturnPolicy - not applicable to digital templates)
 
 ---
 
