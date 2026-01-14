@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load billing_tags %}
+
+{% block title %}Premium Templates - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Premium Invoice Templates</h1>
+        <p class="text-gray-600 dark:text-gray-300 mt-2">
+            Stand out with professionally designed templates. One-time purchase, use forever.
+        </p>
+    </div>
+
+    {% if is_subscriber and has_all_premium %}
+    <div class="mb-8 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg text-center">
+        <p class="text-primary-800 dark:text-primary-200">
+            <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Your {{ current_tier|title }} subscription includes all templates!
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Free Templates Section -->
+    <div class="mb-12">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            Free Templates
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6 text-sm">These templates are available to all users.</p>
+        <div class="grid md:grid-cols-2 gap-6">
+            {% for slug in free_templates %}
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 dark:text-white text-lg">
+                            {{ invoice_templates|get_item:slug|get_item:'name' }}
+                        </h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">
+                            {{ invoice_templates|get_item:slug|get_item:'description' }}
+                        </p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs mt-2">
+                            Best for: {{ invoice_templates|get_item:slug|get_item:'best_for' }}
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium">
+                        Free
+                    </span>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <a href="{% url 'invoices:create' %}?template={{ slug }}" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 text-sm font-medium">
+                        Use Template &rarr;
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bundle Section -->
+    {% if not has_all_premium %}
+    <div class="mb-12 bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-8 text-white">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+                <span class="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
+                    Best Value - Save 33%
+                </span>
+                <h2 class="text-2xl font-bold mt-3">{{ bundle.name }}</h2>
+                <p class="text-primary-100 mt-2">{{ bundle.description }}</p>
+                <div class="flex items-center gap-4 mt-4">
+                    <span class="text-3xl font-bold">${{ bundle.price }}</span>
+                    <span class="text-primary-200 line-through">$14.97</span>
+                    <span class="text-sm text-primary-200">one-time payment</span>
+                </div>
+            </div>
+            <a href="{% url 'billing:purchase_template' 'bundle' %}"
+               class="px-8 py-4 bg-white text-primary-700 font-semibold rounded-lg hover:bg-gray-100 transition text-center">
+                Get All 3 Templates
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Premium Templates Section -->
+    <div class="mb-12">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            Premium Templates
+        </h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-6 text-sm">Unlock premium designs with a one-time purchase.</p>
+        <div class="grid md:grid-cols-3 gap-6">
+            {% for slug, template in premium_templates.items %}
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <!-- Template Preview -->
+                <div class="h-40 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
+                    <div class="text-center">
+                        <svg class="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ template.name }}</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-semibold text-gray-900 dark:text-white text-lg">
+                        {{ template.name }}
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">
+                        {{ template.description }}
+                    </p>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs mt-2">
+                        Best for: {{ template.best_for }}
+                    </p>
+
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        {% if slug in available_templates %}
+                        <div class="flex items-center justify-between">
+                            <span class="text-green-600 dark:text-green-400 font-medium">
+                                <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Unlocked
+                            </span>
+                            <a href="{% url 'invoices:create' %}?template={{ slug }}"
+                               class="text-primary-600 hover:text-primary-700 dark:text-primary-400 text-sm font-medium">
+                                Use Template
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-gray-900 dark:text-white">
+                                ${{ template.price }}
+                            </span>
+                            <a href="{% url 'billing:purchase_template' slug %}"
+                               class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition text-sm font-medium">
+                                Buy Now
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Subscription Upsell -->
+    <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 text-center">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            Need All Templates + More?
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
+            Professional and Business plans include all templates plus batch upload,
+            recurring invoices, and more.
+        </p>
+        <a href="{% url 'billing:plans' %}"
+           class="inline-block px-6 py-3 btn-outline">
+            View Subscription Plans
+        </a>
+    </div>
+</div>
+{% endblock %}

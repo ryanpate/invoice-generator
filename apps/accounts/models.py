@@ -49,6 +49,13 @@ class CustomUser(AbstractUser):
     free_credits_remaining = models.PositiveIntegerField(default=5)  # Lifetime free credits
     total_credits_purchased = models.PositiveIntegerField(default=0)  # Lifetime stats
 
+    # Premium template purchases
+    unlocked_templates = models.JSONField(
+        default=list,
+        blank=True,
+        help_text='List of premium template slugs unlocked by purchase'
+    )
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -170,15 +177,58 @@ class CustomUser(AbstractUser):
         self.save(update_fields=['api_calls_this_month'])
 
     def get_available_templates(self):
-        """Get list of templates available to this user."""
+        """Get list of templates available to this user.
+
+        Includes:
+        - Templates from subscription tier
+        - Free templates available to everyone
+        - Individually purchased premium templates
+        """
         from django.conf import settings
 
         tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
-        templates = tier_config.get('templates', ['clean_slate'])
+        tier_templates = tier_config.get('templates', ['clean_slate'])
 
-        if templates == 'all':
+        # If tier gives all templates, return all
+        if tier_templates == 'all':
             return list(settings.INVOICE_TEMPLATES.keys())
-        return templates
+
+        # Build set of available templates
+        available = set(tier_templates)
+
+        # Add free templates that everyone gets
+        available.update(getattr(settings, 'FREE_TEMPLATES', ['clean_slate']))
+
+        # Add unlocked premium templates
+        if self.unlocked_templates:
+            available.update(self.unlocked_templates)
+
+        return list(available)
+
+    def unlock_template(self, template_slug):
+        """Unlock a single premium template."""
+        if not self.unlocked_templates:
+            self.unlocked_templates = []
+        if template_slug not in self.unlocked_templates:
+            self.unlocked_templates = self.unlocked_templates + [template_slug]
+            self.save(update_fields=['unlocked_templates'])
+
+    def unlock_all_premium_templates(self):
+        """Unlock all premium templates (bundle purchase)."""
+        from django.conf import settings
+        premium_slugs = list(getattr(settings, 'PREMIUM_TEMPLATES', {}).keys())
+        if not self.unlocked_templates:
+            self.unlocked_templates = []
+        for slug in premium_slugs:
+            if slug not in self.unlocked_templates:
+                self.unlocked_templates = self.unlocked_templates + [slug]
+        self.save(update_fields=['unlocked_templates'])
+
+    def has_unlocked_template(self, template_slug):
+        """Check if user has purchased a specific premium template."""
+        if not self.unlocked_templates:
+            return False
+        return template_slug in self.unlocked_templates
 
     def has_batch_upload(self):
         """Check if user has batch upload feature."""

@@ -65,6 +65,13 @@
   - Online payments via Stripe Connect (paid directly to business)
   - Payment history and downloadable PDF statements
   - Businesses connect Stripe at `/billing/stripe-connect/`
+- **Premium Templates (one-time purchases):**
+  - 2 Free templates: Clean Slate, Classic Professional
+  - 3 Premium templates ($4.99 each): Executive, Bold Modern, Neon Edge
+  - Bundle option ($9.99): All 3 premium templates (~33% discount)
+  - Template store at `/billing/templates/`
+  - Purchased templates persist indefinitely
+  - Subscription tiers (Pro/Business) include all templates automatically
 
 ### Suppressed/Disabled Features
 
@@ -120,7 +127,11 @@
   - Email invitations with 7-day expiration
   - Auto-accept invitations on signup/login
 - [ ] **Enterprise Tier:** Custom pricing, white-label, dedicated support
-- [ ] **Premium Templates:** Individual template purchases ($4.99 each)
+- [x] **Premium Templates:** Individual template purchases ($4.99 each) - COMPLETED
+  - Free templates: Clean Slate, Classic Professional
+  - Premium templates ($4.99 each): Executive, Bold Modern, Neon Edge
+  - Bundle ($9.99): All 3 premium templates
+  - Template store at `/billing/templates/`
 - [ ] **Affiliate Program:** Referral tracking (20% commission)
 - [x] **QR Code on Invoice PDFs:** Links to public invoice page for viewing and marking as paid - COMPLETED
 - [x] **Digital Signature Field:** On invoice PDFs - COMPLETED (upload in Company Settings, displays on all templates)
@@ -234,6 +245,14 @@ STRIPE_CREDIT_PACK_25_PRICE_ID=price_1Snqlh6oOlORkbTyeaL4R5dQ  # 25 credits for 
 STRIPE_CREDIT_PACK_50_PRICE_ID=price_1Snqm46oOlORkbTycROhS9fV  # 50 credits for $35
 ```
 
+### Stripe Premium Template Products (Configured)
+```bash
+STRIPE_TEMPLATE_EXECUTIVE_PRICE_ID=price_1SpaNc6oOlORkbTyfrk17jmF   # Executive template $4.99
+STRIPE_TEMPLATE_BOLD_MODERN_PRICE_ID=price_1SpaNv6oOlORkbTy5xexCHJu # Bold Modern template $4.99
+STRIPE_TEMPLATE_NEON_EDGE_PRICE_ID=price_1SpaOI6oOlORkbTyeb97MXDr   # Neon Edge template $4.99
+STRIPE_TEMPLATE_BUNDLE_PRICE_ID=price_1SpaOp6oOlORkbTyBr8HcACD      # All templates bundle $9.99
+```
+
 ### Optional - Not Yet Configured
 ```bash
 # AWS S3 (for media file storage - logos currently stored locally)
@@ -311,8 +330,10 @@ invoice_generator/
 | `templates/invoices/public_view.html` | Public invoice view page (for QR code links) |
 | `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
 | `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
-| `apps/billing/models.py` | CreditPurchase model for tracking credit pack purchases |
-| `apps/billing/views.py` | Stripe checkout for subscriptions + credit pack purchases |
+| `apps/billing/models.py` | CreditPurchase, TemplatePurchase models for one-time purchases |
+| `apps/billing/views.py` | Stripe checkout for subscriptions, credits, and template purchases |
+| `templates/billing/templates.html` | Premium template store page |
+| `templates/billing/templates_success.html` | Template purchase success page |
 | `apps/api/views.py` | REST API endpoints |
 | `apps/invoices/tasks.py` | Celery tasks for recurring invoice processing |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
@@ -461,6 +482,13 @@ invoice_generator/
 | `/billing/credits/` | View credit balance and purchase credit packs |
 | `/billing/credits/purchase/<pack_id>/` | Initiate credit pack purchase |
 | `/billing/credits/success/` | Credit purchase success page |
+
+### Premium Template Store URLs
+| URL | Purpose |
+|-----|---------|
+| `/billing/templates/` | Premium template store page |
+| `/billing/templates/purchase/<template_id>/` | Initiate template purchase |
+| `/billing/templates/success/` | Template purchase success page |
 
 ### Meta Tags Override (for child templates)
 ```html
@@ -683,6 +711,14 @@ Authentication: API Key in header `X-API-Key: <key>`
 128. Implemented auto-accept invitations on signup/login via signals
 129. Updated all invoice views with TeamAwareQuerysetMixin for shared company access
 130. Added team-related admin configuration for TeamMember and TeamInvitation models
+131. Implemented Premium Templates feature for one-time template purchases
+132. Added FREE_TEMPLATES, PREMIUM_TEMPLATES, PREMIUM_TEMPLATE_BUNDLE to settings
+133. Added unlocked_templates JSONField and methods to CustomUser model
+134. Created TemplatePurchase model for tracking template purchases
+135. Created template store views (TemplateStoreView, purchase_template, TemplatePurchaseSuccessView)
+136. Updated Stripe webhook handler for template purchase completion
+137. Created template store templates (templates.html, templates_success.html)
+138. Registered TemplatePurchase in admin with CreditPurchase
 
 ---
 

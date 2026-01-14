@@ -198,9 +198,9 @@ def stripe_webhook(request):
 
 
 def handle_checkout_completed(session):
-    """Handle successful checkout (subscriptions, credit purchases, and client payments)."""
+    """Handle successful checkout (subscriptions, credit purchases, template purchases, and client payments)."""
     from apps.accounts.models import CustomUser
-    from .models import CreditPurchase
+    from .models import CreditPurchase, TemplatePurchase
 
     metadata = session.get('metadata', {})
 
@@ -213,6 +213,27 @@ def handle_checkout_completed(session):
 
     user_id = metadata.get('user_id')
     if not user_id:
+        return
+
+    # Check if this is a template purchase
+    if metadata.get('type') == 'template_purchase':
+        try:
+            purchase = TemplatePurchase.objects.get(stripe_session_id=session['id'])
+            purchase.complete_purchase(
+                payment_intent_id=session.get('payment_intent', '')
+            )
+        except TemplatePurchase.DoesNotExist:
+            # Fallback: unlock template directly if purchase record not found
+            try:
+                user = CustomUser.objects.get(id=user_id)
+                template_id = metadata.get('template_id')
+                is_bundle = metadata.get('is_bundle') == 'True'
+                if is_bundle:
+                    user.unlock_all_premium_templates()
+                elif template_id:
+                    user.unlock_template(template_id)
+            except (CustomUser.DoesNotExist, ValueError):
+                pass
         return
 
     # Check if this is a credit purchase
@@ -421,6 +442,149 @@ class CreditPurchaseSuccessView(LoginRequiredMixin, TemplateView):
         ).order_by('-completed_at').first()
 
         context['recent_purchase'] = recent_purchase
+
+        return context
+
+
+# ============================================================================
+# Premium Template Purchase Views
+# ============================================================================
+
+class TemplateStoreView(LoginRequiredMixin, TemplateView):
+    """View and purchase premium templates."""
+    template_name = 'billing/templates.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['premium_templates'] = settings.PREMIUM_TEMPLATES
+        context['bundle'] = settings.PREMIUM_TEMPLATE_BUNDLE
+        context['free_templates'] = getattr(settings, 'FREE_TEMPLATES', ['clean_slate'])
+        context['invoice_templates'] = settings.INVOICE_TEMPLATES
+        context['unlocked_templates'] = user.unlocked_templates or []
+        context['available_templates'] = user.get_available_templates()
+        context['is_subscriber'] = user.is_active_subscriber()
+        context['current_tier'] = user.subscription_tier
+
+        # Check if user has all premium templates (via subscription or purchase)
+        all_premium = all(
+            t in user.get_available_templates()
+            for t in settings.PREMIUM_TEMPLATES.keys()
+        )
+        context['has_all_premium'] = all_premium
+
+        return context
+
+
+@login_required
+def purchase_template(request, template_id):
+    """Create Stripe checkout session for template purchase."""
+    # Check if it's a bundle purchase
+    is_bundle = template_id == 'bundle'
+
+    if is_bundle:
+        item_config = settings.PREMIUM_TEMPLATE_BUNDLE
+        price_id = item_config.get('stripe_price_id')
+        price = item_config['price']
+    else:
+        # Individual template purchase
+        item_config = settings.PREMIUM_TEMPLATES.get(template_id)
+        if not item_config:
+            messages.error(request, 'Invalid template selected.')
+            return redirect('billing:templates')
+        price_id = item_config.get('stripe_price_id')
+        price = item_config['price']
+
+    # Check if already owned (individual template)
+    if not is_bundle and request.user.has_unlocked_template(template_id):
+        messages.info(request, 'You already own this template.')
+        return redirect('billing:templates')
+
+    # Check if user already has all premium (via subscription)
+    if request.user.is_active_subscriber():
+        tier_templates = settings.SUBSCRIPTION_TIERS.get(
+            request.user.subscription_tier, {}
+        ).get('templates')
+        if tier_templates == 'all':
+            messages.info(request, 'Your subscription includes all templates.')
+            return redirect('billing:templates')
+
+    if not price_id:
+        messages.error(request, 'Template purchases are not yet available.')
+        return redirect('billing:templates')
+
+    # Initialize Stripe
+    stripe.api_key = settings.STRIPE_TEST_SECRET_KEY if not settings.STRIPE_LIVE_MODE else settings.STRIPE_LIVE_SECRET_KEY
+
+    try:
+        # Create or get Stripe customer
+        if not request.user.stripe_customer_id:
+            customer = stripe.Customer.create(
+                email=request.user.email,
+                metadata={'user_id': request.user.id}
+            )
+            request.user.stripe_customer_id = customer.id
+            request.user.save()
+
+        # Create checkout session for one-time payment
+        checkout_session = stripe.checkout.Session.create(
+            customer=request.user.stripe_customer_id,
+            payment_method_types=['card'],
+            line_items=[{
+                'price': price_id,
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=request.build_absolute_uri('/billing/templates/success/'),
+            cancel_url=request.build_absolute_uri('/billing/templates/'),
+            metadata={
+                'user_id': str(request.user.id),
+                'template_id': template_id,
+                'is_bundle': str(is_bundle),
+                'type': 'template_purchase',
+            }
+        )
+
+        # Create pending purchase record
+        from .models import TemplatePurchase
+        TemplatePurchase.objects.create(
+            user=request.user,
+            stripe_session_id=checkout_session.id,
+            template_id=template_id,
+            is_bundle=is_bundle,
+            price_paid=price,
+            status='pending',
+        )
+
+        return redirect(checkout_session.url)
+
+    except stripe.error.StripeError as e:
+        messages.error(request, f'Error creating checkout: {str(e)}')
+        return redirect('billing:templates')
+
+
+class TemplatePurchaseSuccessView(LoginRequiredMixin, TemplateView):
+    """Template purchase success page."""
+    template_name = 'billing/templates_success.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['unlocked_templates'] = user.unlocked_templates or []
+        context['available_templates'] = user.get_available_templates()
+
+        # Get the most recent completed purchase
+        from .models import TemplatePurchase
+        recent_purchase = TemplatePurchase.objects.filter(
+            user=user,
+            status='completed'
+        ).order_by('-completed_at').first()
+
+        context['recent_purchase'] = recent_purchase
+        context['premium_templates'] = settings.PREMIUM_TEMPLATES
+        context['invoice_templates'] = settings.INVOICE_TEMPLATES
 
         return context
 

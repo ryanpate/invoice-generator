@@ -323,13 +323,13 @@ INVOICE_TEMPLATES = {
         'name': 'Executive',
         'description': 'Navy & gold accents, serif headings, premium feel',
         'best_for': 'Consulting, legal, finance',
-        'premium': False,
+        'premium': True,
     },
     'bold_modern': {
         'name': 'Bold Modern',
         'description': 'Vibrant accent colors, asymmetric layout, large typography',
         'best_for': 'Creative agencies, designers',
-        'premium': False,
+        'premium': True,
     },
     'classic_professional': {
         'name': 'Classic Professional',
@@ -341,8 +341,45 @@ INVOICE_TEMPLATES = {
         'name': 'Neon Edge',
         'description': 'Dark mode, neon accents, futuristic',
         'best_for': 'Gaming, tech, entertainment',
-        'premium': False,
+        'premium': True,
     },
+}
+
+# Free templates available to all users
+FREE_TEMPLATES = ['clean_slate', 'classic_professional']
+
+# Premium templates available for individual purchase
+PREMIUM_TEMPLATES = {
+    'executive': {
+        'name': 'Executive',
+        'description': 'Navy & gold accents, serif headings, premium feel',
+        'best_for': 'Consulting, legal, finance',
+        'price': 4.99,
+        'stripe_price_id': config('STRIPE_TEMPLATE_EXECUTIVE_PRICE_ID', default=''),
+    },
+    'bold_modern': {
+        'name': 'Bold Modern',
+        'description': 'Vibrant accent colors, asymmetric layout, large typography',
+        'best_for': 'Creative agencies, designers',
+        'price': 4.99,
+        'stripe_price_id': config('STRIPE_TEMPLATE_BOLD_MODERN_PRICE_ID', default=''),
+    },
+    'neon_edge': {
+        'name': 'Neon Edge',
+        'description': 'Dark mode, neon accents, futuristic',
+        'best_for': 'Gaming, tech, entertainment',
+        'price': 4.99,
+        'stripe_price_id': config('STRIPE_TEMPLATE_NEON_EDGE_PRICE_ID', default=''),
+    },
+}
+
+# Premium template bundle (all 3 premium templates at a discount)
+PREMIUM_TEMPLATE_BUNDLE = {
+    'name': 'All Premium Templates Bundle',
+    'description': 'Get all 3 premium templates at a discount',
+    'price': 9.99,
+    'stripe_price_id': config('STRIPE_TEMPLATE_BUNDLE_PRICE_ID', default=''),
+    'templates': ['executive', 'bold_modern', 'neon_edge'],
 }
 
 # Currency options

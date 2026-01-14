@@ -111,3 +111,60 @@ class CreditPurchase(models.Model):
         # Add credits to user
         self.user.add_credits(self.credits_amount)
         return True
+
+
+class TemplatePurchase(models.Model):
+    """Record of premium template purchases."""
+
+    PURCHASE_STATUS = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='template_purchases'
+    )
+    stripe_session_id = models.CharField(max_length=255, unique=True)
+    stripe_payment_intent_id = models.CharField(max_length=255, blank=True)
+    template_id = models.CharField(
+        max_length=50,
+        help_text='Template identifier (e.g., executive, bold_modern) or "bundle"'
+    )
+    is_bundle = models.BooleanField(default=False)
+    price_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, default='USD')
+    status = models.CharField(max_length=20, choices=PURCHASE_STATUS, default='pending')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        item = "Bundle" if self.is_bundle else self.template_id
+        return f"{self.user.email} - {item} - {self.status}"
+
+    def complete_purchase(self, payment_intent_id=''):
+        """Mark purchase as completed and unlock template(s) for user."""
+        from django.utils import timezone
+
+        if self.status != 'pending':
+            return False
+
+        self.status = 'completed'
+        self.stripe_payment_intent_id = payment_intent_id
+        self.completed_at = timezone.now()
+        self.save()
+
+        # Unlock template(s) for user
+        if self.is_bundle:
+            self.user.unlock_all_premium_templates()
+        else:
+            self.user.unlock_template(self.template_id)
+
+        return True

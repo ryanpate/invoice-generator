@@ -20,6 +20,11 @@ urlpatterns = [
     path('credits/purchase/<str:pack_id>/', views.purchase_credits, name='purchase_credits'),
     path('credits/success/', views.CreditPurchaseSuccessView.as_view(), name='credits_success'),
 
+    # Premium template purchase routes
+    path('templates/', views.TemplateStoreView.as_view(), name='templates'),
+    path('templates/purchase/<str:template_id>/', views.purchase_template, name='purchase_template'),
+    path('templates/success/', views.TemplatePurchaseSuccessView.as_view(), name='templates_success'),
+
     # Stripe Connect routes (for receiving client payments)
     path('stripe-connect/', views.StripeConnectStatusView.as_view(), name='stripe_connect_status'),
     path('stripe-connect/start/', views.stripe_connect_start, name='stripe_connect_start'),
