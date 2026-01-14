@@ -12,7 +12,7 @@ class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = [
-            'name', 'logo', 'email', 'phone', 'website',
+            'name', 'logo', 'signature', 'email', 'phone', 'website',
             'address_line1', 'address_line2', 'city', 'state',
             'postal_code', 'country', 'tax_id',
             'default_currency', 'default_payment_terms', 'default_tax_rate',
@@ -120,3 +120,18 @@ class CompanyForm(forms.ModelForm):
                 raise forms.ValidationError('Only JPEG, PNG, and WebP images are allowed.')
 
         return logo
+
+    def clean_signature(self):
+        """Validate signature file."""
+        signature = self.cleaned_data.get('signature')
+        if signature:
+            # Check file size (max 2MB)
+            if signature.size > 2 * 1024 * 1024:
+                raise forms.ValidationError('Signature file size must not exceed 2MB.')
+
+            # Check file type
+            allowed_types = ['image/jpeg', 'image/png', 'image/webp']
+            if hasattr(signature, 'content_type') and signature.content_type not in allowed_types:
+                raise forms.ValidationError('Only JPEG, PNG, and WebP images are allowed.')
+
+        return signature

@@ -62,6 +62,53 @@
                         <p class="text-sm text-gray-500 mt-1">Your logo will appear on all invoices</p>
                     </div>
                 </div>
+                {% if company.logo %}
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <form method="POST" action="{% url 'companies:remove_logo' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition">
+                            Remove Logo
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Digital Signature -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Digital Signature</h2>
+                <div class="flex items-start space-x-6">
+                    <div class="flex-shrink-0">
+                        <div id="signaturePreview" class="w-48 h-20 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600">
+                            {% if company.signature %}
+                            <img src="{{ company.signature.url }}" alt="Signature" class="w-full h-full object-contain p-2">
+                            {% else %}
+                            <svg class="w-10 h-10 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                            </svg>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" name="signature" id="signatureInput" accept="image/*" class="hidden">
+                        <button type="button" onclick="document.getElementById('signatureInput').click()" class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition mb-2">
+                            Upload Signature
+                        </button>
+                        <p class="text-sm text-gray-500">PNG with transparent background recommended</p>
+                        <p class="text-sm text-gray-500 mt-1">Ideal size: 400x100 pixels. Max 2MB.</p>
+                        <p class="text-sm text-gray-500 mt-1">Your signature will appear on all invoice PDFs</p>
+                    </div>
+                </div>
+                {% if company.signature %}
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <form method="POST" action="{% url 'companies:remove_signature' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition">
+                            Remove Signature
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
             </div>
 
             <!-- Company Information -->
@@ -165,6 +212,17 @@ document.getElementById('logoInput').addEventListener('change', function(e) {
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('logoPreview').innerHTML = `<img src="${e.target.result}" alt="Logo Preview" class="w-full h-full object-contain">`;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('signatureInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('signaturePreview').innerHTML = `<img src="${e.target.result}" alt="Signature Preview" class="w-full h-full object-contain p-2">`;
         };
         reader.readAsDataURL(file);
     }

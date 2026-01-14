@@ -45,6 +45,7 @@
 - Competitor comparison page (`/compare/`)
 - Template showcase pages (`/templates/clean-slate/`, `/templates/executive/`, `/templates/bold-modern/`, `/templates/classic-professional/`, `/templates/neon-edge/`)
 - QR code on invoice PDFs linking to public invoice view page (available to all users)
+- Digital signature on invoice PDFs (upload in Company Settings, appears on all invoice templates)
 - **Hybrid Credits + Subscriptions billing model:**
   - Credit system for pay-as-you-go users (5 free lifetime credits on signup)
   - Credit packs: 10 credits ($9), 25 credits ($19), 50 credits ($35)
@@ -104,7 +105,7 @@
 - [ ] **Premium Templates:** Individual template purchases ($4.99 each)
 - [ ] **Affiliate Program:** Referral tracking (20% commission)
 - [x] **QR Code on Invoice PDFs:** Links to public invoice page for viewing and marking as paid - COMPLETED
-- [ ] **Digital Signature Field:** On invoice PDFs
+- [x] **Digital Signature Field:** On invoice PDFs - COMPLETED (upload in Company Settings, displays on all templates)
 - [x] **Recurring Invoices:** Auto-generate invoices on schedule - COMPLETED (requires Celery/Redis deployment)
 - [ ] **Client Portal:** Allow clients to view/pay invoices online
 - [ ] **Multi-language Support:** i18n for international users
@@ -617,7 +618,11 @@ Authentication: API Key in header `X-API-Key: <key>`
 113. Added QR code generation using qrcode library (base64 data URI embedded in PDF)
 114. Created public invoice template with Tailwind CSS styling
 115. Added QR code section to all 5 PDF templates with template-appropriate styling
-116. Updated robots.txt to disallow `/invoice/` path (public invoice pages not indexed)
+116. Added digital signature feature - upload signature image in Company Settings
+117. Added `signature` ImageField to Company model with old file cleanup in save()
+118. Added signature upload UI to company settings template with live preview
+119. Added remove_signature view and URL route
+120. Added signature section to all 5 PDF templates with template-specific styling (Clean Slate, Executive, Bold Modern, Classic Professional, Neon Edge)
 
 ---
 

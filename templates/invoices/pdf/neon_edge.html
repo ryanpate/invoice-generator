@@ -228,6 +228,27 @@
             color: #22D3EE;
             margin-bottom: 4px;
         }
+        .signature-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #1E293B;
+            border-left: 2px solid #22D3EE;
+        }
+        .signature-image {
+            max-width: 200px;
+            max-height: 80px;
+            filter: brightness(1.2);
+        }
+        .signature-label {
+            font-size: 8pt;
+            color: #22D3EE;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #22D3EE;
+            width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -318,6 +339,13 @@
                 </div>
             </div>
         </div>
+
+        {% if company.signature %}
+        <div class="signature-section">
+            <img src="{{ company.signature.url }}" class="signature-image" alt="Signature">
+            <div class="signature-label">// Authorized Signature //</div>
+        </div>
+        {% endif %}
 
         {% if invoice.notes %}
         <div class="notes">

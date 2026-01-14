@@ -185,6 +185,22 @@
             color: #1F2937;
             margin-bottom: 4px;
         }
+        .signature-section {
+            margin-top: 40px;
+            padding-top: 20px;
+        }
+        .signature-image {
+            max-width: 200px;
+            max-height: 80px;
+        }
+        .signature-label {
+            font-size: 8pt;
+            color: #6B7280;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #E5E7EB;
+            width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -269,6 +285,13 @@
             <span>{{ currency_symbol }}{{ invoice.total|floatformat:2 }}</span>
         </div>
     </div>
+
+    {% if company.signature %}
+    <div class="signature-section">
+        <img src="{{ company.signature.url }}" class="signature-image" alt="Signature">
+        <div class="signature-label">Authorized Signature</div>
+    </div>
+    {% endif %}
 
     {% if invoice.notes %}
     <div class="notes">

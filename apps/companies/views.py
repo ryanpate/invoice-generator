@@ -58,3 +58,19 @@ def remove_logo(request):
             pass
 
     return redirect('companies:settings')
+
+
+@login_required
+def remove_signature(request):
+    """Remove company signature."""
+    if request.method == 'POST':
+        try:
+            company = request.user.company
+            if company.signature:
+                company.signature.delete()
+                company.save()
+                messages.success(request, 'Signature removed successfully.')
+        except Company.DoesNotExist:
+            pass
+
+    return redirect('companies:settings')

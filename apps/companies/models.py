@@ -20,6 +20,12 @@ class Company(models.Model):
         null=True,
         help_text='Recommended size: 400x200 pixels'
     )
+    signature = models.ImageField(
+        upload_to='signatures/%Y/%m/',
+        blank=True,
+        null=True,
+        help_text='Digital signature image for invoices. Recommended: PNG with transparent background, 400x100 pixels'
+    )
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=50, blank=True)
     website = models.URLField(blank=True)
@@ -107,12 +113,14 @@ class Company(models.Model):
         return number
 
     def save(self, *args, **kwargs):
-        # Delete old logo when updating with a new one
+        # Delete old logo/signature when updating with new ones
         if self.pk:
             try:
                 old_company = Company.objects.get(pk=self.pk)
                 if old_company.logo and old_company.logo != self.logo:
                     old_company.logo.delete(save=False)
+                if old_company.signature and old_company.signature != self.signature:
+                    old_company.signature.delete(save=False)
             except Company.DoesNotExist:
                 pass
         super().save(*args, **kwargs)
