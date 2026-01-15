@@ -104,8 +104,6 @@ urlpatterns = [
     # System endpoints
     path('health/', health_check, name='health_check'),
 
-    # Fallback 'landing' URL for backward compatibility (namespace-less reference)
-    path('_landing/', LandingPageView.as_view(), name='landing'),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('BingSiteAuth.xml', bing_site_auth, name='bing_site_auth'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),

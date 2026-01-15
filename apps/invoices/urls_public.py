@@ -7,8 +7,8 @@ from . import views
 app_name = 'invoices'
 
 urlpatterns = [
-    # Landing pages
-    path('', views.LandingPageView.as_view(), name='landing'),
+    # Landing page is now defined directly in config/urls.py to avoid namespace conflict
+    # path('', views.LandingPageView.as_view(), name='landing'),
     path('pricing/', views.PricingPageView.as_view(), name='pricing'),
     path('for-freelancers/', views.FreelancersLandingPageView.as_view(), name='for_freelancers'),
     path('for-small-business/', views.SmallBusinessLandingPageView.as_view(), name='for_small_business'),
