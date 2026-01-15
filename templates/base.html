@@ -12,6 +12,12 @@
       gtag('config', 'G-0NR5NZMNBF');
     </script>
 
+    <!-- Google AdSense - Only for free users -->
+    {% if not user.is_authenticated or not user.is_active_subscriber %}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5523870768931777"
+         crossorigin="anonymous"></script>
+    {% endif %}
+
     <!-- Theme initialization (prevents flash) -->
     <script>
         (function() {
