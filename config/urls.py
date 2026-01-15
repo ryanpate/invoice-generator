@@ -30,6 +30,7 @@ class StaticViewSitemap(Sitemap):
             '/templates/clean-slate/', '/templates/executive/', '/templates/bold-modern/',
             '/templates/classic-professional/', '/templates/neon-edge/',
             '/tools/invoice-calculator/', '/tools/late-fee-calculator/',
+            '/affiliate/program/',
         ]
 
     def location(self, item):
@@ -88,6 +89,7 @@ Allow: /api/docs/
 Allow: /blog/
 Allow: /templates/
 Allow: /tools/
+Allow: /affiliate/program/
 Allow: /portal/request-access/
 
 # Allow internationalized versions
