@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}Affiliate Dashboard - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Affiliate Dashboard</h1>
+            <p class="text-gray-600 dark:text-gray-400">Track your referrals and earnings</p>
+        </div>
+    </div>
+
+    <!-- Referral Link Card -->
+    <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl shadow-sm p-6 mb-8 text-white">
+        <h2 class="text-lg font-semibold mb-2">Your Referral Link</h2>
+        <div class="flex items-center gap-4">
+            <input type="text" value="{{ affiliate.get_referral_url }}" readonly
+                   id="referral-link"
+                   class="flex-1 bg-white/20 border border-white/30 rounded-lg px-4 py-2 text-white placeholder-white/70">
+            <button onclick="copyReferralLink()" class="bg-white text-primary-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Copy Link
+            </button>
+        </div>
+        <p class="text-primary-100 text-sm mt-2">Share this link to earn 20% commission on all purchases from your referrals.</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Earnings</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">${{ affiliate.total_earnings|floatformat:2 }}</p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pending Payout</p>
+                    <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">${{ affiliate.pending_earnings|floatformat:2 }}</p>
+                </div>
+                <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Total Referrals</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ affiliate.total_referrals }}</p>
+                </div>
+                <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/50 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Conversions</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ affiliate.total_conversions }}</p>
+                    <p class="text-xs text-gray-400">{{ conversion_rate|floatformat:1 }}% rate</p>
+                </div>
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Stats -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-8 transition-colors duration-200">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Last 30 Days</h2>
+        <div class="grid grid-cols-3 gap-4 text-center">
+            <div>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ monthly_referrals }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">New Referrals</p>
+            </div>
+            <div>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ monthly_conversions }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Conversions</p>
+            </div>
+            <div>
+                <p class="text-3xl font-bold text-green-600 dark:text-green-400">${{ monthly_earnings|floatformat:2 }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Earnings</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Recent Referrals -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Referrals</h2>
+                <a href="{% url 'affiliates:referrals' %}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">View All</a>
+            </div>
+
+            {% if recent_referrals %}
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                {% for referral in recent_referrals %}
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900 dark:text-white">
+                            {% if referral.referred_user %}{{ referral.referred_user.email }}{% else %}Visitor{% endif %}
+                        </p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ referral.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                        {% if referral.converted %}bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400
+                        {% else %}bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300{% endif %}">
+                        {% if referral.converted %}Converted{% else %}Pending{% endif %}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="px-6 py-12 text-center">
+                <p class="text-gray-500 dark:text-gray-400">No referrals yet. Share your link to get started!</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Recent Commissions -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Commissions</h2>
+                <a href="{% url 'affiliates:commissions' %}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">View All</a>
+            </div>
+
+            {% if recent_commissions %}
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                {% for commission in recent_commissions %}
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <p class="font-medium text-gray-900 dark:text-white">{{ commission.purchase_description }}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ commission.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-medium text-green-600 dark:text-green-400">+${{ commission.amount|floatformat:2 }}</p>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                            {% if commission.status == 'paid' %}bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400
+                            {% elif commission.status == 'pending' %}bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-400
+                            {% else %}bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300{% endif %}">
+                            {{ commission.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="px-6 py-12 text-center">
+                <p class="text-gray-500 dark:text-gray-400">No commissions yet. Commissions are earned when referrals make purchases.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Promotional Materials -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mt-8 transition-colors duration-200">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Promotional Materials</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Use these materials to promote InvoiceKits to your audience:</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                <h3 class="font-medium text-gray-900 dark:text-white mb-2">Social Media Post</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Ready-to-use post for Twitter/X, LinkedIn:</p>
+                <textarea readonly class="w-full text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded p-2 text-gray-700 dark:text-gray-300" rows="3">Just discovered @InvoiceKits - the fastest way to create professional invoices! Perfect for freelancers and small businesses. Try it free: {{ affiliate.get_referral_url }}</textarea>
+            </div>
+
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                <h3 class="font-medium text-gray-900 dark:text-white mb-2">Email Signature</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Add to your email signature:</p>
+                <textarea readonly class="w-full text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded p-2 text-gray-700 dark:text-gray-300" rows="3">---
+Need invoicing? I recommend InvoiceKits
+{{ affiliate.get_referral_url }}</textarea>
+            </div>
+
+            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                <h3 class="font-medium text-gray-900 dark:text-white mb-2">Blog/Newsletter</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Longer format for content:</p>
+                <textarea readonly class="w-full text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded p-2 text-gray-700 dark:text-gray-300" rows="3">Looking for a simple invoicing solution? InvoiceKits lets you create professional PDF invoices in seconds. Batch upload, API access, beautiful templates. {{ affiliate.get_referral_url }}</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyReferralLink() {
+    const input = document.getElementById('referral-link');
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value);
+    alert('Referral link copied to clipboard!');
+}
+</script>
+{% endblock %}

@@ -14,6 +14,7 @@ from django.contrib.sitemaps.views import sitemap
 from apps.blog.sitemaps import BlogPostSitemap
 from apps.companies.views import AcceptInvitationView
 from apps.invoices.views import LandingPageView
+from apps.affiliates.views import referral_redirect
 
 
 class StaticViewSitemap(Sitemap):
@@ -131,6 +132,12 @@ urlpatterns = [
 
     # API
     path('api/v1/', include('apps.api.urls')),
+
+    # Affiliate Program
+    path('affiliate/', include('apps.affiliates.urls')),
+
+    # Referral redirect (short link for affiliates)
+    path('ref/<str:code>/', referral_redirect, name='referral_redirect'),
 
     # Team invitation acceptance (public URL with UUID, no i18n needed)
     path('invitation/<uuid:token>/', AcceptInvitationView.as_view(), name='accept_invitation'),

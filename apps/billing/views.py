@@ -199,8 +199,10 @@ def stripe_webhook(request):
 
 def handle_checkout_completed(session):
     """Handle successful checkout (subscriptions, credit purchases, template purchases, and client payments)."""
+    from decimal import Decimal
     from apps.accounts.models import CustomUser
     from .models import CreditPurchase, TemplatePurchase
+    from apps.affiliates.services.commission_tracker import create_commission_for_purchase
 
     metadata = session.get('metadata', {})
 
@@ -222,6 +224,21 @@ def handle_checkout_completed(session):
             purchase.complete_purchase(
                 payment_intent_id=session.get('payment_intent', '')
             )
+            # Track affiliate commission
+            try:
+                user = CustomUser.objects.get(id=user_id)
+                amount = Decimal(str(session.get('amount_total', 0))) / 100
+                is_bundle = metadata.get('is_bundle') == 'True'
+                description = 'Template Bundle' if is_bundle else f"Template: {metadata.get('template_id', 'Unknown')}"
+                create_commission_for_purchase(
+                    user=user,
+                    purchase_type='template',
+                    purchase_description=description,
+                    purchase_amount=amount,
+                    stripe_payment_intent_id=session.get('payment_intent', '')
+                )
+            except CustomUser.DoesNotExist:
+                pass
         except TemplatePurchase.DoesNotExist:
             # Fallback: unlock template directly if purchase record not found
             try:
@@ -243,6 +260,20 @@ def handle_checkout_completed(session):
             purchase.complete_purchase(
                 payment_intent_id=session.get('payment_intent', '')
             )
+            # Track affiliate commission
+            try:
+                user = CustomUser.objects.get(id=user_id)
+                amount = Decimal(str(session.get('amount_total', 0))) / 100
+                credits = metadata.get('credits', '0')
+                create_commission_for_purchase(
+                    user=user,
+                    purchase_type='credit_pack',
+                    purchase_description=f'{credits} Credit Pack',
+                    purchase_amount=amount,
+                    stripe_payment_intent_id=session.get('payment_intent', '')
+                )
+            except CustomUser.DoesNotExist:
+                pass
         except CreditPurchase.DoesNotExist:
             # Fallback: create credits directly if purchase record not found
             try:
@@ -262,6 +293,16 @@ def handle_checkout_completed(session):
             user.subscription_tier = plan
             user.subscription_status = 'active'
             user.save()
+            # Track affiliate commission for first subscription payment
+            amount = Decimal(str(session.get('amount_total', 0))) / 100
+            plan_names = {'starter': 'Starter', 'professional': 'Professional', 'business': 'Business'}
+            create_commission_for_purchase(
+                user=user,
+                purchase_type='subscription',
+                purchase_description=f'{plan_names.get(plan, plan.title())} Plan',
+                purchase_amount=amount,
+                stripe_payment_intent_id=session.get('payment_intent', '')
+            )
         except CustomUser.DoesNotExist:
             pass
 
