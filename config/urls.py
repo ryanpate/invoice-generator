@@ -135,7 +135,10 @@ urlpatterns = [
 
 # Internationalized URLs (public pages - supports /es/, /fr/ prefixes)
 urlpatterns += i18n_patterns(
-    # Public invoice pages (landing, pricing, templates, tools)
+    # Landing page - explicit pattern to ensure 'landing' URL name is available
+    path('', LandingPageView.as_view(), name='landing'),
+
+    # Public invoice pages (pricing, templates, tools - landing handled above)
     path('', include('apps.invoices.urls_public')),
 
     # Blog
