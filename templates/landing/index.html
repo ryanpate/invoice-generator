@@ -741,29 +741,30 @@
                 <ul class="space-y-2">
                     <li><a href="#features" class="hover:text-white transition">{% trans "Features" %}</a></li>
                     <li><a href="#pricing" class="hover:text-white transition">{% trans "Pricing" %}</a></li>
-                    <li><a href="/api/v1/" class="hover:text-white transition">{% trans "API" %}</a></li>
+                    <li><a href="{% url 'api_docs' %}" class="hover:text-white transition">{% trans "API" %}</a></li>
+                    <li><a href="{% url 'affiliates:program' %}" class="hover:text-white transition">{% trans "Affiliate Program" %}</a></li>
                 </ul>
             </div>
             <div>
-                <h3 class="text-white font-semibold mb-4">{% trans "Company" %}</h3>
+                <h3 class="text-white font-semibold mb-4">{% trans "Resources" %}</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-white transition">{% trans "About" %}</a></li>
-                    <li><a href="#" class="hover:text-white transition">{% trans "Blog" %}</a></li>
-                    <li><a href="#" class="hover:text-white transition">{% trans "Careers" %}</a></li>
+                    <li><a href="{% url 'blog:list' %}" class="hover:text-white transition">{% trans "Blog" %}</a></li>
+                    <li><a href="{% url 'invoice_calculator' %}" class="hover:text-white transition">{% trans "Invoice Calculator" %}</a></li>
+                    <li><a href="{% url 'late_fee_calculator' %}" class="hover:text-white transition">{% trans "Late Fee Calculator" %}</a></li>
                 </ul>
             </div>
             <div>
                 <h3 class="text-white font-semibold mb-4">{% trans "Support" %}</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-white transition">{% trans "Help Center" %}</a></li>
-                    <li><a href="#" class="hover:text-white transition">{% trans "Contact" %}</a></li>
+                    <li><a href="{% url 'help' %}" class="hover:text-white transition">{% trans "Help Center" %}</a></li>
+                    <li><a href="{% url 'contact' %}" class="hover:text-white transition">{% trans "Contact" %}</a></li>
                 </ul>
             </div>
             <div>
                 <h3 class="text-white font-semibold mb-4">{% trans "Legal" %}</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-white transition">{% trans "Privacy" %}</a></li>
-                    <li><a href="#" class="hover:text-white transition">{% trans "Terms" %}</a></li>
+                    <li><a href="{% url 'privacy' %}" class="hover:text-white transition">{% trans "Privacy" %}</a></li>
+                    <li><a href="{% url 'terms' %}" class="hover:text-white transition">{% trans "Terms" %}</a></li>
                 </ul>
             </div>
         </div>
