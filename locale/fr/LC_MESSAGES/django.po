@@ -1,0 +1,5191 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: templates/landing/index.html:306 templates/landing/index.html:327
+#: templates/landing/index.html:348
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-15 00:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: config/settings/base.py:121
+msgid "English"
+msgstr ""
+
+#: config/settings/base.py:122
+msgid "Spanish"
+msgstr ""
+
+#: config/settings/base.py:123
+msgid "French"
+msgstr ""
+
+#: templates/base.html:165
+msgid "Dashboard"
+msgstr ""
+
+#: templates/base.html:166 templates/landing/for-small-business.html:155
+#: templates/pages/api_docs.html:98 templates/pages/help.html:157
+msgid "Invoices"
+msgstr ""
+
+#: templates/base.html:167 templates/pages/help.html:167
+msgid "Billing"
+msgstr ""
+
+#: templates/base.html:178 templates/base.html:207
+msgid "Change language"
+msgstr ""
+
+#: templates/base.html:201
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:203 templates/base.html:268
+#: templates/landing/index.html:724 templates/landing/pricing.html:170
+msgid "Pricing"
+msgstr ""
+
+#: templates/base.html:204
+msgid "Login"
+msgstr ""
+
+#: templates/base.html:228 templates/landing/index.html:482
+#: templates/landing/pricing.html:231 templates/landing/pricing.html:460
+msgid "Get Started Free"
+msgstr ""
+
+#: templates/base.html:266 templates/landing/index.html:721
+msgid "Product"
+msgstr ""
+
+#: templates/base.html:269 templates/landing/index.html:723
+msgid "Features"
+msgstr ""
+
+#: templates/base.html:270 templates/landing/index.html:725
+msgid "API"
+msgstr ""
+
+#: templates/base.html:271 templates/landing/index.html:732
+msgid "Blog"
+msgstr ""
+
+#: templates/base.html:275 templates/tools/invoice-calculator.html:128
+#: templates/tools/late-fee-calculator.html:128
+msgid "Free Tools"
+msgstr ""
+
+#: templates/base.html:277 templates/tools/invoice-calculator.html:130
+msgid "Invoice Calculator"
+msgstr ""
+
+#: templates/base.html:278 templates/tools/late-fee-calculator.html:130
+msgid "Late Fee Calculator"
+msgstr ""
+
+#: templates/base.html:282 templates/landing/index.html:737
+msgid "Support"
+msgstr ""
+
+#: templates/base.html:284 templates/landing/index.html:739
+#: templates/pages/help.html:4 templates/pages/help.html:129
+#: templates/pages/help.html:135
+msgid "Help Center"
+msgstr ""
+
+#: templates/base.html:285 templates/pages/contact.html:4
+#: templates/pages/contact.html:41 templates/pages/contact.html:47
+#: templates/pages/privacy.html:181 templates/pages/terms.html:189
+msgid "Contact Us"
+msgstr ""
+
+#: templates/base.html:289 templates/landing/index.html:744
+msgid "Legal"
+msgstr ""
+
+#: templates/base.html:291 templates/pages/privacy.html:4
+#: templates/pages/privacy.html:41 templates/pages/privacy.html:47
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/base.html:292 templates/pages/terms.html:4
+#: templates/pages/terms.html:41 templates/pages/terms.html:47
+msgid "Terms of Service"
+msgstr ""
+
+#: templates/base.html:297
+msgid "Professional invoice generation for freelancers and small businesses."
+msgstr ""
+
+#: templates/base.html:301 templates/landing/index.html:752
+msgid "All rights reserved."
+msgstr ""
+
+#: templates/landing/compare.html:4 templates/landing/compare.html:12
+msgid "InvoiceKits vs Competitors - Invoice Generator Comparison 2026"
+msgstr ""
+
+#: templates/landing/compare.html:6
+msgid ""
+"Compare InvoiceKits to Invoice-Generator.com, Canva, Wave, Zoho Invoice. See "
+"features, pricing, pay-as-you-go credits, and why 10,000+ businesses choose "
+"InvoiceKits."
+msgstr ""
+
+#: templates/landing/compare.html:8
+msgid ""
+"invoicekits vs invoice generator, invoice software comparison, best invoice "
+"generator, invoicekits vs canva, invoicekits vs wave, invoice maker "
+"comparison"
+msgstr ""
+
+#: templates/landing/compare.html:14
+msgid ""
+"Compare InvoiceKits to top invoice generators. See features, pricing, and "
+"find the best solution for your business."
+msgstr ""
+
+#: templates/landing/compare.html:16
+msgid "InvoiceKits vs Competitors | Invoice Software Comparison"
+msgstr ""
+
+#: templates/landing/compare.html:18
+msgid ""
+"Compare InvoiceKits to Invoice-Generator.com, Canva, Wave, and more. Find "
+"the best invoice generator for you."
+msgstr ""
+
+#: templates/landing/compare.html:106
+#: templates/landing/for-consultants.html:107
+#: templates/landing/for-freelancers.html:99
+#: templates/landing/for-small-business.html:107
+#: templates/landing/pricing.html:168 templates/pages/api_docs.html:39
+#: templates/pages/contact.html:39 templates/pages/help.html:127
+#: templates/pages/privacy.html:39 templates/pages/terms.html:39
+#: templates/showcase/bold-modern.html:78
+#: templates/showcase/classic-professional.html:78
+#: templates/showcase/clean-slate.html:78 templates/showcase/executive.html:78
+#: templates/showcase/neon-edge.html:80
+#: templates/tools/invoice-calculator.html:126
+#: templates/tools/late-fee-calculator.html:126
+msgid "Home"
+msgstr ""
+
+#: templates/landing/compare.html:108
+msgid "Compare Invoice Generators"
+msgstr ""
+
+#: templates/landing/compare.html:114
+msgid "InvoiceKits vs The Competition"
+msgstr ""
+
+#: templates/landing/compare.html:117
+msgid ""
+"See how InvoiceKits stacks up against popular invoice generators. We built "
+"InvoiceKits to solve the problems other tools ignore."
+msgstr ""
+
+#: templates/landing/compare.html:120
+msgid "Try InvoiceKits Free"
+msgstr ""
+
+#: templates/landing/compare.html:130
+msgid "Feature Comparison at a Glance"
+msgstr ""
+
+#: templates/landing/compare.html:131
+msgid "See which invoice generator has the features you need"
+msgstr ""
+
+#: templates/landing/compare.html:138
+msgid "Feature"
+msgstr ""
+
+#: templates/landing/compare.html:142 templates/landing/compare.html:154
+msgid "from $0/mo"
+msgstr ""
+
+#: templates/landing/compare.html:148
+msgid "Free only"
+msgstr ""
+
+#: templates/landing/compare.html:160 templates/landing/compare.html:620
+#: templates/landing/for-freelancers.html:408
+msgid "Free"
+msgstr ""
+
+#: templates/landing/compare.html:166
+msgid "from $15/mo"
+msgstr ""
+
+#: templates/landing/compare.html:174
+msgid "Free Plan Available"
+msgstr ""
+
+#: templates/landing/compare.html:176
+msgid "5 free credits"
+msgstr ""
+
+#: templates/landing/compare.html:179
+msgid "Unlimited*"
+msgstr ""
+
+#: templates/landing/compare.html:182 templates/landing/compare.html:185
+#: templates/landing/compare.html:242 templates/landing/compare.html:271
+#: templates/landing/compare.html:274 templates/landing/compare.html:291
+#: templates/landing/compare.html:294 templates/landing/compare.html:302
+#: templates/landing/compare.html:311 templates/landing/compare.html:314
+#: templates/landing/compare.html:342 templates/landing/compare.html:345
+#: templates/landing/compare.html:348 templates/landing/compare.html:351
+#: templates/landing/compare.html:354
+msgid "Yes"
+msgstr ""
+
+#: templates/landing/compare.html:188
+msgid "5/month"
+msgstr ""
+
+#: templates/landing/compare.html:195
+msgid "Pay-As-You-Go Option"
+msgstr ""
+
+#: templates/landing/compare.html:196 templates/landing/compare.html:239
+msgid "Unique"
+msgstr ""
+
+#: templates/landing/compare.html:199
+msgid "Yes (credits)"
+msgstr ""
+
+#: templates/landing/compare.html:202
+msgid "N/A"
+msgstr ""
+
+#: templates/landing/compare.html:205 templates/landing/compare.html:208
+#: templates/landing/compare.html:211 templates/landing/compare.html:245
+#: templates/landing/compare.html:248 templates/landing/compare.html:251
+#: templates/landing/compare.html:265 templates/landing/compare.html:268
+#: templates/landing/compare.html:285 templates/landing/compare.html:288
+#: templates/landing/compare.html:305 templates/landing/compare.html:308
+#: templates/landing/compare.html:325 templates/landing/compare.html:328
+#: templates/landing/compare.html:331
+msgid "No"
+msgstr ""
+
+#: templates/landing/compare.html:217
+msgid "Professional PDF Templates"
+msgstr ""
+
+#: templates/landing/compare.html:219
+msgid "5 templates"
+msgstr ""
+
+#: templates/landing/compare.html:222
+msgid "1 basic"
+msgstr ""
+
+#: templates/landing/compare.html:225
+msgid "Many (design)"
+msgstr ""
+
+#: templates/landing/compare.html:228 templates/landing/compare.html:231
+msgid "3 templates"
+msgstr ""
+
+#: templates/landing/compare.html:238
+msgid "CSV Batch Upload"
+msgstr ""
+
+#: templates/landing/compare.html:254
+msgid "Import only"
+msgstr ""
+
+#: templates/landing/compare.html:260
+#: templates/landing/for-freelancers.html:315
+#: templates/landing/for-small-business.html:247
+#: templates/showcase/executive.html:325
+msgid "Recurring Invoices"
+msgstr ""
+
+#: templates/landing/compare.html:262
+msgid "Yes ($29/mo)"
+msgstr ""
+
+#: templates/landing/compare.html:280
+msgid "Email Invoices to Clients"
+msgstr ""
+
+#: templates/landing/compare.html:282
+msgid "Yes (all plans)"
+msgstr ""
+
+#: templates/landing/compare.html:300
+msgid "Payment Status Tracking"
+msgstr ""
+
+#: templates/landing/compare.html:320
+#: templates/landing/for-small-business.html:267
+msgid "API Access"
+msgstr ""
+
+#: templates/landing/compare.html:322
+msgid "Yes ($79/mo)"
+msgstr ""
+
+#: templates/landing/compare.html:334
+msgid "Yes ($35+/mo)"
+msgstr ""
+
+#: templates/landing/compare.html:340
+msgid "Custom Logo/Branding"
+msgstr ""
+
+#: templates/landing/compare.html:360
+msgid "Accounting Features"
+msgstr ""
+
+#: templates/landing/compare.html:362 templates/landing/compare.html:365
+msgid "Invoicing only"
+msgstr ""
+
+#: templates/landing/compare.html:368
+msgid "Design only"
+msgstr ""
+
+#: templates/landing/compare.html:371 templates/landing/compare.html:374
+msgid "Full suite"
+msgstr ""
+
+#: templates/landing/compare.html:380
+msgid "Setup Time"
+msgstr ""
+
+#: templates/landing/compare.html:382
+msgid "2 minutes"
+msgstr ""
+
+#: templates/landing/compare.html:385
+msgid "1 minute"
+msgstr ""
+
+#: templates/landing/compare.html:388
+msgid "10+ minutes"
+msgstr ""
+
+#: templates/landing/compare.html:391 templates/landing/compare.html:394
+msgid "15+ minutes"
+msgstr ""
+
+#: templates/landing/compare.html:401
+msgid ""
+"* Invoice-Generator.com is free but has no account system, payment tracking, "
+"or invoice management."
+msgstr ""
+
+#: templates/landing/compare.html:409
+msgid "Detailed Comparisons"
+msgstr ""
+
+#: templates/landing/compare.html:410
+msgid "A closer look at how InvoiceKits compares"
+msgstr ""
+
+#: templates/landing/compare.html:417
+msgid "InvoiceKits vs Invoice-Generator.com"
+msgstr ""
+
+#: templates/landing/compare.html:418 templates/landing/compare.html:448
+msgid "We Win"
+msgstr ""
+
+#: templates/landing/compare.html:421
+msgid ""
+"Invoice-Generator.com is great for one-off invoices, but it lacks account "
+"management, payment tracking, and invoice history. Every time you create an "
+"invoice, you start from scratch."
+msgstr ""
+
+#: templates/landing/compare.html:426
+msgid "Save clients, track payments, view history"
+msgstr ""
+
+#: templates/landing/compare.html:430
+msgid "5 professional templates vs 1 basic"
+msgstr ""
+
+#: templates/landing/compare.html:434
+msgid "Email invoices directly to clients"
+msgstr ""
+
+#: templates/landing/compare.html:438
+msgid "Batch upload 100+ invoices at once"
+msgstr ""
+
+#: templates/landing/compare.html:441
+msgid "Best for: Businesses that invoice regularly and need to track payments."
+msgstr ""
+
+#: templates/landing/compare.html:447
+msgid "InvoiceKits vs Canva Invoice Maker"
+msgstr ""
+
+#: templates/landing/compare.html:451
+msgid ""
+"Canva makes beautiful designs, but it's a design tool, not an invoicing "
+"solution. No automatic calculations, no payment tracking, no client "
+"management."
+msgstr ""
+
+#: templates/landing/compare.html:456
+msgid "Auto-calculates totals, taxes, due dates"
+msgstr ""
+
+#: templates/landing/compare.html:460
+msgid "Track paid, pending, overdue status"
+msgstr ""
+
+#: templates/landing/compare.html:464
+msgid "Recurring invoices for retainers"
+msgstr ""
+
+#: templates/landing/compare.html:468
+msgid "60-second invoice creation vs 10+ minutes"
+msgstr ""
+
+#: templates/landing/compare.html:471
+msgid ""
+"Best for: Businesses that need functional invoicing, not just pretty "
+"templates."
+msgstr ""
+
+#: templates/landing/compare.html:477
+msgid "InvoiceKits vs Wave"
+msgstr ""
+
+#: templates/landing/compare.html:478
+msgid "Different Focus"
+msgstr ""
+
+#: templates/landing/compare.html:481
+msgid ""
+"Wave is a full accounting suite that's free but monetizes through payment "
+"processing. Great if you need accounting, but overkill if you just need "
+"invoices."
+msgstr ""
+
+#: templates/landing/compare.html:486
+msgid "Faster setup (2 min vs 15+ min)"
+msgstr ""
+
+#: templates/landing/compare.html:490
+msgid "CSV batch upload (Wave doesn't have this)"
+msgstr ""
+
+#: templates/landing/compare.html:494
+msgid "5 premium templates vs 3 basic"
+msgstr ""
+
+#: templates/landing/compare.html:498
+msgid "Wave wins:"
+msgstr ""
+
+#: templates/landing/compare.html:498
+msgid "Full accounting (if you need it)"
+msgstr ""
+
+#: templates/landing/compare.html:501
+msgid ""
+"Best for: Businesses that want focused invoicing without accounting "
+"complexity."
+msgstr ""
+
+#: templates/landing/compare.html:507
+msgid "InvoiceKits vs Zoho Invoice"
+msgstr ""
+
+#: templates/landing/compare.html:508
+msgid "Better Value"
+msgstr ""
+
+#: templates/landing/compare.html:511
+msgid ""
+"Zoho Invoice is powerful but starts at $15/month and gets expensive fast. "
+"API access alone costs $35+/month. InvoiceKits offers similar features at a "
+"fraction of the price."
+msgstr ""
+
+#: templates/landing/compare.html:516
+msgid "Free plan with 5 invoices/month"
+msgstr ""
+
+#: templates/landing/compare.html:520
+msgid "API at $79/mo vs $35+/mo at Zoho"
+msgstr ""
+
+#: templates/landing/compare.html:524
+msgid "Simpler interface, faster learning curve"
+msgstr ""
+
+#: templates/landing/compare.html:528
+msgid "True batch upload (create 100+ invoices)"
+msgstr ""
+
+#: templates/landing/compare.html:531
+msgid ""
+"Best for: Businesses wanting professional features without enterprise "
+"pricing."
+msgstr ""
+
+#: templates/landing/compare.html:541
+msgid "Why 10,000+ Businesses Choose InvoiceKits"
+msgstr ""
+
+#: templates/landing/compare.html:542
+msgid "The features that matter, without the complexity you don't need"
+msgstr ""
+
+#: templates/landing/compare.html:552
+msgid "Batch Upload"
+msgstr ""
+
+#: templates/landing/compare.html:553
+msgid ""
+"Create 100+ invoices in minutes with CSV upload. No other tool at our price "
+"point offers this."
+msgstr ""
+
+#: templates/landing/compare.html:562
+msgid "Fair Pricing"
+msgstr ""
+
+#: templates/landing/compare.html:563
+msgid ""
+"Start free, upgrade when you need more. No hidden fees, no payment "
+"processing cuts."
+msgstr ""
+
+#: templates/landing/compare.html:572
+msgid "Professional Templates"
+msgstr ""
+
+#: templates/landing/compare.html:573
+msgid ""
+"5 polished designs including Executive, Classic Professional, and Bold "
+"Modern."
+msgstr ""
+
+#: templates/landing/compare.html:583 templates/landing/index.html:365
+msgid "Simple, Transparent Pricing"
+msgstr ""
+
+#: templates/landing/compare.html:584
+msgid "Pay-as-you-go with credits or subscribe for better per-invoice value"
+msgstr ""
+
+#: templates/landing/compare.html:589
+#: templates/landing/for-consultants.html:476
+#: templates/landing/for-freelancers.html:404
+#: templates/landing/for-small-business.html:419
+#: templates/landing/index.html:371 templates/landing/pricing.html:197
+msgid "Pay-As-You-Go Credits"
+msgstr ""
+
+#: templates/landing/compare.html:593 templates/landing/compare.html:598
+#: templates/landing/compare.html:603 templates/landing/compare.html:608
+#: templates/landing/for-consultants.html:485
+#: templates/landing/for-freelancers.html:410
+#: templates/landing/for-freelancers.html:415
+#: templates/landing/for-freelancers.html:422
+#: templates/landing/for-freelancers.html:428
+#: templates/landing/for-small-business.html:428
+#: templates/landing/index.html:379 templates/landing/index.html:393
+#: templates/landing/index.html:408 templates/landing/index.html:423
+msgid "credits"
+msgstr ""
+
+#: templates/landing/compare.html:594
+msgid "FREE"
+msgstr ""
+
+#: templates/landing/compare.html:612
+msgid "Credits never expire. No monthly commitment."
+msgstr ""
+
+#: templates/landing/compare.html:617
+#: templates/landing/for-freelancers.html:437
+msgid "Monthly Subscriptions (Better Value)"
+msgstr ""
+
+#: templates/landing/compare.html:622
+msgid "5 credits (lifetime)"
+msgstr ""
+
+#: templates/landing/compare.html:625
+#: templates/landing/for-consultants.html:542
+#: templates/landing/for-freelancers.html:442
+#: templates/landing/for-small-business.html:485
+msgid "Starter"
+msgstr ""
+
+#: templates/landing/compare.html:627
+#: templates/landing/for-consultants.html:551
+#: templates/landing/for-small-business.html:494
+msgid "50 invoices/month"
+msgstr ""
+
+#: templates/landing/compare.html:630
+#: templates/landing/for-consultants.html:568
+#: templates/landing/for-freelancers.html:472
+#: templates/landing/for-small-business.html:511
+#: templates/showcase/classic-professional.html:100
+#: templates/showcase/executive.html:100
+msgid "Professional"
+msgstr ""
+
+#: templates/landing/compare.html:632
+msgid "200 invoices + batch"
+msgstr ""
+
+#: templates/landing/compare.html:635
+#: templates/landing/for-consultants.html:591
+#: templates/landing/for-freelancers.html:499
+#: templates/landing/for-small-business.html:534
+msgid "Business"
+msgstr ""
+
+#: templates/landing/compare.html:637
+msgid "Unlimited + API"
+msgstr ""
+
+#: templates/landing/compare.html:643
+#: templates/landing/for-consultants.html:615
+#: templates/landing/for-freelancers.html:527
+#: templates/landing/for-small-business.html:558
+msgid "View full pricing details"
+msgstr ""
+
+#: templates/landing/compare.html:652
+#: templates/landing/for-consultants.html:624
+#: templates/landing/for-freelancers.html:536
+#: templates/landing/for-small-business.html:567
+#: templates/landing/index.html:496 templates/landing/pricing.html:507
+#: templates/tools/invoice-calculator.html:335
+#: templates/tools/late-fee-calculator.html:342
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: templates/landing/compare.html:657
+msgid "What makes InvoiceKits different from other invoice generators?"
+msgstr ""
+
+#: templates/landing/compare.html:658
+msgid ""
+"InvoiceKits offers unique features like CSV batch upload for creating 100+ "
+"invoices at once, 5 professional PDF templates, recurring invoices, and API "
+"access - all with a generous free tier. Most competitors either lack batch "
+"processing or charge significantly more."
+msgstr ""
+
+#: templates/landing/compare.html:662
+msgid "Is InvoiceKits cheaper than FreshBooks or Zoho Invoice?"
+msgstr ""
+
+#: templates/landing/compare.html:663
+msgid ""
+"Yes. InvoiceKits starts with a free plan (5 invoices/month) and paid plans "
+"from $9/month. FreshBooks starts at $17/month and Zoho Invoice at $15/month. "
+"InvoiceKits Professional ($29/month) includes features that cost $50+ on "
+"other platforms."
+msgstr ""
+
+#: templates/landing/compare.html:667
+msgid "Can I switch from another invoice tool to InvoiceKits?"
+msgstr ""
+
+#: templates/landing/compare.html:668
+msgid ""
+"Yes! You can start fresh with InvoiceKits immediately. Export your client "
+"list from your current tool and use our batch upload feature to quickly "
+"create invoices for all your clients."
+msgstr ""
+
+#: templates/landing/compare.html:672
+msgid "Does InvoiceKits have accounting features like Wave or QuickBooks?"
+msgstr ""
+
+#: templates/landing/compare.html:673
+msgid ""
+"InvoiceKits focuses on doing invoicing exceptionally well rather than being "
+"a full accounting suite. If you need expense tracking, bank reconciliation, "
+"or tax filing, pair InvoiceKits with your preferred accounting software via "
+"our API."
+msgstr ""
+
+#: templates/landing/compare.html:677
+msgid "What's the difference between credits and subscriptions?"
+msgstr ""
+
+#: templates/landing/compare.html:678
+msgid ""
+"Credits are pay-as-you-go: buy them when you need them, they never expire. "
+"Subscriptions offer better value if you invoice regularly - as low as $0.15/"
+"invoice vs $0.70-0.90 with credits. Subscriptions also include premium "
+"features like batch upload and recurring invoices."
+msgstr ""
+
+#: templates/landing/compare.html:682
+msgid "Do other invoice tools offer pay-as-you-go credits?"
+msgstr ""
+
+#: templates/landing/compare.html:683
+msgid ""
+"No. InvoiceKits is unique in offering a credit-based pay-as-you-go model. "
+"Other tools either require monthly subscriptions (Zoho, FreshBooks) or have "
+"limited free tiers with no upgrade path besides subscriptions. Our credits "
+"give you flexibility without commitment."
+msgstr ""
+
+#: templates/landing/compare.html:693
+msgid "Ready to Switch to Better Invoicing?"
+msgstr ""
+
+#: templates/landing/compare.html:696
+msgid ""
+"Join 10,000+ businesses that chose InvoiceKits for professional, hassle-free "
+"invoicing."
+msgstr ""
+
+#: templates/landing/compare.html:699
+msgid "Start Free - No Credit Card Required"
+msgstr ""
+
+#: templates/landing/compare.html:702
+msgid "Free forever plan available. Upgrade anytime."
+msgstr ""
+
+#: templates/landing/for-consultants.html:4
+#: templates/landing/for-consultants.html:12
+msgid ""
+"Invoice Generator for Consultants - Professional Billing for Expert Services"
+msgstr ""
+
+#: templates/landing/for-consultants.html:6
+msgid ""
+"Free invoice generator for consultants. Create professional invoices for "
+"hourly billing, retainers, and project work. Impress clients and get paid "
+"faster. Start free today."
+msgstr ""
+
+#: templates/landing/for-consultants.html:8
+msgid ""
+"consultant invoice generator, consulting invoice template, professional "
+"services invoice, hourly billing invoice, retainer invoice software, "
+"consultant billing"
+msgstr ""
+
+#: templates/landing/for-consultants.html:14
+msgid ""
+"Free invoice generator for consultants. Professional invoices for hourly "
+"billing, retainers, and project work."
+msgstr ""
+
+#: templates/landing/for-consultants.html:16
+msgid "Invoice Generator for Consultants"
+msgstr ""
+
+#: templates/landing/for-consultants.html:18
+msgid ""
+"Professional invoicing for consultants. Hourly billing, retainers, and "
+"project invoices. Free to start."
+msgstr ""
+
+#: templates/landing/for-consultants.html:109
+msgid "For Consultants"
+msgstr ""
+
+#: templates/landing/for-consultants.html:116
+msgid "Built for Consultants"
+msgstr ""
+
+#: templates/landing/for-consultants.html:119
+msgid "Your Expertise Deserves"
+msgstr ""
+
+#: templates/landing/for-consultants.html:120
+msgid "Professional Invoices."
+msgstr ""
+
+#: templates/landing/for-consultants.html:123
+msgid ""
+"Corporate clients expect polished invoices. Create professional billing "
+"documents that match your expertise in seconds. Join 3,000+ consultants "
+"using InvoiceKits."
+msgstr ""
+
+#: templates/landing/for-consultants.html:127
+#: templates/landing/for-consultants.html:387
+#: templates/landing/for-consultants.html:671
+#: templates/landing/for-freelancers.html:119
+#: templates/landing/for-freelancers.html:578
+msgid "Create Your First Invoice Free"
+msgstr ""
+
+#: templates/landing/for-consultants.html:130
+msgid "View Templates"
+msgstr ""
+
+#: templates/landing/for-consultants.html:134
+msgid ""
+"Start with 5 free credits. Buy more as needed or subscribe for best value."
+msgstr ""
+
+#: templates/landing/for-consultants.html:143
+msgid "Consulting Services"
+msgstr ""
+
+#: templates/landing/for-consultants.html:144
+#: templates/showcase/executive.html:122
+msgid "Strategic Advisory"
+msgstr ""
+
+#: templates/landing/for-consultants.html:147
+#: templates/landing/for-freelancers.html:138 templates/landing/index.html:130
+#: templates/landing/index.html:163 templates/landing/index.html:198
+#: templates/landing/index.html:228 templates/landing/index.html:259
+#: templates/showcase/bold-modern.html:124
+#: templates/showcase/bold-modern.html:228
+#: templates/showcase/classic-professional.html:127
+#: templates/showcase/classic-professional.html:236
+#: templates/showcase/clean-slate.html:124
+#: templates/showcase/clean-slate.html:234
+#: templates/showcase/executive.html:125 templates/showcase/executive.html:231
+#: templates/showcase/neon-edge.html:129 templates/showcase/neon-edge.html:232
+msgid "INVOICE"
+msgstr ""
+
+#: templates/landing/for-consultants.html:153
+#: templates/landing/for-freelancers.html:143
+#: templates/showcase/classic-professional.html:133
+#: templates/showcase/executive.html:131 templates/showcase/neon-edge.html:134
+msgid "Bill To:"
+msgstr ""
+
+#: templates/landing/for-consultants.html:154
+#: templates/showcase/executive.html:132
+msgid "Fortune 500 Corp"
+msgstr ""
+
+#: templates/landing/for-consultants.html:155
+#: templates/showcase/executive.html:133
+msgid "Attn: VP of Strategy"
+msgstr ""
+
+#: templates/landing/for-consultants.html:159
+msgid "Strategy Workshop (8 hrs @ $350/hr)"
+msgstr ""
+
+#: templates/landing/for-consultants.html:163
+msgid "Market Analysis Report"
+msgstr ""
+
+#: templates/landing/for-consultants.html:167
+#: templates/showcase/executive.html:141
+msgid "Executive Presentation"
+msgstr ""
+
+#: templates/landing/for-consultants.html:172
+#: templates/landing/for-freelancers.html:157
+#: templates/showcase/bold-modern.html:282
+#: templates/showcase/classic-professional.html:152
+#: templates/showcase/classic-professional.html:287
+#: templates/showcase/clean-slate.html:289
+#: templates/showcase/executive.html:146 templates/showcase/executive.html:284
+#: templates/showcase/neon-edge.html:148 templates/showcase/neon-edge.html:284
+#: templates/tools/late-fee-calculator.html:270
+msgid "Total Due"
+msgstr ""
+
+#: templates/landing/for-consultants.html:185
+msgid "The Consulting Invoice Dilemma"
+msgstr ""
+
+#: templates/landing/for-consultants.html:186
+msgid "Your clients pay premium rates. Your invoices should reflect that."
+msgstr ""
+
+#: templates/landing/for-consultants.html:196
+#: templates/landing/for-consultants.html:206
+#: templates/landing/for-consultants.html:216
+#: templates/landing/for-consultants.html:412
+#: templates/landing/for-consultants.html:432
+#: templates/landing/for-consultants.html:452
+#: templates/landing/for-freelancers.html:181
+#: templates/landing/for-freelancers.html:191
+#: templates/landing/for-freelancers.html:201
+#: templates/landing/for-freelancers.html:341
+#: templates/landing/for-freelancers.html:361
+#: templates/landing/for-freelancers.html:381
+#: templates/landing/for-small-business.html:195
+#: templates/landing/for-small-business.html:205
+#: templates/landing/for-small-business.html:215
+#: templates/landing/for-small-business.html:355
+#: templates/landing/for-small-business.html:375
+#: templates/landing/for-small-business.html:395
+msgid "\\"
+msgstr ""
+
+#: templates/landing/for-consultants.html:197
+msgid ""
+"You charge $300/hour but send invoices that look like they were made in a "
+"spreadsheet. First impressions matter."
+msgstr ""
+
+#: templates/landing/for-consultants.html:207
+msgid ""
+"Hourly rates, project fees, retainers, expenses... calculating and "
+"formatting it all is a headache."
+msgstr ""
+
+#: templates/landing/for-consultants.html:217
+msgid ""
+"Enterprise clients have procurement requirements. They need professional "
+"invoices for their records."
+msgstr ""
+
+#: templates/landing/for-consultants.html:227
+msgid "Templates That Command Respect"
+msgstr ""
+
+#: templates/landing/for-consultants.html:228
+msgid "Professional designs that match your consulting expertise"
+msgstr ""
+
+#: templates/landing/for-consultants.html:234
+msgid "Popular with Consultants"
+msgstr ""
+
+#: templates/landing/for-consultants.html:242 templates/landing/index.html:187
+#: templates/showcase/bold-modern.html:321
+#: templates/showcase/classic-professional.html:324
+#: templates/showcase/clean-slate.html:360 templates/showcase/executive.html:82
+#: templates/showcase/executive.html:92 templates/showcase/neon-edge.html:322
+msgid "Executive"
+msgstr ""
+
+#: templates/landing/for-consultants.html:243
+msgid ""
+"Navy & gold accents with serif headings. Perfect for strategy consultants "
+"and executive advisors."
+msgstr ""
+
+#: templates/landing/for-consultants.html:255 templates/landing/index.html:248
+#: templates/showcase/bold-modern.html:329
+#: templates/showcase/classic-professional.html:82
+#: templates/showcase/classic-professional.html:92
+#: templates/showcase/clean-slate.html:376
+#: templates/showcase/executive.html:371 templates/showcase/neon-edge.html:338
+msgid "Classic Professional"
+msgstr ""
+
+#: templates/landing/for-consultants.html:256
+msgid ""
+"Traditional layout with subtle grays. Ideal for management and IT "
+"consultants."
+msgstr ""
+
+#: templates/landing/for-consultants.html:268 templates/landing/index.html:154
+#: templates/showcase/bold-modern.html:313
+#: templates/showcase/classic-professional.html:316
+#: templates/showcase/clean-slate.html:82
+#: templates/showcase/clean-slate.html:92 templates/showcase/executive.html:355
+#: templates/showcase/neon-edge.html:314
+msgid "Clean Slate"
+msgstr ""
+
+#: templates/landing/for-consultants.html:269
+msgid ""
+"Minimalist design with modern sans-serif. Great for tech and innovation "
+"consultants."
+msgstr ""
+
+#: templates/landing/for-consultants.html:274
+msgid "Plus 2 more templates: Bold Modern and Neon Edge"
+msgstr ""
+
+#: templates/landing/for-consultants.html:283
+msgid "Features Consultants Need"
+msgstr ""
+
+#: templates/landing/for-consultants.html:284
+msgid "Handle any billing scenario with ease"
+msgstr ""
+
+#: templates/landing/for-consultants.html:294
+#: templates/showcase/executive.html:315
+#: templates/tools/invoice-calculator.html:217
+msgid "Hourly Billing"
+msgstr ""
+
+#: templates/landing/for-consultants.html:295
+msgid ""
+"Add line items with hourly rates and quantities. Totals calculate "
+"automatically for time-based engagements."
+msgstr ""
+
+#: templates/landing/for-consultants.html:304
+msgid "Retainer Invoices"
+msgstr ""
+
+#: templates/landing/for-consultants.html:305
+msgid ""
+"Set up recurring invoices for monthly retainers. Automatic billing means "
+"predictable cash flow."
+msgstr ""
+
+#: templates/landing/for-consultants.html:314
+msgid "Project Milestones"
+msgstr ""
+
+#: templates/landing/for-consultants.html:315
+msgid ""
+"Bill by project phase. Add multiple deliverables with individual pricing to "
+"each invoice."
+msgstr ""
+
+#: templates/landing/for-consultants.html:324
+#: templates/landing/for-freelancers.html:265
+msgid "Your Logo & Branding"
+msgstr ""
+
+#: templates/landing/for-consultants.html:325
+msgid ""
+"Upload your consulting firm's logo. Every invoice reinforces your "
+"professional brand."
+msgstr ""
+
+#: templates/landing/for-consultants.html:334 templates/landing/index.html:107
+#: templates/showcase/clean-slate.html:340
+msgid "Multi-Currency"
+msgstr ""
+
+#: templates/landing/for-consultants.html:335
+msgid ""
+"Invoice international clients in USD, EUR, GBP, and more. Perfect for global "
+"consulting practices."
+msgstr ""
+
+#: templates/landing/for-consultants.html:344
+msgid "Direct Email Delivery"
+msgstr ""
+
+#: templates/landing/for-consultants.html:345
+msgid ""
+"Send invoices directly to clients with one click. PDF attached automatically "
+"with your custom message."
+msgstr ""
+
+#: templates/landing/for-consultants.html:355
+msgid "From Engagement to Payment"
+msgstr ""
+
+#: templates/landing/for-consultants.html:356
+msgid "Professional invoicing in three simple steps"
+msgstr ""
+
+#: templates/landing/for-consultants.html:364
+msgid "Set Up Your Profile"
+msgstr ""
+
+#: templates/landing/for-consultants.html:365
+msgid ""
+"Add your consulting firm details, logo, and default payment terms. Your "
+"brand on every invoice."
+msgstr ""
+
+#: templates/landing/for-consultants.html:372
+msgid "Create & Customize"
+msgstr ""
+
+#: templates/landing/for-consultants.html:373
+msgid ""
+"Add client details, itemize your services, choose a template. The invoice is "
+"ready in under 60 seconds."
+msgstr ""
+
+#: templates/landing/for-consultants.html:380
+msgid "Send & Track"
+msgstr ""
+
+#: templates/landing/for-consultants.html:381
+msgid ""
+"Email the invoice directly or download the PDF. Track payment status from "
+"your dashboard."
+msgstr ""
+
+#: templates/landing/for-consultants.html:397
+msgid "Trusted by Consultants Worldwide"
+msgstr ""
+
+#: templates/landing/for-consultants.html:398
+msgid "See what fellow consultants are saying"
+msgstr ""
+
+#: templates/landing/for-consultants.html:417
+msgid "Strategy Consultant"
+msgstr ""
+
+#: templates/landing/for-consultants.html:437
+msgid "HR Consultant"
+msgstr ""
+
+#: templates/landing/for-consultants.html:457 templates/landing/index.html:332
+msgid "IT Consultant"
+msgstr ""
+
+#: templates/landing/for-consultants.html:469
+msgid "Flexible Pricing for Consultants"
+msgstr ""
+
+#: templates/landing/for-consultants.html:470
+#: templates/landing/for-small-business.html:413
+msgid "Pay-as-you-go credits or monthly subscriptions - your choice"
+msgstr ""
+
+#: templates/landing/for-consultants.html:477
+msgid ""
+"Perfect for project-based consulting. Buy credits when you need them - they "
+"never expire."
+msgstr ""
+
+#: templates/landing/for-consultants.html:482
+#: templates/landing/for-small-business.html:425
+#: templates/landing/pricing.html:205
+msgid "Free Start"
+msgstr ""
+
+#: templates/landing/for-consultants.html:487
+#: templates/landing/for-small-business.html:430
+msgid "FREE forever"
+msgstr ""
+
+#: templates/landing/for-consultants.html:488
+#: templates/landing/for-small-business.html:431
+msgid "One-time signup bonus"
+msgstr ""
+
+#: templates/landing/for-consultants.html:493
+#: templates/landing/for-small-business.html:436
+#: templates/landing/pricing.html:239
+msgid "10 Credits"
+msgstr ""
+
+#: templates/landing/for-consultants.html:497
+#: templates/landing/for-freelancers.html:417
+#: templates/landing/for-small-business.html:440
+#: templates/landing/index.html:395
+msgid "$0.90/invoice"
+msgstr ""
+
+#: templates/landing/for-consultants.html:499
+#: templates/landing/for-consultants.html:514
+#: templates/landing/for-consultants.html:526
+#: templates/landing/for-small-business.html:442
+#: templates/landing/for-small-business.html:457
+#: templates/landing/for-small-business.html:469
+#: templates/landing/index.html:401 templates/landing/index.html:416
+#: templates/landing/index.html:431 templates/landing/pricing.html:266
+#: templates/landing/pricing.html:307 templates/landing/pricing.html:347
+msgid "Buy Credits"
+msgstr ""
+
+#: templates/landing/for-consultants.html:506
+#: templates/landing/for-small-business.html:449
+#: templates/landing/index.html:421 templates/landing/pricing.html:278
+msgid "Best Value"
+msgstr ""
+
+#: templates/landing/for-consultants.html:508
+#: templates/landing/for-small-business.html:451
+#: templates/landing/pricing.html:280
+msgid "25 Credits"
+msgstr ""
+
+#: templates/landing/for-consultants.html:512
+#: templates/landing/for-freelancers.html:424
+#: templates/landing/for-small-business.html:455
+#: templates/landing/index.html:410
+msgid "$0.76/invoice"
+msgstr ""
+
+#: templates/landing/for-consultants.html:520
+#: templates/landing/for-small-business.html:463
+#: templates/landing/pricing.html:320
+msgid "50 Credits"
+msgstr ""
+
+#: templates/landing/for-consultants.html:524
+#: templates/landing/for-freelancers.html:430
+#: templates/landing/for-small-business.html:467
+#: templates/landing/index.html:425
+msgid "$0.70/invoice"
+msgstr ""
+
+#: templates/landing/for-consultants.html:530
+msgid ""
+"All credit packs: All 5 templates including Executive, no watermark, credits "
+"never expire"
+msgstr ""
+
+#: templates/landing/for-consultants.html:536
+#: templates/landing/for-small-business.html:479
+#: templates/landing/index.html:438 templates/landing/pricing.html:376
+msgid "Monthly Subscriptions"
+msgstr ""
+
+#: templates/landing/for-consultants.html:537
+msgid ""
+"Best value for consultants with retainer clients or regular invoicing needs."
+msgstr ""
+
+#: templates/landing/for-consultants.html:545
+#: templates/landing/for-consultants.html:571
+#: templates/landing/for-consultants.html:594
+#: templates/landing/for-freelancers.html:445
+#: templates/landing/for-freelancers.html:475
+#: templates/landing/for-freelancers.html:502
+#: templates/landing/pricing.html:391
+msgid "month"
+msgstr ""
+
+#: templates/landing/for-consultants.html:547
+#: templates/landing/for-small-business.html:490
+msgid "$0.18/invoice (50/mo)"
+msgstr ""
+
+#: templates/landing/for-consultants.html:555
+#: templates/landing/for-small-business.html:498
+msgid "All templates, no watermark"
+msgstr ""
+
+#: templates/landing/for-consultants.html:559
+#: templates/landing/for-consultants.html:585
+#: templates/landing/for-consultants.html:608
+#: templates/landing/for-freelancers.html:463
+#: templates/landing/for-freelancers.html:493
+#: templates/landing/for-freelancers.html:520
+#: templates/landing/for-small-business.html:502
+#: templates/landing/for-small-business.html:528
+#: templates/landing/for-small-business.html:551
+#: templates/landing/index.html:482 templates/landing/pricing.html:460
+msgid "Start Free Trial"
+msgstr ""
+
+#: templates/landing/for-consultants.html:566
+msgid "Best for Consultants"
+msgstr ""
+
+#: templates/landing/for-consultants.html:573
+#: templates/landing/for-small-business.html:516
+msgid "$0.15/invoice (200/mo)"
+msgstr ""
+
+#: templates/landing/for-consultants.html:577
+#: templates/landing/for-small-business.html:520
+msgid "200 invoices/month"
+msgstr ""
+
+#: templates/landing/for-consultants.html:581
+#: templates/landing/for-freelancers.html:485
+msgid "Recurring invoices (retainers)"
+msgstr ""
+
+#: templates/landing/for-consultants.html:596
+#: templates/landing/for-consultants.html:600
+#: templates/landing/for-freelancers.html:508
+#: templates/landing/for-small-business.html:539
+#: templates/landing/for-small-business.html:543
+#: templates/landing/pricing.html:395
+msgid "Unlimited invoices"
+msgstr ""
+
+#: templates/landing/for-consultants.html:604
+msgid "API + batch processing"
+msgstr ""
+
+#: templates/landing/for-consultants.html:615
+#: templates/landing/for-small-business.html:558
+msgid "Need more?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:615
+#: templates/landing/for-small-business.html:558
+msgid "Contact us"
+msgstr ""
+
+#: templates/landing/for-consultants.html:615
+#: templates/landing/for-small-business.html:558
+msgid "for Enterprise pricing."
+msgstr ""
+
+#: templates/landing/for-consultants.html:629
+msgid "Can I bill hourly rates with InvoiceKits?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:630
+msgid ""
+"Yes! Add line items with hourly rates and quantities. InvoiceKits "
+"automatically calculates totals. Perfect for time-based consulting "
+"engagements."
+msgstr ""
+
+#: templates/landing/for-consultants.html:634
+msgid "Should consultants use credits or subscribe?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:635
+msgid ""
+"It depends on your billing pattern. Project-based consultants often prefer "
+"credits ($0.70-$0.90/invoice) since they never expire. Consultants with "
+"retainer clients get better value from subscriptions ($0.15-$0.18/invoice) "
+"plus recurring invoice automation."
+msgstr ""
+
+#: templates/landing/for-consultants.html:639
+msgid "How do I invoice retainer clients?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:640
+msgid ""
+"Set up recurring invoices for retainer agreements. Choose weekly, monthly, "
+"or quarterly billing cycles. Your clients receive professional invoices "
+"automatically."
+msgstr ""
+
+#: templates/landing/for-consultants.html:644
+msgid "Which invoice template is best for consultants?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:645
+msgid ""
+"Our Executive template is popular with consultants - it features a "
+"professional navy and gold design that conveys expertise and credibility. "
+"The Classic Professional template is also excellent for corporate clients."
+msgstr ""
+
+#: templates/landing/for-consultants.html:649
+#: templates/landing/for-small-business.html:592
+#: templates/landing/pricing.html:516
+msgid "Do credits expire?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:650
+msgid ""
+"No! Credits never expire. Perfect for consultants who work on projects with "
+"variable timelines. Buy a credit pack and use them whenever your next "
+"project wraps up."
+msgstr ""
+
+#: templates/landing/for-consultants.html:654
+msgid "Can I customize invoices with my consulting firm's branding?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:655
+msgid ""
+"Absolutely! Upload your logo, add your business address, and customize "
+"payment terms. Every invoice reinforces your professional brand and builds "
+"client confidence."
+msgstr ""
+
+#: templates/landing/for-consultants.html:665
+msgid "Ready to Elevate Your Consulting Practice?"
+msgstr ""
+
+#: templates/landing/for-consultants.html:668
+msgid ""
+"Join thousands of consultants who use InvoiceKits to bill professionally and "
+"get paid faster."
+msgstr ""
+
+#: templates/landing/for-consultants.html:674
+#: templates/landing/for-freelancers.html:581
+msgid "No credit card required. Free forever plan available."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:4
+#: templates/landing/for-freelancers.html:12
+msgid "Invoice Generator for Freelancers - Get Paid Faster"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:6
+msgid ""
+"Free invoice generator built for freelancers. Create professional invoices "
+"in seconds, track payments, send reminders, and get paid faster. No "
+"accounting degree required."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:8
+msgid ""
+"freelancer invoice generator, freelance invoice template, invoice for "
+"freelancers, freelancer billing software, self-employed invoice, contractor "
+"invoice"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:14
+msgid ""
+"Free invoice generator built for freelancers. Create professional invoices "
+"in seconds and get paid faster."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:16
+msgid "Invoice Generator for Freelancers"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:18
+msgid ""
+"Create professional freelance invoices in seconds. Free to start, no credit "
+"card required."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:101
+msgid "For Freelancers"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:108
+msgid "Built for Freelancers"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:111
+msgid "Stop Chasing Payments."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:112
+msgid "Start Getting Paid."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:115
+msgid ""
+"Professional invoices in 60 seconds. No accounting degree required. Join "
+"10,000+ freelancers who use InvoiceKits to look professional and get paid "
+"faster."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:122
+msgid "See How It Works"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:126
+msgid ""
+"Start with 5 free credits. Buy more as needed or subscribe for better value."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:135
+msgid "Your Name Design"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:148
+#: templates/showcase/clean-slate.html:258
+msgid "Website Redesign"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:152
+msgid "Logo Design"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:170
+msgid "Sound Familiar?"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:171
+msgid "Freelancing is hard enough without invoice headaches"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:182
+msgid ""
+"Wrestling with Word docs or spreadsheets, formatting issues, calculating "
+"totals manually..."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:192
+msgid ""
+"Clients judge your work by your invoice. A messy invoice = a messy "
+"freelancer."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:202
+msgid ""
+"No way to track what's paid, what's overdue, or send professional reminders."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:212
+msgid "Create Professional Invoices in 3 Steps"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:213
+msgid "From zero to invoice in under 60 seconds"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:221
+msgid "Add Client Details"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:222
+msgid ""
+"Enter your client's name and email. Save clients for quick access on future "
+"invoices."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:229
+#: templates/tools/invoice-calculator.html:311
+msgid "Add Line Items"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:230
+msgid ""
+"Describe your work, set your rate, and add as many line items as you need. "
+"Tax is calculated automatically."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:237
+msgid "Send & Get Paid"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:238
+msgid ""
+"Download the PDF or email it directly to your client. Track payment status "
+"from your dashboard."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:244
+msgid "Try It Free - No Credit Card Required"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:254
+msgid "Features Freelancers Love"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:255
+msgid "Everything you need to invoice like a pro"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:266
+msgid ""
+"Upload your logo and let every invoice reinforce your professional brand."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:275
+msgid "Email Invoices Instantly"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:276
+msgid ""
+"Send invoices directly to clients with one click. PDF automatically attached."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:285
+msgid "Payment Tracking"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:286
+msgid "See at a glance which invoices are paid, pending, or overdue."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:295
+#: templates/landing/for-small-business.html:287
+msgid "5 Professional Templates"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:296
+msgid ""
+"Choose from Clean Slate, Executive, Bold Modern, Classic, or Neon Edge "
+"designs."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:305
+msgid "Multi-Currency Support"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:306
+msgid "Invoice international clients in USD, EUR, GBP, CAD, AUD, and more."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:316
+msgid ""
+"Set up automatic invoices for retainer clients. Bill weekly, monthly, or "
+"quarterly."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:326
+msgid "Trusted by Freelancers Everywhere"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:327
+msgid "See what other freelancers are saying"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:346 templates/landing/index.html:311
+msgid "Freelance Designer"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:366
+msgid "Freelance Developer"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:386
+msgid "Freelance Writer"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:398
+msgid "Simple Pricing for Freelancers"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:399
+msgid "Pay-as-you-go with credits or subscribe for better value"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:405
+msgid ""
+"Perfect for freelancers with irregular invoicing. Buy credits when you need "
+"them - they never expire."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:420 templates/landing/index.html:406
+msgid "Popular"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:438
+msgid ""
+"Invoice regularly? Subscriptions offer as low as $0.15/invoice plus "
+"recurring invoices for retainer clients."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:447
+msgid "For growing freelance businesses"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:451
+msgid "50 invoices per month"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:455 templates/landing/index.html:397
+#: templates/landing/index.html:412 templates/landing/index.html:427
+#: templates/landing/pricing.html:255 templates/landing/pricing.html:296
+#: templates/landing/pricing.html:336 templates/landing/pricing.html:425
+msgid "All 5 templates"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:459 templates/landing/index.html:398
+#: templates/landing/index.html:413 templates/landing/index.html:428
+#: templates/landing/index.html:466 templates/landing/pricing.html:261
+#: templates/landing/pricing.html:302 templates/landing/pricing.html:342
+#: templates/landing/pricing.html:416
+msgid "No watermark"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:470
+msgid "Best for Freelancers"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:477
+msgid "For busy freelancers with retainer clients"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:481
+msgid "200 invoices per month"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:489
+#: templates/landing/pricing.html:434
+msgid "CSV batch upload"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:504
+msgid "For agencies and high-volume freelancers"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:512
+msgid "API access (1,000 calls/mo)"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:516
+msgid "Unlimited recurring invoices"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:527
+msgid "All plans include email support."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:541
+msgid "Is InvoiceKits free for freelancers?"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:542
+msgid ""
+"Yes! Every new user gets 5 free credits (one credit = one invoice). Need "
+"more? Buy credit packs starting at $9 for 10 credits, or subscribe monthly "
+"for better value if you invoice regularly."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:546
+msgid "Can I add my logo to freelance invoices?"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:547
+msgid ""
+"Absolutely! Upload your logo in Company Settings and it will appear on all "
+"your invoices automatically, giving your freelance business a professional "
+"look."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:551
+msgid "How do I send invoices to clients?"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:552
+msgid ""
+"You can email invoices directly to clients from InvoiceKits with one click. "
+"The PDF is automatically attached, and you can add a personalized message."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:556
+msgid "Can I track which invoices are paid?"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:557
+msgid ""
+"Yes! Track invoice status (Draft, Sent, Paid, Overdue) from your dashboard. "
+"When you mark an invoice as paid, your client automatically receives a "
+"payment receipt."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:561 templates/landing/index.html:595
+msgid "Should I use credits or subscribe monthly?"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:562
+msgid ""
+"It depends on how often you invoice. Credits are perfect if you invoice "
+"sporadically - they never expire and there's no commitment. If you invoice "
+"15+ times per month, subscriptions offer better value (as low as $0.15/"
+"invoice vs $0.70-0.90 with credits)."
+msgstr ""
+
+#: templates/landing/for-freelancers.html:572
+msgid "Ready to Get Paid Faster?"
+msgstr ""
+
+#: templates/landing/for-freelancers.html:575
+msgid ""
+"Join thousands of freelancers who use InvoiceKits to create professional "
+"invoices in seconds."
+msgstr ""
+
+#: templates/landing/for-small-business.html:4
+#: templates/landing/for-small-business.html:12
+msgid "Invoice Generator for Small Business - Professional Billing Made Easy"
+msgstr ""
+
+#: templates/landing/for-small-business.html:6
+msgid ""
+"Free invoice generator for small businesses. Create professional invoices, "
+"batch process multiple clients, track payments, and scale your billing "
+"operations. Start free today."
+msgstr ""
+
+#: templates/landing/for-small-business.html:8
+msgid ""
+"small business invoice generator, invoice software for small business, "
+"business invoice template, small business billing software, invoice "
+"management system"
+msgstr ""
+
+#: templates/landing/for-small-business.html:14
+msgid ""
+"Free invoice generator for small businesses. Batch process invoices, track "
+"payments, and scale your billing operations."
+msgstr ""
+
+#: templates/landing/for-small-business.html:16
+msgid "Invoice Generator for Small Business"
+msgstr ""
+
+#: templates/landing/for-small-business.html:18
+msgid ""
+"Professional invoicing for small businesses. Batch processing, payment "
+"tracking, and more. Free to start."
+msgstr ""
+
+#: templates/landing/for-small-business.html:109
+msgid "For Small Business"
+msgstr ""
+
+#: templates/landing/for-small-business.html:116
+msgid "Built for Small Business"
+msgstr ""
+
+#: templates/landing/for-small-business.html:119
+msgid "Billing That Scales"
+msgstr ""
+
+#: templates/landing/for-small-business.html:120
+msgid "With Your Business."
+msgstr ""
+
+#: templates/landing/for-small-business.html:123
+msgid ""
+"From 10 clients to 10,000. Professional invoice generation, batch "
+"processing, and payment tracking that grows with you. Join 5,000+ small "
+"businesses using InvoiceKits."
+msgstr ""
+
+#: templates/landing/for-small-business.html:127
+msgid "Start Free - No Credit Card"
+msgstr ""
+
+#: templates/landing/for-small-business.html:130
+#: templates/landing/index.html:26
+msgid "See Features"
+msgstr ""
+
+#: templates/landing/for-small-business.html:134
+msgid ""
+"Start with 5 free credits. Buy more as needed or subscribe monthly for "
+"better value."
+msgstr ""
+
+#: templates/landing/for-small-business.html:141
+msgid "Invoice Dashboard"
+msgstr ""
+
+#: templates/landing/for-small-business.html:142
+msgid "This Month"
+msgstr ""
+
+#: templates/landing/for-small-business.html:147
+#: templates/landing/for-small-business.html:164 templates/pages/help.html:216
+msgid "Paid"
+msgstr ""
+
+#: templates/landing/for-small-business.html:151
+#: templates/landing/for-small-business.html:171
+msgid "Pending"
+msgstr ""
+
+#: templates/landing/for-small-business.html:184
+msgid "Growing Pains Are Real"
+msgstr ""
+
+#: templates/landing/for-small-business.html:185
+msgid "Invoicing challenges that hold small businesses back"
+msgstr ""
+
+#: templates/landing/for-small-business.html:196
+msgid ""
+"Creating individual invoices one by one burns hours that could be spent "
+"growing your business."
+msgstr ""
+
+#: templates/landing/for-small-business.html:206
+msgid ""
+"Spreadsheets get messy. Without clear payment tracking, revenue falls "
+"through the cracks."
+msgstr ""
+
+#: templates/landing/for-small-business.html:216
+msgid ""
+"What worked for 10 clients breaks at 100. You need invoicing that grows with "
+"your business."
+msgstr ""
+
+#: templates/landing/for-small-business.html:226
+msgid "Features That Drive Business Growth"
+msgstr ""
+
+#: templates/landing/for-small-business.html:227
+msgid "Everything you need to manage invoicing at scale"
+msgstr ""
+
+#: templates/landing/for-small-business.html:237
+msgid "Batch Invoice Processing"
+msgstr ""
+
+#: templates/landing/for-small-business.html:238
+msgid ""
+"Upload a CSV and create 100+ invoices in minutes. Perfect for monthly "
+"billing cycles or multiple client invoicing."
+msgstr ""
+
+#: templates/landing/for-small-business.html:248
+msgid ""
+"Set up automatic billing for subscription services, retainers, or "
+"maintenance contracts. Bill weekly, monthly, or yearly."
+msgstr ""
+
+#: templates/landing/for-small-business.html:257
+msgid "Real-Time Dashboard"
+msgstr ""
+
+#: templates/landing/for-small-business.html:258
+msgid ""
+"See paid, pending, and overdue invoices at a glance. Know your cash flow "
+"position instantly."
+msgstr ""
+
+#: templates/landing/for-small-business.html:268
+msgid ""
+"Integrate with your existing systems. Automate invoice creation from your "
+"CRM, project management, or accounting software."
+msgstr ""
+
+#: templates/landing/for-small-business.html:277
+msgid "Email Delivery & Receipts"
+msgstr ""
+
+#: templates/landing/for-small-business.html:278
+msgid ""
+"Send professional invoices directly to clients. Automatic payment receipts "
+"when invoices are marked paid."
+msgstr ""
+
+#: templates/landing/for-small-business.html:288
+msgid ""
+"Choose from Clean Slate, Executive, Bold Modern, Classic Professional, or "
+"Neon Edge to match your brand."
+msgstr ""
+
+#: templates/landing/for-small-business.html:298
+msgid "How Small Businesses Use InvoiceKits"
+msgstr ""
+
+#: templates/landing/for-small-business.html:299
+msgid "From setup to paid in three simple steps"
+msgstr ""
+
+#: templates/landing/for-small-business.html:307
+msgid "Set Up Your Business"
+msgstr ""
+
+#: templates/landing/for-small-business.html:308
+msgid ""
+"Add your company logo, address, and default payment terms. Your brand on "
+"every invoice, automatically."
+msgstr ""
+
+#: templates/landing/for-small-business.html:315
+msgid "Create & Send Invoices"
+msgstr ""
+
+#: templates/landing/for-small-business.html:316
+msgid ""
+"Create individual invoices or batch process hundreds at once. Send via email "
+"with one click."
+msgstr ""
+
+#: templates/landing/for-small-business.html:323
+msgid "Track & Get Paid"
+msgstr ""
+
+#: templates/landing/for-small-business.html:324
+msgid ""
+"Monitor payment status from your dashboard. Mark invoices paid and send "
+"automatic receipts."
+msgstr ""
+
+#: templates/landing/for-small-business.html:330
+msgid "Get Started Free Today"
+msgstr ""
+
+#: templates/landing/for-small-business.html:340
+msgid "Trusted by Growing Businesses"
+msgstr ""
+
+#: templates/landing/for-small-business.html:341
+msgid "See what business owners are saying"
+msgstr ""
+
+#: templates/landing/for-small-business.html:360
+msgid "Property Management Co."
+msgstr ""
+
+#: templates/landing/for-small-business.html:380
+msgid "SaaS Startup Founder"
+msgstr ""
+
+#: templates/landing/for-small-business.html:400
+#: templates/landing/index.html:353
+msgid "Marketing Agency Owner"
+msgstr ""
+
+#: templates/landing/for-small-business.html:412
+msgid "Flexible Pricing That Scales With You"
+msgstr ""
+
+#: templates/landing/for-small-business.html:420
+msgid ""
+"Perfect for seasonal billing or occasional bulk invoicing. Credits never "
+"expire."
+msgstr ""
+
+#: templates/landing/for-small-business.html:473
+msgid "All credit packs: 5 templates, no watermark, credits never expire"
+msgstr ""
+
+#: templates/landing/for-small-business.html:480
+msgid "Best value for regular invoicing. Includes advanced features."
+msgstr ""
+
+#: templates/landing/for-small-business.html:488
+#: templates/landing/for-small-business.html:514
+#: templates/landing/for-small-business.html:537
+msgid "mo"
+msgstr ""
+
+#: templates/landing/for-small-business.html:509
+#: templates/landing/index.html:447 templates/landing/pricing.html:385
+msgid "Most Popular"
+msgstr ""
+
+#: templates/landing/for-small-business.html:524
+msgid "Batch upload + recurring"
+msgstr ""
+
+#: templates/landing/for-small-business.html:547
+msgid "API access (1000 calls/mo)"
+msgstr ""
+
+#: templates/landing/for-small-business.html:572
+msgid "Can I invoice multiple clients at once?"
+msgstr ""
+
+#: templates/landing/for-small-business.html:573
+msgid ""
+"Yes! Our batch upload feature lets you create hundreds of invoices at once "
+"by uploading a CSV file. Perfect for businesses that bill multiple clients "
+"on the same schedule."
+msgstr ""
+
+#: templates/landing/for-small-business.html:577
+msgid "Should my business use credits or a subscription?"
+msgstr ""
+
+#: templates/landing/for-small-business.html:578
+msgid ""
+"It depends on your invoicing volume. If you invoice 20+ clients monthly, "
+"subscriptions offer better value ($0.15-$0.18/invoice vs $0.70-$0.90 with "
+"credits). For seasonal businesses or occasional bulk invoicing, credits are "
+"more flexible since they never expire."
+msgstr ""
+
+#: templates/landing/for-small-business.html:582
+msgid "Does InvoiceKits integrate with accounting software?"
+msgstr ""
+
+#: templates/landing/for-small-business.html:583
+msgid ""
+"Yes, our Business plan includes API access so you can integrate with "
+"QuickBooks, Xero, or your existing accounting workflow. Export invoice data "
+"anytime."
+msgstr ""
+
+#: templates/landing/for-small-business.html:587
+msgid "Can I set up recurring invoices for subscription clients?"
+msgstr ""
+
+#: templates/landing/for-small-business.html:588
+msgid ""
+"Absolutely! Set up automatic invoices on weekly, bi-weekly, monthly, "
+"quarterly, or yearly schedules. Your clients receive invoices automatically, "
+"and you get notified when they're generated."
+msgstr ""
+
+#: templates/landing/for-small-business.html:593
+msgid ""
+"No! Credits never expire. Buy a credit pack and use them whenever you need. "
+"This makes credits perfect for businesses with seasonal invoicing or "
+"unpredictable billing cycles."
+msgstr ""
+
+#: templates/landing/for-small-business.html:597
+msgid "Is InvoiceKits secure for business billing?"
+msgstr ""
+
+#: templates/landing/for-small-business.html:598
+msgid ""
+"Yes. We use bank-level encryption, secure cloud storage, and never share "
+"your data. All payments are processed through Stripe, a PCI-compliant "
+"payment processor."
+msgstr ""
+
+#: templates/landing/for-small-business.html:608
+msgid "Ready to Streamline Your Billing?"
+msgstr ""
+
+#: templates/landing/for-small-business.html:611
+msgid ""
+"Join thousands of small businesses that save hours every month with "
+"InvoiceKits."
+msgstr ""
+
+#: templates/landing/for-small-business.html:614
+msgid "Start Your Free Trial Today"
+msgstr ""
+
+#: templates/landing/for-small-business.html:617
+msgid "No credit card required. 14-day free trial on all paid plans."
+msgstr ""
+
+#: templates/landing/index.html:4
+msgid "Free Invoice Generator - Create Professional Invoices"
+msgstr ""
+
+#: templates/landing/index.html:15
+msgid "Free Invoice Generator"
+msgstr ""
+
+#: templates/landing/index.html:16
+msgid "Create Professional Invoices in Seconds"
+msgstr ""
+
+#: templates/landing/index.html:19
+msgid ""
+"The fastest invoice generator for freelancers and small businesses. Create "
+"beautiful PDF invoices instantly, upload CSV for batch invoice generation, "
+"or use our API. No credit card required."
+msgstr ""
+
+#: templates/landing/index.html:23
+msgid "Create Free Invoice Now"
+msgstr ""
+
+#: templates/landing/index.html:30
+msgid "Start with 5 free credits. Pay-as-you-go or subscribe for better value."
+msgstr ""
+
+#: templates/landing/index.html:40
+msgid "The Most Powerful Invoice Generator"
+msgstr ""
+
+#: templates/landing/index.html:41
+msgid "Everything you need to create professional invoices and get paid faster"
+msgstr ""
+
+#: templates/landing/index.html:52
+msgid "Instant PDF Generation"
+msgstr ""
+
+#: templates/landing/index.html:53
+msgid ""
+"Create professional PDF invoices instantly with your company branding and "
+"logo."
+msgstr ""
+
+#: templates/landing/index.html:63
+msgid "Batch Invoice Generator"
+msgstr ""
+
+#: templates/landing/index.html:64
+msgid ""
+"Upload a CSV file for bulk invoice generation. Create 100+ invoices in "
+"minutes with our batch invoice processing feature."
+msgstr ""
+
+#: templates/landing/index.html:74
+msgid "5 Beautiful Templates"
+msgstr ""
+
+#: templates/landing/index.html:75
+msgid ""
+"Choose from professionally designed templates that match your brand style."
+msgstr ""
+
+#: templates/landing/index.html:85
+msgid "Custom Logo"
+msgstr ""
+
+#: templates/landing/index.html:86
+msgid ""
+"Upload your company logo and customize colors to match your brand identity."
+msgstr ""
+
+#: templates/landing/index.html:96
+msgid "Developer API"
+msgstr ""
+
+#: templates/landing/index.html:97
+msgid "Integrate invoice generation into your apps with our powerful REST API."
+msgstr ""
+
+#: templates/landing/index.html:108
+msgid ""
+"Support for USD, EUR, GBP, and more currencies for international invoicing."
+msgstr ""
+
+#: templates/landing/index.html:118
+msgid "5 Professional Invoice Templates"
+msgstr ""
+
+#: templates/landing/index.html:119
+msgid ""
+"Our invoice generator offers the perfect template style for your business"
+msgstr ""
+
+#: templates/landing/index.html:149 templates/landing/index.html:182
+#: templates/landing/index.html:212 templates/landing/index.html:243
+#: templates/landing/index.html:274 templates/showcase/bold-modern.html:145
+#: templates/showcase/clean-slate.html:151
+#: templates/tools/invoice-calculator.html:274
+msgid "Total"
+msgstr ""
+
+#: templates/landing/index.html:155
+msgid "Tech companies, startups"
+msgstr ""
+
+#: templates/landing/index.html:188
+msgid "Consulting, legal, finance"
+msgstr ""
+
+#: templates/landing/index.html:217 templates/showcase/bold-modern.html:82
+#: templates/showcase/bold-modern.html:92
+#: templates/showcase/classic-professional.html:332
+#: templates/showcase/clean-slate.html:368
+#: templates/showcase/executive.html:363 templates/showcase/neon-edge.html:330
+msgid "Bold Modern"
+msgstr ""
+
+#: templates/landing/index.html:218
+msgid "Creative agencies, designers"
+msgstr ""
+
+#: templates/landing/index.html:249
+msgid "General business, accounting"
+msgstr ""
+
+#: templates/landing/index.html:279 templates/showcase/bold-modern.html:337
+#: templates/showcase/classic-professional.html:340
+#: templates/showcase/clean-slate.html:384
+#: templates/showcase/executive.html:379 templates/showcase/neon-edge.html:84
+#: templates/showcase/neon-edge.html:94
+msgid "Neon Edge"
+msgstr ""
+
+#: templates/landing/index.html:280
+msgid "Gaming, tech, entertainment"
+msgstr ""
+
+#: templates/landing/index.html:290
+msgid "Trusted by Freelancers & Small Businesses"
+msgstr ""
+
+#: templates/landing/index.html:291
+msgid "See why thousands choose InvoiceKits for their invoicing needs"
+msgstr ""
+
+#: templates/landing/index.html:366
+msgid ""
+"Pay-as-you-go with credits or subscribe monthly for better value. Start with "
+"5 free credits."
+msgstr ""
+
+#: templates/landing/index.html:372
+msgid ""
+"Buy credits when you need them. No monthly commitment, no expiration. "
+"Perfect for occasional invoicing."
+msgstr ""
+
+#: templates/landing/index.html:377
+msgid "Free Starter"
+msgstr ""
+
+#: templates/landing/index.html:382 templates/landing/pricing.html:221
+msgid "1 template"
+msgstr ""
+
+#: templates/landing/index.html:383 templates/landing/index.html:466
+msgid "Watermark on PDFs"
+msgstr ""
+
+#: templates/landing/index.html:384 templates/landing/index.html:399
+#: templates/landing/index.html:414 templates/landing/index.html:429
+msgid "Never expires"
+msgstr ""
+
+#: templates/landing/index.html:386
+msgid "Sign Up Free"
+msgstr ""
+
+#: templates/landing/index.html:391
+msgid "Starter Pack"
+msgstr ""
+
+#: templates/landing/index.html:439
+msgid ""
+"Create invoices regularly? Subscriptions offer the best per-invoice value, "
+"plus batch upload and recurring invoices."
+msgstr ""
+
+#: templates/landing/index.html:453
+msgid "/month"
+msgstr ""
+
+#: templates/landing/index.html:460 templates/landing/pricing.html:407
+msgid "Unlimited"
+msgstr ""
+
+#: templates/landing/index.html:460
+msgid "invoices/month"
+msgstr ""
+
+#: templates/landing/index.html:472
+msgid "Batch upload"
+msgstr ""
+
+#: templates/landing/index.html:472
+msgid "No batch upload"
+msgstr ""
+
+#: templates/landing/index.html:478 templates/landing/pricing.html:443
+msgid "API access"
+msgstr ""
+
+#: templates/landing/index.html:478
+msgid "calls"
+msgstr ""
+
+#: templates/landing/index.html:478
+msgid "No API access"
+msgstr ""
+
+#: templates/landing/index.html:497
+msgid "Everything you need to know about InvoiceKits"
+msgstr ""
+
+#: templates/landing/index.html:504
+msgid "Is InvoiceKits really free to use?"
+msgstr ""
+
+#: templates/landing/index.html:510
+msgid ""
+"Yes! Our free plan lets you create up to 5 professional invoices per month "
+"at no cost. No credit card required to sign up. You can upgrade to a paid "
+"plan anytime for additional features like batch processing and API access."
+msgstr ""
+
+#: templates/landing/index.html:517
+msgid "How do I create an invoice with InvoiceKits?"
+msgstr ""
+
+#: templates/landing/index.html:523
+msgid ""
+"Creating an invoice is simple: 1) Sign up for a free account, 2) Enter your "
+"company details once, 3) Fill in client information and line items, 4) "
+"Choose a professional template, 5) Download your PDF invoice instantly. You "
+"can also upload a CSV file for batch invoice creation."
+msgstr ""
+
+#: templates/landing/index.html:530
+msgid "Can I add my company logo to invoices?"
+msgstr ""
+
+#: templates/landing/index.html:536
+msgid ""
+"Absolutely! All plans allow you to upload your company logo. Go to Settings "
+"> Company and upload your logo once. It will automatically appear on all "
+"your invoices, creating a professional branded look."
+msgstr ""
+
+#: templates/landing/index.html:543
+msgid "What currencies does InvoiceKits support?"
+msgstr ""
+
+#: templates/landing/index.html:549
+msgid ""
+"InvoiceKits supports multiple currencies including USD, EUR, GBP, CAD, AUD, "
+"JPY, and INR. You can set a default currency in your company settings and "
+"change it per invoice as needed for international clients."
+msgstr ""
+
+#: templates/landing/index.html:556
+msgid "What is batch invoice processing?"
+msgstr ""
+
+#: templates/landing/index.html:562
+msgid ""
+"Batch processing lets you create multiple invoices at once by uploading a "
+"CSV file. Simply download our template, fill in your invoice data, and "
+"upload it. InvoiceKits will generate PDF invoices for each row, which you "
+"can download as a ZIP file. This feature is available on Professional and "
+"Business plans."
+msgstr ""
+
+#: templates/landing/index.html:569
+msgid "Do you offer an API for developers?"
+msgstr ""
+
+#: templates/landing/index.html:575
+msgid ""
+"Yes! Our Business plan includes REST API access with 1,000 API calls per "
+"month. You can programmatically create invoices, retrieve invoice data, and "
+"download PDFs. API documentation is available at /api/docs/ for "
+"authenticated users."
+msgstr ""
+
+#: templates/landing/index.html:582
+msgid "What are invoice credits and how do they work?"
+msgstr ""
+
+#: templates/landing/index.html:588
+msgid ""
+"Credits are our pay-as-you-go option. Each credit lets you create one "
+"invoice. New users get 5 free credits to start. You can buy more credits in "
+"packs of 10, 25, or 50 whenever you need them. Credits never expire, so you "
+"only pay for what you use."
+msgstr ""
+
+#: templates/landing/index.html:601
+msgid ""
+"Credits are ideal if you create invoices occasionally or unpredictably. "
+"Monthly subscriptions offer better per-invoice value (as low as $0.15/"
+"invoice vs $0.70-0.90 with credits) and include premium features like batch "
+"upload and recurring invoices. If you create more than 15 invoices per "
+"month, a subscription is more cost-effective."
+msgstr ""
+
+#: templates/landing/index.html:608
+msgid "Do invoice credits ever expire?"
+msgstr ""
+
+#: templates/landing/index.html:614
+msgid ""
+"No, credits never expire! Once you purchase a credit pack, those credits "
+"stay in your account until you use them. This makes credits perfect for "
+"occasional invoicing needs without worrying about a monthly subscription."
+msgstr ""
+
+#: templates/landing/index.html:706
+msgid "Ready to Get Started?"
+msgstr ""
+
+#: templates/landing/index.html:708
+msgid ""
+"Join thousands of freelancers and businesses using our free invoice "
+"generator to create professional invoices."
+msgstr ""
+
+#: templates/landing/index.html:711
+msgid "Try Our Invoice Generator Free"
+msgstr ""
+
+#: templates/landing/index.html:729
+msgid "Company"
+msgstr ""
+
+#: templates/landing/index.html:731
+msgid "About"
+msgstr ""
+
+#: templates/landing/index.html:733
+msgid "Careers"
+msgstr ""
+
+#: templates/landing/index.html:740
+msgid "Contact"
+msgstr ""
+
+#: templates/landing/index.html:746
+msgid "Privacy"
+msgstr ""
+
+#: templates/landing/index.html:747
+msgid "Terms"
+msgstr ""
+
+#: templates/landing/pricing.html:4
+msgid "Invoice Generator Pricing - Subscriptions & Pay-As-You-Go Credits"
+msgstr ""
+
+#: templates/landing/pricing.html:6
+msgid ""
+"Flexible invoice generator pricing. Start free with 5 credits, buy credit "
+"packs from $9, or subscribe from $9/mo for better value. No monthly "
+"commitment required. Credits never expire."
+msgstr ""
+
+#: templates/landing/pricing.html:8
+msgid ""
+"invoice generator pricing, invoice software pricing, free invoice maker, "
+"invoicing plans, batch invoice pricing, pay as you go invoicing, invoice "
+"credits"
+msgstr ""
+
+#: templates/landing/pricing.html:12
+msgid "Invoice Generator Pricing - Flexible Plans for Every Business"
+msgstr ""
+
+#: templates/landing/pricing.html:14
+msgid ""
+"Pay-as-you-go credits or monthly subscriptions. Start free with 5 credits, "
+"buy more from $9, or subscribe for unlimited value. No credit card required."
+msgstr ""
+
+#: templates/landing/pricing.html:16
+msgid "Invoice Generator Pricing - Credits & Subscriptions"
+msgstr ""
+
+#: templates/landing/pricing.html:18
+msgid ""
+"Flexible invoicing: pay-as-you-go credits from $9 or subscriptions from $9/"
+"mo. Start free, no commitment."
+msgstr ""
+
+#: templates/landing/pricing.html:175
+msgid "Invoice Generator Pricing"
+msgstr ""
+
+#: templates/landing/pricing.html:176
+msgid "Choose your style: pay-as-you-go credits or monthly subscriptions"
+msgstr ""
+
+#: templates/landing/pricing.html:183
+msgid "Credits"
+msgstr ""
+
+#: templates/landing/pricing.html:184
+msgid "Pay only when you invoice"
+msgstr ""
+
+#: templates/landing/pricing.html:186
+msgid "or"
+msgstr ""
+
+#: templates/landing/pricing.html:188
+msgid "Subscriptions"
+msgstr ""
+
+#: templates/landing/pricing.html:189
+msgid "Best value for regular use"
+msgstr ""
+
+#: templates/landing/pricing.html:198
+msgid "No subscription required. Buy credits, use them anytime."
+msgstr ""
+
+#: templates/landing/pricing.html:198
+msgid "Credits never expire."
+msgstr ""
+
+#: templates/landing/pricing.html:209
+msgid "5 credits"
+msgstr ""
+
+#: templates/landing/pricing.html:215
+msgid "Lifetime credits"
+msgstr ""
+
+#: templates/landing/pricing.html:227 templates/landing/pricing.html:416
+msgid "Includes watermark"
+msgstr ""
+
+#: templates/landing/pricing.html:243
+msgid "$0.90 per invoice"
+msgstr ""
+
+#: templates/landing/pricing.html:249 templates/landing/pricing.html:290
+#: templates/landing/pricing.html:330
+msgid "Never expire"
+msgstr ""
+
+#: templates/landing/pricing.html:270 templates/landing/pricing.html:311
+#: templates/landing/pricing.html:351
+msgid "Get Started"
+msgstr ""
+
+#: templates/landing/pricing.html:284
+msgid "$0.76 per invoice"
+msgstr ""
+
+#: templates/landing/pricing.html:324
+msgid "$0.70 per invoice"
+msgstr ""
+
+#: templates/landing/pricing.html:359
+msgid "Perfect for occasional invoicing. No monthly fees, no commitment."
+msgstr ""
+
+#: templates/landing/pricing.html:369
+msgid "Or subscribe for better value"
+msgstr ""
+
+#: templates/landing/pricing.html:377
+msgid "Best per-invoice value for businesses that invoice regularly"
+msgstr ""
+
+#: templates/landing/pricing.html:395
+msgid "per invoice"
+msgstr ""
+
+#: templates/landing/pricing.html:398
+msgid "5 invoices/month"
+msgstr ""
+
+#: templates/landing/pricing.html:407
+msgid "invoices per month"
+msgstr ""
+
+#: templates/landing/pricing.html:425
+msgid "template"
+msgstr ""
+
+#: templates/landing/pricing.html:443
+msgid "calls/mo"
+msgstr ""
+
+#: templates/landing/pricing.html:451
+msgid "Current Plan"
+msgstr ""
+
+#: templates/landing/pricing.html:455
+msgid "Switch to Free"
+msgstr ""
+
+#: templates/landing/pricing.html:455
+msgid "Upgrade"
+msgstr ""
+
+#: templates/landing/pricing.html:472
+msgid "Credits vs Subscriptions: Which is Right for You?"
+msgstr ""
+
+#: templates/landing/pricing.html:479
+msgid "Choose Credits If:"
+msgstr ""
+
+#: templates/landing/pricing.html:482
+msgid "You invoice occasionally (1-10/month)"
+msgstr ""
+
+#: templates/landing/pricing.html:483
+msgid "You want no monthly commitment"
+msgstr ""
+
+#: templates/landing/pricing.html:484
+msgid "Your invoicing needs are unpredictable"
+msgstr ""
+
+#: templates/landing/pricing.html:485
+msgid "You're a seasonal business"
+msgstr ""
+
+#: templates/landing/pricing.html:493
+msgid "Choose a Subscription If:"
+msgstr ""
+
+#: templates/landing/pricing.html:496
+msgid "You invoice regularly (10+/month)"
+msgstr ""
+
+#: templates/landing/pricing.html:497
+msgid "You want the best per-invoice value"
+msgstr ""
+
+#: templates/landing/pricing.html:498
+msgid "You need batch upload or recurring invoices"
+msgstr ""
+
+#: templates/landing/pricing.html:499
+msgid "You need API access"
+msgstr ""
+
+#: templates/landing/pricing.html:511
+msgid "What are invoice credits?"
+msgstr ""
+
+#: templates/landing/pricing.html:512
+msgid ""
+"Credits are pay-as-you-go tokens for creating invoices. 1 credit = 1 "
+"invoice. Buy credits when you need them with no monthly commitment. Credits "
+"never expire and include all 5 templates with no watermark."
+msgstr ""
+
+#: templates/landing/pricing.html:517
+msgid ""
+"No! Credits never expire. Use them whenever you need to create an invoice, "
+"whether that's tomorrow or next year."
+msgstr ""
+
+#: templates/landing/pricing.html:521
+msgid "Should I buy credits or subscribe?"
+msgstr ""
+
+#: templates/landing/pricing.html:522
+msgid ""
+"If you invoice regularly (10+ per month), subscriptions offer better per-"
+"invoice value ($0.18/invoice on Starter vs $0.90/invoice on credits). For "
+"occasional invoicing, credits are more flexible with no monthly commitment."
+msgstr ""
+
+#: templates/landing/pricing.html:526
+msgid "Can I upgrade or downgrade anytime?"
+msgstr ""
+
+#: templates/landing/pricing.html:527
+msgid ""
+"Yes! You can change your plan at any time. Upgrades take effect immediately, "
+"and downgrades take effect at the end of your billing cycle. You can also "
+"switch between credits and subscriptions anytime."
+msgstr ""
+
+#: templates/landing/pricing.html:531
+msgid "What happens if I exceed my invoice limit?"
+msgstr ""
+
+#: templates/landing/pricing.html:532
+msgid ""
+"For subscribers, you can purchase credit packs to create additional invoices "
+"beyond your monthly limit. For credit users, simply buy another credit pack "
+"when you run low."
+msgstr ""
+
+#: templates/landing/pricing.html:536
+msgid "What payment methods do you accept?"
+msgstr ""
+
+#: templates/landing/pricing.html:537
+msgid ""
+"We accept all major credit cards (Visa, Mastercard, American Express) "
+"through our secure payment processor, Stripe."
+msgstr ""
+
+#: templates/pages/api_docs.html:4 templates/pages/api_docs.html:41
+#: templates/pages/api_docs.html:47
+msgid "API Documentation"
+msgstr ""
+
+#: templates/pages/api_docs.html:6
+msgid ""
+"InvoiceKits API documentation. Learn how to integrate invoice generation "
+"into your applications with our REST API."
+msgstr ""
+
+#: templates/pages/api_docs.html:48
+msgid "Integrate InvoiceKits into your applications"
+msgstr ""
+
+#: templates/pages/api_docs.html:53
+msgid "API access requires a Business plan subscription"
+msgstr ""
+
+#: templates/pages/api_docs.html:59
+msgid "Quick Start"
+msgstr ""
+
+#: templates/pages/api_docs.html:63
+msgid "Base URL"
+msgstr ""
+
+#: templates/pages/api_docs.html:70
+msgid "Authentication"
+msgstr ""
+
+#: templates/pages/api_docs.html:72
+msgid ""
+"All API requests require authentication using an API key. Include your key "
+"in the"
+msgstr ""
+
+#: templates/pages/api_docs.html:72
+msgid "header."
+msgstr ""
+
+#: templates/pages/api_docs.html:81
+msgid "Getting Your API Key"
+msgstr ""
+
+#: templates/pages/api_docs.html:83
+msgid ""
+"API keys are available on the Business plan. Once subscribed, you can "
+"generate your API key from"
+msgstr ""
+
+#: templates/pages/api_docs.html:84
+msgid "Company Settings"
+msgstr ""
+
+#: templates/pages/api_docs.html:92
+msgid "Endpoints"
+msgstr ""
+
+#: templates/pages/api_docs.html:111
+msgid "List all invoices for your account."
+msgstr ""
+
+#: templates/pages/api_docs.html:124
+msgid "Create a new invoice."
+msgstr ""
+
+#: templates/pages/api_docs.html:126
+msgid "View request body"
+msgstr ""
+
+#: templates/pages/api_docs.html:160
+msgid "Get details of a specific invoice."
+msgstr ""
+
+#: templates/pages/api_docs.html:173
+msgid "Update an existing invoice."
+msgstr ""
+
+#: templates/pages/api_docs.html:186
+msgid "Delete an invoice."
+msgstr ""
+
+#: templates/pages/api_docs.html:199
+msgid "Download invoice as PDF."
+msgstr ""
+
+#: templates/pages/api_docs.html:212
+msgid "Mark invoice as sent."
+msgstr ""
+
+#: templates/pages/api_docs.html:225
+msgid "Mark invoice as paid."
+msgstr ""
+
+#: templates/pages/api_docs.html:235 templates/showcase/bold-modern.html:80
+#: templates/showcase/classic-professional.html:80
+#: templates/showcase/clean-slate.html:80 templates/showcase/executive.html:80
+#: templates/showcase/neon-edge.html:82
+msgid "Templates"
+msgstr ""
+
+#: templates/pages/api_docs.html:246
+msgid ""
+"List all available invoice templates and their availability for your plan."
+msgstr ""
+
+#: templates/pages/api_docs.html:255
+msgid "Usage"
+msgstr ""
+
+#: templates/pages/api_docs.html:266
+msgid "Get your current API usage statistics, limits, and available features."
+msgstr ""
+
+#: templates/pages/api_docs.html:274
+msgid "Response Codes"
+msgstr ""
+
+#: templates/pages/api_docs.html:280
+msgid "Code"
+msgstr ""
+
+#: templates/pages/api_docs.html:281 templates/showcase/bold-modern.html:248
+#: templates/showcase/classic-professional.html:254
+#: templates/showcase/clean-slate.html:252
+#: templates/showcase/neon-edge.html:250
+#: templates/tools/invoice-calculator.html:172
+msgid "Description"
+msgstr ""
+
+#: templates/pages/api_docs.html:287
+msgid "Success"
+msgstr ""
+
+#: templates/pages/api_docs.html:291
+msgid "Created successfully"
+msgstr ""
+
+#: templates/pages/api_docs.html:295
+msgid "Bad request - Invalid parameters"
+msgstr ""
+
+#: templates/pages/api_docs.html:299
+msgid "Unauthorized - Invalid or missing API key"
+msgstr ""
+
+#: templates/pages/api_docs.html:303
+msgid "Forbidden - Invoice limit reached or API access not enabled"
+msgstr ""
+
+#: templates/pages/api_docs.html:307
+msgid "Not found - Resource doesn't exist"
+msgstr ""
+
+#: templates/pages/api_docs.html:311
+msgid "Rate limited - Too many requests"
+msgstr ""
+
+#: templates/pages/api_docs.html:320
+msgid "Rate Limits"
+msgstr ""
+
+#: templates/pages/api_docs.html:322
+msgid ""
+"The Business plan includes 1,000 API calls per month. Usage resets on the "
+"first of each month."
+msgstr ""
+
+#: templates/pages/api_docs.html:325
+msgid "Check your current usage with the"
+msgstr ""
+
+#: templates/pages/api_docs.html:325
+msgid "endpoint."
+msgstr ""
+
+#: templates/pages/api_docs.html:331
+msgid "Need Help?"
+msgstr ""
+
+#: templates/pages/api_docs.html:332
+msgid "Having trouble with the API? Our support team is here to help."
+msgstr ""
+
+#: templates/pages/api_docs.html:334 templates/pages/help.html:248
+msgid "Contact Support"
+msgstr ""
+
+#: templates/pages/api_docs.html:337 templates/pages/help.html:251
+msgid "Email us at"
+msgstr ""
+
+#: templates/pages/contact.html:6
+msgid ""
+"Get in touch with the InvoiceKits team. We're here to help with your "
+"invoicing questions and support needs."
+msgstr ""
+
+#: templates/pages/contact.html:48
+msgid "We'd love to hear from you. Get in touch with our team."
+msgstr ""
+
+#: templates/pages/contact.html:54
+msgid "Get in Touch"
+msgstr ""
+
+#: templates/pages/contact.html:67
+msgid "Email"
+msgstr ""
+
+#: templates/pages/contact.html:68
+msgid "Send us an email anytime"
+msgstr ""
+
+#: templates/pages/contact.html:85
+msgid "Response Time"
+msgstr ""
+
+#: templates/pages/contact.html:86
+msgid "We typically respond within 24-48 hours during business days."
+msgstr ""
+
+#: templates/pages/contact.html:100
+msgid "Support Hours"
+msgstr ""
+
+#: templates/pages/contact.html:101
+msgid "Monday - Friday"
+msgstr ""
+
+#: templates/pages/contact.html:101
+msgid "9:00 AM - 5:00 PM (EST)"
+msgstr ""
+
+#: templates/pages/contact.html:109
+msgid "Quick Help"
+msgstr ""
+
+#: templates/pages/contact.html:113
+msgid "Account Issues"
+msgstr ""
+
+#: templates/pages/contact.html:114
+msgid ""
+"Having trouble logging in or managing your account? Include your account "
+"email in your message."
+msgstr ""
+
+#: templates/pages/contact.html:118
+msgid "Billing Questions"
+msgstr ""
+
+#: templates/pages/contact.html:119
+msgid ""
+"Questions about subscriptions, upgrades, or payments? We're happy to help "
+"clarify."
+msgstr ""
+
+#: templates/pages/contact.html:123
+msgid "Feature Requests"
+msgstr ""
+
+#: templates/pages/contact.html:124
+msgid ""
+"Have an idea for a new feature? We love hearing from our users about how to "
+"improve."
+msgstr ""
+
+#: templates/pages/contact.html:128
+msgid "Bug Reports"
+msgstr ""
+
+#: templates/pages/contact.html:129
+msgid ""
+"Found something that isn't working right? Please include steps to reproduce "
+"the issue."
+msgstr ""
+
+#: templates/pages/contact.html:137
+msgid "Ready to get started with professional invoicing?"
+msgstr ""
+
+#: templates/pages/contact.html:139
+msgid "Start Free Today"
+msgstr ""
+
+#: templates/pages/help.html:6
+msgid ""
+"Get help with InvoiceKits. Learn how to create invoices, manage "
+"subscriptions, use batch upload, and more."
+msgstr ""
+
+#: templates/pages/help.html:136
+msgid "Everything you need to know about using InvoiceKits"
+msgstr ""
+
+#: templates/pages/help.html:147 templates/pages/help.html:174
+msgid "Getting Started"
+msgstr ""
+
+#: templates/pages/help.html:148
+msgid "Create your first invoice"
+msgstr ""
+
+#: templates/pages/help.html:158
+msgid "Create, edit, and manage"
+msgstr ""
+
+#: templates/pages/help.html:168
+msgid "Plans and subscriptions"
+msgstr ""
+
+#: templates/pages/help.html:178
+msgid "How do I create my first invoice?"
+msgstr ""
+
+#: templates/pages/help.html:179
+msgid "After signing up, click \\"
+msgstr ""
+
+#: templates/pages/help.html:183
+msgid "How do I set up my company profile?"
+msgstr ""
+
+#: templates/pages/help.html:184
+msgid ""
+"Go to Settings > Company Profile to add your business name, address, logo, "
+"and default payment information. This information will automatically appear "
+"on all your invoices."
+msgstr ""
+
+#: templates/pages/help.html:188
+msgid "What file formats are supported for logos?"
+msgstr ""
+
+#: templates/pages/help.html:189
+msgid ""
+"We support PNG, JPG, and JPEG formats for company logos. For best results, "
+"use a square image with a transparent background (PNG)."
+msgstr ""
+
+#: templates/pages/help.html:196
+msgid "Working with Invoices"
+msgstr ""
+
+#: templates/pages/help.html:200
+msgid "How do I download an invoice as PDF?"
+msgstr ""
+
+#: templates/pages/help.html:201
+msgid "From the invoice detail page, click the \\"
+msgstr ""
+
+#: templates/pages/help.html:205
+msgid "Can I edit an invoice after creating it?"
+msgstr ""
+
+#: templates/pages/help.html:206
+msgid "Yes! Click on any invoice from your list, then click \\"
+msgstr ""
+
+#: templates/pages/help.html:210
+msgid "What is batch upload?"
+msgstr ""
+
+#: templates/pages/help.html:211
+msgid ""
+"Batch upload (available on Professional and Business plans) lets you create "
+"multiple invoices at once by uploading a CSV file. This is perfect for "
+"generating invoices for multiple clients quickly."
+msgstr ""
+
+#: templates/pages/help.html:215
+msgid "How do invoice statuses work?"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "Invoices can have four statuses:"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "Draft"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "(just created),"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "Sent"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "(delivered to client),"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "(payment received), or"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "Overdue"
+msgstr ""
+
+#: templates/pages/help.html:216
+msgid "(past due date). Update status from the invoice detail page."
+msgstr ""
+
+#: templates/pages/help.html:223
+msgid "Billing & Subscriptions"
+msgstr ""
+
+#: templates/pages/help.html:227
+msgid "What's included in the free plan?"
+msgstr ""
+
+#: templates/pages/help.html:228
+msgid ""
+"The free plan includes 5 invoices per month, 1 template style, and basic "
+"features. Perfect for trying out InvoiceKits or occasional invoicing needs."
+msgstr ""
+
+#: templates/pages/help.html:232
+msgid "How do I upgrade my plan?"
+msgstr ""
+
+#: templates/pages/help.html:233
+msgid ""
+"Go to Billing > Plans to see available options. Select the plan that fits "
+"your needs and follow the checkout process. Upgrades take effect immediately."
+msgstr ""
+
+#: templates/pages/help.html:237
+msgid "Can I cancel my subscription?"
+msgstr ""
+
+#: templates/pages/help.html:238
+msgid ""
+"Yes, you can cancel anytime from your Billing page. Your plan will remain "
+"active until the end of your current billing period."
+msgstr ""
+
+#: templates/pages/help.html:245
+msgid "Still need help?"
+msgstr ""
+
+#: templates/pages/help.html:246
+msgid "Our support team is here to assist you with any questions."
+msgstr ""
+
+#: templates/pages/privacy.html:6
+msgid ""
+"Read InvoiceKits' privacy policy. Learn how we collect, use, and protect "
+"your personal information."
+msgstr ""
+
+#: templates/pages/privacy.html:48 templates/pages/terms.html:48
+msgid "Last updated:"
+msgstr ""
+
+#: templates/pages/privacy.html:55
+msgid "Introduction"
+msgstr ""
+
+#: templates/pages/privacy.html:57
+msgid "InvoiceKits (\\"
+msgstr ""
+
+#: templates/pages/privacy.html:60
+msgid ""
+"By using InvoiceKits, you agree to the collection and use of information in "
+"accordance with this policy."
+msgstr ""
+
+#: templates/pages/privacy.html:66
+msgid "Information We Collect"
+msgstr ""
+
+#: templates/pages/privacy.html:68
+msgid "Account Information"
+msgstr ""
+
+#: templates/pages/privacy.html:70
+msgid "When you create an account, we collect:"
+msgstr ""
+
+#: templates/pages/privacy.html:73
+msgid "Email address"
+msgstr ""
+
+#: templates/pages/privacy.html:74
+msgid "Password (encrypted)"
+msgstr ""
+
+#: templates/pages/privacy.html:75
+msgid "Company name and address (optional)"
+msgstr ""
+
+#: templates/pages/privacy.html:76
+msgid "Company logo (optional)"
+msgstr ""
+
+#: templates/pages/privacy.html:79
+msgid "Invoice Data"
+msgstr ""
+
+#: templates/pages/privacy.html:81
+msgid "When you create invoices, we store:"
+msgstr ""
+
+#: templates/pages/privacy.html:84
+msgid "Client names and contact information"
+msgstr ""
+
+#: templates/pages/privacy.html:85
+msgid "Invoice amounts and line items"
+msgstr ""
+
+#: templates/pages/privacy.html:86
+msgid "Invoice dates and payment terms"
+msgstr ""
+
+#: templates/pages/privacy.html:87
+msgid "Notes and payment instructions"
+msgstr ""
+
+#: templates/pages/privacy.html:90
+msgid "Usage Information"
+msgstr ""
+
+#: templates/pages/privacy.html:92
+msgid ""
+"We automatically collect certain information when you use our service, "
+"including your IP address, browser type, and usage patterns to improve our "
+"service."
+msgstr ""
+
+#: templates/pages/privacy.html:98
+msgid "How We Use Your Information"
+msgstr ""
+
+#: templates/pages/privacy.html:99
+msgid "We use the information we collect to:"
+msgstr ""
+
+#: templates/pages/privacy.html:101
+msgid "Provide and maintain our invoice generation service"
+msgstr ""
+
+#: templates/pages/privacy.html:102
+msgid "Process your subscription and payments"
+msgstr ""
+
+#: templates/pages/privacy.html:103
+msgid "Send you important service updates and notifications"
+msgstr ""
+
+#: templates/pages/privacy.html:104
+msgid "Respond to your support requests"
+msgstr ""
+
+#: templates/pages/privacy.html:105
+msgid "Improve and optimize our service"
+msgstr ""
+
+#: templates/pages/privacy.html:106
+msgid "Comply with legal obligations"
+msgstr ""
+
+#: templates/pages/privacy.html:112
+msgid "Data Security"
+msgstr ""
+
+#: templates/pages/privacy.html:114
+msgid ""
+"We implement appropriate technical and organizational security measures to "
+"protect your personal information, including:"
+msgstr ""
+
+#: templates/pages/privacy.html:117
+msgid "Encryption of data in transit (HTTPS/TLS)"
+msgstr ""
+
+#: templates/pages/privacy.html:118
+msgid "Secure password hashing"
+msgstr ""
+
+#: templates/pages/privacy.html:119
+msgid "Regular security audits"
+msgstr ""
+
+#: templates/pages/privacy.html:120
+msgid "Access controls and authentication"
+msgstr ""
+
+#: templates/pages/privacy.html:126
+msgid "Data Retention"
+msgstr ""
+
+#: templates/pages/privacy.html:128
+msgid ""
+"We retain your account information and invoices for as long as your account "
+"is active. If you delete your account, we will delete your personal "
+"information within 30 days, except where we need to retain it for legal or "
+"business purposes."
+msgstr ""
+
+#: templates/pages/privacy.html:134
+msgid "Third-Party Services"
+msgstr ""
+
+#: templates/pages/privacy.html:135
+msgid "We may use third-party services to help us operate our service:"
+msgstr ""
+
+#: templates/pages/privacy.html:137
+msgid "For payment processing."
+msgstr ""
+
+#: templates/pages/privacy.html:137
+msgid "See Stripe's Privacy Policy"
+msgstr ""
+
+#: templates/pages/privacy.html:138
+msgid "For hosting and infrastructure"
+msgstr ""
+
+#: templates/pages/privacy.html:144
+msgid "Your Rights"
+msgstr ""
+
+#: templates/pages/privacy.html:145
+msgid "You have the right to:"
+msgstr ""
+
+#: templates/pages/privacy.html:147
+msgid "Access your personal information"
+msgstr ""
+
+#: templates/pages/privacy.html:148
+msgid "Correct inaccurate information"
+msgstr ""
+
+#: templates/pages/privacy.html:149
+msgid "Delete your account and associated data"
+msgstr ""
+
+#: templates/pages/privacy.html:150
+msgid "Export your invoice data"
+msgstr ""
+
+#: templates/pages/privacy.html:151
+msgid "Opt out of marketing communications"
+msgstr ""
+
+#: templates/pages/privacy.html:157
+msgid "Cookies"
+msgstr ""
+
+#: templates/pages/privacy.html:159
+msgid ""
+"We use essential cookies to maintain your session and remember your "
+"preferences (such as dark mode). We do not use tracking or advertising "
+"cookies."
+msgstr ""
+
+#: templates/pages/privacy.html:165
+msgid "Children's Privacy"
+msgstr ""
+
+#: templates/pages/privacy.html:167
+msgid ""
+"InvoiceKits is not intended for use by children under 16 years of age. We do "
+"not knowingly collect personal information from children."
+msgstr ""
+
+#: templates/pages/privacy.html:173
+msgid "Changes to This Policy"
+msgstr ""
+
+#: templates/pages/privacy.html:175
+msgid ""
+"We may update this Privacy Policy from time to time. We will notify you of "
+"any changes by posting the new policy on this page and updating the \\"
+msgstr ""
+
+#: templates/pages/privacy.html:183
+msgid ""
+"If you have any questions about this Privacy Policy, please contact us at:"
+msgstr ""
+
+#: templates/pages/privacy.html:186 templates/pages/terms.html:194
+msgid "Email:"
+msgstr ""
+
+#: templates/pages/terms.html:6
+msgid ""
+"Read InvoiceKits' terms of service. Understand the terms and conditions for "
+"using our invoice generation service."
+msgstr ""
+
+#: templates/pages/terms.html:55
+msgid "Agreement to Terms"
+msgstr ""
+
+#: templates/pages/terms.html:57
+msgid "By accessing or using InvoiceKits (\\"
+msgstr ""
+
+#: templates/pages/terms.html:63
+msgid "Description of Service"
+msgstr ""
+
+#: templates/pages/terms.html:65
+msgid ""
+"InvoiceKits is a web-based invoice generation service that allows users to:"
+msgstr ""
+
+#: templates/pages/terms.html:68
+msgid "Create and manage professional invoices"
+msgstr ""
+
+#: templates/pages/terms.html:69
+msgid "Generate PDF invoices with customizable templates"
+msgstr ""
+
+#: templates/pages/terms.html:70
+msgid "Upload CSV files for batch invoice creation"
+msgstr ""
+
+#: templates/pages/terms.html:71
+msgid "Track invoice status and payment history"
+msgstr ""
+
+#: templates/pages/terms.html:72
+msgid "Manage company profiles and branding"
+msgstr ""
+
+#: templates/pages/terms.html:78
+msgid "User Accounts"
+msgstr ""
+
+#: templates/pages/terms.html:80
+msgid ""
+"To use certain features of the Service, you must register for an account. "
+"You agree to:"
+msgstr ""
+
+#: templates/pages/terms.html:83
+msgid "Provide accurate and complete registration information"
+msgstr ""
+
+#: templates/pages/terms.html:84
+msgid "Maintain the security of your account credentials"
+msgstr ""
+
+#: templates/pages/terms.html:85
+msgid "Notify us immediately of any unauthorized access"
+msgstr ""
+
+#: templates/pages/terms.html:86
+msgid "Accept responsibility for all activities under your account"
+msgstr ""
+
+#: templates/pages/terms.html:92
+msgid "Subscription Plans and Billing"
+msgstr ""
+
+#: templates/pages/terms.html:94
+msgid ""
+"InvoiceKits offers various subscription tiers with different features and "
+"limits:"
+msgstr ""
+
+#: templates/pages/terms.html:97
+msgid "Free:"
+msgstr ""
+
+#: templates/pages/terms.html:97
+msgid "5 invoices per month, 1 template"
+msgstr ""
+
+#: templates/pages/terms.html:98
+msgid "Starter ($9/mo):"
+msgstr ""
+
+#: templates/pages/terms.html:98
+msgid "50 invoices per month, 2 templates"
+msgstr ""
+
+#: templates/pages/terms.html:99
+msgid "Professional ($29/mo):"
+msgstr ""
+
+#: templates/pages/terms.html:99
+msgid "200 invoices per month, all templates, batch upload"
+msgstr ""
+
+#: templates/pages/terms.html:100
+msgid "Business ($79/mo):"
+msgstr ""
+
+#: templates/pages/terms.html:100
+msgid "Unlimited invoices, API access"
+msgstr ""
+
+#: templates/pages/terms.html:103
+msgid ""
+"Paid subscriptions are billed monthly. You may cancel at any time, and your "
+"subscription will remain active until the end of the current billing period."
+msgstr ""
+
+#: templates/pages/terms.html:109
+msgid "Acceptable Use"
+msgstr ""
+
+#: templates/pages/terms.html:110
+msgid "You agree not to use the Service to:"
+msgstr ""
+
+#: templates/pages/terms.html:112
+msgid "Violate any applicable laws or regulations"
+msgstr ""
+
+#: templates/pages/terms.html:113
+msgid "Create fraudulent or misleading invoices"
+msgstr ""
+
+#: templates/pages/terms.html:114
+msgid "Infringe on intellectual property rights"
+msgstr ""
+
+#: templates/pages/terms.html:115
+msgid "Transmit malicious code or interfere with the Service"
+msgstr ""
+
+#: templates/pages/terms.html:116
+msgid "Attempt to gain unauthorized access to other accounts"
+msgstr ""
+
+#: templates/pages/terms.html:117
+msgid "Use the Service for illegal financial activities"
+msgstr ""
+
+#: templates/pages/terms.html:123
+msgid "Intellectual Property"
+msgstr ""
+
+#: templates/pages/terms.html:125
+msgid ""
+"The Service and its original content, features, and functionality are owned "
+"by InvoiceKits and are protected by copyright, trademark, and other "
+"intellectual property laws."
+msgstr ""
+
+#: templates/pages/terms.html:128
+msgid ""
+"You retain ownership of the content you create using our Service, including "
+"your invoices, company information, and uploaded logos."
+msgstr ""
+
+#: templates/pages/terms.html:134
+msgid "Limitation of Liability"
+msgstr ""
+
+#: templates/pages/terms.html:136
+msgid ""
+"To the maximum extent permitted by law, InvoiceKits shall not be liable for:"
+msgstr ""
+
+#: templates/pages/terms.html:139
+msgid "Any indirect, incidental, special, or consequential damages"
+msgstr ""
+
+#: templates/pages/terms.html:140
+msgid "Loss of profits, data, or business opportunities"
+msgstr ""
+
+#: templates/pages/terms.html:141
+msgid "Any damages resulting from unauthorized access to your account"
+msgstr ""
+
+#: templates/pages/terms.html:142
+msgid "Service interruptions or errors"
+msgstr ""
+
+#: templates/pages/terms.html:148
+msgid "Disclaimer"
+msgstr ""
+
+#: templates/pages/terms.html:150
+msgid "The Service is provided \\"
+msgstr ""
+
+#: templates/pages/terms.html:156
+msgid "Termination"
+msgstr ""
+
+#: templates/pages/terms.html:158
+msgid ""
+"We may terminate or suspend your account immediately, without prior notice, "
+"for:"
+msgstr ""
+
+#: templates/pages/terms.html:161
+msgid "Violation of these Terms"
+msgstr ""
+
+#: templates/pages/terms.html:162
+msgid "Fraudulent or illegal activity"
+msgstr ""
+
+#: templates/pages/terms.html:163
+msgid "Non-payment of subscription fees"
+msgstr ""
+
+#: templates/pages/terms.html:164
+msgid "Extended periods of inactivity"
+msgstr ""
+
+#: templates/pages/terms.html:167
+msgid ""
+"You may delete your account at any time through your account settings. Upon "
+"termination, your data will be deleted in accordance with our Privacy Policy."
+msgstr ""
+
+#: templates/pages/terms.html:173
+msgid "Modifications to Terms"
+msgstr ""
+
+#: templates/pages/terms.html:175
+msgid ""
+"We reserve the right to modify these Terms at any time. We will provide "
+"notice of significant changes by posting the new Terms on this page and "
+"updating the \\"
+msgstr ""
+
+#: templates/pages/terms.html:181
+msgid "Governing Law"
+msgstr ""
+
+#: templates/pages/terms.html:183
+msgid ""
+"These Terms shall be governed by and construed in accordance with applicable "
+"laws, without regard to conflict of law principles."
+msgstr ""
+
+#: templates/pages/terms.html:191
+msgid "If you have any questions about these Terms, please contact us at:"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:4 templates/showcase/bold-modern.html:12
+msgid "Bold Modern Invoice Template - Vibrant Creative Design"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:6
+msgid ""
+"Bold Modern invoice template features vibrant colors and large typography. "
+"Perfect for creative agencies, designers, and photographers. Free to try."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:8
+msgid ""
+"bold modern invoice template, creative invoice design, designer invoice "
+"template, photographer invoice, agency invoice template, colorful invoice"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:14
+msgid ""
+"Vibrant invoice design with bold colors and large typography. Perfect for "
+"creative agencies and designers."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:16
+msgid "Bold Modern Invoice Template"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:18
+msgid ""
+"Vibrant invoice design for creative professionals. Bold, colorful, free to "
+"try."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:89
+#: templates/showcase/classic-professional.html:89
+#: templates/showcase/clean-slate.html:89 templates/showcase/executive.html:89
+#: templates/showcase/neon-edge.html:91
+msgid "Invoice Template"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:95
+msgid ""
+"Make a statement with every invoice. Vibrant gradient colors and bold "
+"typography that stands out in any inbox and reflects your creative energy."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:98
+msgid "Vibrant"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:99
+msgid "Creative"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:100
+#: templates/showcase/neon-edge.html:102
+msgid "Bold"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:101
+msgid "Gradient"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:105
+#: templates/showcase/classic-professional.html:105
+#: templates/showcase/clean-slate.html:105
+#: templates/showcase/executive.html:105 templates/showcase/neon-edge.html:107
+msgid "Try This Template Free"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:108
+#: templates/showcase/classic-professional.html:108
+#: templates/showcase/clean-slate.html:108
+#: templates/showcase/executive.html:108 templates/showcase/neon-edge.html:110
+msgid "See Full Preview"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:112
+#: templates/showcase/classic-professional.html:112
+#: templates/showcase/clean-slate.html:112
+#: templates/showcase/executive.html:112 templates/showcase/neon-edge.html:114
+msgid "Start with 5 free credits. No credit card required."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:131
+#: templates/showcase/bold-modern.html:239
+#: templates/showcase/classic-professional.html:245
+#: templates/showcase/clean-slate.html:131
+#: templates/showcase/clean-slate.html:243
+#: templates/showcase/executive.html:241 templates/showcase/neon-edge.html:241
+msgid "Bill To"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:132
+msgid "Creative Client Co."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:136
+msgid "Brand Identity Design"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:140
+msgid "Social Media Kit"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:159
+#: templates/showcase/classic-professional.html:165
+#: templates/showcase/clean-slate.html:164
+#: templates/showcase/executive.html:159 templates/showcase/neon-edge.html:161
+msgid "Perfect For"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:160
+msgid "Creative professionals who aren't afraid to stand out"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:170
+msgid "Designers"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:171
+msgid "Graphic, web, and UX designers"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:181
+msgid "Photographers"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:182
+msgid "Commercial and creative photographers"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:191
+msgid "Videographers"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:192
+msgid "Video production and content creators"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:201
+msgid "Creative Agencies"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:202
+msgid "Marketing and branding agencies"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:212
+#: templates/showcase/classic-professional.html:217
+#: templates/showcase/clean-slate.html:216
+#: templates/showcase/executive.html:211 templates/showcase/neon-edge.html:213
+msgid "Full Template Preview"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:213
+#: templates/showcase/classic-professional.html:218
+#: templates/showcase/clean-slate.html:217
+#: templates/showcase/executive.html:212 templates/showcase/neon-edge.html:214
+msgid "See exactly what your invoices will look like"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:224
+msgid "Creative Studio"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:230
+#: templates/showcase/classic-professional.html:238
+#: templates/showcase/clean-slate.html:236
+#: templates/showcase/executive.html:233 templates/showcase/neon-edge.html:234
+msgid "January 9, 2026"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:240
+msgid "Startup Ventures Inc."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:249
+#: templates/showcase/clean-slate.html:253
+#: templates/showcase/neon-edge.html:251
+#: templates/tools/invoice-calculator.html:173
+msgid "Qty"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:250
+#: templates/showcase/classic-professional.html:256
+#: templates/showcase/clean-slate.html:254
+#: templates/showcase/executive.html:253 templates/showcase/neon-edge.html:252
+msgid "Rate"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:251
+#: templates/showcase/classic-professional.html:257
+#: templates/showcase/clean-slate.html:255
+#: templates/showcase/executive.html:254 templates/showcase/neon-edge.html:253
+#: templates/tools/invoice-calculator.html:175
+msgid "Amount"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:254
+msgid "Brand Identity Package"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:260
+msgid "Website Design (5 pages)"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:266
+msgid "Social Media Templates"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:277
+#: templates/showcase/classic-professional.html:283
+#: templates/showcase/clean-slate.html:281
+#: templates/showcase/executive.html:280 templates/showcase/neon-edge.html:279
+#: templates/tools/invoice-calculator.html:261
+msgid "Subtotal"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:291
+#: templates/showcase/clean-slate.html:297
+#: templates/showcase/neon-edge.html:293
+msgid "Notes"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:292
+msgid "Thanks for choosing Creative Studio! We loved working on this project."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:304
+#: templates/showcase/classic-professional.html:307
+#: templates/showcase/clean-slate.html:351
+#: templates/showcase/executive.html:346 templates/showcase/neon-edge.html:305
+msgid "Explore Other Templates"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:305
+#: templates/showcase/classic-professional.html:308
+#: templates/showcase/clean-slate.html:352
+#: templates/showcase/executive.html:347 templates/showcase/neon-edge.html:306
+msgid "Find the perfect design for your business"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:314
+#: templates/showcase/classic-professional.html:317
+#: templates/showcase/executive.html:356 templates/showcase/neon-edge.html:315
+msgid "Minimalist, modern"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:322
+#: templates/showcase/classic-professional.html:325
+#: templates/showcase/clean-slate.html:361
+#: templates/showcase/neon-edge.html:323
+msgid "Navy & gold, professional"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:330
+#: templates/showcase/clean-slate.html:377
+#: templates/showcase/executive.html:372 templates/showcase/neon-edge.html:339
+msgid "Traditional, trusted"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:338
+#: templates/showcase/classic-professional.html:341
+#: templates/showcase/clean-slate.html:385
+#: templates/showcase/executive.html:380
+msgid "Dark mode, bold"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:348
+msgid "Ready to Use Bold Modern?"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:351
+msgid "Create invoices as creative as your work. Free to start."
+msgstr ""
+
+#: templates/showcase/bold-modern.html:354
+#: templates/showcase/classic-professional.html:357
+#: templates/showcase/clean-slate.html:401
+#: templates/showcase/executive.html:396 templates/showcase/neon-edge.html:355
+msgid "Start Creating Invoices Free"
+msgstr ""
+
+#: templates/showcase/bold-modern.html:357
+#: templates/showcase/classic-professional.html:360
+#: templates/showcase/clean-slate.html:404
+#: templates/showcase/executive.html:399 templates/showcase/neon-edge.html:358
+msgid "5 free credits included. No credit card required."
+msgstr ""
+
+#: templates/showcase/classic-professional.html:4
+#: templates/showcase/classic-professional.html:12
+msgid "Classic Professional Invoice Template - Traditional Business Design"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:6
+msgid ""
+"Classic Professional invoice template features a traditional layout with "
+"subtle grays. Perfect for accountants, general businesses, and established "
+"companies. Free to try."
+msgstr ""
+
+#: templates/showcase/classic-professional.html:8
+msgid ""
+"classic invoice template, professional invoice design, business invoice "
+"template, accountant invoice, traditional invoice layout, corporate invoice"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:14
+msgid ""
+"Traditional invoice design with professional layout and subtle grays. "
+"Perfect for accountants and established businesses."
+msgstr ""
+
+#: templates/showcase/classic-professional.html:16
+msgid "Classic Professional Invoice Template"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:18
+msgid ""
+"Traditional invoice design for established businesses. Professional, "
+"trusted, free to try."
+msgstr ""
+
+#: templates/showcase/classic-professional.html:95
+msgid ""
+"Time-tested design that works everywhere. A traditional layout with "
+"professional typography and subtle gray accents that clients recognize and "
+"trust."
+msgstr ""
+
+#: templates/showcase/classic-professional.html:98
+msgid "Traditional"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:99
+msgid "Trusted"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:101
+msgid "Universal"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:123
+msgid "Anderson & Brown"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:124
+msgid "Accounting Services"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:134
+msgid "Client Company"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:137
+#: templates/showcase/classic-professional.html:238
+#: templates/showcase/clean-slate.html:236
+#: templates/showcase/executive.html:233 templates/showcase/neon-edge.html:234
+msgid "Date:"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:138
+#: templates/showcase/clean-slate.html:136
+msgid "Jan 9, 2026"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:143
+msgid "Monthly Bookkeeping"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:147
+msgid "Tax Preparation"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:166
+msgid "Businesses that value professionalism and tradition"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:176
+msgid "Accountants"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:177
+msgid "CPA firms and bookkeeping services"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:186
+msgid "General Business"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:187
+msgid "B2B services and contractors"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:196
+msgid "Established Companies"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:197
+msgid "Businesses with traditional clients"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:206
+msgid "Insurance & Healthcare"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:207
+msgid "Industries requiring formal documentation"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:230
+msgid "Anderson & Brown CPA"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:231
+msgid "Certified Public Accountants"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:239
+#: templates/showcase/clean-slate.html:237
+#: templates/showcase/executive.html:234 templates/showcase/neon-edge.html:235
+msgid "Due:"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:239
+msgid "February 8, 2026"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:246
+msgid "Johnson Manufacturing Ltd."
+msgstr ""
+
+#: templates/showcase/classic-professional.html:255
+#: templates/showcase/executive.html:252
+msgid "Hours"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:260
+msgid "Monthly Bookkeeping - January"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:262
+#: templates/showcase/executive.html:265
+msgid "Fixed"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:266
+msgid "Q4 Financial Statement Prep"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:272
+msgid "Tax Planning Consultation"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:295
+#: templates/showcase/executive.html:292
+msgid "Payment Terms"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:296
+msgid "Net 30. Please remit payment to the address above or via bank transfer."
+msgstr ""
+
+#: templates/showcase/classic-professional.html:333
+#: templates/showcase/clean-slate.html:369
+#: templates/showcase/executive.html:364 templates/showcase/neon-edge.html:331
+msgid "Vibrant, creative"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:351
+msgid "Ready to Use Classic Professional?"
+msgstr ""
+
+#: templates/showcase/classic-professional.html:354
+msgid "Create trusted, professional invoices. Free to start."
+msgstr ""
+
+#: templates/showcase/clean-slate.html:4 templates/showcase/clean-slate.html:12
+msgid "Clean Slate Invoice Template - Minimalist Professional Design"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:6
+msgid ""
+"Clean Slate invoice template features a minimalist white design with modern "
+"sans-serif typography. Perfect for tech startups, SaaS companies, and modern "
+"businesses. Free to try."
+msgstr ""
+
+#: templates/showcase/clean-slate.html:8
+msgid ""
+"clean slate invoice template, minimalist invoice design, modern invoice "
+"template, tech startup invoice, SaaS invoice template, white invoice design"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:14
+msgid ""
+"Minimalist white invoice design with modern sans-serif typography. Perfect "
+"for tech startups and modern businesses."
+msgstr ""
+
+#: templates/showcase/clean-slate.html:16
+msgid "Clean Slate Invoice Template"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:18
+msgid ""
+"Minimalist invoice design for modern businesses. Clean, professional, and "
+"free to try."
+msgstr ""
+
+#: templates/showcase/clean-slate.html:95
+msgid ""
+"A minimalist invoice design that lets your work speak for itself. Modern "
+"sans-serif typography on a pristine white canvas creates a clean, "
+"professional impression."
+msgstr ""
+
+#: templates/showcase/clean-slate.html:98
+msgid "Minimalist"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:99
+msgid "Modern"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:100
+msgid "Tech-Friendly"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:101
+msgid "Sans-Serif"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:121
+msgid "Your Company"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:132
+msgid "Client Name"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:135
+msgid "Date"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:142
+msgid "Web Development"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:146
+msgid "UI/UX Design"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:165
+msgid "Industries and businesses that thrive with minimalist design"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:175
+#: templates/showcase/neon-edge.html:182
+msgid "Tech Startups"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:176
+msgid "Modern companies that value clean, forward-thinking aesthetics"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:185
+msgid "SaaS Companies"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:186
+msgid "Software businesses billing for subscriptions and services"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:195
+msgid "Web Developers"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:196
+msgid "Freelance developers and digital agencies"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:205
+msgid "Digital Agencies"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:206
+msgid "Marketing and creative agencies with modern clients"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:229
+msgid "Your Company Name"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:230
+msgid "123 Business Street"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:231
+msgid "San Francisco, CA 94102"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:237
+#: templates/showcase/executive.html:234 templates/showcase/neon-edge.html:235
+msgid "January 24, 2026"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:244
+msgid "Acme Corporation"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:245
+msgid "456 Client Avenue"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:246
+msgid "New York, NY 10001"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:264
+msgid "Mobile App Development"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:270
+msgid "UX Consultation (hourly)"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:285
+#, python-format
+msgid "Tax (8%%)"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:298
+msgid "Thank you for your business. Payment is due within 15 days."
+msgstr ""
+
+#: templates/showcase/clean-slate.html:309
+#: templates/showcase/executive.html:304
+msgid "Template Features"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:310
+msgid "Everything you need for professional invoicing"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:320
+msgid "Your Logo"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:321
+msgid "Upload your company logo for instant brand recognition"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:330
+msgid "Auto Calculations"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:331
+msgid "Automatic subtotals, tax calculations, and totals"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:341
+msgid "Bill in USD, EUR, GBP, and other major currencies"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:395
+msgid "Ready to Use Clean Slate?"
+msgstr ""
+
+#: templates/showcase/clean-slate.html:398
+msgid "Create your first invoice in under 60 seconds. Free to start."
+msgstr ""
+
+#: templates/showcase/executive.html:4 templates/showcase/executive.html:12
+msgid "Executive Invoice Template - Navy & Gold Professional Design"
+msgstr ""
+
+#: templates/showcase/executive.html:6
+msgid ""
+"Executive invoice template features elegant navy and gold accents with serif "
+"typography. Perfect for consultants, law firms, and financial advisors. Free "
+"to try."
+msgstr ""
+
+#: templates/showcase/executive.html:8
+msgid ""
+"executive invoice template, professional invoice design, consultant invoice "
+"template, law firm invoice, financial advisor invoice, navy gold invoice"
+msgstr ""
+
+#: templates/showcase/executive.html:14
+msgid ""
+"Elegant navy and gold invoice design with serif typography. Perfect for "
+"consultants and professional services."
+msgstr ""
+
+#: templates/showcase/executive.html:16
+msgid "Executive Invoice Template"
+msgstr ""
+
+#: templates/showcase/executive.html:18
+msgid ""
+"Navy and gold invoice design for consultants and professionals. Elegant, "
+"trusted, free to try."
+msgstr ""
+
+#: templates/showcase/executive.html:95
+msgid ""
+"Command respect with every invoice. Navy and gold accents paired with "
+"elegant serif typography create an unmistakably premium impression."
+msgstr ""
+
+#: templates/showcase/executive.html:98
+msgid "Premium"
+msgstr ""
+
+#: templates/showcase/executive.html:99
+msgid "Elegant"
+msgstr ""
+
+#: templates/showcase/executive.html:101
+msgid "Serif"
+msgstr ""
+
+#: templates/showcase/executive.html:121
+msgid "Professional Services"
+msgstr ""
+
+#: templates/showcase/executive.html:137
+msgid "Strategy Workshop (8 hrs)"
+msgstr ""
+
+#: templates/showcase/executive.html:160
+msgid "Professionals who command premium rates"
+msgstr ""
+
+#: templates/showcase/executive.html:170
+msgid "Consultants"
+msgstr ""
+
+#: templates/showcase/executive.html:171
+msgid "Strategy, management, and business consultants"
+msgstr ""
+
+#: templates/showcase/executive.html:180
+msgid "Law Firms"
+msgstr ""
+
+#: templates/showcase/executive.html:181
+msgid "Attorneys and legal practices"
+msgstr ""
+
+#: templates/showcase/executive.html:190
+msgid "Financial Advisors"
+msgstr ""
+
+#: templates/showcase/executive.html:191
+msgid "Wealth management and financial planning"
+msgstr ""
+
+#: templates/showcase/executive.html:200
+msgid "Corporate Services"
+msgstr ""
+
+#: templates/showcase/executive.html:201
+msgid "Executive coaching and corporate training"
+msgstr ""
+
+#: templates/showcase/executive.html:225
+msgid "Kendrick & Associates"
+msgstr ""
+
+#: templates/showcase/executive.html:226
+msgid "Strategic Advisory Services"
+msgstr ""
+
+#: templates/showcase/executive.html:227
+msgid "100 Park Avenue, Suite 4500"
+msgstr ""
+
+#: templates/showcase/executive.html:228
+msgid "New York, NY 10017"
+msgstr ""
+
+#: templates/showcase/executive.html:242
+msgid "Global Enterprises Inc."
+msgstr ""
+
+#: templates/showcase/executive.html:243
+msgid "Attn: Sarah Mitchell, CFO"
+msgstr ""
+
+#: templates/showcase/executive.html:244
+msgid "500 Corporate Drive"
+msgstr ""
+
+#: templates/showcase/executive.html:245
+msgid "Chicago, IL 60601"
+msgstr ""
+
+#: templates/showcase/executive.html:251
+msgid "Service Description"
+msgstr ""
+
+#: templates/showcase/executive.html:257
+msgid "Executive Strategy Workshop"
+msgstr ""
+
+#: templates/showcase/executive.html:263
+msgid "Market Analysis & Report"
+msgstr ""
+
+#: templates/showcase/executive.html:269
+msgid "Board Presentation Prep"
+msgstr ""
+
+#: templates/showcase/executive.html:293
+msgid ""
+"Net 15. Payment due within 15 days of invoice date. Wire transfer preferred."
+msgstr ""
+
+#: templates/showcase/executive.html:305
+msgid "Designed for high-value professional services"
+msgstr ""
+
+#: templates/showcase/executive.html:316
+msgid "Perfect for time-based consulting engagements"
+msgstr ""
+
+#: templates/showcase/executive.html:326
+msgid "Automate monthly retainer billing"
+msgstr ""
+
+#: templates/showcase/executive.html:335
+msgid "Email Delivery"
+msgstr ""
+
+#: templates/showcase/executive.html:336
+msgid "Send directly to clients with PDF attachment"
+msgstr ""
+
+#: templates/showcase/executive.html:390
+msgid "Ready to Use Executive?"
+msgstr ""
+
+#: templates/showcase/executive.html:393
+msgid "Create professional invoices that match your expertise. Free to start."
+msgstr ""
+
+#: templates/showcase/neon-edge.html:4 templates/showcase/neon-edge.html:12
+msgid "Neon Edge Invoice Template - Dark Mode Bold Design"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:6
+msgid ""
+"Neon Edge invoice template features a dark mode design with neon accents. "
+"Perfect for gaming companies, tech startups, and entertainment businesses. "
+"Free to try."
+msgstr ""
+
+#: templates/showcase/neon-edge.html:8
+msgid ""
+"neon invoice template, dark mode invoice design, gaming invoice template, "
+"tech invoice, entertainment invoice template, cyberpunk invoice"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:14
+msgid ""
+"Dark mode invoice design with neon accents. Perfect for gaming, tech, and "
+"entertainment businesses."
+msgstr ""
+
+#: templates/showcase/neon-edge.html:16
+msgid "Neon Edge Invoice Template"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:18
+msgid ""
+"Dark mode invoice design for gaming and tech. Bold, unique, free to try."
+msgstr ""
+
+#: templates/showcase/neon-edge.html:97
+msgid ""
+"Break the mold with dark mode invoicing. Bold neon accents on a sleek black "
+"canvas create an unforgettable impression that matches your cutting-edge "
+"brand."
+msgstr ""
+
+#: templates/showcase/neon-edge.html:100
+msgid "Dark Mode"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:101
+msgid "Neon"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:103
+msgid "Futuristic"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:125 templates/showcase/neon-edge.html:226
+msgid "NeonX Studios"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:126
+msgid "Game Development"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:135
+msgid "Gaming Publisher Inc."
+msgstr ""
+
+#: templates/showcase/neon-edge.html:139
+msgid "Game Asset Design"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:143
+msgid "Sound Effects Package"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:162
+msgid "Industries that thrive on innovation and edge"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:172
+msgid "Gaming Studios"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:173
+msgid "Game developers and esports companies"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:183
+msgid "Cutting-edge technology companies"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:192
+msgid "Entertainment"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:193
+msgid "Music producers and DJs"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:202
+msgid "Crypto & Web3"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:203
+msgid "Blockchain and NFT projects"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:242
+msgid "Mega Gaming Publisher"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:256
+msgid "3D Character Models (Pack)"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:262
+msgid "Environment Design"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:268
+msgid "UI/UX Design for Game Menu"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:294
+msgid ""
+"Thanks for gaming with us! Payment accepted via crypto or wire transfer."
+msgstr ""
+
+#: templates/showcase/neon-edge.html:349
+msgid "Ready to Use Neon Edge?"
+msgstr ""
+
+#: templates/showcase/neon-edge.html:352
+msgid "Create invoices as bold as your brand. Free to start."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:4
+#: templates/tools/invoice-calculator.html:12
+msgid "Free Invoice Calculator - Calculate Invoice Totals Instantly"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:6
+msgid ""
+"Free online invoice calculator. Add line items, calculate subtotals, apply "
+"tax and discounts, get instant totals. Supports hourly rates. No signup "
+"required."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:8
+msgid ""
+"invoice calculator, calculate invoice total, invoice tax calculator, free "
+"invoice calculator, invoice total calculator, hourly rate calculator"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:14
+msgid ""
+"Free online invoice calculator. Add line items, apply tax and discounts, "
+"calculate totals instantly. No signup required."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:16
+#: templates/tools/invoice-calculator.html:136
+msgid "Free Invoice Calculator"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:18
+msgid ""
+"Calculate invoice totals instantly. Add line items, apply tax and discounts. "
+"Free, no signup required."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:139
+msgid ""
+"Calculate invoice totals instantly. Add line items, apply tax and discounts, "
+"switch between itemized and hourly billing modes."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:155
+#: templates/tools/invoice-calculator.html:166
+msgid "Line Items"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:159
+msgid "Hourly Rate"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:174
+msgid "Rate ($)"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:211
+msgid "Add Line Item"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:221
+msgid "Hourly Rate ($)"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:226
+msgid "Hours Worked"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:239
+#: templates/tools/invoice-calculator.html:265
+msgid "Discount"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:251
+#, python-format
+msgid "Tax Rate (%%)"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:269
+msgid "Tax"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:287
+#: templates/tools/late-fee-calculator.html:294
+msgid "Print Results"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:294
+msgid "Create a Real Invoice"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:304
+msgid "How to Use the Invoice Calculator"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:312
+msgid ""
+"Enter your products or services with quantities and rates. Use Hourly Mode "
+"for time-based billing."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:318
+msgid "Apply Tax & Discounts"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:319
+msgid "Add your local tax rate and any discounts (percentage or flat amount)."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:325
+msgid "Get Your Total"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:326
+msgid ""
+"See your invoice total instantly. Print the results or create a real invoice."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:339
+msgid "How do I use the invoice calculator?"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:340
+msgid ""
+"Simply add line items with descriptions, quantities, and rates. The "
+"calculator automatically computes subtotals. Then add tax percentage and any "
+"discounts to get your final invoice total."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:343
+msgid "Can I calculate hourly billing?"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:344
+msgid ""
+"Yes! Switch to Hourly Mode and enter your hourly rate and hours worked. The "
+"calculator will compute your subtotal, then you can apply tax and discounts."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:347
+msgid "Is this invoice calculator free?"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:348
+msgid ""
+"Yes, this invoice calculator is completely free to use. No signup or credit "
+"card required. Use it as many times as you need."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:351
+msgid "How do I add tax to my invoice?"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:352
+#, python-format
+msgid ""
+"Enter your tax rate as a percentage (e.g., 8.25 for 8.25%% sales tax). The "
+"calculator automatically applies tax to your subtotal after any discounts."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:355
+msgid "Can I apply discounts?"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:356
+msgid ""
+"Yes! You can apply either a percentage discount or a flat dollar amount "
+"discount. The discount is applied to the subtotal before tax is calculated."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:365
+msgid "Need to Create Real Invoices?"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:366
+msgid ""
+"Turn your calculations into professional PDF invoices. Track payments, send "
+"reminders, and get paid faster with InvoiceKits."
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:369
+#: templates/tools/late-fee-calculator.html:376
+msgid "Start Free - 5 Invoices Included"
+msgstr ""
+
+#: templates/tools/invoice-calculator.html:372
+msgid "Try Late Fee Calculator"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:4
+#: templates/tools/late-fee-calculator.html:12
+msgid "Free Late Fee Calculator - Calculate Invoice Late Fees & Interest"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:6
+msgid ""
+"Free late fee calculator for invoices. Calculate late payment fees, interest "
+"charges, and total amount due. Supports flat fees, percentage rates, and "
+"compound interest."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:8
+msgid ""
+"late fee calculator, invoice late fee calculator, late payment interest "
+"calculator, overdue invoice calculator, late payment penalty calculator"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:14
+msgid ""
+"Free late fee calculator for overdue invoices. Calculate late payment fees, "
+"interest, and total due. No signup required."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:16
+#: templates/tools/late-fee-calculator.html:136
+msgid "Free Late Fee Calculator"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:18
+msgid ""
+"Calculate late payment fees and interest on overdue invoices. Free, no "
+"signup required."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:139
+msgid ""
+"Calculate late payment fees and interest on overdue invoices. Supports flat "
+"fees, percentage rates, and compound interest."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:152
+msgid "Invoice Details"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:156
+msgid "Invoice Amount ($)"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:161
+msgid "Due Date"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:166
+msgid "Payment Date"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:174
+msgid "Quick Set Due Date"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:176
+msgid "Net 15"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:177
+msgid "Net 30"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:178
+msgid "Net 45"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:179
+msgid "Net 60"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:189
+msgid "Late Fee Settings"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:193
+msgid "Late Fee Method"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:198
+msgid "Flat Fee Only"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:199
+msgid "Fixed dollar amount"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:205
+msgid "Percentage Only"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:206
+#, python-format
+msgid "%% of invoice amount"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:212
+msgid "Flat + Percentage"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:213
+msgid "Combined fees"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:222
+msgid "Flat Fee ($)"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:228
+#, python-format
+msgid "Interest Rate (%%)"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:230
+msgid "per month"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:231
+msgid "per year"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:232
+msgid "per day"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:245
+msgid "Apply compound interest"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:246
+msgid "Interest calculated on principal + accumulated interest"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:254
+msgid "Results"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:258
+msgid "Days Overdue"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:262
+msgid "Original Amount"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:266
+msgid "Late Fee"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:277
+msgid "Fee Breakdown"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:280
+msgid "Interest fee"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:301
+msgid "Send Late Payment Reminder"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:311
+msgid "Understanding Late Fees on Invoices"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:316
+msgid "Common Late Fee Structures"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:318
+msgid "Flat fee:"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:318
+msgid "A fixed amount (e.g., $25-$50) charged regardless of invoice size"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:319
+msgid "Percentage fee:"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:319
+#, python-format
+msgid "A percentage of the invoice amount (typically 1-2%% per month)"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:320
+msgid "Combined:"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:320
+msgid "A flat fee plus percentage for larger overdue amounts"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:321
+msgid "Tiered:"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:321
+msgid "Higher rates for longer overdue periods"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:325
+msgid "Best Practices"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:327
+msgid "Always include late fee terms on your invoices"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:328
+msgid "Send payment reminders before the due date"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:329
+msgid "Apply a grace period (1-15 days) before charging fees"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:330
+msgid "Check local regulations for maximum allowed rates"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:331
+msgid "Document all late fees in your contracts"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:346
+msgid "How do I calculate late fees on an invoice?"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:347
+msgid ""
+"Enter your invoice amount, due date, and payment date. Choose a late fee "
+"method (flat fee, percentage, or both), enter the rate, and the calculator "
+"will show you the late fee amount and total due."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:350
+msgid "What is a typical late fee for invoices?"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:351
+#, python-format
+msgid ""
+"Common late fee structures include 1-2%% per month, a flat fee of $25-$50, "
+"or a combination. Many businesses charge 1.5%% monthly (18%% annually). "
+"Always check local regulations as some jurisdictions limit late fees."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:354
+msgid "What is the difference between simple and compound interest?"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:355
+msgid ""
+"Simple interest is calculated only on the original amount. Compound interest "
+"is calculated on the original amount plus any accumulated interest. Compound "
+"interest results in higher total fees over time."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:358
+msgid "Can I charge late fees on invoices?"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:359
+msgid ""
+"Yes, in most jurisdictions you can charge late fees if they are disclosed on "
+"the invoice and agreed to by the client. Include late fee terms on your "
+"invoices and in your contracts."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:362
+msgid "How many days late before charging a fee?"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:363
+msgid ""
+"Most businesses apply late fees after a grace period of 1-15 days past the "
+"due date. Common terms include Net 30 (payment due in 30 days) with fees "
+"applied on day 31."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:372
+msgid "Automate Your Invoice Reminders"
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:373
+msgid ""
+"Stop chasing late payments manually. InvoiceKits helps you track overdue "
+"invoices and send professional payment reminders with one click."
+msgstr ""
+
+#: templates/tools/late-fee-calculator.html:379
+msgid "Try Invoice Calculator"
+msgstr ""

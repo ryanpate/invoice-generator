@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Neon Edge Invoice Template - Dark Mode Bold Design | InvoiceKits{% endblock %}
+{% block title %}{% trans "Neon Edge Invoice Template - Dark Mode Bold Design" %} | InvoiceKits{% endblock %}
 
-{% block meta_description %}Neon Edge invoice template features a dark mode design with neon accents. Perfect for gaming companies, tech startups, and entertainment businesses. Free to try.{% endblock %}
+{% block meta_description %}{% trans "Neon Edge invoice template features a dark mode design with neon accents. Perfect for gaming companies, tech startups, and entertainment businesses. Free to try." %}{% endblock %}
 
-{% block meta_keywords %}neon invoice template, dark mode invoice design, gaming invoice template, tech invoice, entertainment invoice template, cyberpunk invoice{% endblock %}
+{% block meta_keywords %}{% trans "neon invoice template, dark mode invoice design, gaming invoice template, tech invoice, entertainment invoice template, cyberpunk invoice" %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/templates/neon-edge/{% endblock %}
 
-{% block og_title %}Neon Edge Invoice Template - Dark Mode Bold Design | InvoiceKits{% endblock %}
+{% block og_title %}{% trans "Neon Edge Invoice Template - Dark Mode Bold Design" %} | InvoiceKits{% endblock %}
 
-{% block og_description %}Dark mode invoice design with neon accents. Perfect for gaming, tech, and entertainment businesses.{% endblock %}
+{% block og_description %}{% trans "Dark mode invoice design with neon accents. Perfect for gaming, tech, and entertainment businesses." %}{% endblock %}
 
-{% block twitter_title %}Neon Edge Invoice Template | InvoiceKits{% endblock %}
+{% block twitter_title %}{% trans "Neon Edge Invoice Template" %} | InvoiceKits{% endblock %}
 
-{% block twitter_description %}Dark mode invoice design for gaming and tech. Bold, unique, free to try.{% endblock %}
+{% block twitter_description %}{% trans "Dark mode invoice design for gaming and tech. Bold, unique, free to try." %}{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -76,41 +77,41 @@
         <!-- Breadcrumb -->
         <nav class="mb-8">
             <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-cyan-400">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-cyan-400">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li><span class="text-gray-600">Templates</span></li>
+                <li><span class="text-gray-600">{% trans "Templates" %}</span></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-cyan-400 font-medium">Neon Edge</li>
+                <li class="text-cyan-400 font-medium">{% trans "Neon Edge" %}</li>
             </ol>
         </nav>
 
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="inline-block px-4 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-sm font-medium mb-6 border border-cyan-500/30">
-                    Invoice Template
+                    {% trans "Invoice Template" %}
                 </span>
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                    Neon Edge
+                    {% trans "Neon Edge" %}
                 </h1>
                 <p class="text-xl text-gray-400 mb-6">
-                    Break the mold with dark mode invoicing. Bold neon accents on a sleek black canvas create an unforgettable impression that matches your cutting-edge brand.
+                    {% trans "Break the mold with dark mode invoicing. Bold neon accents on a sleek black canvas create an unforgettable impression that matches your cutting-edge brand." %}
                 </p>
                 <div class="flex flex-wrap gap-3 mb-8">
-                    <span class="px-3 py-1 bg-gray-800 text-cyan-400 rounded-full text-sm border border-gray-700">Dark Mode</span>
-                    <span class="px-3 py-1 bg-gray-800 text-purple-400 rounded-full text-sm border border-gray-700">Neon</span>
-                    <span class="px-3 py-1 bg-gray-800 text-pink-400 rounded-full text-sm border border-gray-700">Bold</span>
-                    <span class="px-3 py-1 bg-gray-800 text-green-400 rounded-full text-sm border border-gray-700">Futuristic</span>
+                    <span class="px-3 py-1 bg-gray-800 text-cyan-400 rounded-full text-sm border border-gray-700">{% trans "Dark Mode" %}</span>
+                    <span class="px-3 py-1 bg-gray-800 text-purple-400 rounded-full text-sm border border-gray-700">{% trans "Neon" %}</span>
+                    <span class="px-3 py-1 bg-gray-800 text-pink-400 rounded-full text-sm border border-gray-700">{% trans "Bold" %}</span>
+                    <span class="px-3 py-1 bg-gray-800 text-green-400 rounded-full text-sm border border-gray-700">{% trans "Futuristic" %}</span>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-lg hover:from-cyan-400 hover:to-purple-400 transition shadow-lg shadow-cyan-500/25 text-center">
-                        Try This Template Free
+                        {% trans "Try This Template Free" %}
                     </a>
                     <a href="#preview" class="px-8 py-4 border-2 border-gray-700 text-white font-semibold rounded-lg hover:bg-gray-800 transition text-center">
-                        See Full Preview
+                        {% trans "See Full Preview" %}
                     </a>
                 </div>
                 <p class="mt-4 text-gray-500 text-sm">
-                    Start with 5 free credits. No credit card required.
+                    {% trans "Start with 5 free credits. No credit card required." %}
                 </p>
             </div>
             <div class="hidden lg:block">
@@ -121,30 +122,30 @@
                             <div class="w-12 h-12 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-lg mb-3 flex items-center justify-center">
                                 <span class="text-white font-bold">NX</span>
                             </div>
-                            <p class="font-semibold text-white">NeonX Studios</p>
-                            <p class="text-sm text-gray-500">Game Development</p>
+                            <p class="font-semibold text-white">{% trans "NeonX Studios" %}</p>
+                            <p class="text-sm text-gray-500">{% trans "Game Development" %}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">INVOICE</p>
+                            <p class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">{% trans "INVOICE" %}</p>
                             <p class="text-sm text-gray-500">#NEO-2026-001</p>
                         </div>
                     </div>
                     <div class="border-t border-gray-800 pt-4 mb-4">
-                        <p class="text-sm text-gray-500">Bill To:</p>
-                        <p class="font-medium text-white">Gaming Publisher Inc.</p>
+                        <p class="text-sm text-gray-500">{% trans "Bill To:" %}</p>
+                        <p class="font-medium text-white">{% trans "Gaming Publisher Inc." %}</p>
                     </div>
                     <div class="bg-gray-800/50 rounded-lg p-4 mb-4 border border-gray-700">
                         <div class="flex justify-between text-sm mb-2 pb-2 border-b border-gray-700">
-                            <span class="text-gray-400">Game Asset Design</span>
+                            <span class="text-gray-400">{% trans "Game Asset Design" %}</span>
                             <span class="font-medium text-cyan-400">$6,500.00</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Sound Effects Package</span>
+                            <span class="text-gray-400">{% trans "Sound Effects Package" %}</span>
                             <span class="font-medium text-cyan-400">$2,200.00</span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center pt-4 border-t border-cyan-500/30">
-                        <span class="font-semibold text-white">Total Due</span>
+                        <span class="font-semibold text-white">{% trans "Total Due" %}</span>
                         <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">$8,700.00</span>
                     </div>
                 </div>
@@ -157,8 +158,8 @@
 <section class="py-16 bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-white mb-4">Perfect For</h2>
-            <p class="text-xl text-gray-400">Industries that thrive on innovation and edge</p>
+            <h2 class="text-3xl font-bold text-white mb-4">{% trans "Perfect For" %}</h2>
+            <p class="text-xl text-gray-400">{% trans "Industries that thrive on innovation and edge" %}</p>
         </div>
 
         <div class="grid md:grid-cols-4 gap-6">
@@ -168,8 +169,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-white mb-2">Gaming Studios</h3>
-                <p class="text-gray-400 text-sm">Game developers and esports companies</p>
+                <h3 class="font-semibold text-white mb-2">{% trans "Gaming Studios" %}</h3>
+                <p class="text-gray-400 text-sm">{% trans "Game developers and esports companies" %}</p>
             </div>
 
             <div class="bg-gray-800/50 rounded-xl p-6 text-center border border-gray-700">
@@ -178,8 +179,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-white mb-2">Tech Startups</h3>
-                <p class="text-gray-400 text-sm">Cutting-edge technology companies</p>
+                <h3 class="font-semibold text-white mb-2">{% trans "Tech Startups" %}</h3>
+                <p class="text-gray-400 text-sm">{% trans "Cutting-edge technology companies" %}</p>
             </div>
 
             <div class="bg-gray-800/50 rounded-xl p-6 text-center border border-gray-700">
@@ -188,8 +189,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-white mb-2">Entertainment</h3>
-                <p class="text-gray-400 text-sm">Music producers and DJs</p>
+                <h3 class="font-semibold text-white mb-2">{% trans "Entertainment" %}</h3>
+                <p class="text-gray-400 text-sm">{% trans "Music producers and DJs" %}</p>
             </div>
 
             <div class="bg-gray-800/50 rounded-xl p-6 text-center border border-gray-700">
@@ -198,8 +199,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-white mb-2">Crypto & Web3</h3>
-                <p class="text-gray-400 text-sm">Blockchain and NFT projects</p>
+                <h3 class="font-semibold text-white mb-2">{% trans "Crypto & Web3" %}</h3>
+                <p class="text-gray-400 text-sm">{% trans "Blockchain and NFT projects" %}</p>
             </div>
         </div>
     </div>
@@ -209,8 +210,8 @@
 <section id="preview" class="py-16 bg-black">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-white mb-4">Full Template Preview</h2>
-            <p class="text-xl text-gray-400">See exactly what your invoices will look like</p>
+            <h2 class="text-3xl font-bold text-white mb-4">{% trans "Full Template Preview" %}</h2>
+            <p class="text-xl text-gray-400">{% trans "See exactly what your invoices will look like" %}</p>
         </div>
 
         <div class="bg-gray-900 rounded-2xl shadow-xl shadow-purple-500/10 p-8 md:p-12 border border-gray-800">
@@ -222,23 +223,23 @@
                         <div class="w-20 h-20 bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 rounded-xl mb-4 flex items-center justify-center">
                             <span class="text-white text-2xl font-bold">NX</span>
                         </div>
-                        <p class="font-bold text-white text-xl">NeonX Studios</p>
+                        <p class="font-bold text-white text-xl">{% trans "NeonX Studios" %}</p>
                         <p class="text-gray-500">hello@neonxstudios.io</p>
                         <p class="text-sm text-gray-500 mt-2">1337 Digital Avenue</p>
                         <p class="text-sm text-gray-500">Los Angeles, CA 90001</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-2">INVOICE</p>
+                        <p class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-2">{% trans "INVOICE" %}</p>
                         <p class="text-gray-500">#NEO-2026-0089</p>
-                        <p class="text-sm text-gray-500 mt-4">Date: January 9, 2026</p>
-                        <p class="text-sm text-gray-500">Due: January 24, 2026</p>
+                        <p class="text-sm text-gray-500 mt-4">{% trans "Date:" %} {% trans "January 9, 2026" %}</p>
+                        <p class="text-sm text-gray-500">{% trans "Due:" %} {% trans "January 24, 2026" %}</p>
                     </div>
                 </div>
 
                 <!-- Bill To -->
                 <div class="bg-gray-800/50 rounded-xl p-6 mb-8 border border-gray-700">
-                    <p class="text-xs uppercase tracking-wide text-cyan-400 mb-2">Bill To</p>
-                    <p class="font-bold text-white text-lg">Mega Gaming Publisher</p>
+                    <p class="text-xs uppercase tracking-wide text-cyan-400 mb-2">{% trans "Bill To" %}</p>
+                    <p class="font-bold text-white text-lg">{% trans "Mega Gaming Publisher" %}</p>
                     <p class="text-gray-400">500 Game Street</p>
                     <p class="text-gray-400">Seattle, WA 98101</p>
                 </div>
@@ -246,25 +247,25 @@
                 <!-- Line Items -->
                 <div class="mb-8">
                     <div class="grid grid-cols-12 text-xs uppercase tracking-wide text-gray-500 pb-3 border-b border-cyan-500/30">
-                        <div class="col-span-6">Description</div>
-                        <div class="col-span-2 text-right">Qty</div>
-                        <div class="col-span-2 text-right">Rate</div>
-                        <div class="col-span-2 text-right">Amount</div>
+                        <div class="col-span-6">{% trans "Description" %}</div>
+                        <div class="col-span-2 text-right">{% trans "Qty" %}</div>
+                        <div class="col-span-2 text-right">{% trans "Rate" %}</div>
+                        <div class="col-span-2 text-right">{% trans "Amount" %}</div>
                     </div>
                     <div class="grid grid-cols-12 py-4 border-b border-gray-800 text-sm">
-                        <div class="col-span-6 text-white">3D Character Models (Pack)</div>
+                        <div class="col-span-6 text-white">{% trans "3D Character Models (Pack)" %}</div>
                         <div class="col-span-2 text-right text-gray-400">5</div>
                         <div class="col-span-2 text-right text-gray-400">$2,000.00</div>
                         <div class="col-span-2 text-right font-medium text-cyan-400">$10,000.00</div>
                     </div>
                     <div class="grid grid-cols-12 py-4 border-b border-gray-800 text-sm">
-                        <div class="col-span-6 text-white">Environment Design</div>
+                        <div class="col-span-6 text-white">{% trans "Environment Design" %}</div>
                         <div class="col-span-2 text-right text-gray-400">1</div>
                         <div class="col-span-2 text-right text-gray-400">$8,500.00</div>
                         <div class="col-span-2 text-right font-medium text-cyan-400">$8,500.00</div>
                     </div>
                     <div class="grid grid-cols-12 py-4 border-b border-gray-800 text-sm">
-                        <div class="col-span-6 text-white">UI/UX Design for Game Menu</div>
+                        <div class="col-span-6 text-white">{% trans "UI/UX Design for Game Menu" %}</div>
                         <div class="col-span-2 text-right text-gray-400">1</div>
                         <div class="col-span-2 text-right text-gray-400">$3,500.00</div>
                         <div class="col-span-2 text-right font-medium text-cyan-400">$3,500.00</div>
@@ -275,12 +276,12 @@
                 <div class="flex justify-end">
                     <div class="w-72">
                         <div class="flex justify-between py-2">
-                            <span class="text-gray-500">Subtotal</span>
+                            <span class="text-gray-500">{% trans "Subtotal" %}</span>
                             <span class="text-white">$22,000.00</span>
                         </div>
                         <div class="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-lg p-4 mt-2 border border-cyan-500/30">
                             <div class="flex justify-between items-center">
-                                <span class="text-white font-semibold">Total Due</span>
+                                <span class="text-white font-semibold">{% trans "Total Due" %}</span>
                                 <span class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">$22,000.00</span>
                             </div>
                         </div>
@@ -289,8 +290,8 @@
 
                 <!-- Notes -->
                 <div class="mt-10 pt-6 border-t border-gray-800">
-                    <p class="text-xs uppercase tracking-wide text-cyan-400 mb-2">Notes</p>
-                    <p class="text-gray-400">Thanks for gaming with us! Payment accepted via crypto or wire transfer.</p>
+                    <p class="text-xs uppercase tracking-wide text-cyan-400 mb-2">{% trans "Notes" %}</p>
+                    <p class="text-gray-400">{% trans "Thanks for gaming with us! Payment accepted via crypto or wire transfer." %}</p>
                 </div>
             </div>
         </div>
@@ -301,8 +302,8 @@
 <section class="py-16 bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-white mb-4">Explore Other Templates</h2>
-            <p class="text-xl text-gray-400">Find the perfect design for your business</p>
+            <h2 class="text-3xl font-bold text-white mb-4">{% trans "Explore Other Templates" %}</h2>
+            <p class="text-xl text-gray-400">{% trans "Find the perfect design for your business" %}</p>
         </div>
 
         <div class="grid md:grid-cols-4 gap-6">
@@ -310,32 +311,32 @@
                 <div class="h-24 bg-white rounded-lg mb-4 flex items-center justify-center">
                     <div class="w-6 h-6 bg-blue-500 rounded"></div>
                 </div>
-                <h3 class="font-semibold text-white group-hover:text-cyan-400">Clean Slate</h3>
-                <p class="text-gray-500 text-sm">Minimalist, modern</p>
+                <h3 class="font-semibold text-white group-hover:text-cyan-400">{% trans "Clean Slate" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Minimalist, modern" %}</p>
             </a>
 
             <a href="{% url 'invoices:template_executive' %}" class="bg-gray-800/50 rounded-xl p-6 hover:bg-gray-800 transition group border border-gray-700">
                 <div class="h-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg mb-4 flex items-center justify-center">
                     <div class="w-6 h-6 bg-amber-500 rounded"></div>
                 </div>
-                <h3 class="font-semibold text-white group-hover:text-cyan-400">Executive</h3>
-                <p class="text-gray-500 text-sm">Navy & gold, professional</p>
+                <h3 class="font-semibold text-white group-hover:text-cyan-400">{% trans "Executive" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Navy & gold, professional" %}</p>
             </a>
 
             <a href="{% url 'invoices:template_bold_modern' %}" class="bg-gray-800/50 rounded-xl p-6 hover:bg-gray-800 transition group border border-gray-700">
                 <div class="h-24 bg-gradient-to-br from-pink-500 to-orange-400 rounded-lg mb-4 flex items-center justify-center">
                     <div class="w-6 h-6 bg-white rounded"></div>
                 </div>
-                <h3 class="font-semibold text-white group-hover:text-cyan-400">Bold Modern</h3>
-                <p class="text-gray-500 text-sm">Vibrant, creative</p>
+                <h3 class="font-semibold text-white group-hover:text-cyan-400">{% trans "Bold Modern" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Vibrant, creative" %}</p>
             </a>
 
             <a href="{% url 'invoices:template_classic_professional' %}" class="bg-gray-800/50 rounded-xl p-6 hover:bg-gray-800 transition group border border-gray-700">
                 <div class="h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 flex items-center justify-center">
                     <div class="w-6 h-6 bg-gray-600 rounded"></div>
                 </div>
-                <h3 class="font-semibold text-white group-hover:text-cyan-400">Classic Professional</h3>
-                <p class="text-gray-500 text-sm">Traditional, trusted</p>
+                <h3 class="font-semibold text-white group-hover:text-cyan-400">{% trans "Classic Professional" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Traditional, trusted" %}</p>
             </a>
         </div>
     </div>
@@ -345,16 +346,16 @@
 <section class="py-16 bg-gradient-to-r from-gray-900 via-purple-900/50 to-gray-900">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-white mb-6">
-            Ready to Use Neon Edge?
+            {% trans "Ready to Use Neon Edge?" %}
         </h2>
         <p class="text-xl text-gray-400 mb-8">
-            Create invoices as bold as your brand. Free to start.
+            {% trans "Create invoices as bold as your brand. Free to start." %}
         </p>
         <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-500 text-white font-semibold rounded-lg hover:from-cyan-400 hover:to-purple-400 transition shadow-lg shadow-purple-500/25">
-            Start Creating Invoices Free
+            {% trans "Start Creating Invoices Free" %}
         </a>
         <p class="mt-4 text-gray-500 text-sm">
-            5 free credits included. No credit card required.
+            {% trans "5 free credits included. No credit card required." %}
         </p>
     </div>
 </section>

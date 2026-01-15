@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls.i18n import i18n_patterns
 from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.sitemaps import Sitemap
@@ -87,26 +88,33 @@ Allow: /templates/
 Allow: /tools/
 Allow: /portal/request-access/
 
+# Allow internationalized versions
+Allow: /es/
+Allow: /fr/
+
 # Sitemap location
 Sitemap: https://www.invoicekits.com/sitemap.xml
 """
     return HttpResponse(content, content_type='text/plain')
 
 
+# Non-internationalized URLs (system, admin, authenticated routes)
 urlpatterns = [
+    # System endpoints
     path('health/', health_check, name='health_check'),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('BingSiteAuth.xml', bing_site_auth, name='bing_site_auth'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+
+    # Admin
     path('admin/', admin.site.urls),
 
     # Authentication
     path('accounts/', include('allauth.urls')),
 
-    # Main app URLs
-    path('', include('apps.invoices.urls')),
-    path('', include('apps.blog.urls')),
-    path('', include('apps.clients.urls')),  # Client Portal
+    # Authenticated app routes (English only)
+    path('invoices/', include('apps.invoices.urls')),
+    path('', include('apps.clients.urls')),  # Client Portal at /portal/
     path('dashboard/', include('apps.accounts.urls')),
     path('billing/', include('apps.billing.urls')),
     path('settings/', include('apps.companies.urls')),
@@ -114,16 +122,31 @@ urlpatterns = [
     # API
     path('api/v1/', include('apps.api.urls')),
 
-    # Static pages (footer links)
+    # Team invitation acceptance (public URL with UUID, no i18n needed)
+    path('invitation/<uuid:token>/', AcceptInvitationView.as_view(), name='accept_invitation'),
+
+    # Language switcher endpoint
+    path('i18n/', include('django.conf.urls.i18n')),
+]
+
+# Internationalized URLs (public pages - supports /es/, /fr/ prefixes)
+urlpatterns += i18n_patterns(
+    # Public invoice pages (landing, pricing, templates, tools)
+    path('', include('apps.invoices.urls_public')),
+
+    # Blog
+    path('blog/', include('apps.blog.urls')),
+
+    # Static footer pages
     path('contact/', TemplateView.as_view(template_name='pages/contact.html'), name='contact'),
     path('help/', TemplateView.as_view(template_name='pages/help.html'), name='help'),
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
     path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),
     path('api/docs/', TemplateView.as_view(template_name='pages/api_docs.html'), name='api_docs'),
 
-    # Team invitation acceptance (public URL)
-    path('invitation/<uuid:token>/', AcceptInvitationView.as_view(), name='accept_invitation'),
-]
+    # Don't prefix English URLs (/ stays as /, not /en/)
+    prefix_default_language=False,
+)
 
 # Stripe webhooks - only if djstripe is installed
 if 'djstripe' in settings.INSTALLED_APPS:

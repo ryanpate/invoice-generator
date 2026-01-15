@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Invoice Generator for Consultants - Professional Billing for Expert Services | InvoiceKits{% endblock %}
+{% block title %}{% trans "Invoice Generator for Consultants - Professional Billing for Expert Services" %} | InvoiceKits{% endblock %}
 
-{% block meta_description %}Free invoice generator for consultants. Create professional invoices for hourly billing, retainers, and project work. Impress clients and get paid faster. Start free today.{% endblock %}
+{% block meta_description %}{% trans "Free invoice generator for consultants. Create professional invoices for hourly billing, retainers, and project work. Impress clients and get paid faster. Start free today." %}{% endblock %}
 
-{% block meta_keywords %}consultant invoice generator, consulting invoice template, professional services invoice, hourly billing invoice, retainer invoice software, consultant billing{% endblock %}
+{% block meta_keywords %}{% trans "consultant invoice generator, consulting invoice template, professional services invoice, hourly billing invoice, retainer invoice software, consultant billing" %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/for-consultants/{% endblock %}
 
-{% block og_title %}Invoice Generator for Consultants - Professional Billing for Expert Services | InvoiceKits{% endblock %}
+{% block og_title %}{% trans "Invoice Generator for Consultants - Professional Billing for Expert Services" %} | InvoiceKits{% endblock %}
 
-{% block og_description %}Free invoice generator for consultants. Professional invoices for hourly billing, retainers, and project work.{% endblock %}
+{% block og_description %}{% trans "Free invoice generator for consultants. Professional invoices for hourly billing, retainers, and project work." %}{% endblock %}
 
-{% block twitter_title %}Invoice Generator for Consultants | InvoiceKits{% endblock %}
+{% block twitter_title %}{% trans "Invoice Generator for Consultants" %} | InvoiceKits{% endblock %}
 
-{% block twitter_description %}Professional invoicing for consultants. Hourly billing, retainers, and project invoices. Free to start.{% endblock %}
+{% block twitter_description %}{% trans "Professional invoicing for consultants. Hourly billing, retainers, and project invoices. Free to start." %}{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -103,34 +104,34 @@
         <!-- Breadcrumb -->
         <nav class="mb-8">
             <ol class="flex items-center space-x-2 text-sm text-slate-400">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-white">For Consultants</li>
+                <li class="text-white">{% trans "For Consultants" %}</li>
             </ol>
         </nav>
 
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="inline-block px-4 py-1 bg-amber-500/20 text-amber-300 rounded-full text-sm font-medium mb-6">
-                    Built for Consultants
+                    {% trans "Built for Consultants" %}
                 </span>
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                    Your Expertise Deserves<br>
-                    <span class="text-amber-400">Professional Invoices.</span>
+                    {% trans "Your Expertise Deserves" %}<br>
+                    <span class="text-amber-400">{% trans "Professional Invoices." %}</span>
                 </h1>
                 <p class="text-xl text-slate-300 mb-8">
-                    Corporate clients expect polished invoices. Create professional billing documents that match your expertise in seconds. Join 3,000+ consultants using InvoiceKits.
+                    {% trans "Corporate clients expect polished invoices. Create professional billing documents that match your expertise in seconds. Join 3,000+ consultants using InvoiceKits." %}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition shadow-lg text-center">
-                        Create Your First Invoice Free
+                        {% trans "Create Your First Invoice Free" %}
                     </a>
                     <a href="#templates" class="px-8 py-4 border-2 border-slate-600 text-white font-semibold rounded-lg hover:bg-slate-800 transition text-center">
-                        View Templates
+                        {% trans "View Templates" %}
                     </a>
                 </div>
                 <p class="mt-6 text-slate-400 text-sm">
-                    Start with 5 free credits. Buy more as needed or subscribe for best value.
+                    {% trans "Start with 5 free credits. Buy more as needed or subscribe for best value." %}
                 </p>
             </div>
             <div class="hidden lg:block">
@@ -139,36 +140,36 @@
                     <div class="border-l-4 border-amber-500 pl-4 mb-6">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-sm text-slate-500 uppercase tracking-wide">Consulting Services</p>
-                                <p class="text-xl font-bold text-slate-900">Strategic Advisory</p>
+                                <p class="text-sm text-slate-500 uppercase tracking-wide">{% trans "Consulting Services" %}</p>
+                                <p class="text-xl font-bold text-slate-900">{% trans "Strategic Advisory" %}</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-2xl font-bold text-slate-900">INVOICE</p>
+                                <p class="text-2xl font-bold text-slate-900">{% trans "INVOICE" %}</p>
                                 <p class="text-sm text-slate-500">#CON-2026-001</p>
                             </div>
                         </div>
                     </div>
                     <div class="border-t border-slate-200 pt-4 mb-4">
-                        <p class="text-sm text-slate-500">Bill To:</p>
-                        <p class="font-medium text-slate-900">Fortune 500 Corp</p>
-                        <p class="text-sm text-slate-600">Attn: VP of Strategy</p>
+                        <p class="text-sm text-slate-500">{% trans "Bill To:" %}</p>
+                        <p class="font-medium text-slate-900">{% trans "Fortune 500 Corp" %}</p>
+                        <p class="text-sm text-slate-600">{% trans "Attn: VP of Strategy" %}</p>
                     </div>
                     <div class="bg-slate-50 rounded-lg p-4 mb-4">
                         <div class="flex justify-between text-sm mb-2 pb-2 border-b border-slate-200">
-                            <span class="text-slate-600">Strategy Workshop (8 hrs @ $350/hr)</span>
+                            <span class="text-slate-600">{% trans "Strategy Workshop (8 hrs @ $350/hr)" %}</span>
                             <span class="font-medium">$2,800.00</span>
                         </div>
                         <div class="flex justify-between text-sm mb-2 pb-2 border-b border-slate-200">
-                            <span class="text-slate-600">Market Analysis Report</span>
+                            <span class="text-slate-600">{% trans "Market Analysis Report" %}</span>
                             <span class="font-medium">$4,500.00</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-slate-600">Executive Presentation</span>
+                            <span class="text-slate-600">{% trans "Executive Presentation" %}</span>
                             <span class="font-medium">$1,200.00</span>
                         </div>
                     </div>
                     <div class="flex justify-between items-center pt-4 border-t-2 border-slate-900">
-                        <span class="text-lg font-semibold text-slate-900">Total Due</span>
+                        <span class="text-lg font-semibold text-slate-900">{% trans "Total Due" %}</span>
                         <span class="text-2xl font-bold text-amber-600">$8,500.00</span>
                     </div>
                 </div>
@@ -181,8 +182,8 @@
 <section class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">The Consulting Invoice Dilemma</h2>
-            <p class="text-xl text-slate-600">Your clients pay premium rates. Your invoices should reflect that.</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">{% trans "The Consulting Invoice Dilemma" %}</h2>
+            <p class="text-xl text-slate-600">{% trans "Your clients pay premium rates. Your invoices should reflect that." %}</p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
@@ -192,8 +193,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">"My invoices look amateurish"</h3>
-                <p class="text-slate-600">You charge $300/hour but send invoices that look like they were made in a spreadsheet. First impressions matter.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "\"My invoices look amateurish\"" %}</h3>
+                <p class="text-slate-600">{% trans "You charge $300/hour but send invoices that look like they were made in a spreadsheet. First impressions matter." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-red-400">
@@ -202,8 +203,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">"Complex billing takes forever"</h3>
-                <p class="text-slate-600">Hourly rates, project fees, retainers, expenses... calculating and formatting it all is a headache.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "\"Complex billing takes forever\"" %}</h3>
+                <p class="text-slate-600">{% trans "Hourly rates, project fees, retainers, expenses... calculating and formatting it all is a headache." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm border-l-4 border-red-400">
@@ -212,8 +213,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">"Corporate clients need proper docs"</h3>
-                <p class="text-slate-600">Enterprise clients have procurement requirements. They need professional invoices for their records.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "\"Corporate clients need proper docs\"" %}</h3>
+                <p class="text-slate-600">{% trans "Enterprise clients have procurement requirements. They need professional invoices for their records." %}</p>
             </div>
         </div>
     </div>
@@ -223,14 +224,14 @@
 <section id="templates" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Templates That Command Respect</h2>
-            <p class="text-xl text-slate-600">Professional designs that match your consulting expertise</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">{% trans "Templates That Command Respect" %}</h2>
+            <p class="text-xl text-slate-600">{% trans "Professional designs that match your consulting expertise" %}</p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Executive Template -->
             <div class="bg-slate-50 rounded-xl p-6 border-2 border-amber-400 relative">
-                <span class="absolute -top-3 left-4 bg-amber-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-full">Popular with Consultants</span>
+                <span class="absolute -top-3 left-4 bg-amber-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-full">{% trans "Popular with Consultants" %}</span>
                 <div class="h-40 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg mb-4 flex items-center justify-center">
                     <div class="text-center">
                         <div class="w-8 h-8 bg-amber-500 rounded mx-auto mb-2"></div>
@@ -238,8 +239,8 @@
                         <div class="w-16 h-2 bg-slate-700 rounded mx-auto"></div>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Executive</h3>
-                <p class="text-slate-600 text-sm">Navy & gold accents with serif headings. Perfect for strategy consultants and executive advisors.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Executive" %}</h3>
+                <p class="text-slate-600 text-sm">{% trans "Navy & gold accents with serif headings. Perfect for strategy consultants and executive advisors." %}</p>
             </div>
 
             <!-- Classic Professional -->
@@ -251,8 +252,8 @@
                         <div class="w-16 h-2 bg-slate-300 rounded mx-auto"></div>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Classic Professional</h3>
-                <p class="text-slate-600 text-sm">Traditional layout with subtle grays. Ideal for management and IT consultants.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Classic Professional" %}</h3>
+                <p class="text-slate-600 text-sm">{% trans "Traditional layout with subtle grays. Ideal for management and IT consultants." %}</p>
             </div>
 
             <!-- Clean Slate -->
@@ -264,13 +265,13 @@
                         <div class="w-16 h-2 bg-slate-100 rounded mx-auto"></div>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Clean Slate</h3>
-                <p class="text-slate-600 text-sm">Minimalist design with modern sans-serif. Great for tech and innovation consultants.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Clean Slate" %}</h3>
+                <p class="text-slate-600 text-sm">{% trans "Minimalist design with modern sans-serif. Great for tech and innovation consultants." %}</p>
             </div>
         </div>
 
         <div class="mt-8 text-center">
-            <p class="text-slate-500">Plus 2 more templates: Bold Modern and Neon Edge</p>
+            <p class="text-slate-500">{% trans "Plus 2 more templates: Bold Modern and Neon Edge" %}</p>
         </div>
     </div>
 </section>
@@ -279,8 +280,8 @@
 <section class="py-20 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Features Consultants Need</h2>
-            <p class="text-xl text-slate-600">Handle any billing scenario with ease</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">{% trans "Features Consultants Need" %}</h2>
+            <p class="text-xl text-slate-600">{% trans "Handle any billing scenario with ease" %}</p>
         </div>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -290,8 +291,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Hourly Billing</h3>
-                <p class="text-slate-600">Add line items with hourly rates and quantities. Totals calculate automatically for time-based engagements.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Hourly Billing" %}</h3>
+                <p class="text-slate-600">{% trans "Add line items with hourly rates and quantities. Totals calculate automatically for time-based engagements." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
@@ -300,8 +301,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Retainer Invoices</h3>
-                <p class="text-slate-600">Set up recurring invoices for monthly retainers. Automatic billing means predictable cash flow.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Retainer Invoices" %}</h3>
+                <p class="text-slate-600">{% trans "Set up recurring invoices for monthly retainers. Automatic billing means predictable cash flow." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
@@ -310,8 +311,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Project Milestones</h3>
-                <p class="text-slate-600">Bill by project phase. Add multiple deliverables with individual pricing to each invoice.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Project Milestones" %}</h3>
+                <p class="text-slate-600">{% trans "Bill by project phase. Add multiple deliverables with individual pricing to each invoice." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
@@ -320,8 +321,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Your Logo & Branding</h3>
-                <p class="text-slate-600">Upload your consulting firm's logo. Every invoice reinforces your professional brand.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Your Logo & Branding" %}</h3>
+                <p class="text-slate-600">{% trans "Upload your consulting firm's logo. Every invoice reinforces your professional brand." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
@@ -330,8 +331,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Multi-Currency</h3>
-                <p class="text-slate-600">Invoice international clients in USD, EUR, GBP, and more. Perfect for global consulting practices.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Multi-Currency" %}</h3>
+                <p class="text-slate-600">{% trans "Invoice international clients in USD, EUR, GBP, and more. Perfect for global consulting practices." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
@@ -340,8 +341,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">Direct Email Delivery</h3>
-                <p class="text-slate-600">Send invoices directly to clients with one click. PDF attached automatically with your custom message.</p>
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">{% trans "Direct Email Delivery" %}</h3>
+                <p class="text-slate-600">{% trans "Send invoices directly to clients with one click. PDF attached automatically with your custom message." %}</p>
             </div>
         </div>
     </div>
@@ -351,8 +352,8 @@
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">From Engagement to Payment</h2>
-            <p class="text-xl text-slate-600">Professional invoicing in three simple steps</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">{% trans "From Engagement to Payment" %}</h2>
+            <p class="text-xl text-slate-600">{% trans "Professional invoicing in three simple steps" %}</p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
@@ -360,30 +361,30 @@
                 <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="text-2xl font-bold text-amber-600">1</span>
                 </div>
-                <h3 class="text-xl font-semibold text-slate-900 mb-3">Set Up Your Profile</h3>
-                <p class="text-slate-600">Add your consulting firm details, logo, and default payment terms. Your brand on every invoice.</p>
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">{% trans "Set Up Your Profile" %}</h3>
+                <p class="text-slate-600">{% trans "Add your consulting firm details, logo, and default payment terms. Your brand on every invoice." %}</p>
             </div>
 
             <div class="text-center">
                 <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="text-2xl font-bold text-amber-600">2</span>
                 </div>
-                <h3 class="text-xl font-semibold text-slate-900 mb-3">Create & Customize</h3>
-                <p class="text-slate-600">Add client details, itemize your services, choose a template. The invoice is ready in under 60 seconds.</p>
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">{% trans "Create & Customize" %}</h3>
+                <p class="text-slate-600">{% trans "Add client details, itemize your services, choose a template. The invoice is ready in under 60 seconds." %}</p>
             </div>
 
             <div class="text-center">
                 <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="text-2xl font-bold text-amber-600">3</span>
                 </div>
-                <h3 class="text-xl font-semibold text-slate-900 mb-3">Send & Track</h3>
-                <p class="text-slate-600">Email the invoice directly or download the PDF. Track payment status from your dashboard.</p>
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">{% trans "Send & Track" %}</h3>
+                <p class="text-slate-600">{% trans "Email the invoice directly or download the PDF. Track payment status from your dashboard." %}</p>
             </div>
         </div>
 
         <div class="mt-12 text-center">
             <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition shadow-lg">
-                Create Your First Invoice Free
+                {% trans "Create Your First Invoice Free" %}
             </a>
         </div>
     </div>
@@ -393,8 +394,8 @@
 <section class="py-20 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Trusted by Consultants Worldwide</h2>
-            <p class="text-xl text-slate-600">See what fellow consultants are saying</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">{% trans "Trusted by Consultants Worldwide" %}</h2>
+            <p class="text-xl text-slate-600">{% trans "See what fellow consultants are saying" %}</p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
@@ -408,12 +409,12 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                     </div>
                 </div>
-                <p class="text-slate-600 mb-4">"The Executive template is perfect for my strategy consulting practice. My Fortune 500 clients actually comment on how professional my invoices look."</p>
+                <p class="text-slate-600 mb-4">{% trans "\"The Executive template is perfect for my strategy consulting practice. My Fortune 500 clients actually comment on how professional my invoices look.\"" %}</p>
                 <div class="flex items-center">
                     <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-amber-400 font-semibold">RK</div>
                     <div class="ml-3">
                         <p class="font-medium text-slate-900">Robert K.</p>
-                        <p class="text-sm text-slate-500">Strategy Consultant</p>
+                        <p class="text-sm text-slate-500">{% trans "Strategy Consultant" %}</p>
                     </div>
                 </div>
             </div>
@@ -428,12 +429,12 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                     </div>
                 </div>
-                <p class="text-slate-600 mb-4">"I have 5 retainer clients. The recurring invoice feature means I never forget to bill. It's like having an assistant handle my invoicing."</p>
+                <p class="text-slate-600 mb-4">{% trans "\"I have 5 retainer clients. The recurring invoice feature means I never forget to bill. It's like having an assistant handle my invoicing.\"" %}</p>
                 <div class="flex items-center">
                     <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-semibold">EP</div>
                     <div class="ml-3">
                         <p class="font-medium text-slate-900">Elena P.</p>
-                        <p class="text-sm text-slate-500">HR Consultant</p>
+                        <p class="text-sm text-slate-500">{% trans "HR Consultant" %}</p>
                     </div>
                 </div>
             </div>
@@ -448,12 +449,12 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                     </div>
                 </div>
-                <p class="text-slate-600 mb-4">"As an IT consultant billing by the hour, I needed something that handles complex time-based invoicing. InvoiceKits makes it simple."</p>
+                <p class="text-slate-600 mb-4">{% trans "\"As an IT consultant billing by the hour, I needed something that handles complex time-based invoicing. InvoiceKits makes it simple.\"" %}</p>
                 <div class="flex items-center">
                     <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-semibold">MP</div>
                     <div class="ml-3">
                         <p class="font-medium text-slate-900">Marcus P.</p>
-                        <p class="text-sm text-slate-500">IT Consultant</p>
+                        <p class="text-sm text-slate-500">{% trans "IT Consultant" %}</p>
                     </div>
                 </div>
             </div>
@@ -465,153 +466,153 @@
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Flexible Pricing for Consultants</h2>
-            <p class="text-xl text-slate-600">Pay-as-you-go credits or monthly subscriptions - your choice</p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">{% trans "Flexible Pricing for Consultants" %}</h2>
+            <p class="text-xl text-slate-600">{% trans "Pay-as-you-go credits or monthly subscriptions - your choice" %}</p>
         </div>
 
         <!-- Pay-As-You-Go Credits -->
         <div class="mb-16">
             <div class="text-center mb-8">
-                <h3 class="text-2xl font-bold text-slate-900 mb-2">Pay-As-You-Go Credits</h3>
-                <p class="text-slate-600">Perfect for project-based consulting. Buy credits when you need them - they never expire.</p>
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">{% trans "Pay-As-You-Go Credits" %}</h3>
+                <p class="text-slate-600">{% trans "Perfect for project-based consulting. Buy credits when you need them - they never expire." %}</p>
             </div>
             <div class="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
                 <!-- Free Credits -->
                 <div class="bg-slate-50 rounded-2xl shadow-lg p-6 text-center">
-                    <h4 class="text-lg font-bold text-slate-900 mb-2">Free Start</h4>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">{% trans "Free Start" %}</h4>
                     <div class="mb-4">
                         <span class="text-3xl font-bold text-slate-900">5</span>
-                        <span class="text-slate-500">credits</span>
+                        <span class="text-slate-500">{% trans "credits" %}</span>
                     </div>
-                    <p class="text-green-600 font-medium mb-4">FREE forever</p>
-                    <p class="text-slate-500 text-sm">One-time signup bonus</p>
+                    <p class="text-green-600 font-medium mb-4">{% trans "FREE forever" %}</p>
+                    <p class="text-slate-500 text-sm">{% trans "One-time signup bonus" %}</p>
                 </div>
 
                 <!-- 10 Credits -->
                 <div class="bg-slate-50 rounded-2xl shadow-lg p-6 text-center">
-                    <h4 class="text-lg font-bold text-slate-900 mb-2">10 Credits</h4>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">{% trans "10 Credits" %}</h4>
                     <div class="mb-4">
                         <span class="text-3xl font-bold text-slate-900">$9</span>
                     </div>
-                    <p class="text-slate-600 text-sm mb-4">$0.90/invoice</p>
+                    <p class="text-slate-600 text-sm mb-4">{% trans "$0.90/invoice" %}</p>
                     <a href="{% url 'billing:credits' %}" class="block w-full text-center py-2 px-4 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition text-sm">
-                        Buy Credits
+                        {% trans "Buy Credits" %}
                     </a>
                 </div>
 
                 <!-- 25 Credits -->
                 <div class="bg-white rounded-2xl shadow-lg p-6 text-center ring-2 ring-amber-500 relative">
                     <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-amber-500 text-slate-900 text-xs font-medium px-3 py-1 rounded-full">
-                        Best Value
+                        {% trans "Best Value" %}
                     </div>
-                    <h4 class="text-lg font-bold text-slate-900 mb-2">25 Credits</h4>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">{% trans "25 Credits" %}</h4>
                     <div class="mb-4">
                         <span class="text-3xl font-bold text-slate-900">$19</span>
                     </div>
-                    <p class="text-slate-600 text-sm mb-4">$0.76/invoice</p>
+                    <p class="text-slate-600 text-sm mb-4">{% trans "$0.76/invoice" %}</p>
                     <a href="{% url 'billing:credits' %}" class="block w-full text-center py-2 px-4 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition text-sm">
-                        Buy Credits
+                        {% trans "Buy Credits" %}
                     </a>
                 </div>
 
                 <!-- 50 Credits -->
                 <div class="bg-slate-50 rounded-2xl shadow-lg p-6 text-center">
-                    <h4 class="text-lg font-bold text-slate-900 mb-2">50 Credits</h4>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">{% trans "50 Credits" %}</h4>
                     <div class="mb-4">
                         <span class="text-3xl font-bold text-slate-900">$35</span>
                     </div>
-                    <p class="text-slate-600 text-sm mb-4">$0.70/invoice</p>
+                    <p class="text-slate-600 text-sm mb-4">{% trans "$0.70/invoice" %}</p>
                     <a href="{% url 'billing:credits' %}" class="block w-full text-center py-2 px-4 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition text-sm">
-                        Buy Credits
+                        {% trans "Buy Credits" %}
                     </a>
                 </div>
             </div>
-            <p class="text-center text-slate-500 mt-4 text-sm">All credit packs: All 5 templates including Executive, no watermark, credits never expire</p>
+            <p class="text-center text-slate-500 mt-4 text-sm">{% trans "All credit packs: All 5 templates including Executive, no watermark, credits never expire" %}</p>
         </div>
 
         <!-- Monthly Subscriptions -->
         <div>
             <div class="text-center mb-8">
-                <h3 class="text-2xl font-bold text-slate-900 mb-2">Monthly Subscriptions</h3>
-                <p class="text-slate-600">Best value for consultants with retainer clients or regular invoicing needs.</p>
+                <h3 class="text-2xl font-bold text-slate-900 mb-2">{% trans "Monthly Subscriptions" %}</h3>
+                <p class="text-slate-600">{% trans "Best value for consultants with retainer clients or regular invoicing needs." %}</p>
             </div>
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
                 <!-- Starter Plan -->
                 <div class="bg-slate-50 rounded-2xl shadow-lg p-8">
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Starter</h4>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">{% trans "Starter" %}</h4>
                     <div class="mb-6">
                         <span class="text-4xl font-bold text-slate-900">$9</span>
-                        <span class="text-slate-500">/month</span>
+                        <span class="text-slate-500">/{% trans "month" %}</span>
                     </div>
-                    <p class="text-green-600 text-sm mb-6">$0.18/invoice (50/mo)</p>
+                    <p class="text-green-600 text-sm mb-6">{% trans "$0.18/invoice (50/mo)" %}</p>
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center text-slate-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            50 invoices/month
+                            {% trans "50 invoices/month" %}
                         </li>
                         <li class="flex items-center text-slate-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            All templates, no watermark
+                            {% trans "All templates, no watermark" %}
                         </li>
                     </ul>
                     <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition">
-                        Start Free Trial
+                        {% trans "Start Free Trial" %}
                     </a>
                 </div>
 
                 <!-- Professional Plan -->
                 <div class="bg-white rounded-2xl shadow-lg p-8 ring-2 ring-amber-500 relative">
                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-amber-500 text-slate-900 text-sm font-medium px-4 py-1 rounded-full">
-                        Best for Consultants
+                        {% trans "Best for Consultants" %}
                     </div>
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Professional</h4>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">{% trans "Professional" %}</h4>
                     <div class="mb-6">
                         <span class="text-4xl font-bold text-slate-900">$29</span>
-                        <span class="text-slate-500">/month</span>
+                        <span class="text-slate-500">/{% trans "month" %}</span>
                     </div>
-                    <p class="text-green-600 text-sm mb-6">$0.15/invoice (200/mo)</p>
+                    <p class="text-green-600 text-sm mb-6">{% trans "$0.15/invoice (200/mo)" %}</p>
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center text-slate-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            200 invoices/month
+                            {% trans "200 invoices/month" %}
                         </li>
                         <li class="flex items-center text-slate-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Recurring invoices (retainers)
+                            {% trans "Recurring invoices (retainers)" %}
                         </li>
                     </ul>
                     <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition">
-                        Start Free Trial
+                        {% trans "Start Free Trial" %}
                     </a>
                 </div>
 
                 <!-- Business Plan -->
                 <div class="bg-slate-50 rounded-2xl shadow-lg p-8">
-                    <h4 class="text-xl font-bold text-slate-900 mb-2">Business</h4>
+                    <h4 class="text-xl font-bold text-slate-900 mb-2">{% trans "Business" %}</h4>
                     <div class="mb-6">
                         <span class="text-4xl font-bold text-slate-900">$79</span>
-                        <span class="text-slate-500">/month</span>
+                        <span class="text-slate-500">/{% trans "month" %}</span>
                     </div>
-                    <p class="text-green-600 text-sm mb-6">Unlimited invoices</p>
+                    <p class="text-green-600 text-sm mb-6">{% trans "Unlimited invoices" %}</p>
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center text-slate-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Unlimited invoices
+                            {% trans "Unlimited invoices" %}
                         </li>
                         <li class="flex items-center text-slate-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            API + batch processing
+                            {% trans "API + batch processing" %}
                         </li>
                     </ul>
                     <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-slate-300 text-slate-700 font-semibold rounded-lg hover:bg-slate-100 transition">
-                        Start Free Trial
+                        {% trans "Start Free Trial" %}
                     </a>
                 </div>
             </div>
         </div>
 
         <p class="text-center text-slate-500 mt-8">
-            <a href="{% url 'invoices:pricing' %}" class="text-amber-600 hover:underline">View full pricing details</a> | Need more? <a href="{% url 'contact' %}" class="text-amber-600 hover:underline">Contact us</a> for Enterprise pricing.
+            <a href="{% url 'invoices:pricing' %}" class="text-amber-600 hover:underline">{% trans "View full pricing details" %}</a> | {% trans "Need more?" %} <a href="{% url 'contact' %}" class="text-amber-600 hover:underline">{% trans "Contact us" %}</a> {% trans "for Enterprise pricing." %}
         </p>
     </div>
 </section>
@@ -620,38 +621,38 @@
 <section class="py-20 bg-slate-50">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">{% trans "Frequently Asked Questions" %}</h2>
         </div>
 
         <div class="space-y-6">
             <div class="bg-white rounded-xl p-6 shadow-sm">
-                <h3 class="font-semibold text-slate-900 mb-2">Can I bill hourly rates with InvoiceKits?</h3>
-                <p class="text-slate-600">Yes! Add line items with hourly rates and quantities. InvoiceKits automatically calculates totals. Perfect for time-based consulting engagements.</p>
+                <h3 class="font-semibold text-slate-900 mb-2">{% trans "Can I bill hourly rates with InvoiceKits?" %}</h3>
+                <p class="text-slate-600">{% trans "Yes! Add line items with hourly rates and quantities. InvoiceKits automatically calculates totals. Perfect for time-based consulting engagements." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
-                <h3 class="font-semibold text-slate-900 mb-2">Should consultants use credits or subscribe?</h3>
-                <p class="text-slate-600">It depends on your billing pattern. Project-based consultants often prefer credits ($0.70-$0.90/invoice) since they never expire. Consultants with retainer clients get better value from subscriptions ($0.15-$0.18/invoice) plus recurring invoice automation.</p>
+                <h3 class="font-semibold text-slate-900 mb-2">{% trans "Should consultants use credits or subscribe?" %}</h3>
+                <p class="text-slate-600">{% trans "It depends on your billing pattern. Project-based consultants often prefer credits ($0.70-$0.90/invoice) since they never expire. Consultants with retainer clients get better value from subscriptions ($0.15-$0.18/invoice) plus recurring invoice automation." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
-                <h3 class="font-semibold text-slate-900 mb-2">How do I invoice retainer clients?</h3>
-                <p class="text-slate-600">Set up recurring invoices for retainer agreements. Choose weekly, monthly, or quarterly billing cycles. Your clients receive professional invoices automatically.</p>
+                <h3 class="font-semibold text-slate-900 mb-2">{% trans "How do I invoice retainer clients?" %}</h3>
+                <p class="text-slate-600">{% trans "Set up recurring invoices for retainer agreements. Choose weekly, monthly, or quarterly billing cycles. Your clients receive professional invoices automatically." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
-                <h3 class="font-semibold text-slate-900 mb-2">Which invoice template is best for consultants?</h3>
-                <p class="text-slate-600">Our Executive template is popular with consultants - it features a professional navy and gold design that conveys expertise and credibility. The Classic Professional template is also excellent for corporate clients.</p>
+                <h3 class="font-semibold text-slate-900 mb-2">{% trans "Which invoice template is best for consultants?" %}</h3>
+                <p class="text-slate-600">{% trans "Our Executive template is popular with consultants - it features a professional navy and gold design that conveys expertise and credibility. The Classic Professional template is also excellent for corporate clients." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
-                <h3 class="font-semibold text-slate-900 mb-2">Do credits expire?</h3>
-                <p class="text-slate-600">No! Credits never expire. Perfect for consultants who work on projects with variable timelines. Buy a credit pack and use them whenever your next project wraps up.</p>
+                <h3 class="font-semibold text-slate-900 mb-2">{% trans "Do credits expire?" %}</h3>
+                <p class="text-slate-600">{% trans "No! Credits never expire. Perfect for consultants who work on projects with variable timelines. Buy a credit pack and use them whenever your next project wraps up." %}</p>
             </div>
 
             <div class="bg-white rounded-xl p-6 shadow-sm">
-                <h3 class="font-semibold text-slate-900 mb-2">Can I customize invoices with my consulting firm's branding?</h3>
-                <p class="text-slate-600">Absolutely! Upload your logo, add your business address, and customize payment terms. Every invoice reinforces your professional brand and builds client confidence.</p>
+                <h3 class="font-semibold text-slate-900 mb-2">{% trans "Can I customize invoices with my consulting firm's branding?" %}</h3>
+                <p class="text-slate-600">{% trans "Absolutely! Upload your logo, add your business address, and customize payment terms. Every invoice reinforces your professional brand and builds client confidence." %}</p>
             </div>
         </div>
     </div>
@@ -661,16 +662,16 @@
 <section class="py-20 bg-slate-900">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Elevate Your Consulting Practice?
+            {% trans "Ready to Elevate Your Consulting Practice?" %}
         </h2>
         <p class="text-xl text-slate-300 mb-8">
-            Join thousands of consultants who use InvoiceKits to bill professionally and get paid faster.
+            {% trans "Join thousands of consultants who use InvoiceKits to bill professionally and get paid faster." %}
         </p>
         <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition shadow-lg">
-            Create Your First Invoice Free
+            {% trans "Create Your First Invoice Free" %}
         </a>
         <p class="mt-6 text-slate-400 text-sm">
-            No credit card required. Free forever plan available.
+            {% trans "No credit card required. Free forever plan available." %}
         </p>
     </div>
 </section>

@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Bold Modern Invoice Template - Vibrant Creative Design | InvoiceKits{% endblock %}
+{% block title %}{% trans "Bold Modern Invoice Template - Vibrant Creative Design" %} | InvoiceKits{% endblock %}
 
-{% block meta_description %}Bold Modern invoice template features vibrant colors and large typography. Perfect for creative agencies, designers, and photographers. Free to try.{% endblock %}
+{% block meta_description %}{% trans "Bold Modern invoice template features vibrant colors and large typography. Perfect for creative agencies, designers, and photographers. Free to try." %}{% endblock %}
 
-{% block meta_keywords %}bold modern invoice template, creative invoice design, designer invoice template, photographer invoice, agency invoice template, colorful invoice{% endblock %}
+{% block meta_keywords %}{% trans "bold modern invoice template, creative invoice design, designer invoice template, photographer invoice, agency invoice template, colorful invoice" %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/templates/bold-modern/{% endblock %}
 
-{% block og_title %}Bold Modern Invoice Template - Vibrant Creative Design | InvoiceKits{% endblock %}
+{% block og_title %}{% trans "Bold Modern Invoice Template - Vibrant Creative Design" %} | InvoiceKits{% endblock %}
 
-{% block og_description %}Vibrant invoice design with bold colors and large typography. Perfect for creative agencies and designers.{% endblock %}
+{% block og_description %}{% trans "Vibrant invoice design with bold colors and large typography. Perfect for creative agencies and designers." %}{% endblock %}
 
-{% block twitter_title %}Bold Modern Invoice Template | InvoiceKits{% endblock %}
+{% block twitter_title %}{% trans "Bold Modern Invoice Template" %} | InvoiceKits{% endblock %}
 
-{% block twitter_description %}Vibrant invoice design for creative professionals. Bold, colorful, free to try.{% endblock %}
+{% block twitter_description %}{% trans "Vibrant invoice design for creative professionals. Bold, colorful, free to try." %}{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -74,41 +75,41 @@
         <!-- Breadcrumb -->
         <nav class="mb-8">
             <ol class="flex items-center space-x-2 text-sm text-white/80">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li><span class="text-white/60">Templates</span></li>
+                <li><span class="text-white/60">{% trans "Templates" %}</span></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-white font-medium">Bold Modern</li>
+                <li class="text-white font-medium">{% trans "Bold Modern" %}</li>
             </ol>
         </nav>
 
         <div class="grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="inline-block px-4 py-1 bg-white/20 text-white rounded-full text-sm font-medium mb-6">
-                    Invoice Template
+                    {% trans "Invoice Template" %}
                 </span>
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                    Bold Modern
+                    {% trans "Bold Modern" %}
                 </h1>
                 <p class="text-xl text-white/90 mb-6">
-                    Make a statement with every invoice. Vibrant gradient colors and bold typography that stands out in any inbox and reflects your creative energy.
+                    {% trans "Make a statement with every invoice. Vibrant gradient colors and bold typography that stands out in any inbox and reflects your creative energy." %}
                 </p>
                 <div class="flex flex-wrap gap-3 mb-8">
-                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">Vibrant</span>
-                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">Creative</span>
-                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">Bold</span>
-                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">Gradient</span>
+                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">{% trans "Vibrant" %}</span>
+                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">{% trans "Creative" %}</span>
+                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">{% trans "Bold" %}</span>
+                    <span class="px-3 py-1 bg-white/20 text-white rounded-full text-sm">{% trans "Gradient" %}</span>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-white text-pink-600 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg text-center">
-                        Try This Template Free
+                        {% trans "Try This Template Free" %}
                     </a>
                     <a href="#preview" class="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition text-center">
-                        See Full Preview
+                        {% trans "See Full Preview" %}
                     </a>
                 </div>
                 <p class="mt-4 text-white/70 text-sm">
-                    Start with 5 free credits. No credit card required.
+                    {% trans "Start with 5 free credits. No credit card required." %}
                 </p>
             </div>
             <div class="hidden lg:block">
@@ -120,28 +121,28 @@
                                 <span class="text-pink-500 font-bold">CS</span>
                             </div>
                             <div class="text-right">
-                                <p class="text-3xl font-bold text-white">INVOICE</p>
+                                <p class="text-3xl font-bold text-white">{% trans "INVOICE" %}</p>
                                 <p class="text-white/80">#BLD-2026-001</p>
                             </div>
                         </div>
                     </div>
                     <div class="p-6">
                         <div class="mb-4">
-                            <p class="text-sm text-gray-500">Bill To</p>
-                            <p class="font-bold text-gray-900">Creative Client Co.</p>
+                            <p class="text-sm text-gray-500">{% trans "Bill To" %}</p>
+                            <p class="font-bold text-gray-900">{% trans "Creative Client Co." %}</p>
                         </div>
                         <div class="space-y-2 mb-4">
                             <div class="flex justify-between text-sm py-2 border-b">
-                                <span class="text-gray-600">Brand Identity Design</span>
+                                <span class="text-gray-600">{% trans "Brand Identity Design" %}</span>
                                 <span class="font-bold">$4,500.00</span>
                             </div>
                             <div class="flex justify-between text-sm py-2 border-b">
-                                <span class="text-gray-600">Social Media Kit</span>
+                                <span class="text-gray-600">{% trans "Social Media Kit" %}</span>
                                 <span class="font-bold">$1,200.00</span>
                             </div>
                         </div>
                         <div class="flex justify-between items-center pt-4 bg-gradient-to-r from-pink-500 to-orange-400 -mx-6 -mb-6 px-6 py-4">
-                            <span class="text-white font-semibold">Total</span>
+                            <span class="text-white font-semibold">{% trans "Total" %}</span>
                             <span class="text-2xl font-bold text-white">$5,700.00</span>
                         </div>
                     </div>
@@ -155,8 +156,8 @@
 <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Perfect For</h2>
-            <p class="text-xl text-gray-600">Creative professionals who aren't afraid to stand out</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Perfect For" %}</h2>
+            <p class="text-xl text-gray-600">{% trans "Creative professionals who aren't afraid to stand out" %}</p>
         </div>
 
         <div class="grid md:grid-cols-4 gap-6">
@@ -166,8 +167,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-gray-900 mb-2">Designers</h3>
-                <p class="text-gray-600 text-sm">Graphic, web, and UX designers</p>
+                <h3 class="font-semibold text-gray-900 mb-2">{% trans "Designers" %}</h3>
+                <p class="text-gray-600 text-sm">{% trans "Graphic, web, and UX designers" %}</p>
             </div>
 
             <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 text-center">
@@ -177,8 +178,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-gray-900 mb-2">Photographers</h3>
-                <p class="text-gray-600 text-sm">Commercial and creative photographers</p>
+                <h3 class="font-semibold text-gray-900 mb-2">{% trans "Photographers" %}</h3>
+                <p class="text-gray-600 text-sm">{% trans "Commercial and creative photographers" %}</p>
             </div>
 
             <div class="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6 text-center">
@@ -187,8 +188,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-gray-900 mb-2">Videographers</h3>
-                <p class="text-gray-600 text-sm">Video production and content creators</p>
+                <h3 class="font-semibold text-gray-900 mb-2">{% trans "Videographers" %}</h3>
+                <p class="text-gray-600 text-sm">{% trans "Video production and content creators" %}</p>
             </div>
 
             <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 text-center">
@@ -197,8 +198,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
                 </div>
-                <h3 class="font-semibold text-gray-900 mb-2">Creative Agencies</h3>
-                <p class="text-gray-600 text-sm">Marketing and branding agencies</p>
+                <h3 class="font-semibold text-gray-900 mb-2">{% trans "Creative Agencies" %}</h3>
+                <p class="text-gray-600 text-sm">{% trans "Marketing and branding agencies" %}</p>
             </div>
         </div>
     </div>
@@ -208,8 +209,8 @@
 <section id="preview" class="py-16 bg-gray-50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Full Template Preview</h2>
-            <p class="text-xl text-gray-600">See exactly what your invoices will look like</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Full Template Preview" %}</h2>
+            <p class="text-xl text-gray-600">{% trans "See exactly what your invoices will look like" %}</p>
         </div>
 
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -220,13 +221,13 @@
                         <div class="w-20 h-20 bg-white rounded-xl mb-4 flex items-center justify-center">
                             <span class="text-2xl font-bold bg-gradient-to-r from-pink-500 to-orange-400 bg-clip-text text-transparent">CS</span>
                         </div>
-                        <p class="font-bold text-white text-xl">Creative Studio</p>
+                        <p class="font-bold text-white text-xl">{% trans "Creative Studio" %}</p>
                         <p class="text-white/80">hello@creativestudio.com</p>
                     </div>
                     <div class="text-right">
-                        <p class="text-4xl font-bold text-white mb-2">INVOICE</p>
+                        <p class="text-4xl font-bold text-white mb-2">{% trans "INVOICE" %}</p>
                         <p class="text-white/80">#BLD-2026-0156</p>
-                        <p class="text-white/80 mt-4">January 9, 2026</p>
+                        <p class="text-white/80 mt-4">{% trans "January 9, 2026" %}</p>
                     </div>
                 </div>
             </div>
@@ -235,8 +236,8 @@
                 <div class="max-w-2xl mx-auto">
                     <!-- Bill To -->
                     <div class="bg-gradient-to-r from-pink-50 to-orange-50 rounded-xl p-6 mb-8">
-                        <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Bill To</p>
-                        <p class="font-bold text-gray-900 text-lg">Startup Ventures Inc.</p>
+                        <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">{% trans "Bill To" %}</p>
+                        <p class="font-bold text-gray-900 text-lg">{% trans "Startup Ventures Inc." %}</p>
                         <p class="text-gray-600">123 Innovation Way</p>
                         <p class="text-gray-600">San Francisco, CA 94107</p>
                     </div>
@@ -244,25 +245,25 @@
                     <!-- Line Items -->
                     <div class="mb-8">
                         <div class="grid grid-cols-12 text-sm uppercase tracking-wide text-gray-500 pb-3 border-b-2 border-pink-200">
-                            <div class="col-span-6">Description</div>
-                            <div class="col-span-2 text-right">Qty</div>
-                            <div class="col-span-2 text-right">Rate</div>
-                            <div class="col-span-2 text-right">Amount</div>
+                            <div class="col-span-6">{% trans "Description" %}</div>
+                            <div class="col-span-2 text-right">{% trans "Qty" %}</div>
+                            <div class="col-span-2 text-right">{% trans "Rate" %}</div>
+                            <div class="col-span-2 text-right">{% trans "Amount" %}</div>
                         </div>
                         <div class="grid grid-cols-12 py-4 border-b border-gray-100">
-                            <div class="col-span-6 font-medium text-gray-900">Brand Identity Package</div>
+                            <div class="col-span-6 font-medium text-gray-900">{% trans "Brand Identity Package" %}</div>
                             <div class="col-span-2 text-right text-gray-600">1</div>
                             <div class="col-span-2 text-right text-gray-600">$5,000.00</div>
                             <div class="col-span-2 text-right font-bold">$5,000.00</div>
                         </div>
                         <div class="grid grid-cols-12 py-4 border-b border-gray-100">
-                            <div class="col-span-6 font-medium text-gray-900">Website Design (5 pages)</div>
+                            <div class="col-span-6 font-medium text-gray-900">{% trans "Website Design (5 pages)" %}</div>
                             <div class="col-span-2 text-right text-gray-600">1</div>
                             <div class="col-span-2 text-right text-gray-600">$3,500.00</div>
                             <div class="col-span-2 text-right font-bold">$3,500.00</div>
                         </div>
                         <div class="grid grid-cols-12 py-4 border-b border-gray-100">
-                            <div class="col-span-6 font-medium text-gray-900">Social Media Templates</div>
+                            <div class="col-span-6 font-medium text-gray-900">{% trans "Social Media Templates" %}</div>
                             <div class="col-span-2 text-right text-gray-600">10</div>
                             <div class="col-span-2 text-right text-gray-600">$150.00</div>
                             <div class="col-span-2 text-right font-bold">$1,500.00</div>
@@ -273,12 +274,12 @@
                     <div class="flex justify-end">
                         <div class="w-72">
                             <div class="flex justify-between py-2">
-                                <span class="text-gray-500">Subtotal</span>
+                                <span class="text-gray-500">{% trans "Subtotal" %}</span>
                                 <span class="font-medium">$10,000.00</span>
                             </div>
                             <div class="bg-gradient-to-r from-pink-500 to-orange-400 rounded-lg p-4 mt-2">
                                 <div class="flex justify-between items-center">
-                                    <span class="text-white font-semibold">Total Due</span>
+                                    <span class="text-white font-semibold">{% trans "Total Due" %}</span>
                                     <span class="text-2xl font-bold text-white">$10,000.00</span>
                                 </div>
                             </div>
@@ -287,8 +288,8 @@
 
                     <!-- Notes -->
                     <div class="mt-10 pt-6 border-t border-gray-200">
-                        <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">Notes</p>
-                        <p class="text-gray-600">Thanks for choosing Creative Studio! We loved working on this project.</p>
+                        <p class="text-sm uppercase tracking-wide text-gray-500 mb-2">{% trans "Notes" %}</p>
+                        <p class="text-gray-600">{% trans "Thanks for choosing Creative Studio! We loved working on this project." %}</p>
                     </div>
                 </div>
             </div>
@@ -300,8 +301,8 @@
 <section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Explore Other Templates</h2>
-            <p class="text-xl text-gray-600">Find the perfect design for your business</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Explore Other Templates" %}</h2>
+            <p class="text-xl text-gray-600">{% trans "Find the perfect design for your business" %}</p>
         </div>
 
         <div class="grid md:grid-cols-4 gap-6">
@@ -309,32 +310,32 @@
                 <div class="h-24 bg-white rounded-lg mb-4 flex items-center justify-center border border-gray-200">
                     <div class="w-6 h-6 bg-blue-500 rounded"></div>
                 </div>
-                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">Clean Slate</h3>
-                <p class="text-gray-500 text-sm">Minimalist, modern</p>
+                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">{% trans "Clean Slate" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Minimalist, modern" %}</p>
             </a>
 
             <a href="{% url 'invoices:template_executive' %}" class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition group">
                 <div class="h-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg mb-4 flex items-center justify-center">
                     <div class="w-6 h-6 bg-amber-500 rounded"></div>
                 </div>
-                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">Executive</h3>
-                <p class="text-gray-500 text-sm">Navy & gold, professional</p>
+                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">{% trans "Executive" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Navy & gold, professional" %}</p>
             </a>
 
             <a href="{% url 'invoices:template_classic_professional' %}" class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition group">
                 <div class="h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 flex items-center justify-center border border-gray-200">
                     <div class="w-6 h-6 bg-gray-600 rounded"></div>
                 </div>
-                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">Classic Professional</h3>
-                <p class="text-gray-500 text-sm">Traditional, trusted</p>
+                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">{% trans "Classic Professional" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Traditional, trusted" %}</p>
             </a>
 
             <a href="{% url 'invoices:template_neon_edge' %}" class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition group">
                 <div class="h-24 bg-gradient-to-br from-gray-900 to-black rounded-lg mb-4 flex items-center justify-center">
                     <div class="w-6 h-6 bg-cyan-400 rounded"></div>
                 </div>
-                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">Neon Edge</h3>
-                <p class="text-gray-500 text-sm">Dark mode, bold</p>
+                <h3 class="font-semibold text-gray-900 group-hover:text-pink-600">{% trans "Neon Edge" %}</h3>
+                <p class="text-gray-500 text-sm">{% trans "Dark mode, bold" %}</p>
             </a>
         </div>
     </div>
@@ -344,16 +345,16 @@
 <section class="py-16 bg-gradient-to-r from-pink-500 via-orange-400 to-yellow-400">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-white mb-6">
-            Ready to Use Bold Modern?
+            {% trans "Ready to Use Bold Modern?" %}
         </h2>
         <p class="text-xl text-white/90 mb-8">
-            Create invoices as creative as your work. Free to start.
+            {% trans "Create invoices as creative as your work. Free to start." %}
         </p>
         <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-white text-pink-600 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
-            Start Creating Invoices Free
+            {% trans "Start Creating Invoices Free" %}
         </a>
         <p class="mt-4 text-white/70 text-sm">
-            5 free credits included. No credit card required.
+            {% trans "5 free credits included. No credit card required." %}
         </p>
     </div>
 </section>

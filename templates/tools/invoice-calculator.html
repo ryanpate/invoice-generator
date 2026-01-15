@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Free Invoice Calculator - Calculate Invoice Totals Instantly | InvoiceKits{% endblock %}
+{% block title %}{% trans "Free Invoice Calculator - Calculate Invoice Totals Instantly" %} | InvoiceKits{% endblock %}
 
-{% block meta_description %}Free online invoice calculator. Add line items, calculate subtotals, apply tax and discounts, get instant totals. Supports hourly rates. No signup required.{% endblock %}
+{% block meta_description %}{% trans "Free online invoice calculator. Add line items, calculate subtotals, apply tax and discounts, get instant totals. Supports hourly rates. No signup required." %}{% endblock %}
 
-{% block meta_keywords %}invoice calculator, calculate invoice total, invoice tax calculator, free invoice calculator, invoice total calculator, hourly rate calculator{% endblock %}
+{% block meta_keywords %}{% trans "invoice calculator, calculate invoice total, invoice tax calculator, free invoice calculator, invoice total calculator, hourly rate calculator" %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/tools/invoice-calculator/{% endblock %}
 
-{% block og_title %}Free Invoice Calculator - Calculate Invoice Totals Instantly | InvoiceKits{% endblock %}
+{% block og_title %}{% trans "Free Invoice Calculator - Calculate Invoice Totals Instantly" %} | InvoiceKits{% endblock %}
 
-{% block og_description %}Free online invoice calculator. Add line items, apply tax and discounts, calculate totals instantly. No signup required.{% endblock %}
+{% block og_description %}{% trans "Free online invoice calculator. Add line items, apply tax and discounts, calculate totals instantly. No signup required." %}{% endblock %}
 
-{% block twitter_title %}Free Invoice Calculator | InvoiceKits{% endblock %}
+{% block twitter_title %}{% trans "Free Invoice Calculator" %} | InvoiceKits{% endblock %}
 
-{% block twitter_description %}Calculate invoice totals instantly. Add line items, apply tax and discounts. Free, no signup required.{% endblock %}
+{% block twitter_description %}{% trans "Calculate invoice totals instantly. Add line items, apply tax and discounts. Free, no signup required." %}{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -122,21 +123,20 @@
         <!-- Breadcrumb -->
         <nav class="mb-6">
             <ol class="flex items-center space-x-2 text-sm text-primary-200">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li><span>Free Tools</span></li>
+                <li><span>{% trans "Free Tools" %}</span></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-white">Invoice Calculator</li>
+                <li class="text-white">{% trans "Invoice Calculator" %}</li>
             </ol>
         </nav>
 
         <div class="text-center">
             <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                Free Invoice Calculator
+                {% trans "Free Invoice Calculator" %}
             </h1>
             <p class="text-lg text-primary-100 max-w-2xl mx-auto">
-                Calculate invoice totals instantly. Add line items, apply tax and discounts,
-                switch between itemized and hourly billing modes.
+                {% trans "Calculate invoice totals instantly. Add line items, apply tax and discounts, switch between itemized and hourly billing modes." %}
             </p>
         </div>
     </div>
@@ -152,27 +152,27 @@
                 <div class="inline-flex rounded-lg bg-gray-100 dark:bg-gray-700 p-1">
                     <button type="button" id="mode-simple" onclick="switchMode('simple')"
                             class="px-6 py-2 text-sm font-medium rounded-md transition-colors bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow">
-                        Line Items
+                        {% trans "Line Items" %}
                     </button>
                     <button type="button" id="mode-hourly" onclick="switchMode('hourly')"
                             class="px-6 py-2 text-sm font-medium rounded-md transition-colors text-gray-600 dark:text-gray-300">
-                        Hourly Rate
+                        {% trans "Hourly Rate" %}
                     </button>
                 </div>
             </div>
 
             <!-- Simple Mode (Line Items) -->
             <div id="simple-mode">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Line Items</h2>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% trans "Line Items" %}</h2>
 
                 <div class="overflow-x-auto">
                     <table class="w-full" id="line-items-table">
                         <thead>
                             <tr class="text-left text-sm text-gray-500 dark:text-gray-400 border-b dark:border-gray-700">
-                                <th class="pb-3 font-medium">Description</th>
-                                <th class="pb-3 font-medium w-24">Qty</th>
-                                <th class="pb-3 font-medium w-32">Rate ($)</th>
-                                <th class="pb-3 font-medium w-32 text-right">Amount</th>
+                                <th class="pb-3 font-medium">{% trans "Description" %}</th>
+                                <th class="pb-3 font-medium w-24">{% trans "Qty" %}</th>
+                                <th class="pb-3 font-medium w-32">{% trans "Rate ($)" %}</th>
+                                <th class="pb-3 font-medium w-32 text-right">{% trans "Amount" %}</th>
                                 <th class="pb-3 w-12"></th>
                             </tr>
                         </thead>
@@ -208,22 +208,22 @@
                     <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Add Line Item
+                    {% trans "Add Line Item" %}
                 </button>
             </div>
 
             <!-- Hourly Mode -->
             <div id="hourly-mode" class="hidden">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Hourly Billing</h2>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% trans "Hourly Billing" %}</h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hourly Rate ($)</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Hourly Rate ($)" %}</label>
                         <input type="number" id="hourly-rate" value="0" min="0" step="0.01" onchange="calculateTotals()"
                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hours Worked</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Hours Worked" %}</label>
                         <input type="number" id="hours-worked" value="0" min="0" step="0.25" onchange="calculateTotals()"
                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg">
                     </div>
@@ -236,7 +236,7 @@
             <!-- Tax & Discount -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Discount</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Discount" %}</label>
                     <div class="flex">
                         <input type="number" id="discount-value" value="0" min="0" step="0.01" onchange="calculateTotals()"
                                class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-l-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
@@ -248,7 +248,7 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tax Rate (%)</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Tax Rate (%)" %}</label>
                     <input type="number" id="tax-rate" value="0" min="0" max="100" step="0.01" onchange="calculateTotals()"
                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                 </div>
@@ -258,20 +258,20 @@
             <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
                 <div class="space-y-3">
                     <div class="flex justify-between text-gray-600 dark:text-gray-300">
-                        <span>Subtotal</span>
+                        <span>{% trans "Subtotal" %}</span>
                         <span id="result-subtotal" class="font-medium">$0.00</span>
                     </div>
                     <div class="flex justify-between text-gray-600 dark:text-gray-300">
-                        <span>Discount</span>
+                        <span>{% trans "Discount" %}</span>
                         <span id="result-discount" class="font-medium text-green-600 dark:text-green-400">-$0.00</span>
                     </div>
                     <div class="flex justify-between text-gray-600 dark:text-gray-300">
-                        <span>Tax (<span id="result-tax-rate">0</span>%)</span>
+                        <span>{% trans "Tax" %} (<span id="result-tax-rate">0</span>%)</span>
                         <span id="result-tax" class="font-medium">$0.00</span>
                     </div>
                     <hr class="border-gray-300 dark:border-gray-600">
                     <div class="flex justify-between text-xl font-bold text-gray-900 dark:text-white">
-                        <span>Total</span>
+                        <span>{% trans "Total" %}</span>
                         <span id="result-total">$0.00</span>
                     </div>
                 </div>
@@ -284,14 +284,14 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
-                    Print Results
+                    {% trans "Print Results" %}
                 </button>
                 <a href="{% url 'account_signup' %}"
                    class="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    Create a Real Invoice
+                    {% trans "Create a Real Invoice" %}
                 </a>
             </div>
         </div>
@@ -301,29 +301,29 @@
 <!-- How to Use Section -->
 <section class="py-16 bg-white dark:bg-gray-800">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">How to Use the Invoice Calculator</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{% trans "How to Use the Invoice Calculator" %}</h2>
 
         <div class="grid md:grid-cols-3 gap-8">
             <div class="text-center">
                 <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span class="text-xl font-bold text-primary-600 dark:text-primary-400">1</span>
                 </div>
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Add Line Items</h3>
-                <p class="text-gray-600 dark:text-gray-300 text-sm">Enter your products or services with quantities and rates. Use Hourly Mode for time-based billing.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Add Line Items" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{% trans "Enter your products or services with quantities and rates. Use Hourly Mode for time-based billing." %}</p>
             </div>
             <div class="text-center">
                 <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span class="text-xl font-bold text-primary-600 dark:text-primary-400">2</span>
                 </div>
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Apply Tax & Discounts</h3>
-                <p class="text-gray-600 dark:text-gray-300 text-sm">Add your local tax rate and any discounts (percentage or flat amount).</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Apply Tax & Discounts" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{% trans "Add your local tax rate and any discounts (percentage or flat amount)." %}</p>
             </div>
             <div class="text-center">
                 <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span class="text-xl font-bold text-primary-600 dark:text-primary-400">3</span>
                 </div>
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Get Your Total</h3>
-                <p class="text-gray-600 dark:text-gray-300 text-sm">See your invoice total instantly. Print the results or create a real invoice.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Get Your Total" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{% trans "See your invoice total instantly. Print the results or create a real invoice." %}</p>
             </div>
         </div>
     </div>
@@ -332,28 +332,28 @@
 <!-- FAQ Section -->
 <section class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Frequently Asked Questions</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{% trans "Frequently Asked Questions" %}</h2>
 
         <div class="space-y-6">
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How do I use the invoice calculator?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Simply add line items with descriptions, quantities, and rates. The calculator automatically computes subtotals. Then add tax percentage and any discounts to get your final invoice total.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "How do I use the invoice calculator?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Simply add line items with descriptions, quantities, and rates. The calculator automatically computes subtotals. Then add tax percentage and any discounts to get your final invoice total." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I calculate hourly billing?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Yes! Switch to Hourly Mode and enter your hourly rate and hours worked. The calculator will compute your subtotal, then you can apply tax and discounts.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Can I calculate hourly billing?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Yes! Switch to Hourly Mode and enter your hourly rate and hours worked. The calculator will compute your subtotal, then you can apply tax and discounts." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Is this invoice calculator free?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Yes, this invoice calculator is completely free to use. No signup or credit card required. Use it as many times as you need.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Is this invoice calculator free?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Yes, this invoice calculator is completely free to use. No signup or credit card required. Use it as many times as you need." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How do I add tax to my invoice?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Enter your tax rate as a percentage (e.g., 8.25 for 8.25% sales tax). The calculator automatically applies tax to your subtotal after any discounts.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "How do I add tax to my invoice?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Enter your tax rate as a percentage (e.g., 8.25 for 8.25% sales tax). The calculator automatically applies tax to your subtotal after any discounts." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I apply discounts?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Yes! You can apply either a percentage discount or a flat dollar amount discount. The discount is applied to the subtotal before tax is calculated.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Can I apply discounts?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Yes! You can apply either a percentage discount or a flat dollar amount discount. The discount is applied to the subtotal before tax is calculated." %}</p>
             </div>
         </div>
     </div>
@@ -362,14 +362,14 @@
 <!-- CTA Section -->
 <section class="py-16 bg-primary-600">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">Need to Create Real Invoices?</h2>
-        <p class="text-primary-100 mb-8 max-w-2xl mx-auto">Turn your calculations into professional PDF invoices. Track payments, send reminders, and get paid faster with InvoiceKits.</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">{% trans "Need to Create Real Invoices?" %}</h2>
+        <p class="text-primary-100 mb-8 max-w-2xl mx-auto">{% trans "Turn your calculations into professional PDF invoices. Track payments, send reminders, and get paid faster with InvoiceKits." %}</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
-                Start Free - 5 Invoices Included
+                {% trans "Start Free - 5 Invoices Included" %}
             </a>
             <a href="{% url 'invoices:late_fee_calculator' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
-                Try Late Fee Calculator
+                {% trans "Try Late Fee Calculator" %}
             </a>
         </div>
     </div>

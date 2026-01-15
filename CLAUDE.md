@@ -75,6 +75,15 @@
 - **Free SEO Tools (no login required):**
   - Invoice Calculator (`/tools/invoice-calculator/`) - Line items mode & hourly rate mode, tax/discount, live totals
   - Late Fee Calculator (`/tools/late-fee-calculator/`) - Flat fee, percentage, compound interest, payment terms presets
+- **Multi-Language Support (i18n):**
+  - Languages: English (default), Spanish (es), French (fr)
+  - URL strategy: `/es/pricing/`, `/fr/pricing/`, `/pricing/` (English - no prefix)
+  - Scope: Public pages only (landing, pricing, templates, tools, blog, footer pages)
+  - Authenticated routes (dashboard, invoices, billing) remain English-only
+  - Language switcher dropdown in navigation
+  - hreflang tags for SEO
+  - ~1,077 translatable strings per language
+  - Translation files: `locale/es/LC_MESSAGES/django.po`, `locale/fr/LC_MESSAGES/django.po`
 
 ### Suppressed/Disabled Features
 
@@ -147,7 +156,7 @@
   - Online payment via Stripe Checkout with transfer to business
   - Downloadable PDF statements
   - Available at `/portal/`
-- [ ] **Multi-language Support:** i18n for international users
+- [x] **Multi-language Support:** i18n for international users (Spanish, French) - COMPLETED
 
 ### SEO - Critical (Week 1)
 - [x] **Fix Canonical URL:** Updated `templates/base.html` to use `https://www.invoicekits.com` - COMPLETED

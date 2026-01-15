@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Contact Us - InvoiceKits{% endblock %}
+{% block title %}{% trans "Contact Us" %} - InvoiceKits{% endblock %}
 
-{% block meta_description %}Get in touch with the InvoiceKits team. We're here to help with your invoicing questions and support needs.{% endblock %}
+{% block meta_description %}{% trans "Get in touch with the InvoiceKits team. We're here to help with your invoicing questions and support needs." %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/contact/{% endblock %}
 
@@ -35,22 +36,22 @@
         <!-- Breadcrumb Navigation -->
         <nav class="mb-8">
             <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-gray-900 dark:text-white">Contact Us</li>
+                <li class="text-gray-900 dark:text-white">{% trans "Contact Us" %}</li>
             </ol>
         </nav>
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Contact Us</h1>
-            <p class="text-xl text-gray-600 dark:text-gray-400">We'd love to hear from you. Get in touch with our team.</p>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">{% trans "Contact Us" %}</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-400">{% trans "We'd love to hear from you. Get in touch with our team." %}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Contact Information -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors duration-200">
-                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Get in Touch</h2>
+                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">{% trans "Get in Touch" %}</h2>
 
                 <div class="space-y-6">
                     <!-- Email -->
@@ -63,8 +64,8 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Email</h3>
-                            <p class="mt-1 text-gray-600 dark:text-gray-400">Send us an email anytime</p>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">{% trans "Email" %}</h3>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">{% trans "Send us an email anytime" %}</p>
                             <a href="mailto:support@invoicekits.com" class="mt-2 inline-block text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium">
                                 support@invoicekits.com
                             </a>
@@ -81,8 +82,8 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Response Time</h3>
-                            <p class="mt-1 text-gray-600 dark:text-gray-400">We typically respond within 24-48 hours during business days.</p>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">{% trans "Response Time" %}</h3>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">{% trans "We typically respond within 24-48 hours during business days." %}</p>
                         </div>
                     </div>
 
@@ -96,8 +97,8 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Support Hours</h3>
-                            <p class="mt-1 text-gray-600 dark:text-gray-400">Monday - Friday<br>9:00 AM - 5:00 PM (EST)</p>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">{% trans "Support Hours" %}</h3>
+                            <p class="mt-1 text-gray-600 dark:text-gray-400">{% trans "Monday - Friday" %}<br>{% trans "9:00 AM - 5:00 PM (EST)" %}</p>
                         </div>
                     </div>
                 </div>
@@ -105,27 +106,27 @@
 
             <!-- Quick Help -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors duration-200">
-                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Quick Help</h2>
+                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">{% trans "Quick Help" %}</h2>
 
                 <div class="space-y-4">
                     <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Account Issues</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">Having trouble logging in or managing your account? Include your account email in your message.</p>
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">{% trans "Account Issues" %}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Having trouble logging in or managing your account? Include your account email in your message." %}</p>
                     </div>
 
                     <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Billing Questions</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">Questions about subscriptions, upgrades, or payments? We're happy to help clarify.</p>
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">{% trans "Billing Questions" %}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Questions about subscriptions, upgrades, or payments? We're happy to help clarify." %}</p>
                     </div>
 
                     <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Feature Requests</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">Have an idea for a new feature? We love hearing from our users about how to improve.</p>
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">{% trans "Feature Requests" %}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Have an idea for a new feature? We love hearing from our users about how to improve." %}</p>
                     </div>
 
                     <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">Bug Reports</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">Found something that isn't working right? Please include steps to reproduce the issue.</p>
+                        <h3 class="font-medium text-gray-900 dark:text-white mb-2">{% trans "Bug Reports" %}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Found something that isn't working right? Please include steps to reproduce the issue." %}</p>
                     </div>
                 </div>
             </div>
@@ -133,9 +134,9 @@
 
         <!-- CTA -->
         <div class="mt-12 text-center">
-            <p class="text-gray-600 dark:text-gray-400 mb-4">Ready to get started with professional invoicing?</p>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">{% trans "Ready to get started with professional invoicing?" %}</p>
             <a href="{% url 'account_signup' %}" class="btn-primary inline-block">
-                Start Free Today
+                {% trans "Start Free Today" %}
             </a>
         </div>
     </div>

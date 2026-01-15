@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Terms of Service - InvoiceKits{% endblock %}
+{% block title %}{% trans "Terms of Service" %} - InvoiceKits{% endblock %}
 
-{% block meta_description %}Read InvoiceKits' terms of service. Understand the terms and conditions for using our invoice generation service.{% endblock %}
+{% block meta_description %}{% trans "Read InvoiceKits' terms of service. Understand the terms and conditions for using our invoice generation service." %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/terms/{% endblock %}
 
@@ -35,162 +36,162 @@
         <!-- Breadcrumb Navigation -->
         <nav class="mb-8">
             <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-gray-900 dark:text-white">Terms of Service</li>
+                <li class="text-gray-900 dark:text-white">{% trans "Terms of Service" %}</li>
             </ol>
         </nav>
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Terms of Service</h1>
-            <p class="text-gray-600 dark:text-gray-400">Last updated: {% now "F d, Y" %}</p>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">{% trans "Terms of Service" %}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{% trans "Last updated:" %} {% now "F d, Y" %}</p>
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors duration-200">
             <div class="prose dark:prose-invert max-w-none">
                 <!-- Agreement -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Agreement to Terms</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Agreement to Terms" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        By accessing or using InvoiceKits ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you disagree with any part of the terms, you may not access the Service.
+                        {% trans "By accessing or using InvoiceKits (\"Service\"), you agree to be bound by these Terms of Service (\"Terms\"). If you disagree with any part of the terms, you may not access the Service." %}
                     </p>
                 </section>
 
                 <!-- Description of Service -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Description of Service</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Description of Service" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        InvoiceKits is a web-based invoice generation service that allows users to:
+                        {% trans "InvoiceKits is a web-based invoice generation service that allows users to:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Create and manage professional invoices</li>
-                        <li>Generate PDF invoices with customizable templates</li>
-                        <li>Upload CSV files for batch invoice creation</li>
-                        <li>Track invoice status and payment history</li>
-                        <li>Manage company profiles and branding</li>
+                        <li>{% trans "Create and manage professional invoices" %}</li>
+                        <li>{% trans "Generate PDF invoices with customizable templates" %}</li>
+                        <li>{% trans "Upload CSV files for batch invoice creation" %}</li>
+                        <li>{% trans "Track invoice status and payment history" %}</li>
+                        <li>{% trans "Manage company profiles and branding" %}</li>
                     </ul>
                 </section>
 
                 <!-- User Accounts -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">User Accounts</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "User Accounts" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        To use certain features of the Service, you must register for an account. You agree to:
+                        {% trans "To use certain features of the Service, you must register for an account. You agree to:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Provide accurate and complete registration information</li>
-                        <li>Maintain the security of your account credentials</li>
-                        <li>Notify us immediately of any unauthorized access</li>
-                        <li>Accept responsibility for all activities under your account</li>
+                        <li>{% trans "Provide accurate and complete registration information" %}</li>
+                        <li>{% trans "Maintain the security of your account credentials" %}</li>
+                        <li>{% trans "Notify us immediately of any unauthorized access" %}</li>
+                        <li>{% trans "Accept responsibility for all activities under your account" %}</li>
                     </ul>
                 </section>
 
                 <!-- Subscription Plans -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Subscription Plans and Billing</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Subscription Plans and Billing" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        InvoiceKits offers various subscription tiers with different features and limits:
+                        {% trans "InvoiceKits offers various subscription tiers with different features and limits:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mb-4 space-y-1">
-                        <li><strong>Free:</strong> 5 invoices per month, 1 template</li>
-                        <li><strong>Starter ($9/mo):</strong> 50 invoices per month, 2 templates</li>
-                        <li><strong>Professional ($29/mo):</strong> 200 invoices per month, all templates, batch upload</li>
-                        <li><strong>Business ($79/mo):</strong> Unlimited invoices, API access</li>
+                        <li><strong>{% trans "Free:" %}</strong> {% trans "5 invoices per month, 1 template" %}</li>
+                        <li><strong>{% trans "Starter ($9/mo):" %}</strong> {% trans "50 invoices per month, 2 templates" %}</li>
+                        <li><strong>{% trans "Professional ($29/mo):" %}</strong> {% trans "200 invoices per month, all templates, batch upload" %}</li>
+                        <li><strong>{% trans "Business ($79/mo):" %}</strong> {% trans "Unlimited invoices, API access" %}</li>
                     </ul>
                     <p class="text-gray-600 dark:text-gray-400">
-                        Paid subscriptions are billed monthly. You may cancel at any time, and your subscription will remain active until the end of the current billing period.
+                        {% trans "Paid subscriptions are billed monthly. You may cancel at any time, and your subscription will remain active until the end of the current billing period." %}
                     </p>
                 </section>
 
                 <!-- Acceptable Use -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Acceptable Use</h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">You agree not to use the Service to:</p>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Acceptable Use" %}</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{% trans "You agree not to use the Service to:" %}</p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Violate any applicable laws or regulations</li>
-                        <li>Create fraudulent or misleading invoices</li>
-                        <li>Infringe on intellectual property rights</li>
-                        <li>Transmit malicious code or interfere with the Service</li>
-                        <li>Attempt to gain unauthorized access to other accounts</li>
-                        <li>Use the Service for illegal financial activities</li>
+                        <li>{% trans "Violate any applicable laws or regulations" %}</li>
+                        <li>{% trans "Create fraudulent or misleading invoices" %}</li>
+                        <li>{% trans "Infringe on intellectual property rights" %}</li>
+                        <li>{% trans "Transmit malicious code or interfere with the Service" %}</li>
+                        <li>{% trans "Attempt to gain unauthorized access to other accounts" %}</li>
+                        <li>{% trans "Use the Service for illegal financial activities" %}</li>
                     </ul>
                 </section>
 
                 <!-- Intellectual Property -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Intellectual Property</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Intellectual Property" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        The Service and its original content, features, and functionality are owned by InvoiceKits and are protected by copyright, trademark, and other intellectual property laws.
+                        {% trans "The Service and its original content, features, and functionality are owned by InvoiceKits and are protected by copyright, trademark, and other intellectual property laws." %}
                     </p>
                     <p class="text-gray-600 dark:text-gray-400">
-                        You retain ownership of the content you create using our Service, including your invoices, company information, and uploaded logos.
+                        {% trans "You retain ownership of the content you create using our Service, including your invoices, company information, and uploaded logos." %}
                     </p>
                 </section>
 
                 <!-- Limitation of Liability -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Limitation of Liability</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Limitation of Liability" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        To the maximum extent permitted by law, InvoiceKits shall not be liable for:
+                        {% trans "To the maximum extent permitted by law, InvoiceKits shall not be liable for:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Any indirect, incidental, special, or consequential damages</li>
-                        <li>Loss of profits, data, or business opportunities</li>
-                        <li>Any damages resulting from unauthorized access to your account</li>
-                        <li>Service interruptions or errors</li>
+                        <li>{% trans "Any indirect, incidental, special, or consequential damages" %}</li>
+                        <li>{% trans "Loss of profits, data, or business opportunities" %}</li>
+                        <li>{% trans "Any damages resulting from unauthorized access to your account" %}</li>
+                        <li>{% trans "Service interruptions or errors" %}</li>
                     </ul>
                 </section>
 
                 <!-- Disclaimer -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Disclaimer</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Disclaimer" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        The Service is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not warrant that the Service will be uninterrupted, secure, or error-free. InvoiceKits is a tool for creating invoices and does not provide legal, tax, or accounting advice.
+                        {% trans "The Service is provided \"as is\" and \"as available\" without warranties of any kind, either express or implied. We do not warrant that the Service will be uninterrupted, secure, or error-free. InvoiceKits is a tool for creating invoices and does not provide legal, tax, or accounting advice." %}
                     </p>
                 </section>
 
                 <!-- Termination -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Termination</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Termination" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        We may terminate or suspend your account immediately, without prior notice, for:
+                        {% trans "We may terminate or suspend your account immediately, without prior notice, for:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Violation of these Terms</li>
-                        <li>Fraudulent or illegal activity</li>
-                        <li>Non-payment of subscription fees</li>
-                        <li>Extended periods of inactivity</li>
+                        <li>{% trans "Violation of these Terms" %}</li>
+                        <li>{% trans "Fraudulent or illegal activity" %}</li>
+                        <li>{% trans "Non-payment of subscription fees" %}</li>
+                        <li>{% trans "Extended periods of inactivity" %}</li>
                     </ul>
                     <p class="text-gray-600 dark:text-gray-400 mt-4">
-                        You may delete your account at any time through your account settings. Upon termination, your data will be deleted in accordance with our Privacy Policy.
+                        {% trans "You may delete your account at any time through your account settings. Upon termination, your data will be deleted in accordance with our Privacy Policy." %}
                     </p>
                 </section>
 
                 <!-- Modifications -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Modifications to Terms</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Modifications to Terms" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        We reserve the right to modify these Terms at any time. We will provide notice of significant changes by posting the new Terms on this page and updating the "Last updated" date. Your continued use of the Service after changes become effective constitutes acceptance of the revised Terms.
+                        {% trans "We reserve the right to modify these Terms at any time. We will provide notice of significant changes by posting the new Terms on this page and updating the \"Last updated\" date. Your continued use of the Service after changes become effective constitutes acceptance of the revised Terms." %}
                     </p>
                 </section>
 
                 <!-- Governing Law -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Governing Law</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Governing Law" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles.
+                        {% trans "These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles." %}
                     </p>
                 </section>
 
                 <!-- Contact -->
                 <section>
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Contact Us</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Contact Us" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        If you have any questions about these Terms, please contact us at:
+                        {% trans "If you have any questions about these Terms, please contact us at:" %}
                     </p>
                     <p class="text-gray-600 dark:text-gray-400 mt-2">
-                        <strong>Email:</strong> <a href="mailto:support@invoicekits.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@invoicekits.com</a>
+                        <strong>{% trans "Email:" %}</strong> <a href="mailto:support@invoicekits.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@invoicekits.com</a>
                     </p>
                 </section>
             </div>

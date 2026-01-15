@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -108,10 +109,26 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
+from django.utils.translation import gettext_lazy as _
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+
+# Multi-language support
+LANGUAGES = [
+    ('en', _('English')),
+    ('es', _('Spanish')),
+    ('fr', _('French')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+LANGUAGE_COOKIE_NAME = 'invoicekits_language'
+LANGUAGE_COOKIE_AGE = 365 * 24 * 60 * 60  # 1 year
 
 # Static files
 STATIC_URL = '/static/'

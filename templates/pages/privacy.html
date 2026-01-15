@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Privacy Policy - InvoiceKits{% endblock %}
+{% block title %}{% trans "Privacy Policy" %} - InvoiceKits{% endblock %}
 
-{% block meta_description %}Read InvoiceKits' privacy policy. Learn how we collect, use, and protect your personal information.{% endblock %}
+{% block meta_description %}{% trans "Read InvoiceKits' privacy policy. Learn how we collect, use, and protect your personal information." %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/privacy/{% endblock %}
 
@@ -35,154 +36,154 @@
         <!-- Breadcrumb Navigation -->
         <nav class="mb-8">
             <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-gray-900 dark:text-white">Privacy Policy</li>
+                <li class="text-gray-900 dark:text-white">{% trans "Privacy Policy" %}</li>
             </ol>
         </nav>
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Privacy Policy</h1>
-            <p class="text-gray-600 dark:text-gray-400">Last updated: {% now "F d, Y" %}</p>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">{% trans "Privacy Policy" %}</h1>
+            <p class="text-gray-600 dark:text-gray-400">{% trans "Last updated:" %} {% now "F d, Y" %}</p>
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 transition-colors duration-200">
             <div class="prose dark:prose-invert max-w-none">
                 <!-- Introduction -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Introduction</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Introduction" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        InvoiceKits ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our invoice generation service.
+                        {% trans "InvoiceKits (\"we,\" \"our,\" or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our invoice generation service." %}
                     </p>
                     <p class="text-gray-600 dark:text-gray-400">
-                        By using InvoiceKits, you agree to the collection and use of information in accordance with this policy.
+                        {% trans "By using InvoiceKits, you agree to the collection and use of information in accordance with this policy." %}
                     </p>
                 </section>
 
                 <!-- Information We Collect -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Information We Collect</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Information We Collect" %}</h2>
 
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mt-6 mb-2">Account Information</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mt-6 mb-2">{% trans "Account Information" %}</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        When you create an account, we collect:
+                        {% trans "When you create an account, we collect:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mb-4 space-y-1">
-                        <li>Email address</li>
-                        <li>Password (encrypted)</li>
-                        <li>Company name and address (optional)</li>
-                        <li>Company logo (optional)</li>
+                        <li>{% trans "Email address" %}</li>
+                        <li>{% trans "Password (encrypted)" %}</li>
+                        <li>{% trans "Company name and address (optional)" %}</li>
+                        <li>{% trans "Company logo (optional)" %}</li>
                     </ul>
 
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mt-6 mb-2">Invoice Data</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mt-6 mb-2">{% trans "Invoice Data" %}</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        When you create invoices, we store:
+                        {% trans "When you create invoices, we store:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 mb-4 space-y-1">
-                        <li>Client names and contact information</li>
-                        <li>Invoice amounts and line items</li>
-                        <li>Invoice dates and payment terms</li>
-                        <li>Notes and payment instructions</li>
+                        <li>{% trans "Client names and contact information" %}</li>
+                        <li>{% trans "Invoice amounts and line items" %}</li>
+                        <li>{% trans "Invoice dates and payment terms" %}</li>
+                        <li>{% trans "Notes and payment instructions" %}</li>
                     </ul>
 
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mt-6 mb-2">Usage Information</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mt-6 mb-2">{% trans "Usage Information" %}</h3>
                     <p class="text-gray-600 dark:text-gray-400">
-                        We automatically collect certain information when you use our service, including your IP address, browser type, and usage patterns to improve our service.
+                        {% trans "We automatically collect certain information when you use our service, including your IP address, browser type, and usage patterns to improve our service." %}
                     </p>
                 </section>
 
                 <!-- How We Use Your Information -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">How We Use Your Information</h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">We use the information we collect to:</p>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "How We Use Your Information" %}</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{% trans "We use the information we collect to:" %}</p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Provide and maintain our invoice generation service</li>
-                        <li>Process your subscription and payments</li>
-                        <li>Send you important service updates and notifications</li>
-                        <li>Respond to your support requests</li>
-                        <li>Improve and optimize our service</li>
-                        <li>Comply with legal obligations</li>
+                        <li>{% trans "Provide and maintain our invoice generation service" %}</li>
+                        <li>{% trans "Process your subscription and payments" %}</li>
+                        <li>{% trans "Send you important service updates and notifications" %}</li>
+                        <li>{% trans "Respond to your support requests" %}</li>
+                        <li>{% trans "Improve and optimize our service" %}</li>
+                        <li>{% trans "Comply with legal obligations" %}</li>
                     </ul>
                 </section>
 
                 <!-- Data Security -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Data Security</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Data Security" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400 mb-4">
-                        We implement appropriate technical and organizational security measures to protect your personal information, including:
+                        {% trans "We implement appropriate technical and organizational security measures to protect your personal information, including:" %}
                     </p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Encryption of data in transit (HTTPS/TLS)</li>
-                        <li>Secure password hashing</li>
-                        <li>Regular security audits</li>
-                        <li>Access controls and authentication</li>
+                        <li>{% trans "Encryption of data in transit (HTTPS/TLS)" %}</li>
+                        <li>{% trans "Secure password hashing" %}</li>
+                        <li>{% trans "Regular security audits" %}</li>
+                        <li>{% trans "Access controls and authentication" %}</li>
                     </ul>
                 </section>
 
                 <!-- Data Retention -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Data Retention</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Data Retention" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        We retain your account information and invoices for as long as your account is active. If you delete your account, we will delete your personal information within 30 days, except where we need to retain it for legal or business purposes.
+                        {% trans "We retain your account information and invoices for as long as your account is active. If you delete your account, we will delete your personal information within 30 days, except where we need to retain it for legal or business purposes." %}
                     </p>
                 </section>
 
                 <!-- Third-Party Services -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Third-Party Services</h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">We may use third-party services to help us operate our service:</p>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Third-Party Services" %}</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{% trans "We may use third-party services to help us operate our service:" %}</p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li><strong>Stripe</strong> - For payment processing. See <a href="https://stripe.com/privacy" class="text-primary-600 dark:text-primary-400 hover:underline" target="_blank" rel="noopener">Stripe's Privacy Policy</a></li>
-                        <li><strong>Railway</strong> - For hosting and infrastructure</li>
+                        <li><strong>Stripe</strong> - {% trans "For payment processing." %} <a href="https://stripe.com/privacy" class="text-primary-600 dark:text-primary-400 hover:underline" target="_blank" rel="noopener">{% trans "See Stripe's Privacy Policy" %}</a></li>
+                        <li><strong>Railway</strong> - {% trans "For hosting and infrastructure" %}</li>
                     </ul>
                 </section>
 
                 <!-- Your Rights -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Your Rights</h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">You have the right to:</p>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Your Rights" %}</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">{% trans "You have the right to:" %}</p>
                     <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>Access your personal information</li>
-                        <li>Correct inaccurate information</li>
-                        <li>Delete your account and associated data</li>
-                        <li>Export your invoice data</li>
-                        <li>Opt out of marketing communications</li>
+                        <li>{% trans "Access your personal information" %}</li>
+                        <li>{% trans "Correct inaccurate information" %}</li>
+                        <li>{% trans "Delete your account and associated data" %}</li>
+                        <li>{% trans "Export your invoice data" %}</li>
+                        <li>{% trans "Opt out of marketing communications" %}</li>
                     </ul>
                 </section>
 
                 <!-- Cookies -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Cookies</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Cookies" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        We use essential cookies to maintain your session and remember your preferences (such as dark mode). We do not use tracking or advertising cookies.
+                        {% trans "We use essential cookies to maintain your session and remember your preferences (such as dark mode). We do not use tracking or advertising cookies." %}
                     </p>
                 </section>
 
                 <!-- Children's Privacy -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Children's Privacy</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Children's Privacy" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        InvoiceKits is not intended for use by children under 16 years of age. We do not knowingly collect personal information from children.
+                        {% trans "InvoiceKits is not intended for use by children under 16 years of age. We do not knowingly collect personal information from children." %}
                     </p>
                 </section>
 
                 <!-- Changes to This Policy -->
                 <section class="mb-8">
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Changes to This Policy</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Changes to This Policy" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the "Last updated" date.
+                        {% trans "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the \"Last updated\" date." %}
                     </p>
                 </section>
 
                 <!-- Contact Us -->
                 <section>
-                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Contact Us</h2>
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Contact Us" %}</h2>
                     <p class="text-gray-600 dark:text-gray-400">
-                        If you have any questions about this Privacy Policy, please contact us at:
+                        {% trans "If you have any questions about this Privacy Policy, please contact us at:" %}
                     </p>
                     <p class="text-gray-600 dark:text-gray-400 mt-2">
-                        <strong>Email:</strong> <a href="mailto:support@invoicekits.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@invoicekits.com</a>
+                        <strong>{% trans "Email:" %}</strong> <a href="mailto:support@invoicekits.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@invoicekits.com</a>
                     </p>
                 </section>
             </div>

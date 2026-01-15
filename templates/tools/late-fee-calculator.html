@@ -1,20 +1,21 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Free Late Fee Calculator - Calculate Invoice Late Fees & Interest | InvoiceKits{% endblock %}
+{% block title %}{% trans "Free Late Fee Calculator - Calculate Invoice Late Fees & Interest" %} | InvoiceKits{% endblock %}
 
-{% block meta_description %}Free late fee calculator for invoices. Calculate late payment fees, interest charges, and total amount due. Supports flat fees, percentage rates, and compound interest.{% endblock %}
+{% block meta_description %}{% trans "Free late fee calculator for invoices. Calculate late payment fees, interest charges, and total amount due. Supports flat fees, percentage rates, and compound interest." %}{% endblock %}
 
-{% block meta_keywords %}late fee calculator, invoice late fee calculator, late payment interest calculator, overdue invoice calculator, late payment penalty calculator{% endblock %}
+{% block meta_keywords %}{% trans "late fee calculator, invoice late fee calculator, late payment interest calculator, overdue invoice calculator, late payment penalty calculator" %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/tools/late-fee-calculator/{% endblock %}
 
-{% block og_title %}Free Late Fee Calculator - Calculate Invoice Late Fees & Interest | InvoiceKits{% endblock %}
+{% block og_title %}{% trans "Free Late Fee Calculator - Calculate Invoice Late Fees & Interest" %} | InvoiceKits{% endblock %}
 
-{% block og_description %}Free late fee calculator for overdue invoices. Calculate late payment fees, interest, and total due. No signup required.{% endblock %}
+{% block og_description %}{% trans "Free late fee calculator for overdue invoices. Calculate late payment fees, interest, and total due. No signup required." %}{% endblock %}
 
-{% block twitter_title %}Free Late Fee Calculator | InvoiceKits{% endblock %}
+{% block twitter_title %}{% trans "Free Late Fee Calculator" %} | InvoiceKits{% endblock %}
 
-{% block twitter_description %}Calculate late payment fees and interest on overdue invoices. Free, no signup required.{% endblock %}
+{% block twitter_description %}{% trans "Calculate late payment fees and interest on overdue invoices. Free, no signup required." %}{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -122,21 +123,20 @@
         <!-- Breadcrumb -->
         <nav class="mb-6">
             <ol class="flex items-center space-x-2 text-sm text-primary-200">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-white">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li><span>Free Tools</span></li>
+                <li><span>{% trans "Free Tools" %}</span></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-white">Late Fee Calculator</li>
+                <li class="text-white">{% trans "Late Fee Calculator" %}</li>
             </ol>
         </nav>
 
         <div class="text-center">
             <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                Free Late Fee Calculator
+                {% trans "Free Late Fee Calculator" %}
             </h1>
             <p class="text-lg text-primary-100 max-w-2xl mx-auto">
-                Calculate late payment fees and interest on overdue invoices.
-                Supports flat fees, percentage rates, and compound interest.
+                {% trans "Calculate late payment fees and interest on overdue invoices. Supports flat fees, percentage rates, and compound interest." %}
             </p>
         </div>
     </div>
@@ -149,21 +149,21 @@
 
             <!-- Invoice Details -->
             <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invoice Details</h2>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% trans "Invoice Details" %}</h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Invoice Amount ($)</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Invoice Amount ($)" %}</label>
                         <input type="number" id="invoice-amount" value="1000" min="0" step="0.01" onchange="calculateLateFee()"
                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Due Date</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Due Date" %}</label>
                         <input type="date" id="due-date" onchange="calculateLateFee()"
                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Date</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Payment Date" %}</label>
                         <input type="date" id="payment-date" onchange="calculateLateFee()"
                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                     </div>
@@ -171,12 +171,12 @@
 
                 <!-- Quick Terms -->
                 <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quick Set Due Date</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Quick Set Due Date" %}</label>
                     <div class="flex flex-wrap gap-2">
-                        <button type="button" onclick="setDueDate(15)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Net 15</button>
-                        <button type="button" onclick="setDueDate(30)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Net 30</button>
-                        <button type="button" onclick="setDueDate(45)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Net 45</button>
-                        <button type="button" onclick="setDueDate(60)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">Net 60</button>
+                        <button type="button" onclick="setDueDate(15)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 15" %}</button>
+                        <button type="button" onclick="setDueDate(30)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 30" %}</button>
+                        <button type="button" onclick="setDueDate(45)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 45" %}</button>
+                        <button type="button" onclick="setDueDate(60)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 60" %}</button>
                     </div>
                 </div>
             </div>
@@ -186,31 +186,31 @@
 
             <!-- Late Fee Settings -->
             <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Late Fee Settings</h2>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% trans "Late Fee Settings" %}</h2>
 
                 <!-- Fee Method -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Late Fee Method</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{% trans "Late Fee Method" %}</label>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <label class="relative flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
                             <input type="radio" name="fee-method" value="flat" class="mr-3" onchange="updateFeeMethod()">
                             <div>
-                                <span class="font-medium text-gray-900 dark:text-white">Flat Fee Only</span>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Fixed dollar amount</p>
+                                <span class="font-medium text-gray-900 dark:text-white">{% trans "Flat Fee Only" %}</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{% trans "Fixed dollar amount" %}</p>
                             </div>
                         </label>
                         <label class="relative flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
                             <input type="radio" name="fee-method" value="percent" class="mr-3" checked onchange="updateFeeMethod()">
                             <div>
-                                <span class="font-medium text-gray-900 dark:text-white">Percentage Only</span>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">% of invoice amount</p>
+                                <span class="font-medium text-gray-900 dark:text-white">{% trans "Percentage Only" %}</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{% trans "% of invoice amount" %}</p>
                             </div>
                         </label>
                         <label class="relative flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
                             <input type="radio" name="fee-method" value="both" class="mr-3" onchange="updateFeeMethod()">
                             <div>
-                                <span class="font-medium text-gray-900 dark:text-white">Flat + Percentage</span>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Combined fees</p>
+                                <span class="font-medium text-gray-900 dark:text-white">{% trans "Flat + Percentage" %}</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">{% trans "Combined fees" %}</p>
                             </div>
                         </label>
                     </div>
@@ -219,17 +219,17 @@
                 <!-- Fee Inputs -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div id="flat-fee-input">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Flat Fee ($)</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Flat Fee ($)" %}</label>
                         <input type="number" id="flat-fee" value="25" min="0" step="0.01" onchange="calculateLateFee()"
                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
                     </div>
                     <div id="percent-fee-input">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Interest Rate (%)
+                            {% trans "Interest Rate (%)" %}
                             <select id="rate-period" onchange="calculateLateFee()" class="ml-2 text-sm border-none bg-transparent text-primary-600 dark:text-primary-400 focus:ring-0">
-                                <option value="monthly">per month</option>
-                                <option value="annual">per year</option>
-                                <option value="daily">per day</option>
+                                <option value="monthly">{% trans "per month" %}</option>
+                                <option value="annual">{% trans "per year" %}</option>
+                                <option value="daily">{% trans "per day" %}</option>
                             </select>
                         </label>
                         <input type="number" id="percent-rate" value="1.5" min="0" max="100" step="0.01" onchange="calculateLateFee()"
@@ -242,8 +242,8 @@
                     <label class="flex items-center cursor-pointer">
                         <input type="checkbox" id="compound-interest" onchange="calculateLateFee()" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
                         <span class="ml-3 text-gray-700 dark:text-gray-300">
-                            <span class="font-medium">Apply compound interest</span>
-                            <span class="text-sm text-gray-500 dark:text-gray-400 block">Interest calculated on principal + accumulated interest</span>
+                            <span class="font-medium">{% trans "Apply compound interest" %}</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 block">{% trans "Interest calculated on principal + accumulated interest" %}</span>
                         </span>
                     </label>
                 </div>
@@ -251,33 +251,33 @@
 
             <!-- Results -->
             <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Results</h2>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">{% trans "Results" %}</h2>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
-                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Days Overdue</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{% trans "Days Overdue" %}</div>
                         <div id="result-days" class="text-2xl font-bold text-gray-900 dark:text-white">0</div>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
-                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Original Amount</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{% trans "Original Amount" %}</div>
                         <div id="result-original" class="text-2xl font-bold text-gray-900 dark:text-white">$1,000.00</div>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
-                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Late Fee</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{% trans "Late Fee" %}</div>
                         <div id="result-fee" class="text-2xl font-bold text-red-600 dark:text-red-400">$0.00</div>
                     </div>
                     <div class="bg-white dark:bg-gray-800 rounded-lg p-4 text-center">
-                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Due</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mb-1">{% trans "Total Due" %}</div>
                         <div id="result-total" class="text-2xl font-bold text-primary-600 dark:text-primary-400">$1,000.00</div>
                     </div>
                 </div>
 
                 <!-- Breakdown -->
                 <div id="fee-breakdown" class="bg-white dark:bg-gray-800 rounded-lg p-4">
-                    <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Fee Breakdown</h3>
+                    <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{% trans "Fee Breakdown" %}</h3>
                     <div id="breakdown-content" class="space-y-2 text-sm">
                         <div class="flex justify-between text-gray-600 dark:text-gray-400">
-                            <span>Interest fee</span>
+                            <span>{% trans "Interest fee" %}</span>
                             <span id="breakdown-interest">$0.00</span>
                         </div>
                     </div>
@@ -291,14 +291,14 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                     </svg>
-                    Print Results
+                    {% trans "Print Results" %}
                 </button>
                 <a href="{% url 'account_signup' %}"
                    class="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
-                    Send Late Payment Reminder
+                    {% trans "Send Late Payment Reminder" %}
                 </a>
             </div>
         </div>
@@ -308,27 +308,27 @@
 <!-- Educational Content -->
 <section class="py-16 bg-white dark:bg-gray-800">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Understanding Late Fees on Invoices</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{% trans "Understanding Late Fees on Invoices" %}</h2>
 
         <div class="prose dark:prose-invert max-w-none">
             <div class="grid md:grid-cols-2 gap-8">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Common Late Fee Structures</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">{% trans "Common Late Fee Structures" %}</h3>
                     <ul class="space-y-2 text-gray-600 dark:text-gray-300">
-                        <li><strong>Flat fee:</strong> A fixed amount (e.g., $25-$50) charged regardless of invoice size</li>
-                        <li><strong>Percentage fee:</strong> A percentage of the invoice amount (typically 1-2% per month)</li>
-                        <li><strong>Combined:</strong> A flat fee plus percentage for larger overdue amounts</li>
-                        <li><strong>Tiered:</strong> Higher rates for longer overdue periods</li>
+                        <li><strong>{% trans "Flat fee:" %}</strong> {% trans "A fixed amount (e.g., $25-$50) charged regardless of invoice size" %}</li>
+                        <li><strong>{% trans "Percentage fee:" %}</strong> {% trans "A percentage of the invoice amount (typically 1-2% per month)" %}</li>
+                        <li><strong>{% trans "Combined:" %}</strong> {% trans "A flat fee plus percentage for larger overdue amounts" %}</li>
+                        <li><strong>{% trans "Tiered:" %}</strong> {% trans "Higher rates for longer overdue periods" %}</li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Best Practices</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">{% trans "Best Practices" %}</h3>
                     <ul class="space-y-2 text-gray-600 dark:text-gray-300">
-                        <li>Always include late fee terms on your invoices</li>
-                        <li>Send payment reminders before the due date</li>
-                        <li>Apply a grace period (1-15 days) before charging fees</li>
-                        <li>Check local regulations for maximum allowed rates</li>
-                        <li>Document all late fees in your contracts</li>
+                        <li>{% trans "Always include late fee terms on your invoices" %}</li>
+                        <li>{% trans "Send payment reminders before the due date" %}</li>
+                        <li>{% trans "Apply a grace period (1-15 days) before charging fees" %}</li>
+                        <li>{% trans "Check local regulations for maximum allowed rates" %}</li>
+                        <li>{% trans "Document all late fees in your contracts" %}</li>
                     </ul>
                 </div>
             </div>
@@ -339,28 +339,28 @@
 <!-- FAQ Section -->
 <section class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Frequently Asked Questions</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{% trans "Frequently Asked Questions" %}</h2>
 
         <div class="space-y-6">
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How do I calculate late fees on an invoice?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Enter your invoice amount, due date, and payment date. Choose a late fee method (flat fee, percentage, or both), enter the rate, and the calculator will show you the late fee amount and total due.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "How do I calculate late fees on an invoice?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Enter your invoice amount, due date, and payment date. Choose a late fee method (flat fee, percentage, or both), enter the rate, and the calculator will show you the late fee amount and total due." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">What is a typical late fee for invoices?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Common late fee structures include 1-2% per month, a flat fee of $25-$50, or a combination. Many businesses charge 1.5% monthly (18% annually). Always check local regulations as some jurisdictions limit late fees.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "What is a typical late fee for invoices?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Common late fee structures include 1-2% per month, a flat fee of $25-$50, or a combination. Many businesses charge 1.5% monthly (18% annually). Always check local regulations as some jurisdictions limit late fees." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">What is the difference between simple and compound interest?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Simple interest is calculated only on the original amount. Compound interest is calculated on the original amount plus any accumulated interest. Compound interest results in higher total fees over time.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "What is the difference between simple and compound interest?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Simple interest is calculated only on the original amount. Compound interest is calculated on the original amount plus any accumulated interest. Compound interest results in higher total fees over time." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I charge late fees on invoices?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Yes, in most jurisdictions you can charge late fees if they are disclosed on the invoice and agreed to by the client. Include late fee terms on your invoices and in your contracts.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Can I charge late fees on invoices?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Yes, in most jurisdictions you can charge late fees if they are disclosed on the invoice and agreed to by the client. Include late fee terms on your invoices and in your contracts." %}</p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How many days late before charging a fee?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Most businesses apply late fees after a grace period of 1-15 days past the due date. Common terms include Net 30 (payment due in 30 days) with fees applied on day 31.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "How many days late before charging a fee?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Most businesses apply late fees after a grace period of 1-15 days past the due date. Common terms include Net 30 (payment due in 30 days) with fees applied on day 31." %}</p>
             </div>
         </div>
     </div>
@@ -369,14 +369,14 @@
 <!-- CTA Section -->
 <section class="py-16 bg-primary-600">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">Automate Your Invoice Reminders</h2>
-        <p class="text-primary-100 mb-8 max-w-2xl mx-auto">Stop chasing late payments manually. InvoiceKits helps you track overdue invoices and send professional payment reminders with one click.</p>
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">{% trans "Automate Your Invoice Reminders" %}</h2>
+        <p class="text-primary-100 mb-8 max-w-2xl mx-auto">{% trans "Stop chasing late payments manually. InvoiceKits helps you track overdue invoices and send professional payment reminders with one click." %}</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
-                Start Free - 5 Invoices Included
+                {% trans "Start Free - 5 Invoices Included" %}
             </a>
             <a href="{% url 'invoices:invoice_calculator' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
-                Try Invoice Calculator
+                {% trans "Try Invoice Calculator" %}
             </a>
         </div>
     </div>

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}API Documentation - InvoiceKits{% endblock %}
+{% block title %}{% trans "API Documentation" %} - InvoiceKits{% endblock %}
 
-{% block meta_description %}InvoiceKits API documentation. Learn how to integrate invoice generation into your applications with our REST API.{% endblock %}
+{% block meta_description %}{% trans "InvoiceKits API documentation. Learn how to integrate invoice generation into your applications with our REST API." %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/api/docs/{% endblock %}
 
@@ -35,40 +36,40 @@
         <!-- Breadcrumb Navigation -->
         <nav class="mb-8">
             <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
-                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">Home</a></li>
+                <li><a href="{% url 'invoices:landing' %}" class="hover:text-primary-600 dark:hover:text-primary-400">{% trans "Home" %}</a></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-gray-900 dark:text-white">API Documentation</li>
+                <li class="text-gray-900 dark:text-white">{% trans "API Documentation" %}</li>
             </ol>
         </nav>
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">API Documentation</h1>
-            <p class="text-xl text-gray-600 dark:text-gray-400">Integrate InvoiceKits into your applications</p>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">{% trans "API Documentation" %}</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-400">{% trans "Integrate InvoiceKits into your applications" %}</p>
             <div class="mt-4 inline-flex items-center px-4 py-2 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300 rounded-lg text-sm">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                API access requires a Business plan subscription
+                {% trans "API access requires a Business plan subscription" %}
             </div>
         </div>
 
         <!-- Quick Start -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Quick Start</h2>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">{% trans "Quick Start" %}</h2>
 
             <div class="space-y-6">
                 <div>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Base URL</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">{% trans "Base URL" %}</h3>
                     <code class="block bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg text-sm text-gray-800 dark:text-gray-200 font-mono">
                         https://invoicekits.com/api/v1/
                     </code>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Authentication</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">{% trans "Authentication" %}</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-3">
-                        All API requests require authentication using an API key. Include your key in the <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">X-API-Key</code> header.
+                        {% trans "All API requests require authentication using an API key. Include your key in the" %} <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">X-API-Key</code> {% trans "header." %}
                     </p>
                     <div class="bg-gray-900 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto">
                         <pre class="text-green-400 text-sm font-mono">curl -H "X-API-Key: your_api_key_here" \
@@ -77,10 +78,10 @@
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Getting Your API Key</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">{% trans "Getting Your API Key" %}</h3>
                     <p class="text-gray-600 dark:text-gray-400">
-                        API keys are available on the Business plan. Once subscribed, you can generate your API key from
-                        <a href="{% url 'companies:settings' %}" class="text-primary-600 dark:text-primary-400 hover:underline">Company Settings</a>.
+                        {% trans "API keys are available on the Business plan. Once subscribed, you can generate your API key from" %}
+                        <a href="{% url 'companies:settings' %}" class="text-primary-600 dark:text-primary-400 hover:underline">{% trans "Company Settings" %}</a>.
                     </p>
                 </div>
             </div>
@@ -88,13 +89,13 @@
 
         <!-- Endpoints -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Endpoints</h2>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">{% trans "Endpoints" %}</h2>
 
             <!-- Invoices -->
             <div class="mb-8">
                 <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-4 flex items-center">
                     <span class="w-2 h-2 bg-primary-500 rounded-full mr-2"></span>
-                    Invoices
+                    {% trans "Invoices" %}
                 </h3>
 
                 <div class="space-y-4">
@@ -107,7 +108,7 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">List all invoices for your account.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "List all invoices for your account." %}</p>
                         </div>
                     </div>
 
@@ -120,9 +121,9 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">Create a new invoice.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">{% trans "Create a new invoice." %}</p>
                             <details class="text-sm">
-                                <summary class="cursor-pointer text-primary-600 dark:text-primary-400 hover:underline">View request body</summary>
+                                <summary class="cursor-pointer text-primary-600 dark:text-primary-400 hover:underline">{% trans "View request body" %}</summary>
                                 <div class="mt-3 bg-gray-900 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto">
                                     <pre class="text-green-400 text-sm font-mono">{
   "client_name": "Acme Corp",
@@ -156,7 +157,7 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Get details of a specific invoice.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Get details of a specific invoice." %}</p>
                         </div>
                     </div>
 
@@ -169,7 +170,7 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Update an existing invoice.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Update an existing invoice." %}</p>
                         </div>
                     </div>
 
@@ -182,7 +183,7 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Delete an invoice.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Delete an invoice." %}</p>
                         </div>
                     </div>
 
@@ -195,7 +196,7 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Download invoice as PDF.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Download invoice as PDF." %}</p>
                         </div>
                     </div>
 
@@ -208,7 +209,7 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Mark invoice as sent.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Mark invoice as sent." %}</p>
                         </div>
                     </div>
 
@@ -221,7 +222,7 @@
                             </div>
                         </div>
                         <div class="px-4 py-3">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm">Mark invoice as paid.</p>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Mark invoice as paid." %}</p>
                         </div>
                     </div>
                 </div>
@@ -231,7 +232,7 @@
             <div class="mb-8">
                 <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-4 flex items-center">
                     <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                    Templates
+                    {% trans "Templates" %}
                 </h3>
 
                 <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -242,7 +243,7 @@
                         </div>
                     </div>
                     <div class="px-4 py-3">
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">List all available invoice templates and their availability for your plan.</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "List all available invoice templates and their availability for your plan." %}</p>
                     </div>
                 </div>
             </div>
@@ -251,7 +252,7 @@
             <div>
                 <h3 class="text-xl font-medium text-gray-900 dark:text-white mb-4 flex items-center">
                     <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-                    Usage
+                    {% trans "Usage" %}
                 </h3>
 
                 <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -262,7 +263,7 @@
                         </div>
                     </div>
                     <div class="px-4 py-3">
-                        <p class="text-gray-600 dark:text-gray-400 text-sm">Get your current API usage statistics, limits, and available features.</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">{% trans "Get your current API usage statistics, limits, and available features." %}</p>
                     </div>
                 </div>
             </div>
@@ -270,44 +271,44 @@
 
         <!-- Response Codes -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Response Codes</h2>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">{% trans "Response Codes" %}</h2>
 
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead>
                         <tr class="border-b border-gray-200 dark:border-gray-700">
-                            <th class="text-left py-3 text-sm font-semibold text-gray-900 dark:text-white">Code</th>
-                            <th class="text-left py-3 text-sm font-semibold text-gray-900 dark:text-white">Description</th>
+                            <th class="text-left py-3 text-sm font-semibold text-gray-900 dark:text-white">{% trans "Code" %}</th>
+                            <th class="text-left py-3 text-sm font-semibold text-gray-900 dark:text-white">{% trans "Description" %}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                         <tr>
                             <td class="py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400">200</span></td>
-                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">Success</td>
+                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">{% trans "Success" %}</td>
                         </tr>
                         <tr>
                             <td class="py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400">201</span></td>
-                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">Created successfully</td>
+                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">{% trans "Created successfully" %}</td>
                         </tr>
                         <tr>
                             <td class="py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-400">400</span></td>
-                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">Bad request - Invalid parameters</td>
+                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">{% trans "Bad request - Invalid parameters" %}</td>
                         </tr>
                         <tr>
                             <td class="py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400">401</span></td>
-                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">Unauthorized - Invalid or missing API key</td>
+                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">{% trans "Unauthorized - Invalid or missing API key" %}</td>
                         </tr>
                         <tr>
                             <td class="py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400">403</span></td>
-                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">Forbidden - Invoice limit reached or API access not enabled</td>
+                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">{% trans "Forbidden - Invoice limit reached or API access not enabled" %}</td>
                         </tr>
                         <tr>
                             <td class="py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400">404</span></td>
-                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">Not found - Resource doesn't exist</td>
+                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">{% trans "Not found - Resource doesn't exist" %}</td>
                         </tr>
                         <tr>
                             <td class="py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400">429</span></td>
-                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">Rate limited - Too many requests</td>
+                            <td class="py-3 text-gray-600 dark:text-gray-400 text-sm">{% trans "Rate limited - Too many requests" %}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -316,24 +317,24 @@
 
         <!-- Rate Limits -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-8 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Rate Limits</h2>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">{% trans "Rate Limits" %}</h2>
             <p class="text-gray-600 dark:text-gray-400 mb-4">
-                The Business plan includes 1,000 API calls per month. Usage resets on the first of each month.
+                {% trans "The Business plan includes 1,000 API calls per month. Usage resets on the first of each month." %}
             </p>
             <p class="text-gray-600 dark:text-gray-400">
-                Check your current usage with the <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">/api/v1/usage/</code> endpoint.
+                {% trans "Check your current usage with the" %} <code class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">/api/v1/usage/</code> {% trans "endpoint." %}
             </p>
         </div>
 
         <!-- Need Help -->
         <div class="bg-primary-50 dark:bg-primary-900/30 rounded-xl p-8 text-center">
-            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Need Help?</h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">Having trouble with the API? Our support team is here to help.</p>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">{% trans "Need Help?" %}</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">{% trans "Having trouble with the API? Our support team is here to help." %}</p>
             <a href="{% url 'contact' %}" class="btn-primary inline-block">
-                Contact Support
+                {% trans "Contact Support" %}
             </a>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">
-                Email us at <a href="mailto:support@invoicekits.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@invoicekits.com</a>
+                {% trans "Email us at" %} <a href="mailto:support@invoicekits.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@invoicekits.com</a>
             </p>
         </div>
     </div>
