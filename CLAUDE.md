@@ -84,6 +84,13 @@
   - hreflang tags for SEO
   - ~1,077 translatable strings per language
   - Translation files: `locale/es/LC_MESSAGES/django.po`, `locale/fr/LC_MESSAGES/django.po`
+- **Affiliate Program (20% commission):**
+  - Referral tracking via cookies (30-day duration)
+  - Commission on all purchases (subscriptions, credit packs, templates)
+  - Affiliate dashboard at `/affiliate/` with stats and referral links
+  - Application workflow with admin approval
+  - Public program landing page at `/affiliate/program/`
+  - Referral links: `/ref/<code>/`
 
 ### Suppressed/Disabled Features
 
@@ -144,7 +151,7 @@
   - Premium templates ($4.99 each): Executive, Bold Modern, Neon Edge
   - Bundle ($9.99): All 3 premium templates
   - Template store at `/billing/templates/`
-- [ ] **Affiliate Program:** Referral tracking (20% commission)
+- [x] **Affiliate Program:** Referral tracking (20% commission) - COMPLETED
 - [x] **QR Code on Invoice PDFs:** Links to public invoice page for viewing and marking as paid - COMPLETED
 - [x] **Digital Signature Field:** On invoice PDFs - COMPLETED (upload in Company Settings, displays on all templates)
 - [x] **Recurring Invoices:** Auto-generate invoices on schedule - COMPLETED (requires Celery/Redis deployment)
@@ -205,7 +212,7 @@
 - [ ] **Video Tutorials:** Create YouTube content, embed on site
 - [ ] **Industry Reports:** "State of Freelance Invoicing 2026"
 - [x] **Free Tools:** Invoice calculator, late fee calculator - COMPLETED
-- [ ] **Affiliate Program:** Incentivize backlinks
+- [x] **Affiliate Program:** Incentivize backlinks - COMPLETED
 - [ ] **Core Web Vitals:** Run PageSpeed Insights audit, optimize LCP/FID/CLS
 - [ ] **Dynamic Sitemap:** Add invoice public links (if public sharing enabled)
 - [ ] **International SEO:** Alternate language versions if targeting international markets
@@ -387,6 +394,12 @@ invoice_generator/
 | `templates/clients/invoice_detail.html` | Client invoice view with pay button |
 | `templates/emails/client_magic_link.html` | Magic link email template |
 | `templates/billing/stripe_connect_status.html` | Stripe Connect management page |
+| `apps/affiliates/models.py` | Affiliate, Referral, Commission, AffiliateApplication models |
+| `apps/affiliates/views.py` | Affiliate dashboard, apply, referral redirect views |
+| `apps/affiliates/signals.py` | Connect referral cookies to new user signups |
+| `apps/affiliates/services/commission_tracker.py` | Commission creation service (20% rate) |
+| `templates/affiliates/dashboard.html` | Affiliate dashboard with stats and referral links |
+| `templates/affiliates/program.html` | Public affiliate program landing page |
 
 ---
 
@@ -503,6 +516,16 @@ invoice_generator/
 | `/billing/templates/` | Premium template store page |
 | `/billing/templates/purchase/<template_id>/` | Initiate template purchase |
 | `/billing/templates/success/` | Template purchase success page |
+
+### Affiliate Program URLs
+| URL | Purpose |
+|-----|---------|
+| `/affiliate/` | Affiliate dashboard (approved affiliates only) |
+| `/affiliate/apply/` | Apply to become an affiliate |
+| `/affiliate/program/` | Public affiliate program landing page |
+| `/affiliate/commissions/` | View all commission history |
+| `/affiliate/referrals/` | View all referral history |
+| `/ref/<code>/` | Referral redirect link (sets 30-day cookie) |
 
 ### Meta Tags Override (for child templates)
 ```html
@@ -746,6 +769,15 @@ Authentication: API Key in header `X-API-Key: <key>`
 143. Added BreadcrumbList, WebApplication, and FAQPage JSON-LD schemas to both tool pages
 144. Added Free Tools section to footer navigation
 145. Updated sitemap and robots.txt to include `/tools/` URLs
+146. Implemented Affiliate Program with 20% commission on all purchases
+147. Created Affiliate, Referral, Commission, AffiliateApplication models
+148. Added affiliate dashboard with stats, referral links, and promotional materials
+149. Implemented referral tracking via 30-day cookies
+150. Connected referral cookies to new user signups via django-allauth signals
+151. Integrated commission tracking into Stripe webhook for subscriptions, credit packs, and templates
+152. Created affiliate application workflow with admin approval system
+153. Added public affiliate program landing page at `/affiliate/program/`
+154. Created AffiliateAdmin with earnings display and status management
 
 ---
 
