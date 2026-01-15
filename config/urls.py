@@ -99,12 +99,20 @@ Sitemap: https://www.invoicekits.com/sitemap.xml
     return HttpResponse(content, content_type='text/plain')
 
 
+def ads_txt(request):
+    """Serve ads.txt for Google AdSense verification."""
+    content = """google.com, pub-5523870768931777, DIRECT, f08c47fec0942fa0
+"""
+    return HttpResponse(content, content_type='text/plain')
+
+
 # Non-internationalized URLs (system, admin, authenticated routes)
 urlpatterns = [
     # System endpoints
     path('health/', health_check, name='health_check'),
 
     path('robots.txt', robots_txt, name='robots_txt'),
+    path('ads.txt', ads_txt, name='ads_txt'),
     path('BingSiteAuth.xml', bing_site_auth, name='bing_site_auth'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
 
