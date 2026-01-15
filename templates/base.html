@@ -92,7 +92,12 @@
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 
+    <!-- Alpine.js for dropdowns -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
+        /* Hide Alpine.js elements until loaded */
+        [x-cloak] { display: none !important; }
         body { font-family: 'Inter', sans-serif; }
         .form-input {
             @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition;
@@ -173,20 +178,7 @@
                                 </svg>
                             </button>
                         </div>
-                        <!-- Language Switcher -->
-                        <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg px-2 py-2 transition-colors" title="{% trans 'Change language' %}">
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-                                </svg>
-                                <span class="uppercase text-sm">{{ LANGUAGE_CODE|default:'en' }}</span>
-                            </button>
-                            <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700">
-                                <a href="{% if LANGUAGE_CODE != 'en' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'en' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">English</a>
-                                <a href="/es{{ request.path|slice:'3:' }}{% if LANGUAGE_CODE == 'en' %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'es' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Español</a>
-                                <a href="/fr{{ request.path|slice:'3:' }}{% if LANGUAGE_CODE == 'en' %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'fr' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Français</a>
-                            </div>
-                        </div>
+                        <!-- Language Switcher - Hidden for authenticated users (dashboard pages are English-only) -->
                         <!-- Theme Toggle -->
                         <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5 transition-colors" title="Toggle dark/light mode">
                             <!-- Sun icon (shown in dark mode) -->
@@ -211,9 +203,12 @@
                                 <span class="uppercase text-sm">{{ LANGUAGE_CODE|default:'en' }}</span>
                             </button>
                             <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700">
-                                <a href="{% if LANGUAGE_CODE != 'en' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'en' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">English</a>
-                                <a href="/es{{ request.path|slice:'3:' }}{% if LANGUAGE_CODE == 'en' %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'es' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Español</a>
-                                <a href="/fr{{ request.path|slice:'3:' }}{% if LANGUAGE_CODE == 'en' %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'fr' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Français</a>
+                                <!-- English: strip language prefix if present -->
+                                <a href="{% if LANGUAGE_CODE == 'en' %}{{ request.path }}{% else %}{{ request.path|slice:'3:' }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'en' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">English</a>
+                                <!-- Spanish: add /es prefix, strip existing prefix if switching from another language -->
+                                <a href="{% if LANGUAGE_CODE == 'en' %}/es{{ request.path }}{% elif LANGUAGE_CODE == 'es' %}{{ request.path }}{% else %}/es{{ request.path|slice:'3:' }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'es' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Español</a>
+                                <!-- French: add /fr prefix, strip existing prefix if switching from another language -->
+                                <a href="{% if LANGUAGE_CODE == 'en' %}/fr{{ request.path }}{% elif LANGUAGE_CODE == 'fr' %}{{ request.path }}{% else %}/fr{{ request.path|slice:'3:' }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'fr' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Français</a>
                             </div>
                         </div>
                         <!-- Theme Toggle (for non-authenticated users) -->
