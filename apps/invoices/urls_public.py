@@ -1,13 +1,15 @@
 """
 URL patterns for public invoices app pages (with i18n support).
+These URLs are NOT namespaced - they're included directly in i18n_patterns.
 """
 from django.urls import path
 from . import views
 
-app_name = 'invoices'
+# No app_name - these are root-level URLs to avoid namespace conflict with invoices app
+# app_name = 'invoices'
 
 urlpatterns = [
-    # Landing page is now defined directly in config/urls.py to avoid namespace conflict
+    # Landing page is now defined directly in config/urls.py
     # path('', views.LandingPageView.as_view(), name='landing'),
     path('pricing/', views.PricingPageView.as_view(), name='pricing'),
     path('for-freelancers/', views.FreelancersLandingPageView.as_view(), name='for_freelancers'),
