@@ -58,8 +58,18 @@ def bing_site_auth(request):
     return HttpResponse(content, content_type='application/xml')
 
 
+def service_worker(request):
+    """Serve service worker from root URL for proper scope."""
+    import os
+    sw_path = os.path.join(settings.BASE_DIR, 'static', 'js', 'service-worker.js')
+    with open(sw_path, 'r') as f:
+        content = f.read()
+    response = HttpResponse(content, content_type='application/javascript')
+    response['Service-Worker-Allowed'] = '/'
+    return response
+
+
 def robots_txt(request):
-    """Serve robots.txt from root URL."""
     content = """# InvoiceKits robots.txt
 # https://www.invoicekits.com
 
@@ -117,6 +127,8 @@ urlpatterns = [
     path('robots.txt', robots_txt, name='robots_txt'),
     path('ads.txt', ads_txt, name='ads_txt'),
     path('BingSiteAuth.xml', bing_site_auth, name='bing_site_auth'),
+    path('service-worker.js', service_worker, name='service_worker'),
+    path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
 
     # Admin

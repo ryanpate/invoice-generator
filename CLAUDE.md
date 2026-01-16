@@ -117,6 +117,14 @@
   - Late fee status and history visible on invoice detail page
   - Daily processing at 7:00 AM UTC via Celery Beat
   - One-time fee application per invoice (no compounding)
+- **Progressive Web App (PWA):**
+  - Installable on mobile home screens and desktop
+  - Offline support with cached pages
+  - App-like experience with standalone display mode
+  - Push notification ready (infrastructure in place)
+  - Quick action shortcuts: Create Invoice, View Invoices
+  - Custom app icons (72px to 512px)
+  - Service worker for asset caching and offline fallback
 
 ### Suppressed/Disabled Features
 
@@ -279,12 +287,12 @@
 
 Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 2026):
 
-**Phase 1 - Quick Wins (Weeks 1-2):**
+**Phase 1 - Quick Wins (Weeks 1-2): COMPLETED**
 - [x] **Automated Payment Reminders:** Email automation for unpaid invoices - COMPLETED
 - [x] **Client Payment History Display:** Show "This client pays in X days on average" when creating invoices - COMPLETED
 - [x] **One-Click Recurring:** "Make this recurring" button on invoice detail page - COMPLETED
 - [x] **Late Fee Auto-Apply Toggle:** Automatically add late fees after X days overdue - COMPLETED
-- [ ] **PWA (Progressive Web App):** Make site installable on mobile home screens
+- [x] **PWA (Progressive Web App):** Make site installable on mobile home screens - COMPLETED
 
 **Phase 2 - AI Features (Weeks 3-4):**
 - [ ] **AI Invoice Generator:** "Describe your work, we generate the invoice" — LLM creates line items from natural language
@@ -945,6 +953,17 @@ Authentication: API Key in header `X-API-Key: <key>`
 190. Added late fee controls (pause/resume) and history display to invoice detail page
 191. Added `toggle_invoice_late_fees` view and URL route for per-invoice late fee control
 192. Registered `LateFeeLog` in admin with appropriate display columns
+193. Implemented Progressive Web App (PWA) support for installable app experience
+194. Created `static/manifest.json` with app metadata, icons, and shortcuts
+195. Created `static/js/service-worker.js` for offline support and asset caching
+196. Created `templates/offline.html` for graceful offline fallback
+197. Added PWA meta tags to `templates/base.html` (manifest link, theme-color, apple-mobile-web-app)
+198. Added service worker registration script to base template
+199. Created PWA icons in 8 sizes (72px to 512px) in `static/images/icons/`
+200. Created `static/browserconfig.xml` for Windows tile support
+201. Added `/service-worker.js` URL route for proper service worker scope
+202. Added `/offline/` URL route for offline page
+203. Phase 1 Quick Wins now 100% complete
 
 ---
 

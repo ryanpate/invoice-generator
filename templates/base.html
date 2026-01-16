@@ -48,6 +48,17 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
 
+    <!-- PWA (Progressive Web App) -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="InvoiceKits">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="InvoiceKits">
+    <meta name="msapplication-TileColor" content="#2563eb">
+    <meta name="msapplication-config" content="{% static 'browserconfig.xml' %}">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{% block og_url %}https://www.invoicekits.com/{% endblock %}">
@@ -372,6 +383,21 @@
                 themeToggleBtnGuest.addEventListener('click', toggleTheme);
             }
         })();
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registered successfully:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
