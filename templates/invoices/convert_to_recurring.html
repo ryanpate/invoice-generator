@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Make Recurring - {{ invoice.invoice_number }} - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+        <a href="{% url 'invoices:detail' invoice.pk %}" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 text-sm mb-2 inline-block">
+            &larr; Back to Invoice
+        </a>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Make This Invoice Recurring</h1>
+        <p class="text-gray-600 dark:text-gray-400">Create a recurring invoice template from this invoice</p>
+    </div>
+
+    <!-- Invoice Summary -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6 transition-colors duration-200">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invoice Summary</h2>
+
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+                <span class="text-gray-500 dark:text-gray-400">Invoice Number:</span>
+                <span class="ml-2 font-medium text-gray-900 dark:text-white">{{ invoice.invoice_number }}</span>
+            </div>
+            <div>
+                <span class="text-gray-500 dark:text-gray-400">Client:</span>
+                <span class="ml-2 font-medium text-gray-900 dark:text-white">{{ invoice.client_name }}</span>
+            </div>
+            {% if invoice.invoice_name %}
+            <div>
+                <span class="text-gray-500 dark:text-gray-400">Invoice Name:</span>
+                <span class="ml-2 font-medium text-gray-900 dark:text-white">{{ invoice.invoice_name }}</span>
+            </div>
+            {% endif %}
+            <div>
+                <span class="text-gray-500 dark:text-gray-400">Total:</span>
+                <span class="ml-2 font-medium text-gray-900 dark:text-white">{{ invoice.get_currency_symbol }}{{ invoice.total|floatformat:2 }}</span>
+            </div>
+        </div>
+
+        <!-- Line Items Preview -->
+        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Line Items ({{ invoice.line_items.count }})</h3>
+            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                {% for item in invoice.line_items.all %}
+                <li class="flex justify-between">
+                    <span>{{ item.description }}</span>
+                    <span>{{ item.quantity }} x {{ invoice.get_currency_symbol }}{{ item.rate|floatformat:2 }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Recurring Settings Form -->
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6 transition-colors duration-200">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recurring Schedule</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Frequency</label>
+                    <select name="frequency" id="frequency" class="form-select w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-primary-500 focus:ring-primary-500">
+                        {% for value, label in frequencies %}
+                        <option value="{{ value }}" {% if value == 'monthly' %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">How often should a new invoice be generated?</p>
+                </div>
+
+                <div>
+                    <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start Date</label>
+                    <input type="date" name="start_date" id="start_date" value="{{ default_start_date }}" class="form-input w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-primary-500 focus:ring-primary-500">
+                    <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">First invoice will be generated on this date</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-blue-800 dark:text-blue-300">What happens next?</h3>
+                    <div class="mt-2 text-sm text-blue-700 dark:text-blue-400">
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>A recurring invoice template will be created with all line items from this invoice</li>
+                            <li>New invoices will be automatically generated at 6:00 AM UTC on each scheduled date</li>
+                            <li>You can edit or pause the recurring invoice at any time</li>
+                            <li>{% if invoice.client_email %}Invoices will be automatically sent to {{ invoice.client_email }}{% else %}Since no client email is set, invoices will need to be manually sent{% endif %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-3">
+            <button type="submit" class="btn-primary flex-1 flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Create Recurring Invoice
+            </button>
+            <a href="{% url 'invoices:detail' invoice.pk %}" class="btn-secondary flex-1 text-center">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

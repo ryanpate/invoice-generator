@@ -40,6 +40,7 @@
 - Payment receipt emails (auto-sent when invoice marked as paid)
 - Social login with Google and GitHub (OAuth fully configured via environment variables)
 - Recurring invoices for Professional+ plans (weekly, bi-weekly, monthly, quarterly, yearly)
+- One-click recurring: "Make Recurring" button on invoice detail page to convert any invoice to a recurring template
 - Blog section with SEO-optimized content (`/blog/`) - 5 posts live
 - Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
 - Competitor comparison page (`/compare/`)
@@ -271,7 +272,7 @@ Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 202
 **Phase 1 - Quick Wins (Weeks 1-2):**
 - [x] **Automated Payment Reminders:** Email automation for unpaid invoices - COMPLETED
 - [x] **Client Payment History Display:** Show "This client pays in X days on average" when creating invoices - COMPLETED
-- [ ] **One-Click Recurring:** "Make this recurring" button on invoice detail page
+- [x] **One-Click Recurring:** "Make this recurring" button on invoice detail page - COMPLETED
 - [ ] **Late Fee Auto-Apply Toggle:** Automatically add late fees after X days overdue
 - [ ] **PWA (Progressive Web App):** Make site installable on mobile home screens
 
@@ -604,6 +605,7 @@ invoice_generator/
 | `/invoices/recurring/<pk>/delete/` | Delete confirmation |
 | `/invoices/recurring/<pk>/toggle-status/` | Pause/Resume recurring |
 | `/invoices/recurring/<pk>/generate-now/` | Manual invoice generation |
+| `/invoices/<pk>/make-recurring/` | Convert invoice to recurring template |
 
 ### Payment Reminder URLs
 | URL | Purpose |
@@ -906,6 +908,11 @@ Authentication: API Key in header `X-API-Key: <key>`
 172. Updated invoice create template with client payment history indicator below email field
 173. Updated invoice edit template with client payment history display (auto-loads on page)
 174. Payment history shows color-coded rating: green (A-B), yellow (C), orange (D), red (F)
+175. Implemented One-Click Recurring feature - "Make Recurring" button on invoice detail page (Professional+ only)
+176. Created `convert_to_recurring` view in `apps/invoices/views.py` that copies invoice data to new RecurringInvoice
+177. Added URL route at `/invoices/<pk>/make-recurring/` for invoice-to-recurring conversion
+178. Created `templates/invoices/convert_to_recurring.html` with frequency selection and schedule preview
+179. Added "Make Recurring" button to invoice detail header (visible for users with recurring invoice access)
 
 ---
 

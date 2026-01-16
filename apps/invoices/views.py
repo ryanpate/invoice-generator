@@ -890,6 +890,103 @@ def recurring_generate_now(request, pk):
         return redirect('invoices:recurring_detail', pk=pk)
 
 
+@login_required
+def convert_to_recurring(request, pk):
+    """
+    Convert an existing invoice to a recurring invoice template.
+    One-click creation of recurring invoice from existing invoice data.
+    """
+    from django.utils import timezone
+
+    # Get the invoice (team-aware)
+    invoice = get_team_aware_object(Invoice, pk, request.user)
+    if not invoice:
+        messages.error(request, 'Invoice not found.')
+        return redirect('invoices:list')
+
+    # Check recurring invoice access
+    if not request.user.has_recurring_invoices():
+        messages.error(
+            request,
+            'Recurring invoices require a Professional plan or higher. '
+            'Upgrade to create recurring invoices.'
+        )
+        return redirect('billing:plans')
+
+    # Check recurring invoice limit
+    if not request.user.can_create_recurring_invoice():
+        messages.error(
+            request,
+            'You have reached your limit for recurring invoices. '
+            'Please upgrade your plan or cancel an existing recurring invoice.'
+        )
+        return redirect('invoices:recurring_list')
+
+    if request.method == 'POST':
+        # Get frequency from form (default to monthly)
+        frequency = request.POST.get('frequency', 'monthly')
+        start_date_str = request.POST.get('start_date')
+
+        # Parse start date or default to today
+        if start_date_str:
+            try:
+                from datetime import datetime
+                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+            except ValueError:
+                start_date = timezone.now().date()
+        else:
+            start_date = timezone.now().date()
+
+        # Create recurring invoice from this invoice
+        recurring = RecurringInvoice.objects.create(
+            company=invoice.company,
+            name=invoice.invoice_name or f"Recurring - {invoice.client_name}",
+            client_name=invoice.client_name,
+            client_email=invoice.client_email,
+            client_phone=invoice.client_phone,
+            client_address=invoice.client_address,
+            frequency=frequency,
+            start_date=start_date,
+            next_run_date=start_date,
+            currency=invoice.currency,
+            payment_terms=invoice.payment_terms,
+            tax_rate=invoice.tax_rate,
+            template_style=invoice.template_style,
+            notes=invoice.notes,
+            status='active',
+            send_email_on_generation=True,
+            auto_send_to_client=bool(invoice.client_email),
+        )
+
+        # Copy line items from invoice to recurring invoice
+        from .models import RecurringLineItem
+        for item in invoice.line_items.all():
+            RecurringLineItem.objects.create(
+                recurring_invoice=recurring,
+                description=item.description,
+                quantity=item.quantity,
+                rate=item.rate,
+                order=item.order,
+            )
+
+        messages.success(
+            request,
+            f'Recurring invoice "{recurring.name}" created successfully! '
+            f'It will generate invoices {recurring.get_frequency_display().lower()}.'
+        )
+
+        return redirect('invoices:recurring_detail', pk=recurring.pk)
+
+    # GET request - show confirmation modal/form
+    # For simplicity, we'll just render a simple confirmation page
+    context = {
+        'invoice': invoice,
+        'frequencies': RecurringInvoice.FREQUENCY_CHOICES,
+        'default_start_date': timezone.now().date().isoformat(),
+    }
+    return render(request, 'invoices/convert_to_recurring.html', context)
+
+
 # =============================================================================
 # Public Invoice Views (for QR code links - no auth required)
 # =============================================================================
