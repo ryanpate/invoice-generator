@@ -40,15 +40,6 @@
 - Payment receipt emails (auto-sent when invoice marked as paid)
 - Social login with Google and GitHub (OAuth fully configured via environment variables)
 - Recurring invoices for Professional+ plans (weekly, bi-weekly, monthly, quarterly, yearly)
-- **Automated Payment Reminders:**
-  - Configurable reminder schedule (3, 1 days before; on due date; 3, 7, 14 days after)
-  - Escalating email tones (friendly before, firm on due date, urgent when overdue)
-  - Per-invoice pause/resume controls
-  - Company-level settings at `/settings/reminders/`
-  - CC business owner option
-  - Custom message fields for each reminder stage
-  - Reminder history on invoice detail page
-  - Celery task runs daily at 6:30 AM UTC
 - Blog section with SEO-optimized content (`/blog/`) - 5 posts live
 - Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
 - Competitor comparison page (`/compare/`)
@@ -100,6 +91,15 @@
   - Application workflow with admin approval
   - Public program landing page at `/affiliate/program/`
   - Referral links: `/ref/<code>/`
+- **Automated Payment Reminders:**
+  - Configurable reminder schedule (3, 1 days before; on due date; 3, 7, 14 days after)
+  - Three escalating email tones: friendly (before), firm (due), urgent (overdue)
+  - Per-invoice pause/resume control
+  - Optional CC to business owner
+  - Custom messages for each reminder stage
+  - Settings UI at `/settings/reminders/`
+  - Reminder history visible on invoice detail page
+  - Daily processing at 6:30 AM UTC via Celery Beat
 
 ### Suppressed/Disabled Features
 
@@ -108,6 +108,34 @@
 | Email Verification | Disabled | Not required for MVP | Change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
 | Healthcheck | Removed | Startup time exceeds Railway timeout | Re-add to `railway.json` if startup is optimized |
+
+---
+
+## Competitive Analysis (January 2026)
+
+### Current Strengths
+- **Unique batch CSV upload** (720 searches/mo for "batch invoice generator" - low competition)
+- **Hybrid credits + subscriptions** — captures both casual and power users
+- **5 professional templates** with premium upsell ($4.99 each)
+- **Client portal with Stripe Connect** — direct payments to businesses
+- **Team seats** for Business tier (3 members)
+- **API access** for enterprise use cases
+- **Multi-language support** (EN/ES/FR)
+
+### Competitive Gaps vs. Major Players
+
+| Feature | InvoiceKits | Zoho Invoice | FreshBooks | Wave |
+|---------|-------------|--------------|------------|------|
+| AI-powered features | ❌ None | ⚠️ Basic | ⚠️ Basic | ❌ None |
+| Time tracking | ❌ Missing | ✅ Built-in | ✅ Best-in-class | ❌ Missing |
+| Expense tracking | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
+| Payment reminders | ✅ Automated | ✅ Automated | ✅ Automated | ⚠️ Limited |
+| Client payment scoring | ❌ Missing | ❌ Missing | ❌ Missing | ❌ Missing |
+| Mobile app | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
+| Bank connections | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
+| Batch invoicing | ✅ Best-in-class | ❌ None | ❌ None | ❌ None |
+
+**Key Opportunity:** Client Payment Scoring is missing from ALL competitors — first-mover advantage available.
 
 ---
 
@@ -133,6 +161,20 @@
 - [x] **Account Delete Confirmation:** `templates/accounts/delete_confirm.html` - COMPLETED
 - [x] **Stripe Subscription Cancellation on Account Delete:** COMPLETED
 - [x] **Custom Domain Setup:** www.invoicekits.com configured - COMPLETED
+
+### Completed - Payment Reminders Implementation
+- [x] **Models:** `PaymentReminderSettings`, `PaymentReminderLog` added to `apps/invoices/models.py` - COMPLETED
+- [x] **Models:** `reminders_paused` field added to `Invoice` model - COMPLETED
+- [x] **Migration:** `0005_payment_reminders.py` created and applied - COMPLETED
+- [x] **Service:** `apps/invoices/services/reminder_sender.py` with `PaymentReminderService` class - COMPLETED
+- [x] **Email Templates:** 3 escalating tone templates (before, due, overdue) - COMPLETED
+- [x] **Settings UI:** `templates/settings/reminders.html` with full configuration - COMPLETED
+- [x] **Navigation:** "Reminders" tab added to all settings pages - COMPLETED
+- [x] **Views:** `ReminderSettingsView` and `toggle_invoice_reminders` views - COMPLETED
+- [x] **URLs:** `/settings/reminders/` and `/<pk>/toggle-reminders/` routes - COMPLETED
+- [x] **Invoice Detail:** Reminder status section with pause/resume and history - COMPLETED
+- [x] **Admin:** `PaymentReminderSettings` and `PaymentReminderLog` registered - COMPLETED
+- [x] **Celery Beat:** `process_payment_reminders` scheduled at 6:30 AM UTC - COMPLETED
 
 ### Medium Priority - Growth & Marketing
 - [x] **Google Search Console:** Verified and configured
@@ -215,6 +257,50 @@
 - [ ] **Reddit Presence:** Engage in r/freelance, r/smallbusiness
 - [ ] **Guest Posts:** Reach out to freelancer/entrepreneur blogs
 - [ ] **Free Resources:** Create downloadable invoice templates/checklists
+
+### Future Features - Competitive Gaps (Strategic Roadmap)
+
+Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 2026):
+
+**Phase 1 - Quick Wins (Weeks 1-2):**
+- [x] **Automated Payment Reminders:** Email automation for unpaid invoices - COMPLETED
+- [ ] **Client Payment History Display:** Show "This client pays in X days on average" when creating invoices
+- [ ] **One-Click Recurring:** "Make this recurring" button on invoice detail page
+- [ ] **Late Fee Auto-Apply Toggle:** Automatically add late fees after X days overdue
+- [ ] **PWA (Progressive Web App):** Make site installable on mobile home screens
+
+**Phase 2 - AI Features (Weeks 3-4):**
+- [ ] **AI Invoice Generator:** "Describe your work, we generate the invoice" — LLM creates line items from natural language
+- [ ] **Smart Payment Predictions:** Analyze client payment history to predict late payments
+- [ ] **Time Tracking Integration:** Built-in timer or Toggl/Clockify integration, "Bill this time" button
+
+**Phase 3 - Get Paid Faster Suite (Month 2):**
+- [ ] **Client Payment Score:** Rate clients A-F based on payment history (like credit score for freelancers)
+- [ ] **Vertical Landing Pages:** `/for-contractors/`, `/for-photographers/`, `/for-agencies/`
+- [ ] **Industry Templates:** Construction (progress billing, lien waivers), Photography (licensing terms, usage rights)
+
+**Phase 4 - Mobile & Partnerships (Month 3):**
+- [ ] **Mobile App:** React Native or Flutter for iOS/Android
+- [ ] **Instant Payouts:** Partner with factoring service for immediate cash (2% fee)
+- [ ] **Buy Now Pay Later:** Affirm/Klarna integration for client payment flexibility
+- [ ] **Expense Tracking:** Receipt OCR, expense categorization
+
+**New Revenue Opportunities:**
+| Feature | Pricing Model | Est. Revenue/User |
+|---------|---------------|-------------------|
+| AI Invoice Generator | $0.10/AI invoice (usage-based) | $2-5/mo |
+| Client Payment Scores | $5/mo add-on | $5/mo |
+| Vertical Templates | $19 one-time | $19 |
+| Invoice Factoring Referrals | 1% of factored amount | Variable |
+| White-label for Agencies | $199/mo | $199/mo |
+| Instant Payout | 2% transaction fee | 2% of invoiced |
+
+**Recommended Positioning:** "AI-powered invoicing that gets you paid faster"
+
+**Tagline Options:**
+- "Stop chasing payments. Start getting paid."
+- "The invoice generator that fights for your money"
+- "Batch invoicing meets AI automation"
 
 ### SEO - Advanced (Month 3-6)
 - [x] **FAQ Schema:** Add FAQ structured data to pricing and help pages - COMPLETED
@@ -313,8 +399,7 @@ invoice_generator/
 │   │   └── services/
 │   │       ├── pdf_generator.py   # xhtml2pdf PDF generation
 │   │       ├── batch_processor.py # CSV batch processing
-│   │       ├── email_sender.py    # Invoice email sending with PDF
-│   │       └── reminder_sender.py # Payment reminder email service
+│   │       └── email_sender.py    # Invoice email sending with PDF
 │   ├── companies/           # Company profiles & branding
 │   ├── api/                 # REST API (DRF)
 │   └── blog/                # SEO blog content
@@ -365,12 +450,6 @@ invoice_generator/
 | `templates/billing/templates_success.html` | Template purchase success page |
 | `apps/api/views.py` | REST API endpoints |
 | `apps/invoices/tasks.py` | Celery tasks for recurring invoices and payment reminders |
-| `apps/invoices/services/reminder_sender.py` | Payment reminder email service with escalating tones |
-| `apps/invoices/models.py` | Invoice, PaymentReminderSettings, PaymentReminderLog models |
-| `templates/settings/reminders.html` | Payment reminder settings page |
-| `templates/emails/payment_reminder_before.html` | Friendly reminder email (before due) |
-| `templates/emails/payment_reminder_due.html` | Firm reminder email (on due date) |
-| `templates/emails/payment_reminder_overdue.html` | Urgent reminder email (after due) |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
 | `templates/emails/welcome.html` | HTML welcome email template |
 | `templates/emails/payment_receipt.html` | Payment receipt email template |
@@ -800,16 +879,16 @@ Authentication: API Key in header `X-API-Key: <key>`
 152. Created affiliate application workflow with admin approval system
 153. Added public affiliate program landing page at `/affiliate/program/`
 154. Created AffiliateAdmin with earnings display and status management
-155. Implemented Automated Payment Reminders feature for unpaid invoices
-156. Created PaymentReminderSettings and PaymentReminderLog models in apps/invoices/models.py
-157. Added `reminders_paused` field to Invoice model for per-invoice control
-158. Created PaymentReminderService in apps/invoices/services/reminder_sender.py
-159. Created 3 email templates with escalating tones (before, due, overdue)
-160. Added Celery tasks for daily reminder processing at 6:30 AM UTC
-161. Created reminders settings page at /settings/reminders/ with full configuration UI
-162. Added Reminders tab to all settings navigation pages
-163. Added reminder pause/resume controls and history to invoice detail page
-164. Registered PaymentReminderSettings and PaymentReminderLog in Django admin
+155. Started Automated Payment Reminders feature - added Celery tasks (`process_payment_reminders`, `send_payment_reminder`) to `apps/invoices/tasks.py`
+156. Completed Automated Payment Reminders - added `PaymentReminderSettings`, `PaymentReminderLog` models with migration `0005_payment_reminders.py`
+157. Created `PaymentReminderService` in `apps/invoices/services/reminder_sender.py` for sending reminder emails with PDF attachments
+158. Created 3 escalating-tone email templates: `payment_reminder_before.html` (friendly), `payment_reminder_due.html` (firm), `payment_reminder_overdue.html` (urgent)
+159. Created reminder settings UI at `templates/settings/reminders.html` with schedule configuration and custom messages
+160. Added "Reminders" tab to all settings navigation pages (company, team, account)
+161. Added reminder controls (pause/resume) and history display to invoice detail page
+162. Added `reminders_paused` field to Invoice model for per-invoice control
+163. Registered `PaymentReminderSettings` and `PaymentReminderLog` in admin with appropriate display columns
+164. Configured Celery Beat schedule for `process_payment_reminders` task at 6:30 AM UTC daily
 
 ---
 
