@@ -22,6 +22,7 @@ urlpatterns = [
     # Status updates
     path('<int:pk>/status/<str:status>/', views.mark_invoice_status, name='mark_status'),
     path('<int:pk>/toggle-reminders/', views.toggle_invoice_reminders, name='toggle_reminders'),
+    path('<int:pk>/toggle-late-fees/', views.toggle_invoice_late_fees, name='toggle_late_fees'),
 
     # Client analytics
     path('client-stats/', views.client_payment_stats, name='client_payment_stats'),

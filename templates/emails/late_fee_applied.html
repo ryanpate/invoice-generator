@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Late Fee Applied - {{ invoice.invoice_number }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 40px 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">
+                                Late Fee Applied
+                            </h1>
+                            <p style="margin: 10px 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">
+                                Invoice {{ invoice.invoice_number }}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                        <td style="padding: 30px 40px 20px;">
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Hi {{ user.first_name|default:user.email }},
+                            </p>
+                            <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.6;">
+                                A late fee has been automatically applied to an overdue invoice as per your late fee settings.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Invoice Details -->
+                    <tr>
+                        <td style="padding: 20px 40px;">
+                            <table role="presentation" style="width: 100%; background-color: #fef3c7; border-radius: 8px; border: 1px solid #fbbf24;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <table role="presentation" style="width: 100%;">
+                                            <tr>
+                                                <td style="color: #92400e; font-size: 14px;">Invoice Number:</td>
+                                                <td style="text-align: right; color: #78350f; font-size: 16px; font-weight: 600;">
+                                                    {{ invoice.invoice_number }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #92400e; font-size: 14px; padding-top: 10px;">Client:</td>
+                                                <td style="text-align: right; color: #78350f; font-size: 16px; padding-top: 10px;">
+                                                    {{ invoice.client_name }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #92400e; font-size: 14px; padding-top: 10px;">Original Due Date:</td>
+                                                <td style="text-align: right; color: #78350f; font-size: 14px; padding-top: 10px;">
+                                                    {{ invoice.due_date|date:"F d, Y" }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="border-top: 1px solid #fbbf24; padding-top: 15px; margin-top: 10px;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #92400e; font-size: 14px; padding-top: 5px;">Original Amount:</td>
+                                                <td style="text-align: right; color: #78350f; font-size: 16px; padding-top: 5px;">
+                                                    {{ invoice.get_currency_symbol }}{{ invoice.original_total|floatformat:2 }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #92400e; font-size: 14px; padding-top: 10px;">Late Fee:</td>
+                                                <td style="text-align: right; color: #d97706; font-size: 16px; font-weight: 600; padding-top: 10px;">
+                                                    +{{ invoice.get_currency_symbol }}{{ fee_amount|floatformat:2 }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #92400e; font-size: 14px; padding-top: 10px;">New Total:</td>
+                                                <td style="text-align: right; color: #78350f; font-size: 20px; font-weight: 700; padding-top: 10px;">
+                                                    {{ invoice.get_currency_symbol }}{{ invoice.total|floatformat:2 }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Info -->
+                    <tr>
+                        <td style="padding: 0 40px 20px;">
+                            <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.6;">
+                                The updated invoice total now includes the late fee. The client has been notified of this change.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- View Invoice Button -->
+                    <tr>
+                        <td style="padding: 10px 40px 40px; text-align: center;">
+                            <a href="{{ site_url }}/invoices/{{ invoice.pk }}/" style="display: inline-block; padding: 14px 32px; background-color: #d97706; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600;">
+                                View Invoice
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 30px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="margin: 0 0 10px; color: #6b7280; font-size: 13px;">
+                                You can manage your late fee settings in your company settings.
+                            </p>
+                            <p style="margin: 20px 0 0; color: #9ca3af; font-size: 11px;">
+                                Sent via <a href="{{ site_url }}" style="color: #d97706; text-decoration: none;">InvoiceKits</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

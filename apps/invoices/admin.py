@@ -4,7 +4,7 @@ Admin configuration for invoices app.
 from django.contrib import admin
 from .models import (
     Invoice, LineItem, InvoiceBatch, RecurringInvoice, RecurringLineItem,
-    PaymentReminderSettings, PaymentReminderLog
+    PaymentReminderSettings, PaymentReminderLog, LateFeeLog
 )
 
 
@@ -157,6 +157,42 @@ class PaymentReminderLogAdmin(admin.ModelAdmin):
     search_fields = ['invoice__invoice_number', 'recipient_email']
     readonly_fields = ['invoice', 'days_offset', 'reminder_type', 'sent_at', 'recipient_email', 'success', 'error_message']
     date_hierarchy = 'sent_at'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(LateFeeLog)
+class LateFeeLogAdmin(admin.ModelAdmin):
+    list_display = [
+        'invoice', 'fee_type', 'fee_amount', 'days_overdue',
+        'applied_by', 'applied_at'
+    ]
+    list_filter = ['fee_type', 'applied_by', 'applied_at']
+    search_fields = ['invoice__invoice_number', 'invoice__client_name']
+    readonly_fields = [
+        'invoice', 'fee_type', 'fee_amount', 'days_overdue',
+        'invoice_total_before', 'invoice_total_after', 'applied_at', 'applied_by'
+    ]
+    date_hierarchy = 'applied_at'
+
+    fieldsets = (
+        ('Invoice', {
+            'fields': ('invoice',)
+        }),
+        ('Late Fee Details', {
+            'fields': ('fee_type', 'fee_amount', 'days_overdue')
+        }),
+        ('Invoice Totals', {
+            'fields': ('invoice_total_before', 'invoice_total_after')
+        }),
+        ('Metadata', {
+            'fields': ('applied_by', 'applied_at')
+        }),
+    )
 
     def has_add_permission(self, request):
         return False

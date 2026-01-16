@@ -355,3 +355,61 @@ class ReminderSettingsView(LoginRequiredMixin, View):
             'form': form,
             'reminder_settings': reminder_settings,
         })
+
+
+class LateFeeSettingsView(LoginRequiredMixin, View):
+    """Configure automatic late fee settings."""
+    template_name = 'settings/late_fees.html'
+
+    def get_company(self, user):
+        """Get or create company for user."""
+        company, created = Company.objects.get_or_create(
+            user=user,
+            defaults={'name': f"{user.username}'s Company"}
+        )
+        return company
+
+    def get(self, request, *args, **kwargs):
+        company = self.get_company(request.user)
+
+        return render(request, self.template_name, {
+            'company': company,
+        })
+
+    def post(self, request, *args, **kwargs):
+        from decimal import Decimal, InvalidOperation
+
+        company = self.get_company(request.user)
+
+        # Update late fee settings
+        company.late_fees_enabled = 'late_fees_enabled' in request.POST
+        company.late_fee_type = request.POST.get('late_fee_type', 'flat')
+
+        # Parse fee amount
+        try:
+            fee_amount = Decimal(request.POST.get('late_fee_amount', '0'))
+            company.late_fee_amount = max(Decimal('0'), fee_amount)
+        except (InvalidOperation, ValueError):
+            company.late_fee_amount = Decimal('0')
+
+        # Parse grace days
+        try:
+            grace_days = int(request.POST.get('late_fee_grace_days', '3'))
+            company.late_fee_grace_days = max(0, min(60, grace_days))
+        except (ValueError, TypeError):
+            company.late_fee_grace_days = 3
+
+        # Parse max amount (optional)
+        max_amount_str = request.POST.get('late_fee_max_amount', '').strip()
+        if max_amount_str:
+            try:
+                max_amount = Decimal(max_amount_str)
+                company.late_fee_max_amount = max(Decimal('0'), max_amount) if max_amount > 0 else None
+            except (InvalidOperation, ValueError):
+                company.late_fee_max_amount = None
+        else:
+            company.late_fee_max_amount = None
+
+        company.save()
+        messages.success(request, 'Late fee settings saved successfully!')
+        return redirect('companies:late_fees')

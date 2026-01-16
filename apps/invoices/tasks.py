@@ -1,7 +1,9 @@
 """
-Celery tasks for recurring invoice processing.
+Celery tasks for recurring invoice processing, payment reminders, and late fees.
 """
 import logging
+from datetime import timedelta
+from decimal import Decimal
 from celery import shared_task
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -353,3 +355,246 @@ def send_payment_reminder(self, invoice_id, days_offset, reminder_settings_id=No
             exc_info=True
         )
         raise self.retry(exc=e, countdown=60 * 5)  # Retry in 5 minutes
+
+
+@shared_task(bind=True, max_retries=3)
+def process_late_fees(self):
+    """
+    Process late fees for overdue invoices.
+    Runs daily at 7:00 AM UTC via Celery Beat (1 hour after recurring invoices).
+    """
+    from apps.invoices.models import Invoice, LateFeeLog
+    from apps.companies.models import Company
+
+    today = timezone.now().date()
+    logger.info(f"Processing late fees for {today}")
+
+    applied_count = 0
+    skipped_count = 0
+    failed_count = 0
+
+    # Get all companies with late fees enabled
+    companies = Company.objects.filter(
+        late_fees_enabled=True,
+        late_fee_amount__gt=0
+    )
+
+    for company in companies:
+        # Calculate the cutoff date (due_date + grace_days)
+        grace_days = company.late_fee_grace_days or 0
+        cutoff_date = today - timedelta(days=grace_days)
+
+        # Get overdue invoices for this company that haven't had late fees applied
+        overdue_invoices = Invoice.objects.filter(
+            company=company,
+            status__in=['sent', 'overdue'],
+            due_date__lt=cutoff_date,
+            late_fee_applied=0,
+            late_fees_paused=False
+        )
+
+        for invoice in overdue_invoices:
+            try:
+                # Calculate the late fee
+                fee_amount = calculate_late_fee(
+                    invoice_total=invoice.total,
+                    fee_type=company.late_fee_type,
+                    fee_amount=company.late_fee_amount,
+                    max_amount=company.late_fee_max_amount
+                )
+
+                if fee_amount <= 0:
+                    skipped_count += 1
+                    continue
+
+                # Store values for logging
+                total_before = invoice.total
+                days_overdue = (today - invoice.due_date).days
+
+                # Apply the late fee
+                if invoice.apply_late_fee(fee_amount):
+                    # Create audit log
+                    LateFeeLog.objects.create(
+                        invoice=invoice,
+                        fee_type=company.late_fee_type,
+                        fee_amount=fee_amount,
+                        days_overdue=days_overdue,
+                        invoice_total_before=total_before,
+                        invoice_total_after=invoice.total,
+                        applied_by='system'
+                    )
+
+                    applied_count += 1
+                    logger.info(
+                        f"Applied ${fee_amount} late fee to invoice "
+                        f"{invoice.invoice_number} ({days_overdue} days overdue)"
+                    )
+
+                    # Send notification email
+                    send_late_fee_notification.delay(invoice.id, float(fee_amount))
+                else:
+                    skipped_count += 1
+
+            except Exception as e:
+                failed_count += 1
+                logger.error(
+                    f"Failed to apply late fee to invoice {invoice.id}: {str(e)}",
+                    exc_info=True
+                )
+
+    logger.info(
+        f"Late fee processing complete: "
+        f"{applied_count} applied, {skipped_count} skipped, {failed_count} failed"
+    )
+
+    return {
+        'applied': applied_count,
+        'skipped': skipped_count,
+        'failed': failed_count,
+        'date': str(today)
+    }
+
+
+def calculate_late_fee(invoice_total, fee_type, fee_amount, max_amount=None):
+    """
+    Calculate the late fee amount based on type and settings.
+
+    Args:
+        invoice_total: The invoice total amount
+        fee_type: 'flat' or 'percentage'
+        fee_amount: The fee amount or percentage
+        max_amount: Optional maximum cap
+
+    Returns:
+        Decimal: The calculated late fee
+    """
+    if fee_type == 'flat':
+        calculated_fee = Decimal(str(fee_amount))
+    elif fee_type == 'percentage':
+        calculated_fee = (Decimal(str(invoice_total)) * Decimal(str(fee_amount)) / 100)
+    else:
+        calculated_fee = Decimal('0')
+
+    # Apply max cap if set
+    if max_amount and calculated_fee > Decimal(str(max_amount)):
+        calculated_fee = Decimal(str(max_amount))
+
+    return calculated_fee.quantize(Decimal('0.01'))
+
+
+@shared_task(bind=True, max_retries=3)
+def send_late_fee_notification(self, invoice_id, fee_amount):
+    """
+    Send email notification when a late fee is applied.
+    """
+    from apps.invoices.models import Invoice
+
+    try:
+        invoice = Invoice.objects.select_related(
+            'company', 'company__owner'
+        ).get(id=invoice_id)
+
+        # Send to business owner
+        owner = invoice.company.owner
+        if owner and owner.email:
+            subject = f"Late Fee Applied: Invoice {invoice.invoice_number}"
+
+            html_message = render_to_string('emails/late_fee_applied.html', {
+                'user': owner,
+                'invoice': invoice,
+                'fee_amount': fee_amount,
+                'site_url': getattr(settings, 'SITE_URL', ''),
+            })
+
+            plain_message = (
+                f"Hi {owner.first_name or owner.email},\n\n"
+                f"A late fee of ${fee_amount:.2f} has been automatically applied to "
+                f"invoice {invoice.invoice_number} for {invoice.client_name}.\n\n"
+                f"Original Amount: ${invoice.original_total:.2f}\n"
+                f"Late Fee: ${fee_amount:.2f}\n"
+                f"New Total: ${invoice.total:.2f}\n\n"
+                f"The invoice was due on {invoice.due_date.strftime('%B %d, %Y')}.\n\n"
+                f"You can view and manage this invoice in your dashboard.\n\n"
+                f"Best regards,\n"
+                f"The InvoiceKits Team"
+            )
+
+            send_mail(
+                subject=subject,
+                message=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[owner.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+
+            logger.info(f"Sent late fee notification to {owner.email}")
+
+        # Optionally notify client
+        if invoice.client_email:
+            send_late_fee_client_notification.delay(invoice_id, fee_amount)
+
+    except Invoice.DoesNotExist:
+        logger.error(f"Invoice {invoice_id} not found for late fee notification")
+    except Exception as e:
+        logger.error(
+            f"Failed to send late fee notification: {str(e)}",
+            exc_info=True
+        )
+        raise self.retry(exc=e, countdown=60 * 5)
+
+
+@shared_task(bind=True, max_retries=3)
+def send_late_fee_client_notification(self, invoice_id, fee_amount):
+    """
+    Send email notification to client when a late fee is applied.
+    """
+    from apps.invoices.models import Invoice
+
+    try:
+        invoice = Invoice.objects.select_related('company').get(id=invoice_id)
+
+        if not invoice.client_email:
+            return
+
+        subject = f"Late Fee Notice: Invoice {invoice.invoice_number}"
+
+        html_message = render_to_string('emails/late_fee_client_notice.html', {
+            'invoice': invoice,
+            'company': invoice.company,
+            'fee_amount': fee_amount,
+        })
+
+        plain_message = (
+            f"Dear {invoice.client_name},\n\n"
+            f"A late fee of ${fee_amount:.2f} has been applied to your overdue invoice "
+            f"{invoice.invoice_number}.\n\n"
+            f"Original Amount: ${invoice.original_total:.2f}\n"
+            f"Late Fee: ${fee_amount:.2f}\n"
+            f"New Total Due: ${invoice.total:.2f}\n\n"
+            f"The invoice was originally due on {invoice.due_date.strftime('%B %d, %Y')}.\n\n"
+            f"Please submit payment at your earliest convenience to avoid additional fees.\n\n"
+            f"If you have any questions, please contact us.\n\n"
+            f"Best regards,\n"
+            f"{invoice.company.name}"
+        )
+
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[invoice.client_email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+
+        logger.info(f"Sent late fee client notification to {invoice.client_email}")
+
+    except Invoice.DoesNotExist:
+        logger.error(f"Invoice {invoice_id} not found for client notification")
+    except Exception as e:
+        logger.error(
+            f"Failed to send late fee client notification: {str(e)}",
+            exc_info=True
+        )
+        raise self.retry(exc=e, countdown=60 * 5)

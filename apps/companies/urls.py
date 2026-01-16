@@ -19,4 +19,7 @@ urlpatterns = [
 
     # Payment reminders
     path('reminders/', views.ReminderSettingsView.as_view(), name='reminders'),
+
+    # Late fees
+    path('late-fees/', views.LateFeeSettingsView.as_view(), name='late_fees'),
 ]

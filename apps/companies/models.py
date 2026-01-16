@@ -83,6 +83,40 @@ class Company(models.Model):
         help_text='Default notes/payment instructions to include on invoices'
     )
 
+    # Late fee settings
+    LATE_FEE_TYPES = [
+        ('flat', 'Flat Fee'),
+        ('percentage', 'Percentage of Invoice'),
+    ]
+
+    late_fees_enabled = models.BooleanField(
+        default=False,
+        help_text='Enable automatic late fees on overdue invoices'
+    )
+    late_fee_type = models.CharField(
+        max_length=20,
+        choices=LATE_FEE_TYPES,
+        default='flat',
+        help_text='Type of late fee to apply'
+    )
+    late_fee_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        help_text='Late fee amount (flat fee in currency, or percentage 0-100)'
+    )
+    late_fee_grace_days = models.PositiveIntegerField(
+        default=3,
+        help_text='Days after due date before applying late fee'
+    )
+    late_fee_max_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text='Maximum late fee cap (optional)'
+    )
+
     # Branding
     accent_color = models.CharField(
         max_length=7,

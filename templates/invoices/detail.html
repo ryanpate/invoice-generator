@@ -259,5 +259,112 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Late Fees Section -->
+    {% if invoice.status != 'paid' and invoice.status != 'cancelled' and invoice.status != 'draft' %}
+    <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Late Fees</h2>
+                <form method="post" action="{% url 'invoices:toggle_late_fees' invoice.pk %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium transition
+                        {% if invoice.late_fees_paused %}
+                        bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50
+                        {% else %}
+                        bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50
+                        {% endif %}">
+                        {% if invoice.late_fees_paused %}
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Resume Late Fees
+                        {% else %}
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Pause Late Fees
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+
+            <!-- Late Fee Applied Banner -->
+            {% if invoice.late_fee_applied > 0 %}
+            <div class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg mb-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <span class="text-red-800 dark:text-red-300 font-medium">Late fee applied: {{ invoice.get_currency_symbol }}{{ invoice.late_fee_applied|floatformat:2 }}</span>
+                            {% if invoice.late_fee_applied_at %}
+                            <p class="text-red-700 dark:text-red-400 text-sm">Applied on {{ invoice.late_fee_applied_at|date:"F d, Y" }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if invoice.original_total %}
+                    <div class="text-right text-sm">
+                        <span class="text-gray-500 dark:text-gray-400">Original:</span>
+                        <span class="text-gray-700 dark:text-gray-300 line-through">{{ invoice.get_currency_symbol }}{{ invoice.original_total|floatformat:2 }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <!-- Late Fee Status -->
+            {% if invoice.late_fees_paused %}
+            <div class="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg mb-4">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <span class="text-amber-800 dark:text-amber-300 font-medium">Late fees are paused for this invoice</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg mb-4">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-amber-800 dark:text-amber-300 font-medium">Automatic late fees enabled</span>
+                </div>
+                <p class="mt-1 text-amber-700 dark:text-amber-400 text-sm ml-7">
+                    Late fees will be applied according to your <a href="{% url 'companies:late_fees' %}" class="underline hover:no-underline">settings</a>
+                </p>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <!-- Late Fee History -->
+            {% if invoice.late_fee_logs.exists %}
+            <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3">Late Fee History</h3>
+            <div class="space-y-2">
+                {% for log in invoice.late_fee_logs.all %}
+                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+                        <div>
+                            <span class="text-gray-900 dark:text-white font-medium">
+                                {{ invoice.get_currency_symbol }}{{ log.fee_amount|floatformat:2 }} late fee applied
+                            </span>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm ml-2">
+                                ({{ log.days_overdue }} days overdue, {{ log.get_fee_type_display }})
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-gray-500 dark:text-gray-400 text-xs">{{ log.applied_at|date:"M d, Y g:i A" }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

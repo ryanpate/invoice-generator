@@ -91,6 +91,30 @@ class Invoice(models.Model):
         help_text='Pause automated payment reminders for this invoice'
     )
 
+    # Late fees
+    late_fees_paused = models.BooleanField(
+        default=False,
+        help_text='Pause automatic late fees for this invoice'
+    )
+    late_fee_applied = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        help_text='Amount of late fee applied to this invoice'
+    )
+    late_fee_applied_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='When the late fee was applied'
+    )
+    original_total = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text='Original total before late fee was applied'
+    )
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -205,6 +229,85 @@ class Invoice(models.Model):
         """Get public URL for this invoice (used in QR codes)."""
         site_url = getattr(settings, 'SITE_URL', 'https://www.invoicekits.com')
         return f"{site_url}/invoice/{self.public_token}/"
+
+    def apply_late_fee(self, fee_amount):
+        """
+        Apply a late fee to this invoice.
+
+        Args:
+            fee_amount: The late fee amount to apply
+
+        Returns:
+            bool: True if late fee was applied, False if already applied
+        """
+        if self.late_fee_applied > 0:
+            return False  # Already has a late fee
+
+        # Store original total before applying fee
+        if not self.original_total:
+            self.original_total = self.total
+
+        # Apply the late fee
+        self.late_fee_applied = Decimal(str(fee_amount)).quantize(Decimal('0.01'))
+        self.total = self.original_total + self.late_fee_applied
+        self.late_fee_applied_at = timezone.now()
+
+        self.save(update_fields=[
+            'late_fee_applied',
+            'late_fee_applied_at',
+            'original_total',
+            'total',
+            'updated_at'
+        ])
+
+        return True
+
+    def remove_late_fee(self):
+        """
+        Remove the late fee from this invoice.
+
+        Returns:
+            bool: True if late fee was removed, False if no late fee to remove
+        """
+        if self.late_fee_applied == 0:
+            return False
+
+        # Restore original total
+        if self.original_total:
+            self.total = self.original_total
+
+        self.late_fee_applied = Decimal('0.00')
+        self.late_fee_applied_at = None
+
+        self.save(update_fields=[
+            'late_fee_applied',
+            'late_fee_applied_at',
+            'total',
+            'updated_at'
+        ])
+
+        return True
+
+    def can_apply_late_fee(self):
+        """
+        Check if a late fee can be applied to this invoice.
+
+        Returns:
+            bool: True if late fee can be applied
+        """
+        # Don't apply if already has late fee
+        if self.late_fee_applied > 0:
+            return False
+
+        # Don't apply if paused
+        if self.late_fees_paused:
+            return False
+
+        # Only apply to unpaid invoices
+        if self.status in ['paid', 'cancelled', 'draft']:
+            return False
+
+        return True
 
 
 class LineItem(models.Model):
@@ -621,3 +724,49 @@ class PaymentReminderLog(models.Model):
 
     def __str__(self):
         return f"Reminder for {self.invoice.invoice_number} ({self.days_offset:+d} days)"
+
+
+class LateFeeLog(models.Model):
+    """Track applied late fees for audit purposes."""
+
+    invoice = models.ForeignKey(
+        Invoice,
+        on_delete=models.CASCADE,
+        related_name='late_fee_logs'
+    )
+    fee_type = models.CharField(
+        max_length=20,
+        help_text='Type of fee applied (flat or percentage)'
+    )
+    fee_amount = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        help_text='Amount of late fee applied'
+    )
+    days_overdue = models.PositiveIntegerField(
+        help_text='Days past due date when fee was applied'
+    )
+    invoice_total_before = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        help_text='Invoice total before late fee'
+    )
+    invoice_total_after = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        help_text='Invoice total after late fee'
+    )
+    applied_at = models.DateTimeField(auto_now_add=True)
+    applied_by = models.CharField(
+        max_length=50,
+        default='system',
+        help_text='Who/what applied the fee (system or manual)'
+    )
+
+    class Meta:
+        verbose_name = 'Late Fee Log'
+        verbose_name_plural = 'Late Fee Logs'
+        ordering = ['-applied_at']
+
+    def __str__(self):
+        return f"Late fee ${self.fee_amount} on {self.invoice.invoice_number}"

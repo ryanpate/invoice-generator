@@ -23,6 +23,11 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=6, minute=30),  # Run at 6:30 AM UTC daily (after recurring invoices)
         'options': {'queue': 'default'},
     },
+    'process-late-fees-daily': {
+        'task': 'apps.invoices.tasks.process_late_fees',
+        'schedule': crontab(hour=7, minute=0),  # Run at 7:00 AM UTC daily (after reminders)
+        'options': {'queue': 'default'},
+    },
 }
 app.conf.timezone = 'UTC'
 

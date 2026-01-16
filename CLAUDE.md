@@ -107,6 +107,16 @@
   - Color-coded indicators: green (excellent), blue (good), yellow (average), orange (slow), red (poor)
   - Helps predict client payment behavior before sending invoice
   - Tracks `paid_at` and `sent_at` timestamps for accurate calculation
+- **Automatic Late Fees:**
+  - Configurable late fee settings per company (flat fee or percentage)
+  - Grace period before fee is applied (default 3 days)
+  - Optional maximum fee cap
+  - Per-invoice pause/resume control
+  - Notifications sent to both business owner and client when fee is applied
+  - Settings UI at `/settings/late-fees/`
+  - Late fee status and history visible on invoice detail page
+  - Daily processing at 7:00 AM UTC via Celery Beat
+  - One-time fee application per invoice (no compounding)
 
 ### Suppressed/Disabled Features
 
@@ -273,7 +283,7 @@ Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 202
 - [x] **Automated Payment Reminders:** Email automation for unpaid invoices - COMPLETED
 - [x] **Client Payment History Display:** Show "This client pays in X days on average" when creating invoices - COMPLETED
 - [x] **One-Click Recurring:** "Make this recurring" button on invoice detail page - COMPLETED
-- [ ] **Late Fee Auto-Apply Toggle:** Automatically add late fees after X days overdue
+- [x] **Late Fee Auto-Apply Toggle:** Automatically add late fees after X days overdue - COMPLETED
 - [ ] **PWA (Progressive Web App):** Make site installable on mobile home screens
 
 **Phase 2 - AI Features (Weeks 3-4):**
@@ -488,6 +498,9 @@ invoice_generator/
 | `templates/settings/team.html` | Team management UI page |
 | `templates/emails/team_invitation.html` | Team invitation email template |
 | `templates/emails/team_welcome.html` | Team welcome email template |
+| `templates/settings/late_fees.html` | Late fee settings UI page |
+| `templates/emails/late_fee_applied.html` | Late fee notification to business owner |
+| `templates/emails/late_fee_client_notice.html` | Late fee notification to client |
 | `apps/clients/models.py` | Client, MagicLinkToken, ClientSession, ClientPayment models |
 | `apps/clients/views.py` | Client portal views (dashboard, invoices, payments) |
 | `apps/clients/services/magic_link.py` | Magic link authentication service |
@@ -612,6 +625,12 @@ invoice_generator/
 |-----|---------|
 | `/settings/reminders/` | Company reminder settings page |
 | `/invoices/<pk>/toggle-reminders/` | Pause/resume reminders for specific invoice |
+
+### Late Fee URLs
+| URL | Purpose |
+|-----|---------|
+| `/settings/late-fees/` | Company late fee settings page |
+| `/invoices/<pk>/toggle-late-fees/` | Pause/resume late fees for specific invoice |
 
 ### Credit System URLs
 | URL | Purpose |
@@ -913,6 +932,19 @@ Authentication: API Key in header `X-API-Key: <key>`
 177. Added URL route at `/invoices/<pk>/make-recurring/` for invoice-to-recurring conversion
 178. Created `templates/invoices/convert_to_recurring.html` with frequency selection and schedule preview
 179. Added "Make Recurring" button to invoice detail header (visible for users with recurring invoice access)
+180. Implemented Automatic Late Fees feature - added late fee settings to Company model (`late_fees_enabled`, `late_fee_type`, `late_fee_amount`, `late_fee_grace_days`, `late_fee_max_amount`)
+181. Added late fee fields to Invoice model (`late_fees_paused`, `late_fee_applied`, `late_fee_applied_at`, `original_total`)
+182. Created `LateFeeLog` model for audit tracking with invoice totals before/after, fee type, days overdue
+183. Created migrations for late fee fields (`0007_add_late_fees.py` for invoices, `0006_add_late_fee_settings.py` for companies)
+184. Added Celery task `process_late_fees` at 7:00 AM UTC daily for automatic late fee application
+185. Created late fee notification email templates: `late_fee_applied.html` (to business owner) and `late_fee_client_notice.html` (to client)
+186. Created late fee settings UI at `templates/settings/late_fees.html` with fee type, amount, grace period, and max cap configuration
+187. Added `LateFeeSettingsView` to `apps/companies/views.py` for handling late fee settings form
+188. Added `/settings/late-fees/` URL route in `apps/companies/urls.py`
+189. Added "Late Fees" tab to all settings navigation pages (company, team, reminders, account)
+190. Added late fee controls (pause/resume) and history display to invoice detail page
+191. Added `toggle_invoice_late_fees` view and URL route for per-invoice late fee control
+192. Registered `LateFeeLog` in admin with appropriate display columns
 
 ---
 
