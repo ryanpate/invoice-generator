@@ -125,6 +125,13 @@
   - Quick action shortcuts: Create Invoice, View Invoices
   - Custom app icons (72px to 512px)
   - Service worker for asset caching and offline fallback
+  - Smart install banner on dashboard (dismissible, re-shows after 7 days)
+  - iOS-specific install instructions for Safari users
+- **Feature Discovery UI:**
+  - "What's New" modal on dashboard (version-tracked, shows once per release)
+  - Feature callout cards for Payment Reminders, Late Fees, Recurring Invoices
+  - Dismissible cards with localStorage persistence
+  - Gradient-styled cards with NEW/PRO badges
 
 ### Suppressed/Disabled Features
 
@@ -964,6 +971,12 @@ Authentication: API Key in header `X-API-Key: <key>`
 201. Added `/service-worker.js` URL route for proper service worker scope
 202. Added `/offline/` URL route for offline page
 203. Phase 1 Quick Wins now 100% complete
+204. Added "What's New" modal to dashboard with version-tracked dismissal
+205. Added PWA install banner with smart display logic (shows on installable browsers, re-shows after 7 days)
+206. Added iOS-specific PWA install instructions (Share > Add to Home Screen)
+207. Added feature discovery cards section on dashboard (Payment Reminders, Late Fees, Recurring)
+208. Cards are dismissible with localStorage persistence
+209. Gradient-styled feature cards with NEW/PRO badges for visual distinction
 
 ---
 

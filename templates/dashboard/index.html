@@ -3,6 +3,119 @@
 {% block title %}Dashboard - InvoiceKits{% endblock %}
 
 {% block content %}
+<!-- What's New Modal -->
+<div id="whats-new-modal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 transition-opacity"></div>
+    <div class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-xl bg-white dark:bg-gray-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-white flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                            </svg>
+                            What's New in InvoiceKits
+                        </h3>
+                        <button onclick="closeWhatsNew()" class="text-white/80 hover:text-white">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="px-6 py-4 space-y-4">
+                    <!-- Payment Reminders -->
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900 dark:text-white">Automated Payment Reminders</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Never chase payments again. Set up automatic email reminders before, on, and after due dates.</p>
+                        </div>
+                    </div>
+                    <!-- Late Fees -->
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-yellow-100 dark:bg-yellow-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900 dark:text-white">Automatic Late Fees</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Auto-apply flat or percentage late fees after a grace period. Clients are notified automatically.</p>
+                        </div>
+                    </div>
+                    <!-- Client Insights -->
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900 dark:text-white">Client Payment Insights</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">See payment ratings (A-F) when creating invoices. Know how fast each client typically pays.</p>
+                        </div>
+                    </div>
+                    <!-- PWA -->
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900 dark:text-white">Install as App</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Add InvoiceKits to your home screen for quick access. Works offline too!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 flex justify-between items-center">
+                    <a href="{% url 'companies:reminders' %}" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                        Configure Reminders
+                    </a>
+                    <button onclick="closeWhatsNew()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                        Got it!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PWA Install Banner -->
+<div id="pwa-install-banner" class="hidden bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center mr-3">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-medium">Install InvoiceKits</p>
+                    <p class="text-sm text-blue-100">Add to your home screen for quick access</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="pwa-install-btn" class="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition text-sm font-medium">
+                    Install App
+                </button>
+                <button id="pwa-dismiss-btn" class="text-white/80 hover:text-white p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
@@ -164,6 +277,68 @@
         </a>
     </div>
 
+    <!-- Feature Discovery Cards -->
+    <div id="feature-discovery" class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Get Paid Faster</h2>
+            <button onclick="dismissFeatureCards()" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                Dismiss
+            </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Payment Reminders Card -->
+            <a href="{% url 'companies:reminders' %}" class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-xl p-5 hover:shadow-md transition group">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-800/50 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium bg-green-100 dark:bg-green-800/50 text-green-700 dark:text-green-300 px-2 py-1 rounded-full">NEW</span>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mt-3">Payment Reminders</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Auto-send reminders before and after due dates. Never chase payments again.</p>
+                <div class="mt-3 text-sm font-medium text-green-600 dark:text-green-400 group-hover:underline">
+                    Set up reminders &rarr;
+                </div>
+            </a>
+
+            <!-- Late Fees Card -->
+            <a href="{% url 'companies:late_fees' %}" class="bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-5 hover:shadow-md transition group">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 bg-yellow-100 dark:bg-yellow-800/50 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium bg-yellow-100 dark:bg-yellow-800/50 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded-full">NEW</span>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mt-3">Automatic Late Fees</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Auto-apply fees after grace period. Flat rate or percentage - you choose.</p>
+                <div class="mt-3 text-sm font-medium text-yellow-600 dark:text-yellow-400 group-hover:underline">
+                    Configure late fees &rarr;
+                </div>
+            </a>
+
+            <!-- Recurring Invoices Card -->
+            <a href="{% url 'invoices:recurring_list' %}" class="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-800 rounded-xl p-5 hover:shadow-md transition group">
+                <div class="flex items-start justify-between">
+                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-800/50 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium bg-purple-100 dark:bg-purple-800/50 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full">PRO</span>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mt-3">Recurring Invoices</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Set it and forget it. Auto-generate invoices weekly, monthly, or yearly.</p>
+                <div class="mt-3 text-sm font-medium text-purple-600 dark:text-purple-400 group-hover:underline">
+                    View recurring &rarr;
+                </div>
+            </a>
+        </div>
+    </div>
+
     <!-- AdSense - Only shown to free users (non-subscribers) -->
     {% if not user.is_active_subscriber %}
     <div class="mb-8">
@@ -232,4 +407,128 @@
         {% endif %}
     </div>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Version for "What's New" - increment to show modal again after new features
+const WHATS_NEW_VERSION = '2026.01.16';
+
+// What's New Modal
+function closeWhatsNew() {
+    const modal = document.getElementById('whats-new-modal');
+    modal.classList.add('hidden');
+    localStorage.setItem('whatsNewDismissed', WHATS_NEW_VERSION);
+}
+
+function showWhatsNew() {
+    const dismissed = localStorage.getItem('whatsNewDismissed');
+    if (dismissed !== WHATS_NEW_VERSION) {
+        const modal = document.getElementById('whats-new-modal');
+        modal.classList.remove('hidden');
+    }
+}
+
+// Feature Discovery Cards
+function dismissFeatureCards() {
+    const cards = document.getElementById('feature-discovery');
+    cards.style.display = 'none';
+    localStorage.setItem('featureCardsDismissed', 'true');
+}
+
+function checkFeatureCards() {
+    const dismissed = localStorage.getItem('featureCardsDismissed');
+    if (dismissed === 'true') {
+        const cards = document.getElementById('feature-discovery');
+        if (cards) cards.style.display = 'none';
+    }
+}
+
+// PWA Install Prompt
+let deferredPrompt;
+const pwaInstallBanner = document.getElementById('pwa-install-banner');
+const pwaInstallBtn = document.getElementById('pwa-install-btn');
+const pwaDismissBtn = document.getElementById('pwa-dismiss-btn');
+
+// Check if PWA was already dismissed
+function isPwaDismissed() {
+    const dismissed = localStorage.getItem('pwaBannerDismissed');
+    const dismissedTime = parseInt(dismissed || '0');
+    // Show again after 7 days
+    return dismissed && (Date.now() - dismissedTime < 7 * 24 * 60 * 60 * 1000);
+}
+
+// Check if already installed as PWA
+function isRunningAsPwa() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true;
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // Show banner if not dismissed and not already installed
+    if (!isPwaDismissed() && !isRunningAsPwa()) {
+        pwaInstallBanner.classList.remove('hidden');
+    }
+});
+
+if (pwaInstallBtn) {
+    pwaInstallBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+
+        if (outcome === 'accepted') {
+            console.log('PWA installed');
+        }
+
+        deferredPrompt = null;
+        pwaInstallBanner.classList.add('hidden');
+    });
+}
+
+if (pwaDismissBtn) {
+    pwaDismissBtn.addEventListener('click', () => {
+        pwaInstallBanner.classList.add('hidden');
+        localStorage.setItem('pwaBannerDismissed', Date.now().toString());
+    });
+}
+
+// iOS detection for manual install instructions
+function isIos() {
+    return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+}
+
+function showIosInstallHint() {
+    if (isIos() && !isRunningAsPwa() && !isPwaDismissed()) {
+        // For iOS, show a hint about using Share > Add to Home Screen
+        const banner = pwaInstallBanner;
+        if (banner) {
+            const installBtn = pwaInstallBtn;
+            if (installBtn) {
+                installBtn.textContent = 'Add to Home Screen';
+                installBtn.addEventListener('click', () => {
+                    alert('To install InvoiceKits:\n\n1. Tap the Share button (square with arrow)\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add"');
+                });
+            }
+            banner.classList.remove('hidden');
+        }
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    checkFeatureCards();
+    showIosInstallHint();
+
+    // Show What's New modal after a short delay (let page load first)
+    setTimeout(() => {
+        showWhatsNew();
+    }, 500);
+});
+</script>
 {% endblock %}
