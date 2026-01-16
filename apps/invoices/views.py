@@ -953,3 +953,43 @@ def public_invoice_pdf(request, token):
     response = HttpResponse(pdf_bytes, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{invoice.invoice_number}.pdf"'
     return response
+
+
+@login_required
+def client_payment_stats(request):
+    """
+    AJAX endpoint to get payment statistics for a client by email.
+
+    Returns JSON with payment history, average days, and rating.
+    """
+    client_email = request.GET.get('email', '').strip()
+
+    if not client_email:
+        return JsonResponse({
+            'success': False,
+            'error': 'Email parameter required'
+        }, status=400)
+
+    # Get user's company
+    company = request.user.get_company()
+
+    from .services.client_analytics import get_client_payment_summary
+
+    summary = get_client_payment_summary(client_email, company)
+
+    if summary is None:
+        return JsonResponse({
+            'success': True,
+            'has_history': False,
+            'message': 'No payment history for this client'
+        })
+
+    return JsonResponse({
+        'success': True,
+        'has_history': summary.get('rating') is not None or summary.get('average_days') is not None,
+        'average_days': summary.get('average_days'),
+        'rating': summary.get('rating'),
+        'description': summary.get('description'),
+        'color_class': summary.get('color_class'),
+        'bg_class': summary.get('bg_class'),
+    })

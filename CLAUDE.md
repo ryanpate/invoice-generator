@@ -100,6 +100,12 @@
   - Settings UI at `/settings/reminders/`
   - Reminder history visible on invoice detail page
   - Daily processing at 6:30 AM UTC via Celery Beat
+- **Client Payment History Display:**
+  - Shows payment rating (A-F) when entering client email on invoice create/edit
+  - Displays "This client pays in X days on average" message
+  - Color-coded indicators: green (excellent), blue (good), yellow (average), orange (slow), red (poor)
+  - Helps predict client payment behavior before sending invoice
+  - Tracks `paid_at` and `sent_at` timestamps for accurate calculation
 
 ### Suppressed/Disabled Features
 
@@ -130,12 +136,12 @@
 | Time tracking | ❌ Missing | ✅ Built-in | ✅ Best-in-class | ❌ Missing |
 | Expense tracking | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
 | Payment reminders | ✅ Automated | ✅ Automated | ✅ Automated | ⚠️ Limited |
-| Client payment scoring | ❌ Missing | ❌ Missing | ❌ Missing | ❌ Missing |
+| Client payment scoring | ✅ A-F Rating | ❌ Missing | ❌ Missing | ❌ Missing |
 | Mobile app | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
 | Bank connections | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
 | Batch invoicing | ✅ Best-in-class | ❌ None | ❌ None | ❌ None |
 
-**Key Opportunity:** Client Payment Scoring is missing from ALL competitors — first-mover advantage available.
+**Competitive Advantage:** InvoiceKits is the ONLY invoicing platform with client payment scoring — first-mover advantage captured!
 
 ---
 
@@ -264,7 +270,7 @@ Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 202
 
 **Phase 1 - Quick Wins (Weeks 1-2):**
 - [x] **Automated Payment Reminders:** Email automation for unpaid invoices - COMPLETED
-- [ ] **Client Payment History Display:** Show "This client pays in X days on average" when creating invoices
+- [x] **Client Payment History Display:** Show "This client pays in X days on average" when creating invoices - COMPLETED
 - [ ] **One-Click Recurring:** "Make this recurring" button on invoice detail page
 - [ ] **Late Fee Auto-Apply Toggle:** Automatically add late fees after X days overdue
 - [ ] **PWA (Progressive Web App):** Make site installable on mobile home screens
@@ -443,6 +449,7 @@ invoice_generator/
 | `apps/invoices/services/pdf_generator.py` | xhtml2pdf PDF generation with watermark + QR code |
 | `templates/invoices/public_view.html` | Public invoice view page (for QR code links) |
 | `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
+| `apps/invoices/services/client_analytics.py` | Client payment history analytics (A-F rating, average days) |
 | `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
 | `apps/billing/models.py` | CreditPurchase, TemplatePurchase models for one-time purchases |
 | `apps/billing/views.py` | Stripe checkout for subscriptions, credits, and template purchases |
@@ -889,6 +896,16 @@ Authentication: API Key in header `X-API-Key: <key>`
 162. Added `reminders_paused` field to Invoice model for per-invoice control
 163. Registered `PaymentReminderSettings` and `PaymentReminderLog` in admin with appropriate display columns
 164. Configured Celery Beat schedule for `process_payment_reminders` task at 6:30 AM UTC daily
+165. Added `paid_at` and `sent_at` timestamp fields to Invoice model for tracking payment timing
+166. Created migration `0006_add_payment_timestamps.py` for payment timestamp fields
+167. Updated `mark_as_paid()` and `mark_as_sent()` methods to set timestamps
+168. Added `get_payment_days()` method to Invoice for calculating days between sent and paid
+169. Created `ClientPaymentAnalytics` service in `apps/invoices/services/client_analytics.py`
+170. Implemented A-F payment rating system based on average payment days and on-time rate
+171. Added `client_payment_stats` AJAX endpoint at `/invoices/client-stats/`
+172. Updated invoice create template with client payment history indicator below email field
+173. Updated invoice edit template with client payment history display (auto-loads on page)
+174. Payment history shows color-coded rating: green (A-B), yellow (C), orange (D), red (F)
 
 ---
 

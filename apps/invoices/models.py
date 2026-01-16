@@ -94,6 +94,16 @@ class Invoice(models.Model):
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    paid_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='Timestamp when invoice was marked as paid'
+    )
+    sent_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='Timestamp when invoice was sent to client'
+    )
 
     class Meta:
         ordering = ['-created_at']
@@ -170,12 +180,26 @@ class Invoice(models.Model):
     def mark_as_sent(self):
         """Mark invoice as sent."""
         self.status = 'sent'
-        self.save(update_fields=['status', 'updated_at'])
+        self.sent_at = timezone.now()
+        self.save(update_fields=['status', 'sent_at', 'updated_at'])
 
     def mark_as_paid(self):
         """Mark invoice as paid."""
         self.status = 'paid'
-        self.save(update_fields=['status', 'updated_at'])
+        self.paid_at = timezone.now()
+        self.save(update_fields=['status', 'paid_at', 'updated_at'])
+
+    def get_payment_days(self):
+        """
+        Calculate days between sent and paid.
+        Returns None if invoice is not paid or was never sent.
+        """
+        if self.status != 'paid' or not self.paid_at:
+            return None
+        # Use sent_at if available, otherwise fall back to invoice_date
+        sent_date = self.sent_at.date() if self.sent_at else self.invoice_date
+        paid_date = self.paid_at.date()
+        return (paid_date - sent_date).days
 
     def get_public_url(self):
         """Get public URL for this invoice (used in QR codes)."""
