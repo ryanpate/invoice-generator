@@ -4,6 +4,7 @@ Forms for companies app.
 from django import forms
 from django.conf import settings
 from .models import Company, TeamMember
+from apps.invoices.models import PaymentReminderSettings
 
 
 class CompanyForm(forms.ModelForm):
@@ -153,3 +154,40 @@ class TeamInviteForm(forms.Form):
             'class': 'form-select'
         })
     )
+
+
+class PaymentReminderSettingsForm(forms.ModelForm):
+    """Form for payment reminder settings."""
+
+    class Meta:
+        model = PaymentReminderSettings
+        fields = [
+            'reminders_enabled',
+            'remind_3_days_before',
+            'remind_1_day_before',
+            'remind_on_due_date',
+            'remind_3_days_after',
+            'remind_7_days_after',
+            'remind_14_days_after',
+            'cc_business_owner',
+            'custom_message_before',
+            'custom_message_due',
+            'custom_message_overdue',
+        ]
+        widgets = {
+            'custom_message_before': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'rows': 3,
+                'placeholder': 'Optional custom message for friendly reminders before due date...'
+            }),
+            'custom_message_due': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'rows': 3,
+                'placeholder': 'Optional custom message for reminders on due date...'
+            }),
+            'custom_message_overdue': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'rows': 3,
+                'placeholder': 'Optional custom message for overdue reminders...'
+            }),
+        }

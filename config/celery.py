@@ -18,6 +18,11 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=6, minute=0),  # Run at 6:00 AM UTC daily
         'options': {'queue': 'default'},
     },
+    'process-payment-reminders-daily': {
+        'task': 'apps.invoices.tasks.process_payment_reminders',
+        'schedule': crontab(hour=6, minute=30),  # Run at 6:30 AM UTC daily (after recurring invoices)
+        'options': {'queue': 'default'},
+    },
 }
 app.conf.timezone = 'UTC'
 

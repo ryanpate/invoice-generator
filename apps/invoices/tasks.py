@@ -249,3 +249,107 @@ def generate_recurring_invoice_now(recurring_invoice_id):
     except Exception as e:
         logger.error(f"Failed to generate recurring invoice: {str(e)}", exc_info=True)
         return {'success': False, 'error': str(e)}
+
+
+@shared_task(bind=True, max_retries=3)
+def process_payment_reminders(self):
+    """
+    Process all payment reminders that are due today.
+    Runs daily at 6:30 AM UTC via Celery Beat (30 mins after recurring invoices).
+    """
+    from apps.invoices.models import PaymentReminderSettings
+    from apps.invoices.services.reminder_sender import PaymentReminderService
+
+    today = timezone.now().date()
+    logger.info(f"Processing payment reminders for {today}")
+
+    # All possible reminder days (relative to due date)
+    reminder_days = [-3, -1, 0, 3, 7, 14]
+
+    sent_count = 0
+    failed_count = 0
+    skipped_count = 0
+
+    for days_offset in reminder_days:
+        invoices = PaymentReminderService.get_invoices_needing_reminders(days_offset)
+
+        for invoice in invoices:
+            try:
+                # Get reminder settings for this company
+                try:
+                    reminder_settings = invoice.company.reminder_settings
+                except PaymentReminderSettings.DoesNotExist:
+                    skipped_count += 1
+                    continue
+
+                # Queue the individual reminder task
+                send_payment_reminder.delay(invoice.id, days_offset, reminder_settings.id)
+                sent_count += 1
+
+            except Exception as e:
+                failed_count += 1
+                logger.error(
+                    f"Failed to queue reminder for invoice {invoice.id}: {str(e)}",
+                    exc_info=True
+                )
+
+    logger.info(
+        f"Payment reminder processing complete: "
+        f"{sent_count} queued, {failed_count} failed, {skipped_count} skipped"
+    )
+
+    return {
+        'queued': sent_count,
+        'failed': failed_count,
+        'skipped': skipped_count,
+        'date': str(today)
+    }
+
+
+@shared_task(bind=True, max_retries=3)
+def send_payment_reminder(self, invoice_id, days_offset, reminder_settings_id=None):
+    """
+    Send an individual payment reminder email.
+    """
+    from apps.invoices.models import Invoice, PaymentReminderSettings
+    from apps.invoices.services.reminder_sender import PaymentReminderService
+
+    try:
+        invoice = Invoice.objects.select_related(
+            'company', 'company__owner'
+        ).get(id=invoice_id)
+
+        reminder_settings = None
+        if reminder_settings_id:
+            try:
+                reminder_settings = PaymentReminderSettings.objects.get(id=reminder_settings_id)
+            except PaymentReminderSettings.DoesNotExist:
+                pass
+
+        # Send the reminder
+        service = PaymentReminderService(invoice)
+        result = service.send_reminder(days_offset, reminder_settings)
+
+        if result['success']:
+            logger.info(
+                f"Sent {result.get('reminder_type', 'unknown')} reminder for "
+                f"invoice {invoice.invoice_number} to {result.get('recipient')}"
+            )
+        else:
+            logger.warning(
+                f"Reminder not sent for invoice {invoice.invoice_number}: "
+                f"{result.get('error', 'Unknown error')}"
+            )
+
+        return result
+
+    except Invoice.DoesNotExist:
+        logger.error(f"Invoice {invoice_id} not found for reminder")
+        return {'success': False, 'error': 'Invoice not found'}
+
+    except Exception as e:
+        logger.error(
+            f"Failed to send payment reminder for invoice {invoice_id}: {str(e)}",
+            exc_info=True
+        )
+        raise self.retry(exc=e, countdown=60 * 5)  # Retry in 5 minutes

@@ -531,6 +531,34 @@ def mark_invoice_status(request, pk, status):
     return redirect('invoices:detail', pk=pk)
 
 
+@login_required
+def toggle_invoice_reminders(request, pk):
+    """Toggle payment reminders for a specific invoice."""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST required'}, status=405)
+
+    invoice = get_team_aware_object(Invoice, pk, request.user)
+    if not invoice:
+        return JsonResponse({'error': 'Invoice not found'}, status=404)
+
+    # Toggle the reminders_paused field
+    invoice.reminders_paused = not invoice.reminders_paused
+    invoice.save(update_fields=['reminders_paused', 'updated_at'])
+
+    if invoice.reminders_paused:
+        messages.success(request, 'Payment reminders paused for this invoice.')
+    else:
+        messages.success(request, 'Payment reminders resumed for this invoice.')
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'reminders_paused': invoice.reminders_paused
+        })
+
+    return redirect('invoices:detail', pk=pk)
+
+
 class InvoiceSendEmailView(LoginRequiredMixin, TeamAwareQuerysetMixin, FormView):
     """View for sending invoice via email."""
     template_name = 'invoices/send_email.html'

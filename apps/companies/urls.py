@@ -16,4 +16,7 @@ urlpatterns = [
     path('team/invite/', views.InviteTeamMemberView.as_view(), name='team_invite'),
     path('team/member/<int:pk>/remove/', views.RemoveTeamMemberView.as_view(), name='team_remove'),
     path('team/invitation/<int:pk>/cancel/', views.CancelInvitationView.as_view(), name='team_cancel_invitation'),
+
+    # Payment reminders
+    path('reminders/', views.ReminderSettingsView.as_view(), name='reminders'),
 ]

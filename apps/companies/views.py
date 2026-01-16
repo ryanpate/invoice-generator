@@ -13,7 +13,8 @@ from django.http import HttpResponseForbidden
 from django.utils import timezone
 
 from .models import Company, TeamMember, TeamInvitation
-from .forms import CompanyForm, TeamInviteForm
+from .forms import CompanyForm, TeamInviteForm, PaymentReminderSettingsForm
+from apps.invoices.models import PaymentReminderSettings
 
 
 class CompanySettingsView(LoginRequiredMixin, UpdateView):
@@ -309,3 +310,48 @@ class CancelInvitationView(TeamRequiredMixin, View):
 
         messages.success(request, f'Invitation to {invitation_email} has been cancelled.')
         return redirect('companies:team')
+
+
+class ReminderSettingsView(LoginRequiredMixin, View):
+    """Configure payment reminder settings."""
+    template_name = 'settings/reminders.html'
+
+    def get_company(self, user):
+        """Get or create company for user."""
+        company, created = Company.objects.get_or_create(
+            user=user,
+            defaults={'name': f"{user.username}'s Company"}
+        )
+        return company
+
+    def get_reminder_settings(self, company):
+        """Get or create reminder settings for company."""
+        settings, created = PaymentReminderSettings.objects.get_or_create(
+            company=company
+        )
+        return settings
+
+    def get(self, request, *args, **kwargs):
+        company = self.get_company(request.user)
+        reminder_settings = self.get_reminder_settings(company)
+        form = PaymentReminderSettingsForm(instance=reminder_settings)
+
+        return render(request, self.template_name, {
+            'form': form,
+            'reminder_settings': reminder_settings,
+        })
+
+    def post(self, request, *args, **kwargs):
+        company = self.get_company(request.user)
+        reminder_settings = self.get_reminder_settings(company)
+        form = PaymentReminderSettingsForm(request.POST, instance=reminder_settings)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Payment reminder settings saved successfully!')
+            return redirect('companies:reminders')
+
+        return render(request, self.template_name, {
+            'form': form,
+            'reminder_settings': reminder_settings,
+        })

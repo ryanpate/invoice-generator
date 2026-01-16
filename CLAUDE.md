@@ -40,6 +40,15 @@
 - Payment receipt emails (auto-sent when invoice marked as paid)
 - Social login with Google and GitHub (OAuth fully configured via environment variables)
 - Recurring invoices for Professional+ plans (weekly, bi-weekly, monthly, quarterly, yearly)
+- **Automated Payment Reminders:**
+  - Configurable reminder schedule (3, 1 days before; on due date; 3, 7, 14 days after)
+  - Escalating email tones (friendly before, firm on due date, urgent when overdue)
+  - Per-invoice pause/resume controls
+  - Company-level settings at `/settings/reminders/`
+  - CC business owner option
+  - Custom message fields for each reminder stage
+  - Reminder history on invoice detail page
+  - Celery task runs daily at 6:30 AM UTC
 - Blog section with SEO-optimized content (`/blog/`) - 5 posts live
 - Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
 - Competitor comparison page (`/compare/`)
@@ -304,7 +313,8 @@ invoice_generator/
 │   │   └── services/
 │   │       ├── pdf_generator.py   # xhtml2pdf PDF generation
 │   │       ├── batch_processor.py # CSV batch processing
-│   │       └── email_sender.py    # Invoice email sending with PDF
+│   │       ├── email_sender.py    # Invoice email sending with PDF
+│   │       └── reminder_sender.py # Payment reminder email service
 │   ├── companies/           # Company profiles & branding
 │   ├── api/                 # REST API (DRF)
 │   └── blog/                # SEO blog content
@@ -354,7 +364,13 @@ invoice_generator/
 | `templates/billing/templates.html` | Premium template store page |
 | `templates/billing/templates_success.html` | Template purchase success page |
 | `apps/api/views.py` | REST API endpoints |
-| `apps/invoices/tasks.py` | Celery tasks for recurring invoice processing |
+| `apps/invoices/tasks.py` | Celery tasks for recurring invoices and payment reminders |
+| `apps/invoices/services/reminder_sender.py` | Payment reminder email service with escalating tones |
+| `apps/invoices/models.py` | Invoice, PaymentReminderSettings, PaymentReminderLog models |
+| `templates/settings/reminders.html` | Payment reminder settings page |
+| `templates/emails/payment_reminder_before.html` | Friendly reminder email (before due) |
+| `templates/emails/payment_reminder_due.html` | Firm reminder email (on due date) |
+| `templates/emails/payment_reminder_overdue.html` | Urgent reminder email (after due) |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
 | `templates/emails/welcome.html` | HTML welcome email template |
 | `templates/emails/payment_receipt.html` | Payment receipt email template |
@@ -502,6 +518,12 @@ invoice_generator/
 | `/invoices/recurring/<pk>/delete/` | Delete confirmation |
 | `/invoices/recurring/<pk>/toggle-status/` | Pause/Resume recurring |
 | `/invoices/recurring/<pk>/generate-now/` | Manual invoice generation |
+
+### Payment Reminder URLs
+| URL | Purpose |
+|-----|---------|
+| `/settings/reminders/` | Company reminder settings page |
+| `/invoices/<pk>/toggle-reminders/` | Pause/resume reminders for specific invoice |
 
 ### Credit System URLs
 | URL | Purpose |
@@ -778,6 +800,16 @@ Authentication: API Key in header `X-API-Key: <key>`
 152. Created affiliate application workflow with admin approval system
 153. Added public affiliate program landing page at `/affiliate/program/`
 154. Created AffiliateAdmin with earnings display and status management
+155. Implemented Automated Payment Reminders feature for unpaid invoices
+156. Created PaymentReminderSettings and PaymentReminderLog models in apps/invoices/models.py
+157. Added `reminders_paused` field to Invoice model for per-invoice control
+158. Created PaymentReminderService in apps/invoices/services/reminder_sender.py
+159. Created 3 email templates with escalating tones (before, due, overdue)
+160. Added Celery tasks for daily reminder processing at 6:30 AM UTC
+161. Created reminders settings page at /settings/reminders/ with full configuration UI
+162. Added Reminders tab to all settings navigation pages
+163. Added reminder pause/resume controls and history to invoice detail page
+164. Registered PaymentReminderSettings and PaymentReminderLog in Django admin
 
 ---
 
@@ -836,7 +868,9 @@ The following services are deployed on Railway for recurring invoice auto-genera
 | celery-worker | Processes async tasks | Running |
 | celery-beat | Schedules periodic tasks | Running |
 
-**Schedule:** Recurring invoices process daily at 6:00 AM UTC.
+**Schedule:**
+- Recurring invoices: Daily at 6:00 AM UTC
+- Payment reminders: Daily at 6:30 AM UTC
 
 **Internal URLs:**
 - Redis: `redis://Redis.railway.internal:6379`

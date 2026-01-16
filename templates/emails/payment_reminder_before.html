@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Reminder - {{ invoice.invoice_number }}</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 40px 20px;">
+                <table role="presentation" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <!-- Header - Friendly blue -->
+                    <tr>
+                        <td style="background-color: #3b82f6; padding: 40px 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">
+                                Friendly Reminder
+                            </h1>
+                            <p style="margin: 10px 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">
+                                Invoice {{ invoice.invoice_number }} is due {{ days_label }}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Greeting -->
+                    <tr>
+                        <td style="padding: 40px 40px 20px;">
+                            <p style="margin: 0 0 20px; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Hi {{ invoice.client_name }},
+                            </p>
+                            <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.6;">
+                                Just a friendly heads-up that your invoice from <strong>{{ company.name }}</strong> is coming due soon. We wanted to give you plenty of time to arrange payment.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Invoice Summary -->
+                    <tr>
+                        <td style="padding: 20px 40px;">
+                            <table role="presentation" style="width: 100%; background-color: #f0f9ff; border-radius: 8px; border: 1px solid #bae6fd;">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <table role="presentation" style="width: 100%;">
+                                            <tr>
+                                                <td style="color: #0369a1; font-size: 14px;">Invoice Number:</td>
+                                                <td style="text-align: right; color: #0c4a6e; font-size: 16px; font-weight: 600;">
+                                                    {{ invoice.invoice_number }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #0369a1; font-size: 14px; padding-top: 10px;">Amount Due:</td>
+                                                <td style="text-align: right; color: #0c4a6e; font-size: 24px; font-weight: 700; padding-top: 10px;">
+                                                    {{ invoice.get_currency_symbol }}{{ invoice.total|floatformat:2 }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #0369a1; font-size: 14px; padding-top: 10px;">Due Date:</td>
+                                                <td style="text-align: right; color: #0c4a6e; font-size: 16px; padding-top: 10px;">
+                                                    {{ invoice.due_date|date:"F d, Y" }}
+                                                </td>
+                                            </tr>
+                                            {% if invoice.invoice_name %}
+                                            <tr>
+                                                <td style="color: #0369a1; font-size: 14px; padding-top: 10px;">Reference:</td>
+                                                <td style="text-align: right; color: #0c4a6e; font-size: 14px; padding-top: 10px;">
+                                                    {{ invoice.invoice_name }}
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    {% if custom_message %}
+                    <!-- Custom Message -->
+                    <tr>
+                        <td style="padding: 0 40px 20px;">
+                            <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.6; white-space: pre-wrap;">{{ custom_message }}</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    <!-- View Invoice Button -->
+                    <tr>
+                        <td style="padding: 10px 40px 30px; text-align: center;">
+                            <a href="{{ public_invoice_url }}" style="display: inline-block; padding: 14px 32px; background-color: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 600;">
+                                View Invoice Online
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- Attachment Notice -->
+                    <tr>
+                        <td style="padding: 0 40px 40px;">
+                            <table role="presentation" style="width: 100%; background-color: #f0f9ff; border-radius: 8px; border: 1px solid #bae6fd;">
+                                <tr>
+                                    <td style="padding: 16px;">
+                                        <table role="presentation" style="width: 100%;">
+                                            <tr>
+                                                <td style="width: 40px; vertical-align: top;">
+                                                    <div style="width: 32px; height: 32px; background-color: #3b82f6; border-radius: 6px; text-align: center; line-height: 32px; color: #ffffff; font-size: 14px;">
+                                                        PDF
+                                                    </div>
+                                                </td>
+                                                <td style="padding-left: 12px;">
+                                                    <p style="margin: 0 0 4px; color: #1e40af; font-size: 14px; font-weight: 600;">
+                                                        Invoice Attached
+                                                    </p>
+                                                    <p style="margin: 0; color: #3b82f6; font-size: 13px;">
+                                                        {{ invoice.invoice_number }}.pdf
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 30px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="margin: 0 0 10px; color: #374151; font-size: 14px; font-weight: 600;">
+                                {{ company.name }}
+                            </p>
+                            {% if company.email %}
+                            <p style="margin: 0 0 5px; color: #6b7280; font-size: 13px;">
+                                Questions? <a href="mailto:{{ company.email }}" style="color: #3b82f6; text-decoration: none;">{{ company.email }}</a>
+                            </p>
+                            {% endif %}
+                            {% if company.phone %}
+                            <p style="margin: 0 0 5px; color: #6b7280; font-size: 13px;">
+                                {{ company.phone }}
+                            </p>
+                            {% endif %}
+                            <p style="margin: 20px 0 0; color: #9ca3af; font-size: 11px;">
+                                Sent via <a href="{{ site_url }}" style="color: #3b82f6; text-decoration: none;">InvoiceKits</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

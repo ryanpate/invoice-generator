@@ -85,6 +85,12 @@ class Invoice(models.Model):
         help_text='Unique token for public invoice access'
     )
 
+    # Payment reminders
+    reminders_paused = models.BooleanField(
+        default=False,
+        help_text='Pause automated payment reminders for this invoice'
+    )
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -479,3 +485,115 @@ class RecurringLineItem(models.Model):
     def amount(self):
         """Calculate line item amount."""
         return (self.quantity * self.rate).quantize(Decimal('0.01'))
+
+
+class PaymentReminderSettings(models.Model):
+    """Company-level settings for automated payment reminders."""
+
+    company = models.OneToOneField(
+        'companies.Company',
+        on_delete=models.CASCADE,
+        related_name='reminder_settings'
+    )
+
+    # Master toggle
+    reminders_enabled = models.BooleanField(
+        default=False,
+        help_text='Enable automated payment reminders'
+    )
+
+    # Schedule (which reminders to send)
+    remind_3_days_before = models.BooleanField(default=True)
+    remind_1_day_before = models.BooleanField(default=True)
+    remind_on_due_date = models.BooleanField(default=True)
+    remind_3_days_after = models.BooleanField(default=True)
+    remind_7_days_after = models.BooleanField(default=True)
+    remind_14_days_after = models.BooleanField(default=True)
+
+    # CC options
+    cc_business_owner = models.BooleanField(
+        default=False,
+        help_text='Send a copy of reminders to business owner'
+    )
+
+    # Custom messages (optional)
+    custom_message_before = models.TextField(
+        blank=True,
+        help_text='Custom message for reminders before due date'
+    )
+    custom_message_due = models.TextField(
+        blank=True,
+        help_text='Custom message for reminder on due date'
+    )
+    custom_message_overdue = models.TextField(
+        blank=True,
+        help_text='Custom message for reminders after due date'
+    )
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Payment Reminder Settings'
+        verbose_name_plural = 'Payment Reminder Settings'
+
+    def __str__(self):
+        status = 'enabled' if self.reminders_enabled else 'disabled'
+        return f"Reminders for {self.company.name} ({status})"
+
+    def get_enabled_days(self):
+        """Return list of days offset for enabled reminders."""
+        days = []
+        if self.remind_3_days_before:
+            days.append(-3)
+        if self.remind_1_day_before:
+            days.append(-1)
+        if self.remind_on_due_date:
+            days.append(0)
+        if self.remind_3_days_after:
+            days.append(3)
+        if self.remind_7_days_after:
+            days.append(7)
+        if self.remind_14_days_after:
+            days.append(14)
+        return days
+
+
+class PaymentReminderLog(models.Model):
+    """Track sent payment reminders to prevent duplicates."""
+
+    REMINDER_TYPES = [
+        ('before', 'Before Due Date'),
+        ('due', 'On Due Date'),
+        ('overdue', 'Overdue'),
+    ]
+
+    invoice = models.ForeignKey(
+        Invoice,
+        on_delete=models.CASCADE,
+        related_name='reminder_logs'
+    )
+    days_offset = models.IntegerField(
+        help_text='Days relative to due date (negative=before, 0=on due, positive=after)'
+    )
+    reminder_type = models.CharField(
+        max_length=20,
+        choices=REMINDER_TYPES
+    )
+    sent_at = models.DateTimeField(auto_now_add=True)
+    recipient_email = models.EmailField()
+    success = models.BooleanField(default=True)
+    error_message = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = 'Payment Reminder Log'
+        verbose_name_plural = 'Payment Reminder Logs'
+        unique_together = ['invoice', 'days_offset']
+        ordering = ['-sent_at']
+        indexes = [
+            models.Index(fields=['invoice', 'days_offset']),
+        ]
+
+    def __str__(self):
+        return f"Reminder for {self.invoice.invoice_number} ({self.days_offset:+d} days)"

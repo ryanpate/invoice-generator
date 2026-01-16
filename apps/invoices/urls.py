@@ -21,6 +21,7 @@ urlpatterns = [
 
     # Status updates
     path('<int:pk>/status/<str:status>/', views.mark_invoice_status, name='mark_status'),
+    path('<int:pk>/toggle-reminders/', views.toggle_invoice_reminders, name='toggle_reminders'),
 
     # Batch processing
     path('batch/', views.BatchUploadView.as_view(), name='batch_upload'),
