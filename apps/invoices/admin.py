@@ -4,7 +4,8 @@ Admin configuration for invoices app.
 from django.contrib import admin
 from .models import (
     Invoice, LineItem, InvoiceBatch, RecurringInvoice, RecurringLineItem,
-    PaymentReminderSettings, PaymentReminderLog, LateFeeLog
+    PaymentReminderSettings, PaymentReminderLog, LateFeeLog,
+    TimeEntry, ActiveTimer, TimeTrackingSettings
 )
 
 
@@ -199,3 +200,88 @@ class LateFeeLogAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+
+@admin.register(TimeEntry)
+class TimeEntryAdmin(admin.ModelAdmin):
+    list_display = [
+        'description', 'client_name', 'company', 'date',
+        'duration_display', 'hourly_rate', 'billable_amount', 'status'
+    ]
+    list_filter = ['status', 'billable', 'date', 'created_at']
+    search_fields = ['description', 'client_name', 'client_email']
+    readonly_fields = ['created_at', 'updated_at']
+    date_hierarchy = 'date'
+
+    fieldsets = (
+        ('Entry Details', {
+            'fields': ('company', 'user', 'description', 'date')
+        }),
+        ('Client Information', {
+            'fields': ('client_name', 'client_email')
+        }),
+        ('Time & Billing', {
+            'fields': ('duration', 'hourly_rate', 'billable')
+        }),
+        ('Status', {
+            'fields': ('status', 'invoice')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def duration_display(self, obj):
+        return obj.duration_display
+    duration_display.short_description = 'Duration'
+
+    def billable_amount(self, obj):
+        return f'${obj.billable_amount:.2f}' if obj.billable else '-'
+    billable_amount.short_description = 'Amount'
+
+
+@admin.register(ActiveTimer)
+class ActiveTimerAdmin(admin.ModelAdmin):
+    list_display = [
+        'description', 'user', 'company', 'started_at',
+        'elapsed_display', 'estimated_amount'
+    ]
+    list_filter = ['started_at', 'company']
+    search_fields = ['description', 'user__email', 'client_name']
+    readonly_fields = ['started_at']
+
+    fieldsets = (
+        ('Timer Details', {
+            'fields': ('company', 'user', 'description')
+        }),
+        ('Client Information', {
+            'fields': ('client_name', 'client_email')
+        }),
+        ('Settings', {
+            'fields': ('hourly_rate', 'started_at')
+        }),
+    )
+
+    def elapsed_display(self, obj):
+        return obj.elapsed_display
+    elapsed_display.short_description = 'Elapsed'
+
+    def estimated_amount(self, obj):
+        return f'${obj.estimated_amount:.2f}'
+    estimated_amount.short_description = 'Est. Amount'
+
+
+@admin.register(TimeTrackingSettings)
+class TimeTrackingSettingsAdmin(admin.ModelAdmin):
+    list_display = ['company', 'default_hourly_rate', 'rounding_increment']
+    search_fields = ['company__name']
+
+    fieldsets = (
+        ('Company', {
+            'fields': ('company',)
+        }),
+        ('Settings', {
+            'fields': ('default_hourly_rate', 'rounding_increment')
+        }),
+    )

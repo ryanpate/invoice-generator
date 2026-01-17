@@ -11,7 +11,7 @@ from django.http import HttpResponse, JsonResponse, FileResponse
 from django.db.models import Q
 from django.conf import settings
 
-from .models import Invoice, LineItem, InvoiceBatch, RecurringInvoice
+from .models import Invoice, LineItem, InvoiceBatch, RecurringInvoice, TimeEntry, ActiveTimer, TimeTrackingSettings
 
 
 class TeamAwareQuerysetMixin:
@@ -44,7 +44,7 @@ class TeamAwareQuerysetMixin:
 
 from .forms import (
     InvoiceForm, LineItemFormSet, BatchUploadForm, SendInvoiceEmailForm,
-    RecurringInvoiceForm, RecurringLineItemFormSet
+    RecurringInvoiceForm, RecurringLineItemFormSet, TimeEntryForm
 )
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
@@ -1160,4 +1160,366 @@ def client_payment_stats(request):
         'description': summary.get('description'),
         'color_class': summary.get('color_class'),
         'bg_class': summary.get('bg_class'),
+    })
+
+
+# =============================================================================
+# Time Tracking Views
+# =============================================================================
+
+class TimeEntryListView(LoginRequiredMixin, TeamAwareQuerysetMixin, ListView):
+    """List all time entries for the current user's company."""
+    model = TimeEntry
+    template_name = 'time_tracking/list.html'
+    context_object_name = 'entries'
+    paginate_by = 25
+
+    def get_queryset(self):
+        queryset = self.get_team_aware_queryset(TimeEntry).select_related('user', 'invoice')
+
+        # Search filter
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(description__icontains=search) |
+                Q(client_name__icontains=search) |
+                Q(client_email__icontains=search)
+            )
+
+        # Status filter
+        status = self.request.GET.get('status')
+        if status and status != 'all':
+            queryset = queryset.filter(status=status)
+
+        # Date filter
+        date_from = self.request.GET.get('date_from')
+        date_to = self.request.GET.get('date_to')
+        if date_from:
+            queryset = queryset.filter(date__gte=date_from)
+        if date_to:
+            queryset = queryset.filter(date__lte=date_to)
+
+        # Billable filter
+        billable = self.request.GET.get('billable')
+        if billable == 'yes':
+            queryset = queryset.filter(billable=True)
+        elif billable == 'no':
+            queryset = queryset.filter(billable=False)
+
+        return queryset.order_by('-date', '-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = TimeEntry.STATUS_CHOICES
+        context['current_status'] = self.request.GET.get('status', 'all')
+
+        # Get active timers for this user
+        context['active_timers'] = self.request.user.active_timers.all()
+
+        # Get unbilled totals
+        company = self.get_company()
+        if company:
+            unbilled = TimeEntry.objects.filter(
+                company=company,
+                status='unbilled',
+                billable=True
+            )
+            from django.db.models import Sum
+            from decimal import Decimal
+            total_seconds = unbilled.aggregate(total=Sum('duration'))['total'] or 0
+            context['unbilled_hours'] = Decimal(str(total_seconds)) / Decimal('3600')
+            # Calculate approximate value
+            total_value = sum(e.billable_amount for e in unbilled)
+            context['unbilled_value'] = total_value
+
+        return context
+
+
+class TimeEntryCreateView(LoginRequiredMixin, TeamAwareQuerysetMixin, CreateView):
+    """Create a new time entry."""
+    model = TimeEntry
+    form_class = TimeEntryForm
+    template_name = 'time_tracking/create.html'
+    success_url = reverse_lazy('invoices:time_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['company'] = self.get_company()
+        return kwargs
+
+    def form_valid(self, form):
+        company = self.get_company()
+        if not company:
+            messages.error(self.request, 'You need to create a company first.')
+            return redirect('companies:create')
+
+        form.instance.company = company
+        form.instance.user = self.request.user
+        messages.success(self.request, 'Time entry created successfully.')
+        return super().form_valid(form)
+
+
+class TimeEntryUpdateView(LoginRequiredMixin, TeamAwareQuerysetMixin, UpdateView):
+    """Edit a time entry (only unbilled entries)."""
+    model = TimeEntry
+    form_class = TimeEntryForm
+    template_name = 'time_tracking/edit.html'
+    success_url = reverse_lazy('invoices:time_list')
+
+    def get_queryset(self):
+        return self.get_team_aware_queryset(TimeEntry).filter(status='unbilled')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['company'] = self.get_company()
+        return kwargs
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Time entry updated successfully.')
+        return super().form_valid(form)
+
+
+class TimeEntryDeleteView(LoginRequiredMixin, TeamAwareQuerysetMixin, DeleteView):
+    """Delete a time entry (only unbilled entries)."""
+    model = TimeEntry
+    template_name = 'time_tracking/delete_confirm.html'
+    success_url = reverse_lazy('invoices:time_list')
+
+    def get_queryset(self):
+        return self.get_team_aware_queryset(TimeEntry).filter(status='unbilled')
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, 'Time entry deleted.')
+        return super().delete(request, *args, **kwargs)
+
+
+class BillTimeView(LoginRequiredMixin, TeamAwareQuerysetMixin, TemplateView):
+    """View to select and bill time entries."""
+    template_name = 'time_tracking/bill_time.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        company = self.get_company()
+
+        if not company:
+            context['entries'] = []
+            return context
+
+        # Get all unbilled, billable entries
+        entries = TimeEntry.objects.filter(
+            company=company,
+            status='unbilled',
+            billable=True
+        ).select_related('user').order_by('client_email', '-date')
+
+        context['entries'] = entries
+
+        # Group entries by client for display
+        from collections import defaultdict
+        grouped = defaultdict(list)
+        for entry in entries:
+            key = entry.client_email or 'No Client'
+            grouped[key].append(entry)
+        context['grouped_entries'] = dict(grouped)
+
+        # Get templates for invoice creation
+        context['templates'] = settings.INVOICE_TEMPLATES
+        available_templates = self.request.user.get_available_templates()
+        context['available_templates'] = [
+            (key, value['name'])
+            for key, value in settings.INVOICE_TEMPLATES.items()
+            if key in available_templates
+        ]
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        """Handle billing selected time entries."""
+        company = self.get_company()
+        if not company:
+            messages.error(request, 'You need to create a company first.')
+            return redirect('companies:create')
+
+        # Get selected entry IDs
+        entry_ids = request.POST.getlist('entries')
+        if not entry_ids:
+            messages.error(request, 'Please select at least one time entry to bill.')
+            return redirect('invoices:bill_time')
+
+        # Get billing options
+        grouping = request.POST.get('grouping', 'detailed')
+        template_style = request.POST.get('template_style', 'clean_slate')
+
+        # Get selected entries
+        entries = TimeEntry.objects.filter(
+            id__in=entry_ids,
+            company=company,
+            status='unbilled',
+            billable=True
+        )
+
+        if not entries.exists():
+            messages.error(request, 'No valid entries selected.')
+            return redirect('invoices:bill_time')
+
+        # Check if user can create invoice
+        if not request.user.can_create_invoice():
+            messages.error(request, 'You have reached your invoice limit. Please upgrade your plan.')
+            return redirect('billing:plans')
+
+        # Use the time billing service
+        from .services.time_billing import create_invoice_from_time_entries
+
+        invoice = create_invoice_from_time_entries(
+            entries=entries,
+            company=company,
+            user=request.user,
+            grouping=grouping,
+            template_style=template_style
+        )
+
+        if invoice:
+            # Increment invoice count
+            request.user.increment_invoice_count()
+            messages.success(
+                request,
+                f'Invoice {invoice.invoice_number} created from {entries.count()} time entries.'
+            )
+            return redirect('invoices:detail', pk=invoice.pk)
+        else:
+            messages.error(request, 'Failed to create invoice from time entries.')
+            return redirect('invoices:bill_time')
+
+
+# Timer AJAX Views
+@login_required
+def timer_start(request):
+    """Start a new timer."""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'POST required'}, status=405)
+
+    # Check if user can start a timer
+    if not request.user.can_start_timer():
+        max_timers = request.user.get_max_active_timers()
+        return JsonResponse({
+            'success': False,
+            'error': f'You can only have {max_timers} active timer{"s" if max_timers != 1 else ""}. '
+                     'Stop a timer before starting a new one.'
+        }, status=400)
+
+    company = request.user.get_company()
+    if not company:
+        return JsonResponse({
+            'success': False,
+            'error': 'You need to create a company first.'
+        }, status=400)
+
+    import json
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        data = request.POST
+
+    description = data.get('description', '').strip()
+    client_email = data.get('client_email', '').strip()
+    client_name = data.get('client_name', '').strip()
+
+    # Get default hourly rate
+    try:
+        settings_obj = company.time_tracking_settings
+        hourly_rate = settings_obj.default_hourly_rate
+    except TimeTrackingSettings.DoesNotExist:
+        from decimal import Decimal
+        hourly_rate = Decimal('100.00')
+
+    # Create the timer
+    timer = ActiveTimer.objects.create(
+        company=company,
+        user=request.user,
+        description=description,
+        client_email=client_email,
+        client_name=client_name,
+        hourly_rate=hourly_rate
+    )
+
+    return JsonResponse({
+        'success': True,
+        'timer': {
+            'id': timer.id,
+            'description': timer.description,
+            'started_at': timer.started_at.isoformat(),
+            'elapsed_seconds': timer.elapsed_seconds,
+            'hourly_rate': str(timer.hourly_rate),
+        }
+    })
+
+
+@login_required
+def timer_stop(request, timer_id):
+    """Stop a timer and create a time entry."""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'POST required'}, status=405)
+
+    timer = get_object_or_404(ActiveTimer, id=timer_id, user=request.user)
+
+    import json
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        data = request.POST
+
+    # Allow updating description before stopping
+    description = data.get('description', '').strip()
+    if description:
+        timer.description = description
+        timer.save(update_fields=['description'])
+
+    # Stop the timer and create entry
+    entry = timer.stop()
+
+    return JsonResponse({
+        'success': True,
+        'entry': {
+            'id': entry.id,
+            'description': entry.description,
+            'duration': entry.duration,
+            'duration_display': entry.duration_display,
+            'billable_amount': str(entry.billable_amount),
+        }
+    })
+
+
+@login_required
+def timer_discard(request, timer_id):
+    """Discard a timer without saving."""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'POST required'}, status=405)
+
+    timer = get_object_or_404(ActiveTimer, id=timer_id, user=request.user)
+    timer.discard()
+
+    return JsonResponse({'success': True})
+
+
+@login_required
+def timer_status(request):
+    """Get status of all active timers for the user."""
+    timers = request.user.active_timers.all()
+
+    timer_data = [{
+        'id': t.id,
+        'description': t.description,
+        'client_name': t.client_name,
+        'started_at': t.started_at.isoformat(),
+        'elapsed_seconds': t.elapsed_seconds,
+        'elapsed_display': t.elapsed_display,
+        'hourly_rate': str(t.hourly_rate),
+        'estimated_amount': str(t.estimated_amount),
+    } for t in timers]
+
+    return JsonResponse({
+        'success': True,
+        'timers': timer_data,
+        'can_start_new': request.user.can_start_timer(),
+        'max_timers': request.user.get_max_active_timers(),
     })

@@ -21,7 +21,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         user = self.request.user
 
         # Get user's invoices
-        from apps.invoices.models import Invoice
+        from apps.invoices.models import Invoice, ActiveTimer, TimeEntry
         recent_invoices = Invoice.objects.filter(
             company__user=user
         ).order_by('-created_at')[:5]
@@ -41,6 +41,30 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Get AI generation info
         ai_limit = user.get_ai_generation_limit()
         ai_remaining = user.get_ai_generations_remaining()
+
+        # Get time tracking data
+        company = user.get_company()
+        active_timers = []
+        recent_time_entries = []
+        unbilled_hours = 0
+        unbilled_value = 0
+
+        if company:
+            active_timers = ActiveTimer.objects.filter(company=company).order_by('-started_at')
+            recent_time_entries = TimeEntry.objects.filter(
+                company=company
+            ).order_by('-date', '-created_at')[:5]
+
+            # Calculate unbilled totals
+            unbilled_entries = TimeEntry.objects.filter(
+                company=company,
+                status='unbilled',
+                billable=True
+            )
+            from decimal import Decimal
+            for entry in unbilled_entries:
+                unbilled_hours += entry.duration_hours
+                unbilled_value += entry.billable_amount
 
         context.update({
             'recent_invoices': recent_invoices,
@@ -62,6 +86,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 'used': user.ai_generations_used,
                 'unlimited': ai_limit is None,
             },
+            # Time tracking info
+            'active_timers': active_timers,
+            'recent_time_entries': recent_time_entries,
+            'unbilled_hours': unbilled_hours,
+            'unbilled_value': unbilled_value,
         })
         return context
 

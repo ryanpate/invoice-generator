@@ -144,6 +144,21 @@
   - Purple gradient UI with sparkle icon and "Beta" badge
   - Dashboard card showing usage (X/Y remaining or "Unlimited")
   - Featured in "What's New" modal for user discovery
+- **Time Tracking:**
+  - Real-time timer with live HH:MM:SS display
+  - Dashboard timer widget to start/stop/discard timers
+  - Timer persists across page navigation
+  - Manual time entry (hours/minutes input)
+  - Time entry list with search, status, and date filters
+  - Client association for each time entry
+  - Tier-based limits: Free/Starter (1 active timer), Professional (5 timers), Business (unlimited)
+  - "Bill Time" workflow to convert entries into invoices
+  - Two grouping modes: detailed (one line per entry) or summary (grouped by description)
+  - Unbilled hours summary with total value display
+  - Time entry status tracking: unbilled → invoiced → paid
+  - Settings for default hourly rate and rounding increment
+  - Full dark mode support
+  - Time tracking navigation link and dashboard integration
 
 ### Suppressed/Disabled Features
 
@@ -490,6 +505,11 @@ invoice_generator/
 | `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
 | `apps/invoices/services/client_analytics.py` | Client payment history analytics (A-F rating, average days) |
 | `apps/invoices/services/ai_generator.py` | AI Invoice Generator using Claude API |
+| `apps/invoices/services/time_billing.py` | Time tracking billing service (convert entries to invoices) |
+| `templates/time_tracking/list.html` | Time entry list with active timers and filters |
+| `templates/time_tracking/create.html` | Manual time entry form |
+| `templates/time_tracking/edit.html` | Edit time entry form |
+| `templates/time_tracking/bill_time.html` | Select entries and create invoice |
 | `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
 | `apps/billing/models.py` | CreditPurchase, TemplatePurchase models for one-time purchases |
 | `apps/billing/views.py` | Stripe checkout for subscriptions, credits, and template purchases |
@@ -648,6 +668,19 @@ invoice_generator/
 | `/invoices/recurring/<pk>/toggle-status/` | Pause/Resume recurring |
 | `/invoices/recurring/<pk>/generate-now/` | Manual invoice generation |
 | `/invoices/<pk>/make-recurring/` | Convert invoice to recurring template |
+
+### Time Tracking URLs
+| URL | Purpose |
+|-----|---------|
+| `/invoices/time/` | Time entry list with filters |
+| `/invoices/time/create/` | Add manual time entry |
+| `/invoices/time/<pk>/edit/` | Edit time entry |
+| `/invoices/time/<pk>/delete/` | Delete time entry confirmation |
+| `/invoices/time/bill/` | Bill time - select entries and create invoice |
+| `/invoices/timer/start/` | AJAX: Start new timer |
+| `/invoices/timer/<id>/stop/` | AJAX: Stop timer and save entry |
+| `/invoices/timer/<id>/discard/` | AJAX: Discard timer |
+| `/invoices/timer/status/` | AJAX: Get active timer status |
 
 ### Payment Reminder URLs
 | URL | Purpose |
@@ -1010,6 +1043,21 @@ Authentication: API Key in header `X-API-Key: <key>`
 226. Added AI Invoice Generator to "What's New" modal as featured item with BETA badge
 227. Updated What's New modal version to show again for existing users
 228. Verified AI Invoice Generator working on production (tested hourly and fixed-price descriptions)
+229. Implemented Time Tracking feature with real-time timer, manual entry, and bill-to-invoice workflow
+230. Created TimeEntry, ActiveTimer, TimeTrackingSettings models in `apps/invoices/models.py`
+231. Added time tracking tier configuration (Free/Starter: 1 timer, Pro: 5, Business: unlimited)
+232. Added `has_time_tracking()`, `can_start_timer()`, `get_max_active_timers()` methods to CustomUser
+233. Created TimeEntryForm with hours/minutes input conversion to duration seconds
+234. Added time tracking views: TimeEntryListView, TimeEntryCreateView, TimeEntryUpdateView, TimeEntryDeleteView, BillTimeView
+235. Added timer AJAX endpoints: timer_start, timer_stop, timer_discard, timer_status
+236. Created time tracking templates: list.html, create.html, edit.html, delete_confirm.html, bill_time.html
+237. Created `time_billing.py` service for converting time entries to invoices (detailed/summary modes)
+238. Added dashboard timer widget with real-time counter, start/stop/discard controls
+239. Timer displays live HH:MM:SS elapsed time and estimated billable amount
+240. Added "Time" navigation link in main header navigation
+241. Registered TimeEntry, ActiveTimer, TimeTrackingSettings in Django admin
+242. Time entries track status: unbilled → invoiced → paid (with invoice FK)
+243. Bill Time workflow shows entries grouped by client with grouping options
 
 ---
 

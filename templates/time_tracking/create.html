@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Time Entry - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-6">
+        <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <li><a href="{% url 'invoices:time_list' %}" class="hover:text-primary-600 dark:hover:text-primary-400">Time Tracking</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-gray-900 dark:text-white">Add Entry</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Add Time Entry</h1>
+        <p class="text-gray-600 dark:text-gray-400">Manually log billable hours</p>
+    </div>
+
+    <!-- Form -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Description -->
+            <div>
+                <label for="id_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Description <span class="text-red-500">*</span>
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ form.description.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Client Info -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="id_client_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Client Name
+                    </label>
+                    {{ form.client_name }}
+                </div>
+                <div>
+                    <label for="id_client_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Client Email
+                    </label>
+                    {{ form.client_email }}
+                </div>
+            </div>
+
+            <!-- Date and Duration -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label for="id_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Date <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.date }}
+                </div>
+                <div>
+                    <label for="id_hours" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Hours <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex items-center gap-2">
+                        {{ form.hours }}
+                        <span class="text-gray-500 dark:text-gray-400">h</span>
+                    </div>
+                </div>
+                <div>
+                    <label for="id_minutes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Minutes
+                    </label>
+                    <div class="flex items-center gap-2">
+                        {{ form.minutes }}
+                        <span class="text-gray-500 dark:text-gray-400">m</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rate and Billable -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="id_hourly_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Hourly Rate <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">$</span>
+                        <input type="number" name="hourly_rate" id="id_hourly_rate" step="0.01" min="0"
+                            value="{{ form.hourly_rate.value|default:'100.00' }}"
+                            class="form-input pl-8 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                </div>
+                <div class="flex items-center pt-6">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        {{ form.billable }}
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Billable</span>
+                    </label>
+                </div>
+            </div>
+
+            {% if form.non_field_errors %}
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                {% for error in form.non_field_errors %}
+                <p class="text-red-600 dark:text-red-400">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="flex justify-end gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <a href="{% url 'invoices:time_list' %}" class="btn-secondary">Cancel</a>
+                <button type="submit" class="btn-primary">Save Time Entry</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

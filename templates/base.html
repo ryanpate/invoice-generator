@@ -186,6 +186,7 @@
                     {% if user.is_authenticated %}
                         <a href="{% url 'accounts:dashboard' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Dashboard" %}</a>
                         <a href="{% url 'invoices:list' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Invoices" %}</a>
+                        <a href="{% url 'invoices:time_list' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Time" %}</a>
                         <a href="{% url 'billing:overview' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Billing" %}</a>
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">

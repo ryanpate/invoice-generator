@@ -6,7 +6,7 @@ from django.conf import settings
 from django.forms import inlineformset_factory
 from decimal import Decimal
 
-from .models import Invoice, LineItem, RecurringInvoice, RecurringLineItem
+from .models import Invoice, LineItem, RecurringInvoice, RecurringLineItem, TimeEntry
 
 
 class InvoiceForm(forms.ModelForm):
@@ -369,3 +369,106 @@ RecurringLineItemFormSet = inlineformset_factory(
     min_num=1,
     validate_min=True,
 )
+
+
+class TimeEntryForm(forms.ModelForm):
+    """Form for creating/editing time entries."""
+
+    # Use hours and minutes inputs that convert to duration in seconds
+    hours = forms.IntegerField(
+        min_value=0,
+        max_value=999,
+        required=False,
+        initial=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-input w-20',
+            'placeholder': '0',
+            'min': '0',
+        })
+    )
+    minutes = forms.IntegerField(
+        min_value=0,
+        max_value=59,
+        required=False,
+        initial=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-input w-20',
+            'placeholder': '0',
+            'min': '0',
+            'max': '59',
+        })
+    )
+
+    class Meta:
+        model = TimeEntry
+        fields = [
+            'description', 'client_name', 'client_email',
+            'date', 'hourly_rate', 'billable'
+        ]
+        widgets = {
+            'description': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'What did you work on?'
+            }),
+            'client_name': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Client name (optional)'
+            }),
+            'client_email': forms.EmailInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'client@example.com (optional)'
+            }),
+            'date': forms.DateInput(attrs={
+                'class': 'form-input',
+                'type': 'date'
+            }),
+            'hourly_rate': forms.NumberInput(attrs={
+                'class': 'form-input',
+                'step': '0.01',
+                'min': '0',
+                'placeholder': '100.00'
+            }),
+            'billable': forms.CheckboxInput(attrs={
+                'class': 'form-checkbox'
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.company = kwargs.pop('company', None)
+        super().__init__(*args, **kwargs)
+
+        # Set default hourly rate from company settings
+        if self.company and not self.instance.pk:
+            try:
+                settings_obj = self.company.time_tracking_settings
+                self.initial['hourly_rate'] = settings_obj.default_hourly_rate
+            except Exception:
+                self.initial['hourly_rate'] = Decimal('100.00')
+
+        # If editing, populate hours/minutes from duration
+        if self.instance.pk and self.instance.duration:
+            hours, remainder = divmod(self.instance.duration, 3600)
+            minutes = remainder // 60
+            self.initial['hours'] = hours
+            self.initial['minutes'] = minutes
+
+    def clean(self):
+        cleaned_data = super().clean()
+        hours = cleaned_data.get('hours', 0) or 0
+        minutes = cleaned_data.get('minutes', 0) or 0
+
+        # Calculate duration in seconds
+        duration = (hours * 3600) + (minutes * 60)
+
+        if duration == 0:
+            raise forms.ValidationError('Duration must be greater than 0.')
+
+        cleaned_data['duration'] = duration
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.duration = self.cleaned_data.get('duration', 0)
+        if commit:
+            instance.save()
+        return instance

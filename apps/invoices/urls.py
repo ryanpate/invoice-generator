@@ -52,4 +52,17 @@ urlpatterns = [
     path('invoice/<uuid:token>/', views.PublicInvoiceView.as_view(), name='public_invoice'),
     path('invoice/<uuid:token>/mark-paid/', views.PublicInvoiceMarkPaidView.as_view(), name='public_mark_paid'),
     path('invoice/<uuid:token>/pdf/', views.public_invoice_pdf, name='public_invoice_pdf'),
+
+    # Time Tracking
+    path('time/', views.TimeEntryListView.as_view(), name='time_list'),
+    path('time/create/', views.TimeEntryCreateView.as_view(), name='time_create'),
+    path('time/<int:pk>/edit/', views.TimeEntryUpdateView.as_view(), name='time_edit'),
+    path('time/<int:pk>/delete/', views.TimeEntryDeleteView.as_view(), name='time_delete'),
+    path('time/bill/', views.BillTimeView.as_view(), name='bill_time'),
+
+    # Timer AJAX endpoints
+    path('timer/start/', views.timer_start, name='timer_start'),
+    path('timer/<int:timer_id>/stop/', views.timer_stop, name='timer_stop'),
+    path('timer/<int:timer_id>/discard/', views.timer_discard, name='timer_discard'),
+    path('timer/status/', views.timer_status, name='timer_status'),
 ]

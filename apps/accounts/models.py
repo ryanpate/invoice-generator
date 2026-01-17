@@ -433,3 +433,42 @@ class CustomUser(AbstractUser):
         self.check_ai_usage_reset()
         self.ai_generations_used += 1
         self.save(update_fields=['ai_generations_used'])
+
+    # Time tracking methods
+    def has_time_tracking(self):
+        """Check if user has time tracking feature (all tiers have it)."""
+        from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        return tier_config.get('time_tracking', True)  # Default True for all tiers
+
+    def get_max_active_timers(self):
+        """Get the maximum number of active timers allowed for this tier.
+
+        Returns:
+            int: Max timers allowed (-1 means unlimited)
+        """
+        from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        return tier_config.get('max_active_timers', 1)
+
+    def can_start_timer(self):
+        """Check if user can start a new timer based on tier limits."""
+        max_timers = self.get_max_active_timers()
+        if max_timers == -1:  # Unlimited
+            return True
+
+        # Count current active timers
+        current_count = self.active_timers.count()
+        return current_count < max_timers
+
+    def has_time_reports(self):
+        """Check if user has access to time tracking reports (Pro+ only)."""
+        from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        return tier_config.get('time_tracking_reports', False)
+
+    def has_team_time_tracking(self):
+        """Check if user has access to team time tracking (Business only)."""
+        from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        return tier_config.get('team_time_tracking', False)

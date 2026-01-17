@@ -253,6 +253,10 @@ SUBSCRIPTION_TIERS = {
         'recurring_invoices': False,
         'max_recurring': 0,
         'team_seats': 0,
+        'time_tracking': True,
+        'max_active_timers': 1,
+        'time_tracking_reports': False,
+        'team_time_tracking': False,
     },
     'starter': {
         'name': 'Starter',
@@ -266,6 +270,10 @@ SUBSCRIPTION_TIERS = {
         'recurring_invoices': False,
         'max_recurring': 0,
         'team_seats': 0,
+        'time_tracking': True,
+        'max_active_timers': 1,
+        'time_tracking_reports': False,
+        'team_time_tracking': False,
     },
     'professional': {
         'name': 'Professional',
@@ -279,6 +287,10 @@ SUBSCRIPTION_TIERS = {
         'recurring_invoices': True,
         'max_recurring': 10,
         'team_seats': 0,
+        'time_tracking': True,
+        'max_active_timers': 5,
+        'time_tracking_reports': True,
+        'team_time_tracking': False,
     },
     'business': {
         'name': 'Business',
@@ -292,6 +304,10 @@ SUBSCRIPTION_TIERS = {
         'recurring_invoices': True,
         'max_recurring': -1,  # Unlimited
         'team_seats': 3,  # Business tier includes 3 team seats
+        'time_tracking': True,
+        'max_active_timers': -1,  # Unlimited
+        'time_tracking_reports': True,
+        'team_time_tracking': True,
     },
 }
 

@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}Bill Time - InvoiceKits{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-6">
+        <ol class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+            <li><a href="{% url 'invoices:time_list' %}" class="hover:text-primary-600 dark:hover:text-primary-400">Time Tracking</a></li>
+            <li><span class="mx-2">/</span></li>
+            <li class="text-gray-900 dark:text-white">Bill Time</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Bill Time Entries</h1>
+        <p class="text-gray-600 dark:text-gray-400">Select time entries to convert into an invoice</p>
+    </div>
+
+    {% if entries %}
+    <form method="post" id="bill-time-form">
+        {% csrf_token %}
+
+        <!-- Options -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 mb-6 transition-colors duration-200">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invoice Options</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Line Item Grouping
+                    </label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="grouping" value="detailed" checked class="form-radio">
+                            <span class="text-gray-700 dark:text-gray-300">Detailed</span>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm">(one line per entry)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="grouping" value="summary" class="form-radio">
+                            <span class="text-gray-700 dark:text-gray-300">Summary</span>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm">(grouped by description)</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label for="template_style" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Invoice Template
+                    </label>
+                    <select name="template_style" id="template_style" class="form-select dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        {% for key, name in available_templates %}
+                        <option value="{{ key }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Entries by Client -->
+        {% for client, client_entries in grouped_entries.items %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden mb-6 transition-colors duration-200">
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white">{{ client }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ client_entries|length }} entries</p>
+                </div>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" class="form-checkbox select-all-client" data-client="{{ client }}">
+                    <span class="text-sm text-gray-600 dark:text-gray-300">Select All</span>
+                </label>
+            </div>
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700/30">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-10"></th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Description</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Duration</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rate</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for entry in client_entries %}
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td class="px-6 py-4">
+                            <input type="checkbox" name="entries" value="{{ entry.id }}" class="form-checkbox entry-checkbox" data-client="{{ client }}" data-amount="{{ entry.billable_amount }}">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-white">
+                            {{ entry.date|date:"M d" }}
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white">
+                            {{ entry.description }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-mono text-gray-900 dark:text-white">
+                            {{ entry.duration_display }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-600 dark:text-gray-300">
+                            ${{ entry.hourly_rate|floatformat:2 }}/hr
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            ${{ entry.billable_amount|floatformat:2 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+
+        <!-- Summary & Submit -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200 sticky bottom-4">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="text-center sm:text-left">
+                    <p class="text-gray-500 dark:text-gray-400">Selected:</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                        <span id="selected-count">0</span> entries
+                        <span class="text-primary-600 dark:text-primary-400">$<span id="selected-total">0.00</span></span>
+                    </p>
+                </div>
+                <div class="flex gap-4">
+                    <a href="{% url 'invoices:time_list' %}" class="btn-secondary">Cancel</a>
+                    <button type="submit" class="btn-primary" id="create-invoice-btn" disabled>
+                        Create Invoice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {% else %}
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-12 text-center transition-colors duration-200">
+        <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">No unbilled time entries</h3>
+        <p class="mt-2 text-gray-500 dark:text-gray-400">Start tracking time to bill your clients.</p>
+        <div class="mt-6">
+            <a href="{% url 'invoices:time_list' %}" class="btn-primary">Go to Time Tracking</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('bill-time-form');
+    if (!form) return;
+
+    const checkboxes = document.querySelectorAll('.entry-checkbox');
+    const selectAllBtns = document.querySelectorAll('.select-all-client');
+    const selectedCount = document.getElementById('selected-count');
+    const selectedTotal = document.getElementById('selected-total');
+    const submitBtn = document.getElementById('create-invoice-btn');
+
+    function updateTotals() {
+        let count = 0;
+        let total = 0;
+
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                count++;
+                total += parseFloat(cb.dataset.amount) || 0;
+            }
+        });
+
+        selectedCount.textContent = count;
+        selectedTotal.textContent = total.toFixed(2);
+        submitBtn.disabled = count === 0;
+    }
+
+    // Entry checkbox change
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', updateTotals);
+    });
+
+    // Select all for client
+    selectAllBtns.forEach(btn => {
+        btn.addEventListener('change', function() {
+            const client = this.dataset.client;
+            const clientCheckboxes = document.querySelectorAll(`.entry-checkbox[data-client="${client}"]`);
+            clientCheckboxes.forEach(cb => {
+                cb.checked = this.checked;
+            });
+            updateTotals();
+        });
+    });
+});
+</script>
+{% endblock %}

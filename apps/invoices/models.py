@@ -770,3 +770,258 @@ class LateFeeLog(models.Model):
 
     def __str__(self):
         return f"Late fee ${self.fee_amount} on {self.invoice.invoice_number}"
+
+
+class TimeTrackingSettings(models.Model):
+    """Company-level settings for time tracking."""
+
+    ROUNDING_CHOICES = [
+        (1, '1 minute'),
+        (5, '5 minutes'),
+        (6, '6 minutes (0.1 hour)'),
+        (15, '15 minutes'),
+        (30, '30 minutes'),
+    ]
+
+    company = models.OneToOneField(
+        'companies.Company',
+        on_delete=models.CASCADE,
+        related_name='time_tracking_settings'
+    )
+
+    default_hourly_rate = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal('100.00'),
+        help_text='Default hourly rate for new time entries'
+    )
+
+    rounding_increment = models.PositiveIntegerField(
+        choices=ROUNDING_CHOICES,
+        default=1,
+        help_text='Round time entries to nearest increment'
+    )
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Time Tracking Settings'
+        verbose_name_plural = 'Time Tracking Settings'
+
+    def __str__(self):
+        return f"Time settings for {self.company.name}"
+
+
+class TimeEntry(models.Model):
+    """A time entry for billable work."""
+
+    STATUS_CHOICES = [
+        ('unbilled', 'Unbilled'),
+        ('invoiced', 'Invoiced'),
+        ('paid', 'Paid'),
+    ]
+
+    company = models.ForeignKey(
+        'companies.Company',
+        on_delete=models.CASCADE,
+        related_name='time_entries'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='time_entries'
+    )
+
+    # Description of work performed
+    description = models.CharField(max_length=500)
+
+    # Optional client email for grouping/filtering
+    client_email = models.EmailField(
+        blank=True,
+        help_text='Client email for grouping time entries'
+    )
+
+    # Optional client name for display
+    client_name = models.CharField(max_length=255, blank=True)
+
+    # Date of the work
+    date = models.DateField(default=timezone.now)
+
+    # Duration in seconds
+    duration = models.PositiveIntegerField(
+        default=0,
+        help_text='Duration in seconds'
+    )
+
+    # Billing details
+    hourly_rate = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text='Hourly rate for this entry'
+    )
+    billable = models.BooleanField(
+        default=True,
+        help_text='Whether this time is billable'
+    )
+
+    # Status tracking
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='unbilled'
+    )
+
+    # Link to invoice when billed
+    invoice = models.ForeignKey(
+        Invoice,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='time_entries'
+    )
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Time Entry'
+        verbose_name_plural = 'Time Entries'
+        ordering = ['-date', '-created_at']
+        indexes = [
+            models.Index(fields=['company', 'status']),
+            models.Index(fields=['company', 'date']),
+            models.Index(fields=['user', 'date']),
+            models.Index(fields=['client_email']),
+        ]
+
+    def __str__(self):
+        return f"{self.description[:50]} ({self.duration_display})"
+
+    @property
+    def duration_display(self):
+        """Return duration as HH:MM:SS string."""
+        hours, remainder = divmod(self.duration, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+    @property
+    def duration_hours(self):
+        """Return duration as decimal hours."""
+        return Decimal(str(self.duration)) / Decimal('3600')
+
+    @property
+    def billable_amount(self):
+        """Calculate billable amount based on duration and hourly rate."""
+        if not self.billable:
+            return Decimal('0.00')
+        hours = self.duration_hours
+        return (hours * self.hourly_rate).quantize(Decimal('0.01'))
+
+    def can_edit(self):
+        """Check if entry can be edited (only unbilled entries)."""
+        return self.status == 'unbilled'
+
+    def mark_invoiced(self, invoice):
+        """Mark this entry as invoiced."""
+        self.status = 'invoiced'
+        self.invoice = invoice
+        self.save(update_fields=['status', 'invoice', 'updated_at'])
+
+    def mark_paid(self):
+        """Mark this entry as paid (when linked invoice is paid)."""
+        self.status = 'paid'
+        self.save(update_fields=['status', 'updated_at'])
+
+
+class ActiveTimer(models.Model):
+    """A running timer that hasn't been stopped yet."""
+
+    company = models.ForeignKey(
+        'companies.Company',
+        on_delete=models.CASCADE,
+        related_name='active_timers'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='active_timers'
+    )
+
+    # What the user is working on
+    description = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text='What are you working on?'
+    )
+
+    # Optional client for the timer
+    client_email = models.EmailField(blank=True)
+    client_name = models.CharField(max_length=255, blank=True)
+
+    # Hourly rate for this timer session
+    hourly_rate = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        help_text='Hourly rate for this timer session'
+    )
+
+    # When the timer was started
+    started_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Active Timer'
+        verbose_name_plural = 'Active Timers'
+        ordering = ['-started_at']
+
+    def __str__(self):
+        elapsed = self.elapsed_display
+        desc = self.description[:30] if self.description else 'Timer'
+        return f"{desc} ({elapsed})"
+
+    @property
+    def elapsed_seconds(self):
+        """Get elapsed time in seconds."""
+        now = timezone.now()
+        delta = now - self.started_at
+        return int(delta.total_seconds())
+
+    @property
+    def elapsed_display(self):
+        """Return elapsed time as HH:MM:SS string."""
+        seconds = self.elapsed_seconds
+        hours, remainder = divmod(seconds, 3600)
+        minutes, secs = divmod(remainder, 60)
+        return f"{hours:02d}:{minutes:02d}:{secs:02d}"
+
+    @property
+    def estimated_amount(self):
+        """Calculate estimated billable amount so far."""
+        hours = Decimal(str(self.elapsed_seconds)) / Decimal('3600')
+        return (hours * self.hourly_rate).quantize(Decimal('0.01'))
+
+    def stop(self):
+        """Stop the timer and create a TimeEntry.
+
+        Returns the created TimeEntry.
+        """
+        entry = TimeEntry.objects.create(
+            company=self.company,
+            user=self.user,
+            description=self.description or 'Untitled time entry',
+            client_email=self.client_email,
+            client_name=self.client_name,
+            date=self.started_at.date(),
+            duration=self.elapsed_seconds,
+            hourly_rate=self.hourly_rate,
+            billable=True,
+            status='unbilled'
+        )
+        self.delete()
+        return entry
+
+    def discard(self):
+        """Discard the timer without saving."""
+        self.delete()
