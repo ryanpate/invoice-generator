@@ -124,6 +124,16 @@ class AIInvoiceGeneratorView(TemplateView):
         return context
 
 
+class TimeTrackingView(TemplateView):
+    """Landing page for Time Tracking feature."""
+    template_name = 'features/time-tracking.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+        return context
+
+
 # Template Showcase Views
 class TemplateShowcaseView(TemplateView):
     """Base view for template showcase pages."""

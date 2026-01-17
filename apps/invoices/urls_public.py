@@ -19,6 +19,7 @@ urlpatterns = [
 
     # Feature landing pages
     path('features/ai-invoice-generator/', views.AIInvoiceGeneratorView.as_view(), name='feature_ai_invoice_generator'),
+    path('features/time-tracking/', views.TimeTrackingView.as_view(), name='feature_time_tracking'),
 
     # Template showcase pages
     path('templates/clean-slate/', views.CleanSlateShowcaseView.as_view(), name='template_clean_slate'),

@@ -568,6 +568,7 @@ invoice_generator/
 | `templates/affiliates/dashboard.html` | Affiliate dashboard with stats and referral links |
 | `templates/affiliates/program.html` | Public affiliate program landing page |
 | `templates/features/ai-invoice-generator.html` | AI Invoice Generator feature landing page |
+| `templates/features/time-tracking.html` | Time Tracking feature landing page |
 
 ---
 
@@ -635,6 +636,7 @@ invoice_generator/
 | `/tools/invoice-calculator/` | Free invoice calculator tool |
 | `/tools/late-fee-calculator/` | Free late fee calculator tool |
 | `/features/ai-invoice-generator/` | AI Invoice Generator feature page |
+| `/features/time-tracking/` | Time Tracking feature page |
 
 ### Team Management URLs (Business Tier Only)
 | URL | Purpose |
@@ -773,6 +775,7 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 | URL | Page Type | Status |
 |-----|-----------|--------|
 | `https://www.invoicekits.com/features/ai-invoice-generator/` | Feature Landing Page | Pending |
+| `https://www.invoicekits.com/features/time-tracking/` | Feature Landing Page | Pending |
 
 ### SEO TODOs
 - [x] Register with Google Search Console
@@ -1074,6 +1077,9 @@ Authentication: API Key in header `X-API-Key: <key>`
 248. Created AI Invoice Generator feature landing page at `/features/ai-invoice-generator/` with SEO optimization
 249. Added BreadcrumbList, HowTo, FAQPage, and SoftwareApplication JSON-LD schemas to AI feature page
 250. Added AI Invoice Generator to sitemap and robots.txt
+251. Created Time Tracking feature landing page at `/features/time-tracking/` with SEO optimization
+252. Added BreadcrumbList, HowTo, FAQPage, and SoftwareApplication JSON-LD schemas to Time Tracking page
+253. Added Time Tracking feature page to sitemap
 
 ---
 
