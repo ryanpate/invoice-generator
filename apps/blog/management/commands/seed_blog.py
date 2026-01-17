@@ -131,6 +131,10 @@ class Command(BaseCommand):
 <h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Step 4: Add Line Items</h3>
 <p class="mb-4">List each product or service separately. Be specific in your descriptions—instead of "Consulting," write "Marketing Strategy Consultation - Q1 Campaign Planning."</p>
 
+<div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 my-6">
+    <p class="text-purple-800 dark:text-purple-200 mb-2"><strong>Pro Tip:</strong> Struggling to write clear line item descriptions? Try our <a href="/features/ai-invoice-generator/" class="text-purple-600 dark:text-purple-400 hover:underline font-medium">AI Invoice Generator</a>—describe your work in plain English and let AI create professional line items for you.</p>
+</div>
+
 <h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Step 5: Set Payment Terms</h3>
 <p class="mb-4">Common payment terms include:</p>
 <ul class="list-disc pl-6 mb-4 space-y-2">
@@ -465,6 +469,11 @@ class Command(BaseCommand):
 
 <p class="mb-4">Stop wasting time on manual invoice creation. With InvoiceKits' <strong>batch invoice generator</strong>, you can process your entire client list in minutes, not hours.</p>
 
+<div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 my-6">
+    <h4 class="text-purple-800 dark:text-purple-200 font-semibold mb-2">Need to Create Individual Invoices Quickly?</h4>
+    <p class="text-purple-700 dark:text-purple-300">For one-off invoices, try our <a href="/features/ai-invoice-generator/" class="text-purple-600 dark:text-purple-400 hover:underline font-medium">AI Invoice Generator</a>. Describe your work in plain English and let AI create detailed line items automatically—perfect when you don't have a spreadsheet ready.</p>
+</div>
+
 <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
     <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
@@ -710,12 +719,12 @@ class Command(BaseCommand):
 
 <ul class="list-disc pl-6 mb-4 space-y-2">
     <li><strong>Invoice generators:</strong> Create professional invoices in minutes (like InvoiceKits)</li>
-    <li><strong>Time tracking apps:</strong> Automatically log billable hours</li>
+    <li><strong>Time tracking:</strong> Automatically log billable hours and convert them to invoices with one click using <a href="/features/time-tracking/" class="text-primary-600 dark:text-primary-400 hover:underline">built-in time tracking</a></li>
     <li><strong>Accounting software:</strong> Track expenses, revenue, and taxes</li>
     <li><strong>Payment processors:</strong> Accept credit cards and bank transfers</li>
 </ul>
 
-<p class="mb-4">The right tools pay for themselves in time saved and faster payments.</p>
+<p class="mb-4">The right tools pay for themselves in time saved and faster payments. With InvoiceKits, you get invoice generation and time tracking in one platform—no need to juggle multiple apps.</p>
 
 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Start Getting Paid Faster Today</h2>
 
