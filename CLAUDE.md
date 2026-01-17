@@ -788,6 +788,36 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 - [ ] Build quality backlinks (Product Hunt, directories)
 - [ ] Monitor Core Web Vitals via PageSpeed Insights
 
+### SEO - Feature Pages Enhancement (January 2026)
+
+**Completed:**
+- [x] **Homepage Meta Description:** Updated to include AI and Time Tracking keywords
+- [x] **Homepage Meta Keywords:** Added high-value terms (ai invoice generator, time tracking invoice software, etc.)
+- [x] **Feature Page Cross-Links:** Added Related Features sections between AI Invoice Generator and Time Tracking pages
+- [x] **Feature Landing Pages:** Created `/features/ai-invoice-generator/` and `/features/time-tracking/` with full SEO
+
+**High Priority - Pending:**
+- [ ] **Blog Internal Links:** Add links from existing blog posts to new feature pages
+  - `/blog/how-to-create-professional-invoice/` → link to AI Invoice Generator
+  - `/blog/freelancer-invoice-tips-get-paid-faster/` → link to Time Tracking
+  - `/blog/batch-invoice-generator-guide/` → link to AI Invoice Generator
+- [ ] **Create OG Images:** Custom 1200x630 images for feature pages (currently using default)
+- [ ] **Optimize Meta Descriptions:** Add power words (instantly, effortlessly, automatically) to CTR
+
+**Content - New Blog Posts:**
+- [ ] **Blog Post 6:** "AI Invoice Generator: How to Create Invoices with Natural Language" (target: "ai invoice generator" 1,900/mo)
+- [ ] **Blog Post 7:** "Time Tracking for Freelancers: Bill Every Hour You Work" (target: "time tracking invoice software" 1,600/mo)
+- [ ] **Blog Post 8:** "AI-Powered Billing: The Future of Invoice Automation" (target: "ai billing software" 880/mo)
+
+**New Target Keywords (High Opportunity):**
+| Keyword | Volume | Competition | Feature Page |
+|---------|--------|-------------|--------------|
+| "ai invoice generator" | 1,900/mo | Low | `/features/ai-invoice-generator/` |
+| "time tracking invoice software" | 1,600/mo | Low | `/features/time-tracking/` |
+| "ai billing software" | 880/mo | Low | `/features/ai-invoice-generator/` |
+| "invoice time tracker" | 720/mo | Low | `/features/time-tracking/` |
+| "automatic invoice generator" | 590/mo | Medium | `/features/ai-invoice-generator/` |
+
 ---
 
 ## Invoice Templates
@@ -1086,6 +1116,10 @@ Authentication: API Key in header `X-API-Key: <key>`
 257. Added AI Invoice Generator as first feature card in features grid with BETA badge and link to feature page
 258. Updated Time Tracking feature card with NEW badge, highlighted styling, and link to feature page
 259. Updated homepage title meta tag to "AI Invoice Generator with Time Tracking - Create Professional Invoices Free"
+260. Updated homepage meta description to include AI and Time Tracking keywords for improved CTR
+261. Added meta keywords block to homepage targeting high-value search terms
+262. Added cross-link section to AI Invoice Generator page linking to Time Tracking feature
+263. Added cross-link section to Time Tracking page linking to AI Invoice Generator feature
 
 ---
 
