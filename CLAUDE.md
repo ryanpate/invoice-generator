@@ -132,6 +132,16 @@
   - Feature callout cards for Payment Reminders, Late Fees, Recurring Invoices
   - Dismissible cards with localStorage persistence
   - Gradient-styled cards with NEW/PRO badges
+- **AI Invoice Generator (Beta):**
+  - Natural language to invoice line items conversion powered by Claude
+  - Collapsible "AI Generate" section on invoice create/edit pages
+  - Describe work in plain English (e.g., "Built React dashboard, 12 hours at $150/hr")
+  - AI generates structured line items with descriptions, quantities, and rates
+  - Preview generated items before adding to invoice
+  - "Add All to Invoice" button populates form with generated line items
+  - Tier-based usage limits: Free (3/month), Starter (10/month), Professional (unlimited), Business (unlimited)
+  - Monthly reset of usage counter
+  - Purple gradient UI with sparkle icon and "Beta" badge
 
 ### Suppressed/Disabled Features
 
@@ -383,6 +393,7 @@ Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 202
 - `GOOGLE_OAUTH_CLIENT_SECRET` - Google OAuth client secret (configured)
 - `GITHUB_OAUTH_CLIENT_ID` - GitHub OAuth client ID (configured)
 - `GITHUB_OAUTH_CLIENT_SECRET` - GitHub OAuth client secret (configured)
+- `ANTHROPIC_API_KEY` - Anthropic API key for AI Invoice Generator (configured)
 
 ### Stripe Credit Pack Products (Configured)
 ```bash
@@ -476,6 +487,7 @@ invoice_generator/
 | `templates/invoices/public_view.html` | Public invoice view page (for QR code links) |
 | `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
 | `apps/invoices/services/client_analytics.py` | Client payment history analytics (A-F rating, average days) |
+| `apps/invoices/services/ai_generator.py` | AI Invoice Generator using Claude API |
 | `apps/invoices/signals.py` | Payment receipt signal handler (post_save) |
 | `apps/billing/models.py` | CreditPurchase, TemplatePurchase models for one-time purchases |
 | `apps/billing/views.py` | Stripe checkout for subscriptions, credits, and template purchases |
@@ -977,6 +989,18 @@ Authentication: API Key in header `X-API-Key: <key>`
 207. Added feature discovery cards section on dashboard (Payment Reminders, Late Fees, Recurring)
 208. Cards are dismissible with localStorage persistence
 209. Gradient-styled feature cards with NEW/PRO badges for visual distinction
+210. Implemented AI Invoice Generator feature powered by Claude API
+211. Added `anthropic>=0.40.0` to requirements.txt
+212. Created migration `0007_add_ai_usage_tracking.py` for AI usage tracking fields
+213. Added `ai_generations_used` and `ai_generations_reset_date` fields to CustomUser model
+214. Added AI usage tracking methods: `can_use_ai_generator()`, `get_ai_generations_remaining()`, `increment_ai_generation()`
+215. Added `AI_GENERATION_LIMITS` configuration to settings (Free: 3, Starter: 10, Pro/Business: unlimited)
+216. Created `apps/invoices/services/ai_generator.py` with `AIInvoiceGenerator` class
+217. Added `ai_generate_line_items` AJAX view endpoint at `/invoices/ai-generate/`
+218. Added collapsible AI Generate section to invoice create template with purple gradient UI
+219. Added collapsible AI Generate section to invoice edit template
+220. AI section includes: textarea for work description, Generate button, preview area, Add All to Invoice button
+221. Shows remaining generations counter for tier-limited users
 
 ---
 

@@ -27,6 +27,9 @@ urlpatterns = [
     # Client analytics
     path('client-stats/', views.client_payment_stats, name='client_payment_stats'),
 
+    # AI Invoice Generator
+    path('ai-generate/', views.ai_generate_line_items, name='ai_generate_line_items'),
+
     # Batch processing
     path('batch/', views.BatchUploadView.as_view(), name='batch_upload'),
     path('batch/<int:pk>/', views.BatchResultView.as_view(), name='batch_result'),

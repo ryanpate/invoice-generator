@@ -420,3 +420,14 @@ PAYMENT_TERMS = [
     ('net_45', 'Net 45'),
     ('net_60', 'Net 60'),
 ]
+
+# AI Invoice Generator Configuration
+ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+
+# AI generation limits per subscription tier (None = unlimited)
+AI_GENERATION_LIMITS = {
+    'free': 3,
+    'starter': 10,
+    'professional': None,  # Unlimited
+    'business': None,  # Unlimited
+}

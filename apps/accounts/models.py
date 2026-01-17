@@ -56,6 +56,17 @@ class CustomUser(AbstractUser):
         help_text='List of premium template slugs unlocked by purchase'
     )
 
+    # AI Invoice Generator usage tracking
+    ai_generations_used = models.PositiveIntegerField(
+        default=0,
+        help_text='Number of AI invoice generations used this month'
+    )
+    ai_generations_reset_date = models.DateField(
+        null=True,
+        blank=True,
+        help_text='Date when AI generation count was last reset'
+    )
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -367,3 +378,58 @@ class CustomUser(AbstractUser):
         if not company:
             return False
         return company.get_effective_owner() == self
+
+    # AI Invoice Generator methods
+    def check_ai_usage_reset(self):
+        """Check if AI generation usage should be reset (new month)."""
+        today = timezone.now().date()
+        if self.ai_generations_reset_date is None:
+            # First time usage - set reset date
+            self.ai_generations_reset_date = today
+            self.ai_generations_used = 0
+            self.save(update_fields=['ai_generations_reset_date', 'ai_generations_used'])
+        elif (self.ai_generations_reset_date.month != today.month or
+              self.ai_generations_reset_date.year != today.year):
+            # New month - reset usage
+            self.ai_generations_reset_date = today
+            self.ai_generations_used = 0
+            self.save(update_fields=['ai_generations_reset_date', 'ai_generations_used'])
+
+    def get_ai_generation_limit(self):
+        """Get the AI generation limit for this user's tier.
+
+        Returns:
+            int or None: The limit (None means unlimited)
+        """
+        from django.conf import settings
+        limits = getattr(settings, 'AI_GENERATION_LIMITS', {})
+        return limits.get(self.subscription_tier, 3)  # Default to 3 for unknown tiers
+
+    def get_ai_generations_remaining(self):
+        """Get the number of AI generations remaining this month.
+
+        Returns:
+            int or None: Remaining count, or None if unlimited
+        """
+        self.check_ai_usage_reset()
+        limit = self.get_ai_generation_limit()
+        if limit is None:
+            return None  # Unlimited
+        return max(0, limit - self.ai_generations_used)
+
+    def can_use_ai_generator(self):
+        """Check if user can use the AI invoice generator.
+
+        Returns:
+            bool: True if user has remaining AI generations
+        """
+        remaining = self.get_ai_generations_remaining()
+        if remaining is None:
+            return True  # Unlimited
+        return remaining > 0
+
+    def increment_ai_generation(self):
+        """Increment the AI generation count for this month."""
+        self.check_ai_usage_reset()
+        self.ai_generations_used += 1
+        self.save(update_fields=['ai_generations_used'])

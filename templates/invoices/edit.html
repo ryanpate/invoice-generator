@@ -94,6 +94,75 @@
                     </div>
                 </div>
 
+                <!-- AI Invoice Generator -->
+                <div class="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl shadow-sm p-6 transition-colors duration-200 border border-purple-100 dark:border-purple-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <button type="button" id="ai-toggle" class="flex items-center gap-2 text-left">
+                                <svg id="ai-chevron" class="w-5 h-5 text-purple-600 dark:text-purple-400 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                                <h2 class="text-lg font-semibold text-purple-900 dark:text-purple-100 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                                    </svg>
+                                    AI Generate
+                                    <span class="px-2 py-0.5 text-xs font-medium bg-purple-200 dark:bg-purple-800 text-purple-800 dark:text-purple-200 rounded-full">Beta</span>
+                                </h2>
+                            </button>
+                        </div>
+                        <div id="ai-remaining" class="text-sm text-purple-600 dark:text-purple-400">
+                            {% if user.get_ai_generations_remaining is None %}
+                                <span class="flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Unlimited
+                                </span>
+                            {% else %}
+                                {{ user.get_ai_generations_remaining }}/{{ user.get_ai_generation_limit }} remaining
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="ai-content" class="hidden">
+                        <p class="text-sm text-purple-700 dark:text-purple-300 mb-4">
+                            Describe your work in plain English and let AI generate line items for you.
+                        </p>
+
+                        <div class="mb-4">
+                            <textarea id="ai-description" rows="3" placeholder="Example: Built a React dashboard with 3 charts, 12 hours at $150/hr. Also fixed 2 bugs." class="w-full rounded-lg border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-purple-500 focus:border-purple-500 placeholder-gray-400 dark:placeholder-gray-500"></textarea>
+                        </div>
+
+                        <button type="button" id="ai-generate-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+                            <svg id="ai-generate-icon" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                            </svg>
+                            <span id="ai-generate-text">Generate Line Items</span>
+                        </button>
+
+                        <!-- AI Generated Preview -->
+                        <div id="ai-preview" class="hidden mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-700">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-medium text-gray-900 dark:text-white">Generated Line Items</h3>
+                                <button type="button" id="ai-add-all" class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Add All to Invoice
+                                </button>
+                            </div>
+                            <div id="ai-items-list" class="space-y-2">
+                                <!-- AI generated items will be inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="ai-error" class="hidden mt-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 rounded-lg text-sm">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Line Items -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Line Items</h2>
@@ -420,6 +489,224 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             fetchClientPaymentStats(this.value.trim());
         });
+    }
+
+    // AI Invoice Generator
+    const aiToggle = document.getElementById('ai-toggle');
+    const aiChevron = document.getElementById('ai-chevron');
+    const aiContent = document.getElementById('ai-content');
+    const aiDescription = document.getElementById('ai-description');
+    const aiGenerateBtn = document.getElementById('ai-generate-btn');
+    const aiGenerateIcon = document.getElementById('ai-generate-icon');
+    const aiGenerateText = document.getElementById('ai-generate-text');
+    const aiPreview = document.getElementById('ai-preview');
+    const aiItemsList = document.getElementById('ai-items-list');
+    const aiAddAll = document.getElementById('ai-add-all');
+    const aiError = document.getElementById('ai-error');
+    const aiRemaining = document.getElementById('ai-remaining');
+
+    let generatedItems = [];
+
+    // Toggle AI section
+    if (aiToggle) {
+        aiToggle.addEventListener('click', function() {
+            aiContent.classList.toggle('hidden');
+            aiChevron.classList.toggle('rotate-90');
+        });
+    }
+
+    // Generate button click handler
+    if (aiGenerateBtn) {
+        aiGenerateBtn.addEventListener('click', async function() {
+            const description = aiDescription.value.trim();
+
+            if (!description) {
+                showAiError('Please describe your work first.');
+                return;
+            }
+
+            // Show loading state
+            setAiLoading(true);
+            hideAiError();
+            aiPreview.classList.add('hidden');
+
+            try {
+                const response = await fetch('{% url "invoices:ai_generate_line_items" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ description: description })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    generatedItems = data.line_items;
+                    renderAiPreview(data.line_items);
+                    updateAiRemaining(data.remaining, data.is_unlimited);
+                } else {
+                    showAiError(data.error || 'Failed to generate line items.');
+                }
+            } catch (error) {
+                console.error('AI generation error:', error);
+                showAiError('An error occurred. Please try again.');
+            } finally {
+                setAiLoading(false);
+            }
+        });
+    }
+
+    function setAiLoading(loading) {
+        aiGenerateBtn.disabled = loading;
+        if (loading) {
+            aiGenerateIcon.innerHTML = '<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>';
+            aiGenerateIcon.classList.add('animate-spin');
+            aiGenerateIcon.setAttribute('viewBox', '0 0 24 24');
+            aiGenerateIcon.setAttribute('fill', 'none');
+            aiGenerateText.textContent = 'Generating...';
+        } else {
+            aiGenerateIcon.innerHTML = '<path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>';
+            aiGenerateIcon.classList.remove('animate-spin');
+            aiGenerateIcon.setAttribute('viewBox', '0 0 24 24');
+            aiGenerateIcon.setAttribute('fill', 'currentColor');
+            aiGenerateText.textContent = 'Generate Line Items';
+        }
+    }
+
+    function showAiError(message) {
+        aiError.textContent = message;
+        aiError.classList.remove('hidden');
+    }
+
+    function hideAiError() {
+        aiError.classList.add('hidden');
+    }
+
+    function updateAiRemaining(remaining, isUnlimited) {
+        if (isUnlimited) {
+            aiRemaining.innerHTML = '<span class="flex items-center gap-1"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Unlimited</span>';
+        } else {
+            const limit = {{ user.get_ai_generation_limit|default:3 }};
+            aiRemaining.textContent = `${remaining}/${limit} remaining`;
+        }
+    }
+
+    function renderAiPreview(items) {
+        aiItemsList.innerHTML = '';
+
+        items.forEach((item, index) => {
+            const lineTotal = (item.quantity * item.unit_price).toFixed(2);
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg';
+            div.innerHTML = `
+                <div class="flex-1">
+                    <div class="font-medium text-gray-900 dark:text-white">${escapeHtml(item.description)}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
+                        ${item.quantity} × $${item.unit_price.toFixed(2)} = $${lineTotal}
+                        ${item.notes ? `<span class="text-gray-400 dark:text-gray-500">• ${escapeHtml(item.notes)}</span>` : ''}
+                    </div>
+                </div>
+            `;
+            aiItemsList.appendChild(div);
+        });
+
+        aiPreview.classList.remove('hidden');
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Add All to Invoice button
+    if (aiAddAll) {
+        aiAddAll.addEventListener('click', function() {
+            if (!generatedItems || generatedItems.length === 0) return;
+
+            generatedItems.forEach(item => {
+                addLineItemToForm(item);
+            });
+
+            // Clear AI section
+            aiPreview.classList.add('hidden');
+            aiDescription.value = '';
+            generatedItems = [];
+
+            // Collapse AI section
+            aiContent.classList.add('hidden');
+            aiChevron.classList.remove('rotate-90');
+
+            // Recalculate totals
+            calculateTotals();
+        });
+    }
+
+    function addLineItemToForm(item) {
+        const currentFormCount = parseInt(totalFormsInput.value);
+        const newFormIndex = currentFormCount;
+
+        // Get a visible line item as template
+        let template = container.querySelector('.line-item:not(.deleted)');
+
+        if (!template) {
+            console.error('No template line item found');
+            return;
+        }
+
+        // Clone and update the template
+        const newItem = template.cloneNode(true);
+
+        // Update all input names and IDs with new index
+        newItem.querySelectorAll('input, select, textarea').forEach(function(input) {
+            if (input.name) {
+                input.name = input.name.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+            if (input.id) {
+                input.id = input.id.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+            // Clear values for new form
+            if (input.type === 'checkbox') {
+                input.checked = false;
+            } else if (input.type !== 'hidden' || input.name.includes('-id')) {
+                input.value = '';
+            }
+        });
+
+        // Update labels
+        newItem.querySelectorAll('label').forEach(function(label) {
+            if (label.htmlFor) {
+                label.htmlFor = label.htmlFor.replace(/-\d+-/, '-' + newFormIndex + '-');
+            }
+        });
+
+        // Clear any error messages
+        newItem.querySelectorAll('.text-red-500, .text-red-400').forEach(function(error) {
+            error.remove();
+        });
+
+        // Make sure it's visible
+        newItem.classList.remove('deleted');
+        newItem.style.display = '';
+
+        // Set the values from AI generated item
+        const descInput = newItem.querySelector('[name*=description]');
+        const qtyInput = newItem.querySelector('[name*=quantity]');
+        const rateInput = newItem.querySelector('[name*=rate]');
+
+        if (descInput) descInput.value = item.description;
+        if (qtyInput) qtyInput.value = item.quantity;
+        if (rateInput) rateInput.value = item.unit_price;
+
+        container.appendChild(newItem);
+        totalFormsInput.value = currentFormCount + 1;
+
+        // Reattach listeners
+        attachCalculateListeners();
+        attachDeleteListeners();
     }
 });
 </script>
