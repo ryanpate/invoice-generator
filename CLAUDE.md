@@ -142,6 +142,8 @@
   - Tier-based usage limits: Free (3/month), Starter (10/month), Professional (unlimited), Business (unlimited)
   - Monthly reset of usage counter
   - Purple gradient UI with sparkle icon and "Beta" badge
+  - Dashboard card showing usage (X/Y remaining or "Unlimited")
+  - Featured in "What's New" modal for user discovery
 
 ### Suppressed/Disabled Features
 
@@ -312,7 +314,7 @@ Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 202
 - [x] **PWA (Progressive Web App):** Make site installable on mobile home screens - COMPLETED
 
 **Phase 2 - AI Features (Weeks 3-4):**
-- [ ] **AI Invoice Generator:** "Describe your work, we generate the invoice" — LLM creates line items from natural language
+- [x] **AI Invoice Generator:** "Describe your work, we generate the invoice" — LLM creates line items from natural language - COMPLETED
 - [ ] **Smart Payment Predictions:** Analyze client payment history to predict late payments
 - [ ] **Time Tracking Integration:** Built-in timer or Toggl/Clockify integration, "Bill this time" button
 
@@ -1001,6 +1003,12 @@ Authentication: API Key in header `X-API-Key: <key>`
 219. Added collapsible AI Generate section to invoice edit template
 220. AI section includes: textarea for work description, Generate button, preview area, Add All to Invoice button
 221. Shows remaining generations counter for tier-limited users
+222. Added AI generation usage card to dashboard with purple gradient styling
+223. Dashboard shows "X/Y generations left this month" or "Unlimited" for Pro/Business tiers
+224. Added progress bar for AI usage visualization on dashboard
+225. Added "Try AI Generate" quick link and "Upgrade for more" prompt when low on generations
+226. Added AI Invoice Generator to "What's New" modal as featured item with BETA badge
+227. Updated What's New modal version to show again for existing users
 
 ---
 
