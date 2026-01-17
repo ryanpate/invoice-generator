@@ -129,7 +129,7 @@
   - iOS-specific install instructions for Safari users
 - **Feature Discovery UI:**
   - "What's New" modal on dashboard (version-tracked, shows once per release)
-  - Feature callout cards for Payment Reminders, Late Fees, Recurring Invoices
+  - Feature callout cards for Payment Reminders, Late Fees, Recurring Invoices, Time Tracking
   - Dismissible cards with localStorage persistence
   - Gradient-styled cards with NEW/PRO badges
 - **AI Invoice Generator (Beta):**
@@ -180,13 +180,15 @@
 - **Team seats** for Business tier (3 members)
 - **API access** for enterprise use cases
 - **Multi-language support** (EN/ES/FR)
+- **Built-in time tracking** with real-time timer and bill-to-invoice workflow
+- **AI Invoice Generator** — natural language to line items powered by Claude
 
 ### Competitive Gaps vs. Major Players
 
 | Feature | InvoiceKits | Zoho Invoice | FreshBooks | Wave |
 |---------|-------------|--------------|------------|------|
-| AI-powered features | ❌ None | ⚠️ Basic | ⚠️ Basic | ❌ None |
-| Time tracking | ❌ Missing | ✅ Built-in | ✅ Best-in-class | ❌ Missing |
+| AI-powered features | ✅ AI Invoice Generator | ⚠️ Basic | ⚠️ Basic | ❌ None |
+| Time tracking | ✅ Built-in | ✅ Built-in | ✅ Best-in-class | ❌ Missing |
 | Expense tracking | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
 | Payment reminders | ✅ Automated | ✅ Automated | ✅ Automated | ⚠️ Limited |
 | Client payment scoring | ✅ A-F Rating | ❌ Missing | ❌ Missing | ❌ Missing |
@@ -328,10 +330,10 @@ Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 202
 - [x] **Late Fee Auto-Apply Toggle:** Automatically add late fees after X days overdue - COMPLETED
 - [x] **PWA (Progressive Web App):** Make site installable on mobile home screens - COMPLETED
 
-**Phase 2 - AI Features (Weeks 3-4):**
+**Phase 2 - AI Features (Weeks 3-4): COMPLETED**
 - [x] **AI Invoice Generator:** "Describe your work, we generate the invoice" — LLM creates line items from natural language - COMPLETED
 - [ ] **Smart Payment Predictions:** Analyze client payment history to predict late payments
-- [ ] **Time Tracking Integration:** Built-in timer or Toggl/Clockify integration, "Bill this time" button
+- [x] **Time Tracking:** Built-in real-time timer with "Bill Time" workflow to convert entries into invoices - COMPLETED
 
 **Phase 3 - Get Paid Faster Suite (Month 2):**
 - [ ] **Client Payment Score:** Rate clients A-F based on payment history (like credit score for freelancers)
@@ -1058,6 +1060,10 @@ Authentication: API Key in header `X-API-Key: <key>`
 241. Registered TimeEntry, ActiveTimer, TimeTrackingSettings in Django admin
 242. Time entries track status: unbilled → invoiced → paid (with invoice FK)
 243. Bill Time workflow shows entries grouped by client with grouping options
+244. Added Time Tracking to "What's New" modal with clock icon and "NEW" badge
+245. Added Time Tracking to feature discovery cards section on dashboard (4-column grid)
+246. Updated pricing page to show time tracking timer limits per subscription tier
+247. Added Time Tracking, Payment Reminders, and Recurring Invoices to landing page features section
 
 ---
 
