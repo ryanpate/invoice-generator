@@ -41,6 +41,7 @@ class Command(BaseCommand):
         self._create_freelancer_tips_post(author, tips_category)
         self._create_small_business_guide_post(author, guides_category)
         self._create_invoice_vs_receipt_post(author, guides_category)
+        self._create_ai_invoice_generator_post(author, guides_category)
 
     def _create_invoice_guide(self, author, category):
         """Create or update the 'How to Create a Professional Invoice' post."""
@@ -1524,3 +1525,290 @@ class Command(BaseCommand):
         )
 
         self.stdout.write(self.style.SUCCESS(f'Successfully created blog post: "{post_slug}"'))
+
+    def _create_ai_invoice_generator_post(self, author, category):
+        """Create or update the 'AI Invoice Generator' post."""
+        post_slug = 'ai-invoice-generator-natural-language'
+
+        post_content = '''
+<p class="text-xl text-gray-700 dark:text-gray-300 mb-8">What if you could create professional invoices just by describing your work in plain English? With an <strong>AI invoice generator</strong>, that's exactly what you can do. Instead of manually filling out line items, quantities, and rates, you simply tell the AI what you did—and it creates the invoice for you. This guide shows you how AI-powered invoicing works and why it's revolutionizing how freelancers and businesses get paid.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">What Is an AI Invoice Generator?</h2>
+
+<p class="mb-4">An <strong>AI invoice generator</strong> uses artificial intelligence to convert natural language descriptions into structured invoice line items. Instead of filling out forms field by field, you describe your work the way you'd explain it to a colleague:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 my-6">
+    <p class="text-gray-700 dark:text-gray-300 italic mb-4">"Built a React dashboard with user authentication and data visualization. 40 hours at $125/hour. Also set up CI/CD pipeline, 8 hours."</p>
+    <p class="text-gray-600 dark:text-gray-400 text-sm">The AI understands this and creates properly formatted line items with descriptions, quantities, and rates.</p>
+</div>
+
+<p class="mb-4">This technology combines large language models (like the ones powering ChatGPT) with invoice-specific training to understand billing terminology, hourly rates, project scopes, and professional service descriptions.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">How AI Invoice Generation Works</h2>
+
+<p class="mb-4">The process is surprisingly simple:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Step 1: Describe Your Work</h3>
+<p class="mb-4">Type a description of the work you completed. You can be as detailed or as brief as you like:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Detailed:</strong> "Website redesign project including homepage mockups (5 hours), responsive CSS implementation (12 hours), and client revision rounds (3 hours). Rate: $150/hour."</li>
+    <li><strong>Brief:</strong> "Logo design, $500 flat fee"</li>
+    <li><strong>Mixed:</strong> "Monthly SEO retainer $2,000 plus 5 blog posts at $200 each"</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Step 2: AI Processes Your Description</h3>
+<p class="mb-4">The AI analyzes your text to identify:</p>
+
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Services or products:</strong> What you're billing for</li>
+    <li><strong>Quantities:</strong> Hours, units, or project counts</li>
+    <li><strong>Rates:</strong> Hourly rates, flat fees, or per-unit pricing</li>
+    <li><strong>Line item structure:</strong> How to organize multiple services</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Step 3: Review and Add to Invoice</h3>
+<p class="mb-4">The AI generates structured line items that you can review, edit if needed, and add to your invoice with one click. The result is a professional invoice created in seconds instead of minutes.</p>
+
+<div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6 my-8">
+    <h4 class="text-purple-800 dark:text-purple-200 font-semibold mb-2">Try It Yourself</h4>
+    <p class="text-purple-700 dark:text-purple-300">InvoiceKits includes a built-in <a href="/features/ai-invoice-generator/" class="text-purple-600 dark:text-purple-400 hover:underline font-medium">AI Invoice Generator</a> powered by Claude. Describe your work in plain English and watch as professional line items appear instantly. Free users get 3 AI generations per month.</p>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Benefits of AI-Powered Invoicing</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">1. Save Time on Every Invoice</h3>
+<p class="mb-4">The average freelancer spends 5-10 minutes creating each invoice manually. With AI, that drops to under a minute. For someone sending 20 invoices per month, that's 2-3 hours saved every month—time better spent on billable work.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">2. More Professional Descriptions</h3>
+<p class="mb-4">AI helps you write clear, professional line item descriptions. Instead of vague entries like "consulting" or "design work," you get specific descriptions that clients understand and approve faster:</p>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Before (Manual)</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">After (AI-Generated)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Website work</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Frontend Development - React Dashboard Implementation</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Consulting</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Strategic Consulting Session - Q1 Marketing Planning</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Design</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Brand Identity Design - Logo and Style Guide</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3">Writing</td>
+            <td class="px-4 py-3">Content Creation - SEO Blog Articles (5 × 1,500 words)</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">3. Reduce Billing Disputes</h3>
+<p class="mb-4">Clear, detailed line items mean fewer questions from clients. When your invoice clearly states "User Authentication Implementation - Login, Signup, Password Reset (12 hours)" instead of just "Development," clients know exactly what they're paying for.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">4. Capture All Billable Work</h3>
+<p class="mb-4">When creating invoices manually, it's easy to forget small tasks or underestimate time. Describing your work to AI in narrative form helps you remember everything you did—leading to more accurate (and often higher) invoices.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">5. Consistent Formatting</h3>
+<p class="mb-4">AI ensures your line items follow a consistent format across all invoices. This professional consistency builds trust with clients and makes your business look more established.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Real-World Examples: AI Invoice Generation in Action</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Example 1: Freelance Developer</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 my-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong>Input:</strong></p>
+    <p class="text-gray-700 dark:text-gray-300 italic">"Built new checkout flow for e-commerce site. 15 hours frontend, 10 hours backend API, 5 hours testing. $140/hour."</p>
+</div>
+
+<div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 my-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong>AI-Generated Line Items:</strong></p>
+    <ul class="text-gray-700 dark:text-gray-300 space-y-1">
+        <li>• Frontend Development - E-commerce Checkout Flow | 15 hrs × $140 = $2,100</li>
+        <li>• Backend API Development - Checkout Integration | 10 hrs × $140 = $1,400</li>
+        <li>• Quality Assurance - Checkout Flow Testing | 5 hrs × $140 = $700</li>
+    </ul>
+    <p class="text-green-700 dark:text-green-400 font-semibold mt-2">Total: $4,200</p>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Example 2: Marketing Consultant</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 my-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong>Input:</strong></p>
+    <p class="text-gray-700 dark:text-gray-300 italic">"January retainer - social media management $1500, created 4 blog posts at $300 each, ran Facebook ad campaign setup $500"</p>
+</div>
+
+<div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 my-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong>AI-Generated Line Items:</strong></p>
+    <ul class="text-gray-700 dark:text-gray-300 space-y-1">
+        <li>• Monthly Social Media Management - January 2026 | 1 × $1,500 = $1,500</li>
+        <li>• Content Creation - Blog Articles | 4 × $300 = $1,200</li>
+        <li>• Facebook Advertising - Campaign Setup & Configuration | 1 × $500 = $500</li>
+    </ul>
+    <p class="text-green-700 dark:text-green-400 font-semibold mt-2">Total: $3,200</p>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Example 3: Graphic Designer</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 my-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong>Input:</strong></p>
+    <p class="text-gray-700 dark:text-gray-300 italic">"Logo design project - initial concepts, 3 revision rounds, final files in all formats. Flat fee $1200. Also business card design $350."</p>
+</div>
+
+<div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 my-4">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong>AI-Generated Line Items:</strong></p>
+    <ul class="text-gray-700 dark:text-gray-300 space-y-1">
+        <li>• Logo Design - Concepts, Revisions, and Final Deliverables | 1 × $1,200 = $1,200</li>
+        <li>• Business Card Design - Print-Ready Files | 1 × $350 = $350</li>
+    </ul>
+    <p class="text-green-700 dark:text-green-400 font-semibold mt-2">Total: $1,550</p>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">AI Invoice Generator vs. Traditional Invoicing</h2>
+
+<div class="overflow-x-auto mb-6">
+<table class="min-w-full border border-gray-200 dark:border-gray-700">
+    <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Feature</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">Traditional</th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white border-b">AI-Powered</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Time to create line items</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">5-10 minutes</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700 text-green-600 dark:text-green-400">Under 30 seconds</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Description quality</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Varies</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700 text-green-600 dark:text-green-400">Consistently professional</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Input method</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Form fields</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700 text-green-600 dark:text-green-400">Natural language</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Learning curve</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700">Moderate</td>
+            <td class="px-4 py-3 border-b dark:border-gray-700 text-green-600 dark:text-green-400">None—just describe your work</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-3">Format consistency</td>
+            <td class="px-4 py-3">Manual effort</td>
+            <td class="px-4 py-3 text-green-600 dark:text-green-400">Automatic</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Best Practices for AI Invoice Generation</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">1. Include Key Details</h3>
+<p class="mb-4">The more context you provide, the better the output. Always include:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li>What you did (services/deliverables)</li>
+    <li>How much (hours, quantities, or project scope)</li>
+    <li>Your rate (hourly, flat fee, or per-unit)</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">2. Review Before Sending</h3>
+<p class="mb-4">AI is smart but not perfect. Always review generated line items to ensure they accurately reflect your work and pricing. You can edit any line item before adding it to your invoice.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">3. Be Specific About Project Names</h3>
+<p class="mb-4">Include project or client names in your description for more specific line items:</p>
+<ul class="list-disc pl-6 mb-4 space-y-2">
+    <li><strong>Generic:</strong> "Website development, 20 hours at $100"</li>
+    <li><strong>Specific:</strong> "Acme Corp website development - homepage and product pages, 20 hours at $100"</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">4. Group Related Work</h3>
+<p class="mb-4">Describe related tasks together for cleaner line item grouping. The AI will understand project phases and create logical groupings.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Pairing AI Invoicing with Time Tracking</h2>
+
+<p class="mb-4">For maximum efficiency, combine AI invoice generation with <a href="/features/time-tracking/" class="text-primary-600 dark:text-primary-400 hover:underline">time tracking</a>. Here's the workflow:</p>
+
+<ol class="list-decimal pl-6 mb-4 space-y-2">
+    <li><strong>Track your time</strong> as you work on client projects</li>
+    <li><strong>Review your time entries</strong> at the end of the project or billing period</li>
+    <li><strong>Describe the work</strong> to the AI invoice generator based on your tracked time</li>
+    <li><strong>Generate and send</strong> a professional invoice in seconds</li>
+</ol>
+
+<p class="mb-4">This combination ensures you never miss billable hours and always have accurate, professional invoices.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Who Benefits Most from AI Invoice Generators?</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Freelancers</h3>
+<p class="mb-4">If you're billing for varied project work each month, AI helps you create detailed invoices quickly without the tedium of manual data entry.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Consultants</h3>
+<p class="mb-4">Consulting engagements often involve multiple meetings, deliverables, and work phases. AI organizes these into clear, professional line items.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Creative Professionals</h3>
+<p class="mb-4">Designers, writers, and other creatives can describe project deliverables naturally and get polished invoice entries that reflect the value of their work.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Agencies</h3>
+<p class="mb-4">Agencies juggling multiple client projects can quickly generate invoices for each engagement without copying and pasting from timesheets.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4">Getting Started with AI Invoicing</h2>
+
+<p class="mb-4">Ready to try AI-powered invoice generation? Here's how to get started with InvoiceKits:</p>
+
+<ol class="list-decimal pl-6 mb-4 space-y-2">
+    <li><a href="/accounts/signup/" class="text-primary-600 dark:text-primary-400 hover:underline font-medium">Create a free account</a> (no credit card required)</li>
+    <li>Start creating a new invoice</li>
+    <li>Click the "AI Generate" section</li>
+    <li>Describe your work in plain English</li>
+    <li>Review and add the generated line items</li>
+    <li>Send your professional invoice</li>
+</ol>
+
+<p class="mb-4">Free accounts include 3 AI generations per month. Starter plans get 10, and Professional/Business plans include unlimited AI invoice generation.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+        <li>AI invoice generators convert natural language descriptions into professional line items</li>
+        <li>Creating invoices takes seconds instead of minutes</li>
+        <li>AI produces more detailed, consistent descriptions that reduce client questions</li>
+        <li>Best results come from including specific details about work, hours, and rates</li>
+        <li>Pair AI invoicing with time tracking for maximum accuracy and efficiency</li>
+        <li>Always review AI-generated items before sending your invoice</li>
+    </ul>
+</div>
+
+<div class="mt-8 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg">
+    <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Related reading:</strong> Learn more about our <a href="/features/ai-invoice-generator/" class="text-primary-600 dark:text-primary-400 hover:underline">AI Invoice Generator feature</a>, explore <a href="/features/time-tracking/" class="text-primary-600 dark:text-primary-400 hover:underline">built-in time tracking</a>, or read our <a href="/blog/freelancer-invoice-tips-get-paid-faster/" class="text-primary-600 dark:text-primary-400 hover:underline">invoice best practices for freelancers</a>.</p>
+</div>
+'''
+
+        post, created = BlogPost.objects.update_or_create(
+            slug=post_slug,
+            defaults={
+                'title': 'AI Invoice Generator: How to Create Invoices with Natural Language',
+                'author': author,
+                'category': category,
+                'excerpt': 'Discover how AI invoice generators convert plain English descriptions into professional invoice line items. Save time, create better descriptions, and get paid faster with AI-powered invoicing.',
+                'content': post_content,
+                'meta_description': 'Learn how AI invoice generators work. Describe your work in plain English and create professional invoices instantly. Complete guide with examples.',
+                'meta_keywords': 'ai invoice generator, ai invoicing, natural language invoice, automated invoice, ai billing, invoice automation, smart invoicing, ai powered invoice',
+                'status': 'published',
+            }
+        )
+
+        action = 'Created' if created else 'Updated'
+        self.stdout.write(self.style.SUCCESS(f'{action} blog post: "{post_slug}"'))

@@ -662,6 +662,7 @@ invoice_generator/
 | `/blog/freelancer-invoice-tips-get-paid-faster/` | Invoice Best Practices for Freelancers | "freelance invoice template" (8K/mo) |
 | `/blog/small-business-invoicing-guide/` | Small Business Invoicing Guide | "small business invoice" |
 | `/blog/invoice-vs-receipt-difference/` | Invoice vs Receipt: What's the Difference? | "invoice vs receipt" |
+| `/blog/ai-invoice-generator-natural-language/` | AI Invoice Generator: How to Create Invoices with Natural Language | "ai invoice generator" (1,900/mo) |
 
 ### Recurring Invoice URLs (Professional+ only)
 | URL | Purpose |
@@ -764,6 +765,7 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 | `https://www.invoicekits.com/blog/freelancer-invoice-tips-get-paid-faster/` | Blog Post | Pending |
 | `https://www.invoicekits.com/blog/small-business-invoicing-guide/` | Blog Post | Pending |
 | `https://www.invoicekits.com/blog/invoice-vs-receipt-difference/` | Blog Post | Pending |
+| `https://www.invoicekits.com/blog/ai-invoice-generator-natural-language/` | Blog Post | Pending |
 
 **Free Tools:**
 | URL | Page Type | Status |
@@ -805,7 +807,7 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 - [ ] **Optimize Meta Descriptions:** Add power words (instantly, effortlessly, automatically) to CTR
 
 **Content - New Blog Posts:**
-- [ ] **Blog Post 6:** "AI Invoice Generator: How to Create Invoices with Natural Language" (target: "ai invoice generator" 1,900/mo)
+- [x] **Blog Post 6:** "AI Invoice Generator: How to Create Invoices with Natural Language" (target: "ai invoice generator" 1,900/mo) - COMPLETED
 - [ ] **Blog Post 7:** "Time Tracking for Freelancers: Bill Every Hour You Work" (target: "time tracking invoice software" 1,600/mo)
 - [ ] **Blog Post 8:** "AI-Powered Billing: The Future of Invoice Automation" (target: "ai billing software" 880/mo)
 
@@ -1123,6 +1125,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 264. Added AI Invoice Generator internal link to "How to Create Professional Invoice" blog post (purple callout box after Step 4)
 265. Added Time Tracking internal link to "Freelancer Invoice Tips" blog post (updated tools section)
 266. Added AI Invoice Generator internal link to "Batch Invoice Generator Guide" blog post (callout for one-off invoices)
+267. Blog Post 6: "AI Invoice Generator: How to Create Invoices with Natural Language" - comprehensive guide targeting "ai invoice generator" keyword (1,900/mo)
 
 ---
 
