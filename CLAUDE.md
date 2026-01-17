@@ -797,7 +797,7 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 - [x] **Feature Landing Pages:** Created `/features/ai-invoice-generator/` and `/features/time-tracking/` with full SEO
 
 **High Priority - Pending:**
-- [ ] **Blog Internal Links:** Add links from existing blog posts to new feature pages
+- [x] **Blog Internal Links:** Add links from existing blog posts to new feature pages - COMPLETED
   - `/blog/how-to-create-professional-invoice/` → link to AI Invoice Generator
   - `/blog/freelancer-invoice-tips-get-paid-faster/` → link to Time Tracking
   - `/blog/batch-invoice-generator-guide/` → link to AI Invoice Generator
@@ -1120,6 +1120,9 @@ Authentication: API Key in header `X-API-Key: <key>`
 261. Added meta keywords block to homepage targeting high-value search terms
 262. Added cross-link section to AI Invoice Generator page linking to Time Tracking feature
 263. Added cross-link section to Time Tracking page linking to AI Invoice Generator feature
+264. Added AI Invoice Generator internal link to "How to Create Professional Invoice" blog post (purple callout box after Step 4)
+265. Added Time Tracking internal link to "Freelancer Invoice Tips" blog post (updated tools section)
+266. Added AI Invoice Generator internal link to "Batch Invoice Generator Guide" blog post (callout for one-off invoices)
 
 ---
 
