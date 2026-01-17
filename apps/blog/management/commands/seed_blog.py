@@ -43,11 +43,8 @@ class Command(BaseCommand):
         self._create_invoice_vs_receipt_post(author, guides_category)
 
     def _create_invoice_guide(self, author, category):
-        """Create the 'How to Create a Professional Invoice' post."""
+        """Create or update the 'How to Create a Professional Invoice' post."""
         post_slug = 'how-to-create-professional-invoice'
-        if BlogPost.objects.filter(slug=post_slug).exists():
-            self.stdout.write(self.style.WARNING(f'Blog post "{post_slug}" already exists. Skipping.'))
-            return
 
         post_content = '''
 <p class="text-xl text-gray-700 dark:text-gray-300 mb-8">Creating a professional invoice doesn't have to be complicated. Whether you're a freelancer sending your first invoice or a small business owner looking to streamline your billing process, this comprehensive guide will walk you through everything you need to know about creating invoices that get you paid faster.</p>
@@ -250,26 +247,26 @@ class Command(BaseCommand):
 </div>
 '''
 
-        BlogPost.objects.create(
-            title='How to Create a Professional Invoice in 2026 (Complete Guide)',
+        post, created = BlogPost.objects.update_or_create(
             slug=post_slug,
-            author=author,
-            category=category,
-            excerpt='Learn how to create professional invoices that get you paid faster. This step-by-step guide covers everything from essential invoice elements to best practices for freelancers and small businesses.',
-            content=post_content,
-            meta_description='Learn how to create a professional invoice. Step-by-step guide with essential elements, best practices, and tips to get paid faster.',
-            meta_keywords='how to create an invoice, invoice template, professional invoice, invoice generator, freelance invoice, small business invoice, invoice best practices',
-            status='published',
+            defaults={
+                'title': 'How to Create a Professional Invoice in 2026 (Complete Guide)',
+                'author': author,
+                'category': category,
+                'excerpt': 'Learn how to create professional invoices that get you paid faster. This step-by-step guide covers everything from essential invoice elements to best practices for freelancers and small businesses.',
+                'content': post_content,
+                'meta_description': 'Learn how to create a professional invoice. Step-by-step guide with essential elements, best practices, and tips to get paid faster.',
+                'meta_keywords': 'how to create an invoice, invoice template, professional invoice, invoice generator, freelance invoice, small business invoice, invoice best practices',
+                'status': 'published',
+            }
         )
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully created blog post: "{post_slug}"'))
+        action = 'Created' if created else 'Updated'
+        self.stdout.write(self.style.SUCCESS(f'{action} blog post: "{post_slug}"'))
 
     def _create_batch_invoicing_post(self, author, category):
-        """Create the 'Batch Invoice Generator' post."""
+        """Create or update the 'Batch Invoice Generator' post."""
         post_slug = 'batch-invoice-generator-guide'
-        if BlogPost.objects.filter(slug=post_slug).exists():
-            self.stdout.write(self.style.WARNING(f'Blog post "{post_slug}" already exists. Skipping.'))
-            return
 
         post_content = '''
 <p class="text-xl text-gray-700 dark:text-gray-300 mb-8">If you're spending hours creating invoices one by one, you're wasting valuable time that could be spent growing your business. A <strong>batch invoice generator</strong> lets you create dozens or even hundreds of invoices in minutes using a simple CSV upload. This guide shows you how to leverage bulk invoice generation to save hours every billing cycle.</p>
@@ -486,26 +483,26 @@ class Command(BaseCommand):
 </div>
 '''
 
-        BlogPost.objects.create(
-            title='Batch Invoice Generator: How to Create 100+ Invoices in Minutes',
+        post, created = BlogPost.objects.update_or_create(
             slug=post_slug,
-            author=author,
-            category=category,
-            excerpt='Learn how batch invoicing can save you hours every billing cycle. This guide covers CSV invoice upload, bulk invoice generation best practices, and step-by-step instructions for processing multiple invoices at once.',
-            content=post_content,
-            meta_description='Save hours with batch invoice generation. Create 100+ invoices in minutes using CSV upload. Complete guide to bulk invoicing.',
-            meta_keywords='batch invoice generator, CSV invoice upload, bulk invoice generation, batch invoicing, multiple invoices, bulk billing, invoice automation',
-            status='published',
+            defaults={
+                'title': 'Batch Invoice Generator: How to Create 100+ Invoices in Minutes',
+                'author': author,
+                'category': category,
+                'excerpt': 'Learn how batch invoicing can save you hours every billing cycle. This guide covers CSV invoice upload, bulk invoice generation best practices, and step-by-step instructions for processing multiple invoices at once.',
+                'content': post_content,
+                'meta_description': 'Save hours with batch invoice generation. Create 100+ invoices in minutes using CSV upload. Complete guide to bulk invoicing.',
+                'meta_keywords': 'batch invoice generator, CSV invoice upload, bulk invoice generation, batch invoicing, multiple invoices, bulk billing, invoice automation',
+                'status': 'published',
+            }
         )
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully created blog post: "{post_slug}"'))
+        action = 'Created' if created else 'Updated'
+        self.stdout.write(self.style.SUCCESS(f'{action} blog post: "{post_slug}"'))
 
     def _create_freelancer_tips_post(self, author, category):
-        """Create the 'Invoice Best Practices for Freelancers' post."""
+        """Create or update the 'Invoice Best Practices for Freelancers' post."""
         post_slug = 'freelancer-invoice-tips-get-paid-faster'
-        if BlogPost.objects.filter(slug=post_slug).exists():
-            self.stdout.write(self.style.WARNING(f'Blog post "{post_slug}" already exists. Skipping.'))
-            return
 
         post_content = '''
 <p class="text-xl text-gray-700 dark:text-gray-300 mb-8">As a freelancer, getting paid on time is crucial for keeping your business running. Yet many independent professionals struggle with late payments, unclear invoices, and awkward payment conversations. This guide shares 10 proven <strong>invoice best practices</strong> that will help you get paid faster and maintain professional relationships with your clients.</p>
@@ -752,19 +749,22 @@ class Command(BaseCommand):
 </div>
 '''
 
-        BlogPost.objects.create(
-            title='Invoice Best Practices for Freelancers: 10 Tips to Get Paid Faster',
+        post, created = BlogPost.objects.update_or_create(
             slug=post_slug,
-            author=author,
-            category=category,
-            excerpt='Stop chasing late payments. These 10 proven invoice best practices help freelancers get paid faster, maintain professional client relationships, and improve cash flow.',
-            content=post_content,
-            meta_description='10 invoice tips for freelancers to get paid faster. Professional templates, payment terms, and follow-up strategies.',
-            meta_keywords='freelance invoice template, invoice best practices, freelancer invoice tips, get paid faster, invoice template, freelance billing, payment terms',
-            status='published',
+            defaults={
+                'title': 'Invoice Best Practices for Freelancers: 10 Tips to Get Paid Faster',
+                'author': author,
+                'category': category,
+                'excerpt': 'Stop chasing late payments. These 10 proven invoice best practices help freelancers get paid faster, maintain professional client relationships, and improve cash flow.',
+                'content': post_content,
+                'meta_description': '10 invoice tips for freelancers to get paid faster. Professional templates, payment terms, and follow-up strategies.',
+                'meta_keywords': 'freelance invoice template, invoice best practices, freelancer invoice tips, get paid faster, invoice template, freelance billing, payment terms',
+                'status': 'published',
+            }
         )
 
-        self.stdout.write(self.style.SUCCESS(f'Successfully created blog post: "{post_slug}"'))
+        action = 'Created' if created else 'Updated'
+        self.stdout.write(self.style.SUCCESS(f'{action} blog post: "{post_slug}"'))
 
     def _create_small_business_guide_post(self, author, category):
         """Create the 'Small Business Invoicing Guide' post."""
