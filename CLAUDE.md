@@ -1009,6 +1009,7 @@ Authentication: API Key in header `X-API-Key: <key>`
 225. Added "Try AI Generate" quick link and "Upgrade for more" prompt when low on generations
 226. Added AI Invoice Generator to "What's New" modal as featured item with BETA badge
 227. Updated What's New modal version to show again for existing users
+228. Verified AI Invoice Generator working on production (tested hourly and fixed-price descriptions)
 
 ---
 
