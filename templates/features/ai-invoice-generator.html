@@ -1,0 +1,667 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}AI Invoice Generator - Create Invoices from Natural Language | InvoiceKits{% endblock %}
+
+{% block meta_description %}Generate professional invoices instantly using AI. Simply describe your work in plain English and let our AI create accurate line items automatically. Free to try, no accounting skills needed.{% endblock %}
+
+{% block meta_keywords %}ai invoice generator, artificial intelligence invoice, automated invoice creation, natural language invoice, smart invoice generator, ai billing software, automatic invoice maker{% endblock %}
+
+{% block canonical_url %}https://www.invoicekits.com/features/ai-invoice-generator/{% endblock %}
+
+{% block og_title %}AI Invoice Generator - Create Invoices from Natural Language | InvoiceKits{% endblock %}
+
+{% block og_description %}Generate professional invoices instantly using AI. Describe your work in plain English and get accurate line items automatically.{% endblock %}
+
+{% block twitter_title %}AI Invoice Generator | InvoiceKits{% endblock %}
+
+{% block twitter_description %}Create invoices from natural language descriptions. Our AI generates accurate line items instantly.{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.invoicekits.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Features",
+            "item": "https://www.invoicekits.com/features/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "AI Invoice Generator",
+            "item": "https://www.invoicekits.com/features/ai-invoice-generator/"
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Generate an Invoice Using AI",
+    "description": "Create professional invoices instantly by describing your work in natural language. Our AI converts your description into accurate invoice line items.",
+    "totalTime": "PT1M",
+    "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "0"
+    },
+    "tool": {
+        "@type": "HowToTool",
+        "name": "InvoiceKits AI Invoice Generator"
+    },
+    "step": [
+        {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Describe Your Work",
+            "text": "Enter a natural language description of the work you completed. For example: 'Built a React dashboard with 3 components, 8 hours at $150/hour'"
+        },
+        {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Generate Line Items",
+            "text": "Click 'Generate' and our AI will instantly create structured invoice line items with descriptions, quantities, and rates."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Review and Send",
+            "text": "Review the generated items, make any adjustments, and add them to your invoice with one click. Then send to your client."
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What is an AI invoice generator?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "An AI invoice generator uses artificial intelligence to automatically create invoice line items from natural language descriptions. Instead of manually entering each item, you simply describe your work in plain English (e.g., 'Website redesign, 20 hours at $100/hour') and the AI generates properly formatted invoice entries."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How accurate is the AI invoice generator?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "InvoiceKits AI invoice generator is powered by Claude, one of the most advanced AI models. It accurately parses hourly rates, fixed prices, quantities, and descriptions. You always have the opportunity to review and edit generated items before adding them to your invoice."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is the AI invoice generator free to use?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Free users get 3 AI generations per month. Starter plan users get 10 generations per month. Professional and Business plan subscribers get unlimited AI invoice generations."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What types of work can the AI invoice generator handle?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The AI can handle virtually any type of billable work including hourly services, fixed-price projects, product sales, consulting fees, retainers, and mixed billing. It understands complex descriptions like 'Logo design $500 plus 3 rounds of revisions at $100 each'."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I edit the AI-generated invoice items?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely! The AI generates a preview of line items that you can review before adding to your invoice. You can edit descriptions, quantities, rates, or remove items entirely. The AI is a starting point that saves time, not a replacement for your judgment."
+            }
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "InvoiceKits AI Invoice Generator",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free tier includes 3 AI generations per month"
+    },
+    "featureList": [
+        "Natural language to invoice conversion",
+        "Hourly rate parsing",
+        "Fixed price detection",
+        "Multiple line item generation",
+        "Real-time preview",
+        "One-click add to invoice"
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 overflow-hidden">
+    <div class="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+    <!-- Decorative elements -->
+    <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+            <ol class="flex items-center space-x-2 text-sm text-purple-200">
+                <li><a href="{% url 'landing' %}" class="hover:text-white">Home</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li><span>Features</span></li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-white">AI Invoice Generator</li>
+            </ol>
+        </nav>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="inline-flex items-center px-4 py-1 bg-purple-500/30 text-purple-100 rounded-full text-sm font-medium">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                        Powered by AI
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 bg-green-500/30 text-green-100 rounded-full text-xs font-medium">
+                        BETA
+                    </span>
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                    AI Invoice Generator
+                </h1>
+                <p class="text-xl md:text-2xl text-purple-100 mb-4">
+                    Describe your work. Get an invoice.
+                </p>
+                <p class="text-lg text-purple-200 mb-8">
+                    Stop typing line items manually. Just describe what you did in plain English and let AI create accurate, professional invoice entries in seconds.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-white text-purple-700 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg text-center">
+                        Try AI Invoice Generator Free
+                    </a>
+                    <a href="#how-it-works" class="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition text-center">
+                        See How It Works
+                    </a>
+                </div>
+                <p class="mt-6 text-purple-200 text-sm">
+                    3 free AI generations per month. No credit card required.
+                </p>
+            </div>
+
+            <!-- AI Demo Animation -->
+            <div class="hidden lg:block">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-2xl">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        <span class="ml-2 text-white/60 text-sm">AI Invoice Generator</span>
+                    </div>
+
+                    <!-- Input -->
+                    <div class="bg-white/5 rounded-lg p-4 mb-4 border border-white/10">
+                        <p class="text-purple-200 text-sm mb-2">Describe your work:</p>
+                        <p class="text-white font-mono text-sm">"Built a React dashboard with user analytics, 12 hours at $150/hour. Also created 3 custom API endpoints, fixed price $800"</p>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flex justify-center my-4">
+                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center animate-bounce">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Output -->
+                    <div class="bg-white rounded-lg p-4">
+                        <p class="text-gray-600 text-sm mb-3 font-medium">Generated Line Items:</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                <div>
+                                    <p class="font-medium text-gray-900">React Dashboard Development</p>
+                                    <p class="text-gray-500">12 hours @ $150/hr</p>
+                                </div>
+                                <span class="font-semibold text-gray-900">$1,800.00</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <div>
+                                    <p class="font-medium text-gray-900">Custom API Endpoints (3)</p>
+                                    <p class="text-gray-500">Fixed price</p>
+                                </div>
+                                <span class="font-semibold text-gray-900">$800.00</span>
+                            </div>
+                            <div class="flex justify-between items-center pt-3 border-t border-gray-200">
+                                <span class="font-bold text-gray-900">Total</span>
+                                <span class="font-bold text-purple-600 text-lg">$2,600.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Problem/Solution Section -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Invoicing Shouldn't Take Longer Than the Work Itself</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                Freelancers spend an average of 30 minutes per invoice. That's billable time you're not getting paid for.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <!-- Before -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border-l-4 border-red-400">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">The Old Way</h3>
+                </div>
+                <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        Manually type each line item description
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        Calculate hours and totals manually
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        Switch between notes, timesheets, and invoice tool
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                        Fix typos and formatting inconsistencies
+                    </li>
+                </ul>
+                <p class="mt-4 text-sm text-red-600 dark:text-red-400 font-medium">
+                    Average time: 15-30 minutes per invoice
+                </p>
+            </div>
+
+            <!-- After -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border-l-4 border-green-400">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">With AI Invoice Generator</h3>
+                </div>
+                <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Describe your work in plain English
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        AI calculates totals automatically
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Copy-paste from notes or chat history
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Professional, consistent formatting
+                    </li>
+                </ul>
+                <p class="mt-4 text-sm text-green-600 dark:text-green-400 font-medium">
+                    Average time: Under 1 minute per invoice
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">How the AI Invoice Generator Works</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300">Three simple steps to invoice automation</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Step 1 -->
+            <div class="relative">
+                <div class="absolute top-0 left-8 w-px h-full bg-purple-200 dark:bg-purple-800 md:hidden"></div>
+                <div class="relative bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-6 text-white font-bold text-2xl">
+                        1
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Describe Your Work</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">
+                        Type or paste a description of the work you completed. Use natural language - write it like you're telling a friend what you did.
+                    </p>
+                    <div class="bg-white dark:bg-gray-600 rounded-lg p-4 text-sm font-mono text-gray-700 dark:text-gray-200">
+                        "Website redesign including new homepage, about page, and contact form. 15 hours at $100/hour."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="relative">
+                <div class="relative bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-6 text-white font-bold text-2xl">
+                        2
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">AI Generates Line Items</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">
+                        Our AI instantly parses your description and creates properly formatted invoice line items with accurate calculations.
+                    </p>
+                    <div class="bg-white dark:bg-gray-600 rounded-lg p-4">
+                        <div class="flex justify-between text-sm mb-2">
+                            <span class="text-gray-700 dark:text-gray-200">Website Redesign</span>
+                            <span class="font-medium text-gray-900 dark:text-white">$1,500.00</span>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">15 hours @ $100/hr</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="relative">
+                <div class="relative bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-6 text-white font-bold text-2xl">
+                        3
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Review & Send</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">
+                        Preview the generated items, make any adjustments needed, then add them to your invoice with one click.
+                    </p>
+                    <div class="flex gap-2">
+                        <button class="flex-1 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg">
+                            Add All to Invoice
+                        </button>
+                        <button class="px-4 py-2 border border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-lg">
+                            Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases Section -->
+<section class="py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Works for Any Type of Work</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300">The AI understands hourly, fixed-price, and mixed billing</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Hourly Work -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Hourly Services</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    "Consulting session 2.5 hours at $200/hour"
+                </p>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm">
+                    <p class="font-medium text-gray-900 dark:text-white">Consulting Session</p>
+                    <p class="text-gray-500 dark:text-gray-400">2.5 hrs @ $200/hr = $500.00</p>
+                </div>
+            </div>
+
+            <!-- Fixed Price -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Fixed-Price Projects</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    "Logo design package $1,500"
+                </p>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm">
+                    <p class="font-medium text-gray-900 dark:text-white">Logo Design Package</p>
+                    <p class="text-gray-500 dark:text-gray-400">Fixed price = $1,500.00</p>
+                </div>
+            </div>
+
+            <!-- Multiple Items -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Multiple Line Items</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    "Development 10 hours at $150/hr plus hosting setup $200"
+                </p>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm space-y-2">
+                    <div>
+                        <p class="font-medium text-gray-900 dark:text-white">Development</p>
+                        <p class="text-gray-500 dark:text-gray-400">10 hrs @ $150/hr = $1,500.00</p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-900 dark:text-white">Hosting Setup</p>
+                        <p class="text-gray-500 dark:text-gray-400">= $200.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantities -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Quantities</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    "5 blog posts at $150 each"
+                </p>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm">
+                    <p class="font-medium text-gray-900 dark:text-white">Blog Posts</p>
+                    <p class="text-gray-500 dark:text-gray-400">5 @ $150 = $750.00</p>
+                </div>
+            </div>
+
+            <!-- Retainers -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Monthly Retainers</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    "January 2026 retainer for social media management $2,000"
+                </p>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm">
+                    <p class="font-medium text-gray-900 dark:text-white">January 2026 Retainer - Social Media</p>
+                    <p class="text-gray-500 dark:text-gray-400">= $2,000.00</p>
+                </div>
+            </div>
+
+            <!-- Complex -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Complex Descriptions</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                    "Mobile app Phase 1: design $3,000, development 40 hours at $175/hr, testing $500"
+                </p>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 text-sm space-y-2">
+                    <p class="font-medium text-gray-900 dark:text-white">3 line items generated</p>
+                    <p class="text-gray-500 dark:text-gray-400">Total: $10,500.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">AI Invoice Generator Pricing</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300">Start free, upgrade as you grow</p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            <!-- Free -->
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 text-center">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Free</h3>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">3</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">AI generations/month</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">Perfect for trying it out</p>
+            </div>
+
+            <!-- Starter -->
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 text-center">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Starter</h3>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">10</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">AI generations/month</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">$9/month</p>
+            </div>
+
+            <!-- Professional -->
+            <div class="bg-purple-600 rounded-xl p-6 text-center ring-2 ring-purple-400 ring-offset-2 dark:ring-offset-gray-800">
+                <div class="text-purple-200 text-xs font-medium mb-2">MOST POPULAR</div>
+                <h3 class="font-semibold text-white mb-2">Professional</h3>
+                <p class="text-3xl font-bold text-white mb-1">Unlimited</p>
+                <p class="text-purple-200 text-sm mb-4">AI generations</p>
+                <p class="text-purple-100 text-sm">$29/month</p>
+            </div>
+
+            <!-- Business -->
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 text-center">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Business</h3>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">Unlimited</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">AI generations</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">$79/month</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition shadow-lg">
+                Try AI Invoice Generator Free
+            </a>
+            <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm">
+                No credit card required. 3 free AI generations included.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">What is an AI invoice generator?</h3>
+                <p class="text-gray-600 dark:text-gray-300">An AI invoice generator uses artificial intelligence to automatically create invoice line items from natural language descriptions. Instead of manually entering each item, you simply describe your work in plain English (e.g., "Website redesign, 20 hours at $100/hour") and the AI generates properly formatted invoice entries.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How accurate is the AI invoice generator?</h3>
+                <p class="text-gray-600 dark:text-gray-300">InvoiceKits AI invoice generator is powered by Claude, one of the most advanced AI models available. It accurately parses hourly rates, fixed prices, quantities, and descriptions. You always have the opportunity to review and edit generated items before adding them to your invoice.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Is the AI invoice generator free to use?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Yes! Free users get 3 AI generations per month. Starter plan users get 10 generations per month. Professional and Business plan subscribers get unlimited AI invoice generations.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">What types of work can the AI invoice generator handle?</h3>
+                <p class="text-gray-600 dark:text-gray-300">The AI can handle virtually any type of billable work including hourly services, fixed-price projects, product sales, consulting fees, retainers, and mixed billing. It understands complex descriptions like "Logo design $500 plus 3 rounds of revisions at $100 each".</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I edit the AI-generated invoice items?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Absolutely! The AI generates a preview of line items that you can review before adding to your invoice. You can edit descriptions, quantities, rates, or remove items entirely. The AI is a starting point that saves time, not a replacement for your judgment.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-20 bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="inline-flex items-center px-4 py-1 bg-purple-500/30 text-purple-100 rounded-full text-sm font-medium mb-6">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            AI-Powered Invoicing
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to Invoice 10x Faster?
+        </h2>
+        <p class="text-xl text-purple-100 mb-8">
+            Join thousands of freelancers and businesses using AI to eliminate invoice busywork.
+        </p>
+        <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-white text-purple-700 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
+            Try AI Invoice Generator Free
+        </a>
+        <p class="mt-6 text-purple-200 text-sm">
+            3 free AI generations. No credit card required.
+        </p>
+    </div>
+</section>
+{% endblock %}

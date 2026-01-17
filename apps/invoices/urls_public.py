@@ -17,6 +17,9 @@ urlpatterns = [
     path('for-consultants/', views.ConsultantsLandingPageView.as_view(), name='for_consultants'),
     path('compare/', views.CompareLandingPageView.as_view(), name='compare'),
 
+    # Feature landing pages
+    path('features/ai-invoice-generator/', views.AIInvoiceGeneratorView.as_view(), name='feature_ai_invoice_generator'),
+
     # Template showcase pages
     path('templates/clean-slate/', views.CleanSlateShowcaseView.as_view(), name='template_clean_slate'),
     path('templates/executive/', views.ExecutiveShowcaseView.as_view(), name='template_executive'),

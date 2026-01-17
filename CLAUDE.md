@@ -567,6 +567,7 @@ invoice_generator/
 | `apps/affiliates/services/commission_tracker.py` | Commission creation service (20% rate) |
 | `templates/affiliates/dashboard.html` | Affiliate dashboard with stats and referral links |
 | `templates/affiliates/program.html` | Public affiliate program landing page |
+| `templates/features/ai-invoice-generator.html` | AI Invoice Generator feature landing page |
 
 ---
 
@@ -633,6 +634,7 @@ invoice_generator/
 | `/templates/neon-edge/` | Neon Edge template showcase |
 | `/tools/invoice-calculator/` | Free invoice calculator tool |
 | `/tools/late-fee-calculator/` | Free late fee calculator tool |
+| `/features/ai-invoice-generator/` | AI Invoice Generator feature page |
 
 ### Team Management URLs (Business Tier Only)
 | URL | Purpose |
@@ -766,6 +768,11 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 |-----|-----------|--------|
 | `https://www.invoicekits.com/tools/invoice-calculator/` | Free Tool | Pending |
 | `https://www.invoicekits.com/tools/late-fee-calculator/` | Free Tool | Pending |
+
+**Feature Pages:**
+| URL | Page Type | Status |
+|-----|-----------|--------|
+| `https://www.invoicekits.com/features/ai-invoice-generator/` | Feature Landing Page | Pending |
 
 ### SEO TODOs
 - [x] Register with Google Search Console
@@ -1064,6 +1071,9 @@ Authentication: API Key in header `X-API-Key: <key>`
 245. Added Time Tracking to feature discovery cards section on dashboard (4-column grid)
 246. Updated pricing page to show time tracking timer limits per subscription tier
 247. Added Time Tracking, Payment Reminders, and Recurring Invoices to landing page features section
+248. Created AI Invoice Generator feature landing page at `/features/ai-invoice-generator/` with SEO optimization
+249. Added BreadcrumbList, HowTo, FAQPage, and SoftwareApplication JSON-LD schemas to AI feature page
+250. Added AI Invoice Generator to sitemap and robots.txt
 
 ---
 

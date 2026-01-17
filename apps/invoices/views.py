@@ -112,6 +112,18 @@ class CompareLandingPageView(TemplateView):
         return context
 
 
+# Feature Landing Pages
+class AIInvoiceGeneratorView(TemplateView):
+    """Landing page for AI Invoice Generator feature."""
+    template_name = 'features/ai-invoice-generator.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+        context['ai_limits'] = settings.AI_GENERATION_LIMITS
+        return context
+
+
 # Template Showcase Views
 class TemplateShowcaseView(TemplateView):
     """Base view for template showcase pages."""
