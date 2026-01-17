@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Free Invoice Generator - Create Professional Invoices" %} | InvoiceKits{% endblock %}
+{% block title %}{% trans "AI Invoice Generator with Time Tracking - Create Professional Invoices Free" %} | InvoiceKits{% endblock %}
 
 {% block footer %}{% endblock %}
 
@@ -12,11 +12,11 @@
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                {% trans "Free Invoice Generator" %}<br>
-                <span class="text-primary-200">{% trans "Create Professional Invoices in Seconds" %}</span>
+                {% trans "AI-Powered Invoice Generator" %}<br>
+                <span class="text-primary-200">{% trans "With Built-In Time Tracking" %}</span>
             </h1>
             <p class="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-                {% trans "The fastest invoice generator for freelancers and small businesses. Create beautiful PDF invoices instantly, upload CSV for batch invoice generation, or use our API. No credit card required." %}
+                {% trans "The smartest invoice generator for freelancers and small businesses. Describe your work in plain English and let AI generate your invoice. Track billable hours with our live timer. Create professional PDF invoices instantly." %}
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
@@ -33,6 +33,80 @@
     </div>
 </section>
 
+<!-- NEW: AI & Time Tracking Highlight Section -->
+<section class="py-16 bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <span class="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 mb-4">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clip-rule="evenodd"/>
+                </svg>
+                {% trans "New Features" %}
+            </span>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Work Smarter with AI & Time Tracking" %}</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">{% trans "Revolutionary features that save hours on invoicing" %}</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <!-- AI Invoice Generator Card -->
+            <a href="{% url 'feature_ai_invoice_generator' %}" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-700 p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-purple-400/20 rounded-full blur-3xl"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm">
+                            {% trans "BETA" %}
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">{% trans "AI Invoice Generator" %}</h3>
+                    <p class="text-purple-100 mb-6">
+                        {% trans "Describe your work in plain English — \"Built React dashboard, 12 hours at $150/hr\" — and our AI instantly creates invoice line items. No more manual data entry." %}
+                    </p>
+                    <div class="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform">
+                        {% trans "Learn More" %}
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Time Tracking Card -->
+            <a href="{% url 'feature_time_tracking' %}" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 to-teal-700 p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-cyan-400/20 rounded-full blur-3xl"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm">
+                            {% trans "NEW" %}
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">{% trans "Built-In Time Tracking" %}</h3>
+                    <p class="text-cyan-100 mb-6">
+                        {% trans "Start a timer, track your hours, and convert time entries into invoices with one click. No more guessing how long you worked or switching between apps." %}
+                    </p>
+                    <div class="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform">
+                        {% trans "Learn More" %}
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- Features Section -->
 <section id="features" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,7 +116,21 @@
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
-            <!-- Feature 1 -->
+            <!-- Feature 1 - AI Invoice Generator -->
+            <a href="{% url 'feature_ai_invoice_generator' %}" class="p-8 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border-2 border-purple-200 hover:border-purple-400 transition-all hover:shadow-lg group">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-purple-600 bg-purple-100 px-2 py-1 rounded">BETA</span>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors">{% trans "AI Invoice Generator" %}</h3>
+                <p class="text-gray-600">{% trans "Describe your work in plain English and let AI create invoice line items instantly. Save hours on data entry." %}</p>
+            </a>
+
+            <!-- Feature 2 -->
             <div class="p-8 bg-gray-50 rounded-2xl">
                 <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-6">
                     <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,15 +197,18 @@
             </div>
 
             <!-- Feature 7 - Time Tracking -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+            <a href="{% url 'feature_time_tracking' %}" class="p-8 bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl border-2 border-cyan-200 hover:border-cyan-400 transition-all hover:shadow-lg group">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-cyan-600 bg-cyan-100 px-2 py-1 rounded">NEW</span>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Time Tracking" %}</h3>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-cyan-700 transition-colors">{% trans "Time Tracking" %}</h3>
                 <p class="text-gray-600">{% trans "Track billable hours with a live timer. Convert time entries into invoices with one click." %}</p>
-            </div>
+            </a>
 
             <!-- Feature 8 - Payment Reminders -->
             <div class="p-8 bg-gray-50 rounded-2xl">
