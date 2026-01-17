@@ -1080,6 +1080,12 @@ Authentication: API Key in header `X-API-Key: <key>`
 251. Created Time Tracking feature landing page at `/features/time-tracking/` with SEO optimization
 252. Added BreadcrumbList, HowTo, FAQPage, and SoftwareApplication JSON-LD schemas to Time Tracking page
 253. Added Time Tracking feature page to sitemap
+254. Updated homepage hero H1 to "AI-Powered Invoice Generator With Built-In Time Tracking"
+255. Updated homepage hero description to emphasize AI-powered line item generation and live timer
+256. Added "New Features" highlight section with gradient cards for AI Invoice Generator and Time Tracking
+257. Added AI Invoice Generator as first feature card in features grid with BETA badge and link to feature page
+258. Updated Time Tracking feature card with NEW badge, highlighted styling, and link to feature page
+259. Updated homepage title meta tag to "AI Invoice Generator with Time Tracking - Create Professional Invoices Free"
 
 ---
 
