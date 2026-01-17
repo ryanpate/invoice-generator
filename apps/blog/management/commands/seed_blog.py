@@ -42,6 +42,7 @@ class Command(BaseCommand):
         self._create_small_business_guide_post(author, guides_category)
         self._create_invoice_vs_receipt_post(author, guides_category)
         self._create_ai_invoice_generator_post(author, guides_category)
+        self._create_time_tracking_post(author, tips_category)
 
     def _create_invoice_guide(self, author, category):
         """Create or update the 'How to Create a Professional Invoice' post."""
@@ -1806,6 +1807,370 @@ class Command(BaseCommand):
                 'content': post_content,
                 'meta_description': 'Learn how AI invoice generators work. Describe your work in plain English and create professional invoices instantly. Complete guide with examples.',
                 'meta_keywords': 'ai invoice generator, ai invoicing, natural language invoice, automated invoice, ai billing, invoice automation, smart invoicing, ai powered invoice',
+                'status': 'published',
+            }
+        )
+
+        action = 'Created' if created else 'Updated'
+        self.stdout.write(self.style.SUCCESS(f'{action} blog post: "{post_slug}"'))
+
+    def _create_time_tracking_post(self, author, category):
+        """Create or update the 'Time Tracking for Freelancers' post."""
+        post_slug = 'time-tracking-for-freelancers'
+
+        post_content = '''
+<p class="lead text-xl text-gray-600 dark:text-gray-300 mb-8">Every freelancer has done it: worked an extra 15 minutes here, 30 minutes there, and never billed for it. Those "quick" client calls and "minor" revisions add up to thousands in lost income each year. Time tracking invoice software solves this problem by capturing every billable minute and converting it directly into invoices.</p>
+
+<p class="mb-4">Whether you bill hourly, use day rates, or work on retainers, accurate time tracking is the foundation of getting paid what you're worth. This guide shows you how to implement time tracking that actually works—without feeling like you're constantly punching a clock.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Why Freelancers Need Time Tracking</h2>
+
+<p class="mb-4">A 2025 study by Freelance Union found that the average freelancer loses <strong>$12,000 per year</strong> to untracked time. That's not missing invoices or unpaid clients—it's work that was never billed in the first place.</p>
+
+<p class="mb-4">Here's how unbilled time typically leaks out:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li><strong>Scope creep conversations</strong> – "Quick" phone calls that turn into 45-minute planning sessions</li>
+    <li><strong>Email time</strong> – Client correspondence often takes 30+ minutes daily</li>
+    <li><strong>Revision rounds</strong> – "Minor tweaks" that take real work to implement</li>
+    <li><strong>Research and prep</strong> – Reading documentation, setting up environments, learning new tools</li>
+    <li><strong>Administrative work</strong> – File organization, asset management, project handoffs</li>
+</ul>
+
+<p class="mb-4">Without time tracking, you're essentially guessing how long projects take—and those guesses almost always underestimate the real effort involved.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">What Is Time Tracking Invoice Software?</h2>
+
+<p class="mb-4">Time tracking invoice software combines two essential freelancer tools:</p>
+
+<ol class="list-decimal pl-6 mb-6 space-y-2">
+    <li><strong>Time tracking</strong> – Record how long you spend on each client or project</li>
+    <li><strong>Invoice generation</strong> – Convert those time entries directly into professional invoices</li>
+</ol>
+
+<p class="mb-4">The integration is what makes this powerful. Instead of tracking time in one app and manually transferring totals to an invoice, the software does it automatically. Your logged hours become invoice line items with accurate descriptions, quantities, and rates.</p>
+
+<div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6 my-8">
+    <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">InvoiceKits Time Tracking</h3>
+    <p class="text-green-700 dark:text-green-300">Our built-in time tracking includes a real-time timer, manual time entry, and one-click invoice generation. Track time on your dashboard and convert entries to invoices when you're ready to bill.</p>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">How Time Tracking Works</h2>
+
+<p class="mb-4">Modern time tracking software offers three main methods for capturing your work time:</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">1. Real-Time Timer</h3>
+
+<p class="mb-4">Click start when you begin working, stop when you're done. The timer runs in the background while you work, capturing exact durations down to the second.</p>
+
+<p class="mb-4"><strong>Best for:</strong> Client calls, focused work sessions, tasks where you want automatic tracking</p>
+
+<p class="mb-4"><strong>Example workflow:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Client calls at 2:00 PM for a project discussion</li>
+    <li>You click "Start Timer" and select the client</li>
+    <li>The call ends at 2:47 PM</li>
+    <li>You stop the timer – it logs 47 minutes automatically</li>
+    <li>Add a description: "Project kickoff call - discussed requirements and timeline"</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">2. Manual Time Entry</h3>
+
+<p class="mb-4">Enter hours and minutes after the fact. Useful when you forget to start a timer or prefer to log time in batches.</p>
+
+<p class="mb-4"><strong>Best for:</strong> End-of-day logging, catching up on untracked work, batch entry</p>
+
+<p class="mb-4"><strong>Example workflow:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>At 5 PM, you review your day</li>
+    <li>Add entry: 2 hours - "Homepage redesign mockups"</li>
+    <li>Add entry: 1.5 hours - "Mobile responsive adjustments"</li>
+    <li>Add entry: 30 minutes - "Client email correspondence"</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">3. Hybrid Approach</h3>
+
+<p class="mb-4">Most freelancers use both methods. Timer for predictable work sessions, manual entry for everything else.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">From Time Entries to Invoice: The Workflow</h2>
+
+<p class="mb-4">Here's how time tracking connects to invoicing:</p>
+
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 my-6">
+    <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Step-by-Step Process</h4>
+    <ol class="list-decimal pl-6 space-y-3">
+        <li><strong>Track your time</strong> – Use timer or manual entry throughout your work</li>
+        <li><strong>Review entries</strong> – Check that descriptions are clear and times are accurate</li>
+        <li><strong>Select billable entries</strong> – Choose which time entries to include on the invoice</li>
+        <li><strong>Choose grouping</strong> – Detailed (one line per entry) or summary (grouped by description)</li>
+        <li><strong>Generate invoice</strong> – Click "Bill Time" and your invoice is created automatically</li>
+    </ol>
+</div>
+
+<p class="mb-4">The software calculates totals based on your hourly rate and the time logged. If you spent 4.5 hours on design work at $100/hour, that becomes a $450 line item on your invoice.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Real Example: Freelance Developer's Week</h2>
+
+<p class="mb-4">Let's follow a real workflow. Sarah is a freelance developer working with multiple clients:</p>
+
+<div class="overflow-x-auto my-6">
+    <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Day</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Client</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Description</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Hours</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            <tr>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Monday</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Acme Corp</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">User authentication implementation</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">4.5</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Monday</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Acme Corp</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Code review call</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">0.75</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Tuesday</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Acme Corp</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">API endpoint development</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">6.0</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Wednesday</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Acme Corp</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Bug fixes and testing</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">3.25</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Thursday</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Acme Corp</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Documentation</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">2.0</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Friday</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Acme Corp</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Deployment and handoff</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">1.75</td>
+            </tr>
+        </tbody>
+        <tfoot class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+                <td colspan="3" class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white text-right">Total Hours:</td>
+                <td class="px-4 py-3 text-sm font-semibold text-gray-900 dark:text-white">18.25</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<p class="mb-4">At $125/hour, Sarah's invoice for Acme Corp totals <strong>$2,281.25</strong>. Without time tracking, she might have estimated "about 15-16 hours" and invoiced $2,000—leaving $281.25 on the table.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">5 Time Tracking Best Practices</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">1. Track in Real-Time When Possible</h3>
+
+<p class="mb-4">Starting a timer when you begin work is more accurate than reconstructing your day later. End-of-day estimates tend to undercount actual work time by 15-20%.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">2. Write Specific Descriptions</h3>
+
+<p class="mb-4">Vague entries like "Work" or "Development" don't help you or your client. Be specific:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li><strong>Bad:</strong> "Design work"</li>
+    <li><strong>Good:</strong> "Homepage hero section design - 3 layout variations"</li>
+</ul>
+
+<p class="mb-4">Detailed descriptions become professional invoice line items and reduce client questions about what they're paying for.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">3. Round Consistently</h3>
+
+<p class="mb-4">Pick a rounding increment and stick with it. Common options:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li><strong>6-minute increments (0.1 hours)</strong> – Standard for legal and consulting</li>
+    <li><strong>15-minute increments</strong> – Popular for hourly freelancers</li>
+    <li><strong>No rounding</strong> – Bill exact time down to the minute</li>
+</ul>
+
+<p class="mb-4">Be transparent with clients about your rounding policy.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">4. Review Before Invoicing</h3>
+
+<p class="mb-4">Before converting time entries to an invoice, review for:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Missing entries (did you log that Thursday afternoon call?)</li>
+    <li>Description clarity (will the client understand each line item?)</li>
+    <li>Correct client assignment (especially if you work with multiple clients)</li>
+    <li>Reasonable totals (does 8 hours for that small task seem right?)</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">5. Include All Billable Activities</h3>
+
+<p class="mb-4">These activities are billable and often forgotten:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Phone and video calls</li>
+    <li>Email responses (batch these as one entry per day)</li>
+    <li>Research and learning required for the project</li>
+    <li>File organization and asset management</li>
+    <li>Travel time (if agreed upon)</li>
+    <li>Revision rounds and feedback implementation</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Time Tracking for Different Billing Models</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Hourly Billing</h3>
+
+<p class="mb-4">The most straightforward use case. Track every billable hour, multiply by rate, invoice.</p>
+
+<p class="mb-4"><strong>Tip:</strong> Set a minimum billing increment (e.g., 15 minutes) so 5-minute tasks don't slip through unpaid.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Project-Based / Fixed Fee</h3>
+
+<p class="mb-4">Even with fixed pricing, time tracking helps you:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Quote accurately on future projects</li>
+    <li>Identify scope creep before it spirals</li>
+    <li>Know your effective hourly rate (project fee ÷ actual hours)</li>
+    <li>Justify additional charges when scope changes</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">Retainer Agreements</h3>
+
+<p class="mb-4">For monthly retainers, time tracking shows:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>How many hours the client used vs. their allocation</li>
+    <li>Whether the retainer amount is fair for both parties</li>
+    <li>Rollover hours owed or additional hours billable</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Combining Time Tracking with AI Invoicing</h2>
+
+<p class="mb-4">Time tracking captures the hours. AI invoicing enhances the descriptions. Together, they create professional invoices with minimal effort.</p>
+
+<div class="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6 my-8">
+    <h3 class="text-lg font-semibold text-purple-800 dark:text-purple-200 mb-2">Example Workflow</h3>
+    <p class="text-purple-700 dark:text-purple-300 mb-4">You tracked 4 hours of "API development" for a client. When you bill that time, the AI can expand your brief description into:</p>
+    <p class="text-purple-700 dark:text-purple-300 italic">"Backend API Development - RESTful endpoint implementation with authentication middleware, request validation, and JSON response formatting"</p>
+</div>
+
+<p class="mb-4">This gives clients detailed invoices that demonstrate value while saving you from writing lengthy descriptions manually. Learn more in our <a href="/blog/ai-invoice-generator-natural-language/" class="text-primary-600 dark:text-primary-400 hover:underline">AI invoice generator guide</a>.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Common Time Tracking Mistakes to Avoid</h2>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">1. Not Tracking "Small" Tasks</h3>
+
+<p class="mb-4">That 10-minute email seems trivial, but 10 minutes daily × 20 workdays = 3+ hours monthly. At $100/hour, that's $300 you're giving away each month.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">2. Waiting to Log Time</h3>
+
+<p class="mb-4">Logging at the end of the week means reconstructing days from memory. Memory is unreliable—studies show we forget 40% of what happened just 24 hours ago. Log daily at minimum.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">3. Inconsistent Descriptions</h3>
+
+<p class="mb-4">One day it's "Design," the next it's "UI work," then "Visual updates." Consistent descriptions make invoices cleaner and help you analyze where your time actually goes.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">4. Forgetting to Stop Timers</h3>
+
+<p class="mb-4">Left a timer running during lunch? Review entries before invoicing to catch inflated times. A good time tracking tool shows active timers prominently so you don't forget.</p>
+
+<h3 class="text-xl font-semibold text-gray-900 dark:text-white mt-6 mb-3">5. Not Billing for Communication Time</h3>
+
+<p class="mb-4">Client calls and emails are work. If you spent 30 minutes discussing a project, that's 30 minutes of your professional time. Track it and bill it.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Choosing Time Tracking Software: What to Look For</h2>
+
+<div class="overflow-x-auto my-6">
+    <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Feature</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Why It Matters</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            <tr>
+                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Real-time timer</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Capture exact work time automatically</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Manual entry</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Log time after the fact when you forget the timer</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Client association</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Filter and bill time by client easily</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">One-click invoicing</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Convert tracked time directly to invoice line items</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Entry grouping options</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Detailed or summary views on invoices</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Rounding settings</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Bill in consistent increments (6, 15, 30 min)</td>
+            </tr>
+            <tr>
+                <td class="px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300">Mobile access</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Track time from anywhere</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Getting Started with Time Tracking</h2>
+
+<p class="mb-4">If you've never tracked time before, start simple:</p>
+
+<ol class="list-decimal pl-6 mb-6 space-y-2">
+    <li><strong>Week 1:</strong> Just track everything. Don't worry about categories or perfect descriptions. Get in the habit of logging time.</li>
+    <li><strong>Week 2:</strong> Review your entries. Are descriptions clear? Are you catching all billable work? Refine your approach.</li>
+    <li><strong>Week 3:</strong> Create your first invoice from tracked time. Notice how much faster it is than manual invoice creation.</li>
+    <li><strong>Week 4:</strong> Compare your tracked hours to your estimates. Most freelancers are surprised by how much time certain tasks actually take.</li>
+</ol>
+
+<p class="mb-4">After a month, you'll have valuable data about where your time goes—and you'll never go back to guessing.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+        <li>Freelancers lose an average of $12,000/year to untracked time</li>
+        <li>Real-time timers are more accurate than end-of-day estimates</li>
+        <li>Specific descriptions become professional invoice line items</li>
+        <li>Track all billable activities including calls, emails, and research</li>
+        <li>Time tracking software that integrates with invoicing saves the most time</li>
+        <li>Even fixed-fee projects benefit from time tracking for future estimates</li>
+    </ul>
+</div>
+
+<div class="mt-8 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg">
+    <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Related reading:</strong> Explore our <a href="/features/time-tracking/" class="text-primary-600 dark:text-primary-400 hover:underline">built-in time tracking feature</a>, learn about the <a href="/blog/ai-invoice-generator-natural-language/" class="text-primary-600 dark:text-primary-400 hover:underline">AI invoice generator</a>, or read our <a href="/blog/freelancer-invoice-tips-get-paid-faster/" class="text-primary-600 dark:text-primary-400 hover:underline">invoice best practices for freelancers</a>.</p>
+</div>
+'''
+
+        post, created = BlogPost.objects.update_or_create(
+            slug=post_slug,
+            defaults={
+                'title': 'Time Tracking for Freelancers: Bill Every Hour You Work',
+                'author': author,
+                'category': category,
+                'excerpt': 'Learn how time tracking invoice software helps freelancers capture every billable minute and convert time entries directly into professional invoices. Stop losing money to untracked work.',
+                'content': post_content,
+                'meta_description': 'Time tracking software for freelancers. Capture billable hours, convert to invoices instantly. Complete guide with real examples and best practices.',
+                'meta_keywords': 'time tracking invoice software, freelance time tracking, billable hours tracker, time to invoice, hourly billing software, freelancer time management',
                 'status': 'published',
             }
         )
