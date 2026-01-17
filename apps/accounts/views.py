@@ -38,6 +38,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             created_at__year=current_year
         )
 
+        # Get AI generation info
+        ai_limit = user.get_ai_generation_limit()
+        ai_remaining = user.get_ai_generations_remaining()
+
         context.update({
             'recent_invoices': recent_invoices,
             'invoices_this_month': monthly_invoices.count(),
@@ -50,6 +54,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 'total_available': user.get_available_credits(),
                 'free_remaining': user.free_credits_remaining,
                 'purchased_balance': user.credits_balance,
+            },
+            # AI generation info
+            'ai_generation': {
+                'limit': ai_limit,
+                'remaining': ai_remaining,
+                'used': user.ai_generations_used,
+                'unlimited': ai_limit is None,
             },
         })
         return context

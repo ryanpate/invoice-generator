@@ -215,6 +215,61 @@
         {% endif %}
     </div>
 
+    <!-- AI Generation Usage -->
+    <div class="mb-8">
+        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl shadow-sm p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center">
+                            <h3 class="text-lg font-semibold">AI Invoice Generator</h3>
+                            <span class="ml-2 text-xs font-medium bg-white/20 px-2 py-0.5 rounded-full">BETA</span>
+                        </div>
+                        <p class="text-purple-100 text-sm mt-0.5">Describe your work, get structured line items instantly</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    {% if ai_generation.unlimited %}
+                    <p class="text-2xl font-bold">Unlimited</p>
+                    <p class="text-purple-200 text-sm">AI generations</p>
+                    {% else %}
+                    <p class="text-2xl font-bold">{{ ai_generation.remaining }}<span class="text-lg font-normal text-purple-200">/{{ ai_generation.limit }}</span></p>
+                    <p class="text-purple-200 text-sm">generations left this month</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% if not ai_generation.unlimited %}
+            <div class="mt-4">
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="text-purple-200">Usage</span>
+                    <span class="text-purple-200">{{ ai_generation.used }} used</span>
+                </div>
+                <div class="w-full bg-white/20 rounded-full h-2">
+                    <div class="bg-white h-2 rounded-full" style="width: {% widthratio ai_generation.used ai_generation.limit 100 %}%"></div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="mt-4 flex items-center justify-between">
+                <a href="{% url 'invoices:create' %}" class="inline-flex items-center text-sm font-medium text-white hover:text-purple-100 transition">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Try AI Generate on New Invoice
+                </a>
+                {% if not ai_generation.unlimited and ai_generation.remaining < 3 %}
+                <a href="{% url 'billing:plans' %}" class="text-sm font-medium bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg transition">
+                    Upgrade for more
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <a href="{% url 'invoices:create' %}" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 hover:shadow-md transition group">
