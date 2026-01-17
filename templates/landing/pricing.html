@@ -443,6 +443,15 @@
                                     {% if tier.api_access %}{% trans "API access" %} ({{ tier.api_calls_per_month }} {% trans "calls/mo" %}){% else %}{% trans "API access" %}{% endif %}
                                 </span>
                             </li>
+
+                            <li class="flex items-start">
+                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="text-gray-600">
+                                    {% if tier.max_active_timers == -1 %}{% trans "Unlimited time tracking" %}{% else %}{% trans "Time tracking" %} ({{ tier.max_active_timers }} {% trans "timer" %}{% if tier.max_active_timers > 1 %}s{% endif %}){% endif %}
+                                </span>
+                            </li>
                         </ul>
 
                         {% if user.is_authenticated %}
@@ -496,6 +505,7 @@
                         <li>- {% trans "You invoice regularly (10+/month)" %}</li>
                         <li>- {% trans "You want the best per-invoice value" %}</li>
                         <li>- {% trans "You need batch upload or recurring invoices" %}</li>
+                        <li>- {% trans "You want time tracking to bill hours" %}</li>
                         <li>- {% trans "You need API access" %}</li>
                     </ul>
                 </div>
