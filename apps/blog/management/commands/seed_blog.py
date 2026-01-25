@@ -2671,7 +2671,7 @@ class Command(BaseCommand):
                 'category': category,
                 'excerpt': 'Learn how to calculate late fees on invoices using flat fees, percentage, simple interest, and compound interest. Includes formulas, examples, and legal considerations.',
                 'content': post_content,
-                'meta_description': 'Complete guide to calculating late fees on invoices. Learn flat fee, percentage, simple and compound interest methods with examples. Free late fee calculator included.',
+                'meta_description': 'Learn to calculate late fees on invoices. Covers flat fee, percentage, simple and compound interest with examples. Free calculator.',
                 'meta_keywords': 'calculate late fees, late fee calculator, invoice late fee, how to calculate late fees, late payment fee, overdue invoice interest',
                 'status': 'published',
             }
@@ -2920,7 +2920,7 @@ class Command(BaseCommand):
                 'category': category,
                 'excerpt': 'Master invoice calculations with this complete guide. Learn line item totals, tax calculations, discounts, and avoid common mistakes. Includes step-by-step examples.',
                 'content': post_content,
-                'meta_description': 'Complete guide to calculating invoice totals. Step-by-step examples for line items, tax, discounts, and hourly rates. Free invoice calculator included.',
+                'meta_description': 'Complete guide to invoice totals. Step-by-step examples for line items, tax, discounts, and hourly rates. Free calculator.',
                 'meta_keywords': 'how to calculate an invoice, invoice calculator, invoice total calculation, calculate invoice tax, invoice line items, invoice subtotal',
                 'status': 'published',
             }
