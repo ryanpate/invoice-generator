@@ -29,6 +29,7 @@ urlpatterns = [
     path('templates/neon-edge/', views.NeonEdgeShowcaseView.as_view(), name='template_neon_edge'),
 
     # Free tools (SEO pages - no auth required)
+    path('tools/', views.ToolsIndexView.as_view(), name='tools_index'),
     path('tools/invoice-calculator/', views.InvoiceCalculatorView.as_view(), name='invoice_calculator'),
     path('tools/late-fee-calculator/', views.LateFeeCalculatorView.as_view(), name='late_fee_calculator'),
 ]

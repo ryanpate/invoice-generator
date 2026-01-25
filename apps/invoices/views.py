@@ -190,6 +190,11 @@ class LateFeeCalculatorView(FreeToolView):
     template_name = 'tools/late-fee-calculator.html'
 
 
+class ToolsIndexView(FreeToolView):
+    """Landing page for all free SEO tools."""
+    template_name = 'tools/index.html'
+
+
 class InvoiceListView(LoginRequiredMixin, TeamAwareQuerysetMixin, ListView):
     """List all invoices for the current user's company (including team members)."""
     model = Invoice

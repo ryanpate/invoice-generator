@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Free Invoice Calculator - Calculate Invoice Totals Instantly" %} | InvoiceKits{% endblock %}
+{% block title %}{% trans "Free Online Invoice Calculator" %} | Calculate Invoice Totals Instantly{% endblock %}
 
-{% block meta_description %}{% trans "Free online invoice calculator. Add line items, calculate subtotals, apply tax and discounts, get instant totals. Supports hourly rates. No signup required." %}{% endblock %}
+{% block meta_description %}{% trans "Calculate invoice totals instantly with our free online calculator. Add line items, apply tax and discounts, see results in seconds. Supports hourly rates. No signup required." %}{% endblock %}
 
 {% block meta_keywords %}{% trans "invoice calculator, calculate invoice total, invoice tax calculator, free invoice calculator, invoice total calculator, hourly rate calculator" %}{% endblock %}
 
@@ -18,6 +18,45 @@
 {% block twitter_description %}{% trans "Calculate invoice totals instantly. Add line items, apply tax and discounts. Free, no signup required." %}{% endblock %}
 
 {% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate Invoice Totals",
+    "description": "Step-by-step guide to calculating invoice totals with line items, tax, and discounts using our free online calculator.",
+    "totalTime": "PT2M",
+    "tool": {
+        "@type": "HowToTool",
+        "name": "Invoice Calculator"
+    },
+    "step": [
+        {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Add line items",
+            "text": "Enter descriptions, quantities, and rates for each product or service. Use Hourly Mode for time-based billing."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Apply discounts",
+            "text": "Enter any discount as a percentage or flat dollar amount. The discount is applied to the subtotal."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Add tax rate",
+            "text": "Enter your applicable tax rate as a percentage. Tax is calculated on the discounted subtotal."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "View total",
+            "text": "See your complete invoice breakdown: subtotal, discount amount, tax amount, and final total instantly."
+        }
+    ]
+}
+</script>
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",

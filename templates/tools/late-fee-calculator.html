@@ -1,23 +1,74 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Free Late Fee Calculator - Calculate Invoice Late Fees & Interest" %} | InvoiceKits{% endblock %}
+{% block title %}{% trans "Free Online Late Fee Calculator" %} | Calculate Invoice Penalties Instantly{% endblock %}
 
-{% block meta_description %}{% trans "Free late fee calculator for invoices. Calculate late payment fees, interest charges, and total amount due. Supports flat fees, percentage rates, and compound interest." %}{% endblock %}
+{% block meta_description %}{% trans "Calculate late fees on overdue invoices instantly. Free online tool for flat fees, percentage rates, compound interest. See total owed in seconds. No signup required." %}{% endblock %}
 
 {% block meta_keywords %}{% trans "late fee calculator, invoice late fee calculator, late payment interest calculator, overdue invoice calculator, late payment penalty calculator" %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/tools/late-fee-calculator/{% endblock %}
 
-{% block og_title %}{% trans "Free Late Fee Calculator - Calculate Invoice Late Fees & Interest" %} | InvoiceKits{% endblock %}
+{% block og_title %}{% trans "Free Online Late Fee Calculator" %} | Calculate Invoice Penalties Instantly{% endblock %}
 
-{% block og_description %}{% trans "Free late fee calculator for overdue invoices. Calculate late payment fees, interest, and total due. No signup required." %}{% endblock %}
+{% block og_description %}{% trans "Calculate late fees on overdue invoices instantly. Free tool for flat fees, percentage, compound interest. No signup required." %}{% endblock %}
 
-{% block twitter_title %}{% trans "Free Late Fee Calculator" %} | InvoiceKits{% endblock %}
+{% block twitter_title %}{% trans "Free Online Late Fee Calculator" %} | Instant Results{% endblock %}
 
-{% block twitter_description %}{% trans "Calculate late payment fees and interest on overdue invoices. Free, no signup required." %}{% endblock %}
+{% block twitter_description %}{% trans "Calculate late fees on overdue invoices instantly. Free, supports flat fees, percentage rates, compound interest." %}{% endblock %}
 
 {% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate Late Fees on an Invoice",
+    "description": "Step-by-step guide to calculating late fees and interest on overdue invoices using our free online calculator.",
+    "totalTime": "PT1M",
+    "tool": {
+        "@type": "HowToTool",
+        "name": "Late Fee Calculator"
+    },
+    "step": [
+        {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Enter invoice amount",
+            "text": "Enter the original invoice amount in dollars."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Set due date and payment date",
+            "text": "Select the invoice due date and the actual or expected payment date."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Choose late fee method",
+            "text": "Select flat fee only, percentage only, or a combination of both."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "Enter fee rate",
+            "text": "Enter your late fee rate (flat dollar amount and/or percentage per month/year/day)."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 5,
+            "name": "Toggle compound interest",
+            "text": "Optionally enable compound interest for interest calculated on principal plus accumulated interest."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 6,
+            "name": "View results",
+            "text": "See the calculated late fee amount, days overdue, and total amount due instantly."
+        }
+    ]
+}
+</script>
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",

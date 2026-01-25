@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Free Invoice & Billing Tools" %} | InvoiceKits{% endblock %}
+
+{% block meta_description %}{% trans "Free online invoice tools: Calculate invoice totals, late fees, and interest instantly. No signup required. Professional calculators for freelancers and small businesses." %}{% endblock %}
+
+{% block meta_keywords %}{% trans "free invoice tools, invoice calculator, late fee calculator, billing tools, freelancer tools, small business invoice tools, online invoice calculators" %}{% endblock %}
+
+{% block canonical_url %}https://www.invoicekits.com/tools/{% endblock %}
+
+{% block og_title %}{% trans "Free Invoice & Billing Tools" %} | InvoiceKits{% endblock %}
+
+{% block og_description %}{% trans "Free online invoice tools: Calculate totals, late fees, interest. No signup required. Professional calculators for freelancers." %}{% endblock %}
+
+{% block twitter_title %}{% trans "Free Invoice & Billing Tools" %} | InvoiceKits{% endblock %}
+
+{% block twitter_description %}{% trans "Free invoice calculators for totals, late fees, interest. No signup required." %}{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.invoicekits.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Free Tools",
+            "item": "https://www.invoicekits.com/tools/"
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Free Invoice & Billing Tools",
+    "description": "Collection of free online tools for invoice calculations, late fees, and billing management.",
+    "url": "https://www.invoicekits.com/tools/",
+    "hasPart": [
+        {
+            "@type": "WebApplication",
+            "name": "Invoice Calculator",
+            "url": "https://www.invoicekits.com/tools/invoice-calculator/"
+        },
+        {
+            "@type": "WebApplication",
+            "name": "Late Fee Calculator",
+            "url": "https://www.invoicekits.com/tools/late-fee-calculator/"
+        }
+    ],
+    "provider": {
+        "@type": "Organization",
+        "name": "InvoiceKits",
+        "url": "https://www.invoicekits.com"
+    }
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Are these invoice tools really free?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, all our invoice and billing tools are completely free to use. No signup, no credit card, no hidden fees. Use them as many times as you need."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do I need to create an account to use these tools?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No account is required. Simply visit any tool page and start using it immediately. However, if you want to save your calculations or create actual invoices, you can sign up for a free InvoiceKits account."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I use these tools on mobile devices?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, all our tools are fully responsive and work on smartphones, tablets, and desktop computers. You can calculate invoice totals and late fees from any device."
+            }
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-primary-600 to-primary-800 overflow-hidden">
+    <div class="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+        <!-- Breadcrumb -->
+        <nav class="mb-6">
+            <ol class="flex items-center space-x-2 text-sm text-primary-200">
+                <li><a href="{% url 'landing' %}" class="hover:text-white">{% trans "Home" %}</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-white">{% trans "Free Tools" %}</li>
+            </ol>
+        </nav>
+
+        <div class="text-center">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+                {% trans "Free Invoice & Billing Tools" %}
+            </h1>
+            <p class="text-lg md:text-xl text-primary-100 max-w-3xl mx-auto">
+                {% trans "Professional calculators for freelancers and small businesses. Calculate invoice totals, late fees, and more. No signup required." %}
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Tools Grid -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Invoice Calculator -->
+            <a href="{% url 'invoice_calculator' %}" class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <div class="p-8">
+                    <div class="w-14 h-14 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                        {% trans "Invoice Calculator" %}
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        {% trans "Calculate invoice totals with line items, tax, and discounts. Switch between itemized and hourly billing modes. See results instantly." %}
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Add unlimited line items" %}
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Apply tax and discounts" %}
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Hourly rate calculator mode" %}
+                        </li>
+                    </ul>
+                    <span class="inline-flex items-center text-primary-600 dark:text-primary-400 font-medium group-hover:translate-x-1 transition-transform">
+                        {% trans "Use Calculator" %}
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Late Fee Calculator -->
+            <a href="{% url 'late_fee_calculator' %}" class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                <div class="p-8">
+                    <div class="w-14 h-14 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                        {% trans "Late Fee Calculator" %}
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6">
+                        {% trans "Calculate late payment fees and interest on overdue invoices. Supports flat fees, percentage rates, and compound interest." %}
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-500 dark:text-gray-400 mb-6">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Flat fee or percentage rates" %}
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Simple or compound interest" %}
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Payment terms presets" %}
+                        </li>
+                    </ul>
+                    <span class="inline-flex items-center text-primary-600 dark:text-primary-400 font-medium group-hover:translate-x-1 transition-transform">
+                        {% trans "Use Calculator" %}
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Use Free Tools Section -->
+<section class="py-16 bg-white dark:bg-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
+            {% trans "Why Use Our Free Invoice Tools?" %}
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8 mt-10">
+            <div>
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "100% Free" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{% trans "No hidden fees, no credit card, no catches. Use our tools as often as you need." %}</p>
+            </div>
+            <div>
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Instant Results" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{% trans "See calculations in real-time as you type. No waiting, no page reloads." %}</p>
+            </div>
+            <div>
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "No Signup Required" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{% trans "Start calculating immediately. No account, no email, no personal information needed." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{% trans "Frequently Asked Questions" %}</h2>
+
+        <div class="space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Are these invoice tools really free?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Yes, all our invoice and billing tools are completely free to use. No signup, no credit card, no hidden fees. Use them as many times as you need." %}</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Do I need to create an account?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "No account is required. Simply visit any tool page and start using it immediately. However, if you want to create actual invoices, you can sign up for a free InvoiceKits account." %}</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% trans "Can I use these tools on my phone?" %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% trans "Yes, all our tools are fully responsive and work on smartphones, tablets, and desktop computers. You can calculate invoice totals and late fees from any device." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-primary-600">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">{% trans "Ready to Create Real Invoices?" %}</h2>
+        <p class="text-primary-100 mb-8 max-w-2xl mx-auto">{% trans "Turn your calculations into professional PDF invoices. Track payments, send reminders, and get paid faster with InvoiceKits." %}</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                {% trans "Start Free - 5 Invoices Included" %}
+            </a>
+            <a href="{% url 'pricing' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
+                {% trans "View Pricing" %}
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

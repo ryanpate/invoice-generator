@@ -29,7 +29,7 @@ class StaticViewSitemap(Sitemap):
             '/contact/', '/help/', '/privacy/', '/terms/', '/api/docs/', '/blog/',
             '/templates/clean-slate/', '/templates/executive/', '/templates/bold-modern/',
             '/templates/classic-professional/', '/templates/neon-edge/',
-            '/tools/invoice-calculator/', '/tools/late-fee-calculator/',
+            '/tools/', '/tools/invoice-calculator/', '/tools/late-fee-calculator/',
             '/features/ai-invoice-generator/', '/features/time-tracking/',
             '/affiliate/program/',
         ]

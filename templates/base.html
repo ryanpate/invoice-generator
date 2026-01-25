@@ -29,9 +29,9 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}InvoiceKits{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}Create professional invoices in seconds with InvoiceKits. Free plan available. Upload CSV for batch processing, download as PDF. Perfect for freelancers and small businesses.{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}invoice generator, free invoice maker, PDF invoice, batch invoice, online invoicing, freelancer invoice, small business invoice, invoice software{% endblock %}">
+    <title>{% block title %}Free AI Invoice Generator with Time Tracking | InvoiceKits{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Create professional invoices in seconds with AI. Track billable hours, send automated reminders, get paid faster. Free plan includes 5 invoices. No credit card required.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}ai invoice generator, free invoice maker, time tracking invoice software, PDF invoice, batch invoice generator, online invoicing, freelancer invoice, small business invoice, ai billing software{% endblock %}">
     <meta name="robots" content="index, follow">
     <meta name="author" content="InvoiceKits">
     <link rel="canonical" href="{% block canonical_url %}https://www.invoicekits.com/{% endblock %}">
@@ -106,10 +106,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- HTMX -->
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <!-- HTMX (deferred for performance) -->
+    <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
 
-    <!-- Alpine.js for dropdowns -->
+    <!-- Alpine.js for dropdowns (already deferred) -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <style>
@@ -146,14 +146,23 @@
         "name": "InvoiceKits",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web",
-        "description": "Professional invoice generator for freelancers and small businesses. Create PDF invoices, batch process via CSV, customize templates.",
+        "description": "AI-powered invoice generator with time tracking. Create professional invoices in seconds, track billable hours, send automated reminders, get paid faster.",
         "image": "https://www.invoicekits.com/static/images/og-image.png",
+        "screenshot": "https://www.invoicekits.com/static/images/og-image.png",
         "url": "https://www.invoicekits.com",
+        "featureList": [
+            "AI-powered line item generation",
+            "Real-time time tracking",
+            "Batch CSV invoice upload",
+            "5 professional PDF templates",
+            "Automated payment reminders",
+            "Client portal with online payments"
+        ],
         "offers": {
             "@type": "Offer",
             "price": "0",
             "priceCurrency": "USD",
-            "description": "Free tier with 5 invoices per month"
+            "description": "Free tier with 5 invoices. No credit card required."
         },
         "publisher": {
             "@type": "Organization",
@@ -162,7 +171,11 @@
             "logo": {
                 "@type": "ImageObject",
                 "url": "https://www.invoicekits.com/static/images/og-image.png"
-            }
+            },
+            "sameAs": [
+                "https://twitter.com/invoicekits",
+                "https://www.linkedin.com/company/invoicekits"
+            ]
         }
     }
     </script>
