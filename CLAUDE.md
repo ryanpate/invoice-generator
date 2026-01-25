@@ -665,6 +665,8 @@ invoice_generator/
 | `/blog/ai-invoice-generator-natural-language/` | AI Invoice Generator: How to Create Invoices with Natural Language | "ai invoice generator" (1,900/mo) |
 | `/blog/time-tracking-for-freelancers/` | Time Tracking for Freelancers: Bill Every Hour You Work | "time tracking invoice software" (1,600/mo) |
 | `/blog/ai-powered-billing-future-invoice-automation/` | AI-Powered Billing: The Future of Invoice Automation | "ai billing software" (880/mo) |
+| `/blog/how-to-calculate-late-fees-on-invoices/` | How to Calculate Late Fees on Invoices: Complete Guide 2026 | "calculate late fees" (50/mo) |
+| `/blog/how-to-calculate-invoice-totals/` | How to Calculate Invoice Totals: Complete Guide with Examples | "how to calculate an invoice" (5/mo) |
 
 ### Recurring Invoice URLs (Professional+ only)
 | URL | Purpose |
@@ -739,49 +741,49 @@ invoice_generator/
 {% block extra_schema %}Additional JSON-LD{% endblock %}
 ```
 
-### URLs Pending Google Search Console Indexing
-The following pages need to be submitted for indexing via GSC URL Inspection tool:
+### URLs Submitted to Google Search Console (January 2026)
+All pages have been submitted for indexing via GSC URL Inspection tool:
 
 **Role-Specific Landing Pages:**
 | URL | Page Type | Status |
 |-----|-----------|--------|
-| `https://www.invoicekits.com/for-small-business/` | Landing Page | Pending |
-| `https://www.invoicekits.com/for-consultants/` | Landing Page | Pending |
-| `https://www.invoicekits.com/compare/` | Comparison Page | Pending |
+| `https://www.invoicekits.com/for-small-business/` | Landing Page | Submitted |
+| `https://www.invoicekits.com/for-consultants/` | Landing Page | Submitted |
+| `https://www.invoicekits.com/compare/` | Comparison Page | Submitted |
 
 **Template Showcase Pages:**
 | URL | Page Type | Status |
 |-----|-----------|--------|
-| `https://www.invoicekits.com/templates/clean-slate/` | Template Showcase | Pending |
-| `https://www.invoicekits.com/templates/executive/` | Template Showcase | Pending |
-| `https://www.invoicekits.com/templates/bold-modern/` | Template Showcase | Pending |
-| `https://www.invoicekits.com/templates/classic-professional/` | Template Showcase | Pending |
-| `https://www.invoicekits.com/templates/neon-edge/` | Template Showcase | Pending |
+| `https://www.invoicekits.com/templates/clean-slate/` | Template Showcase | Submitted |
+| `https://www.invoicekits.com/templates/executive/` | Template Showcase | Submitted |
+| `https://www.invoicekits.com/templates/bold-modern/` | Template Showcase | Submitted |
+| `https://www.invoicekits.com/templates/classic-professional/` | Template Showcase | Submitted |
+| `https://www.invoicekits.com/templates/neon-edge/` | Template Showcase | Submitted |
 
 **Blog Posts:**
 | URL | Page Type | Status |
 |-----|-----------|--------|
-| `https://www.invoicekits.com/blog/` | Blog Index | Pending |
-| `https://www.invoicekits.com/blog/how-to-create-professional-invoice/` | Blog Post | Pending |
-| `https://www.invoicekits.com/blog/batch-invoice-generator-guide/` | Blog Post | Pending |
-| `https://www.invoicekits.com/blog/freelancer-invoice-tips-get-paid-faster/` | Blog Post | Pending |
-| `https://www.invoicekits.com/blog/small-business-invoicing-guide/` | Blog Post | Pending |
-| `https://www.invoicekits.com/blog/invoice-vs-receipt-difference/` | Blog Post | Pending |
-| `https://www.invoicekits.com/blog/ai-invoice-generator-natural-language/` | Blog Post | Pending |
-| `https://www.invoicekits.com/blog/time-tracking-for-freelancers/` | Blog Post | Pending |
-| `https://www.invoicekits.com/blog/ai-powered-billing-future-invoice-automation/` | Blog Post | Pending |
+| `https://www.invoicekits.com/blog/` | Blog Index | Submitted |
+| `https://www.invoicekits.com/blog/how-to-create-professional-invoice/` | Blog Post | Submitted |
+| `https://www.invoicekits.com/blog/batch-invoice-generator-guide/` | Blog Post | Submitted |
+| `https://www.invoicekits.com/blog/freelancer-invoice-tips-get-paid-faster/` | Blog Post | Submitted |
+| `https://www.invoicekits.com/blog/small-business-invoicing-guide/` | Blog Post | Submitted |
+| `https://www.invoicekits.com/blog/invoice-vs-receipt-difference/` | Blog Post | Submitted |
+| `https://www.invoicekits.com/blog/ai-invoice-generator-natural-language/` | Blog Post | Submitted |
+| `https://www.invoicekits.com/blog/time-tracking-for-freelancers/` | Blog Post | Submitted |
+| `https://www.invoicekits.com/blog/ai-powered-billing-future-invoice-automation/` | Blog Post | Submitted |
 
 **Free Tools:**
 | URL | Page Type | Status |
 |-----|-----------|--------|
-| `https://www.invoicekits.com/tools/invoice-calculator/` | Free Tool | Pending |
-| `https://www.invoicekits.com/tools/late-fee-calculator/` | Free Tool | Pending |
+| `https://www.invoicekits.com/tools/invoice-calculator/` | Free Tool | Submitted |
+| `https://www.invoicekits.com/tools/late-fee-calculator/` | Free Tool | Submitted |
 
 **Feature Pages:**
 | URL | Page Type | Status |
 |-----|-----------|--------|
-| `https://www.invoicekits.com/features/ai-invoice-generator/` | Feature Landing Page | Pending |
-| `https://www.invoicekits.com/features/time-tracking/` | Feature Landing Page | Pending |
+| `https://www.invoicekits.com/features/ai-invoice-generator/` | Feature Landing Page | Submitted |
+| `https://www.invoicekits.com/features/time-tracking/` | Feature Landing Page | Submitted |
 
 ### SEO TODOs
 - [x] Register with Google Search Console
@@ -790,8 +792,8 @@ The following pages need to be submitted for indexing via GSC URL Inspection too
 - [x] Set up custom domain (www.invoicekits.com)
 - [x] Submit sitemap to Google Search Console - COMPLETED
 - [x] Request indexing for core public pages (/, /pricing/, /for-freelancers/, /privacy/, /terms/, /contact/, /help/, /api/docs/) - COMPLETED
-- [ ] **Request indexing for remaining 16 pages** (see URLs Pending section above)
-- [ ] Build quality backlinks (Product Hunt, directories)
+- [x] **Request indexing for all remaining pages** (21 URLs submitted: landing pages, templates, blog posts, tools, feature pages) - COMPLETED
+- [ ] Build quality backlinks (Product Hunt, directories, Quora, Reddit)
 - [ ] Monitor Core Web Vitals via PageSpeed Insights
 
 ### SEO - Feature Pages Enhancement (January 2026)
@@ -1132,6 +1134,17 @@ Authentication: API Key in header `X-API-Key: <key>`
 267. Blog Post 6: "AI Invoice Generator: How to Create Invoices with Natural Language" - comprehensive guide targeting "ai invoice generator" keyword (1,900/mo)
 268. Blog Post 7: "Time Tracking for Freelancers: Bill Every Hour You Work" - comprehensive guide targeting "time tracking invoice software" keyword (1,600/mo)
 269. Blog Post 8: "AI-Powered Billing: The Future of Invoice Automation" - comprehensive guide targeting "ai billing software" keyword (880/mo)
+270. Blog Post 9: "How to Calculate Late Fees on Invoices: Complete Guide 2026" - comprehensive guide targeting "calculate late fees" keyword with internal links to /tools/late-fee-calculator/
+271. Blog Post 10: "How to Calculate Invoice Totals: Complete Guide with Examples" - comprehensive guide targeting "how to calculate an invoice" keyword with internal links to /tools/invoice-calculator/
+272. Created /tools/ index page with CollectionPage and FAQPage schemas - landing page for free SEO tools
+273. Added HowTo schema to late fee calculator (6 steps) and invoice calculator (4 steps) for rich snippets
+274. Enhanced SoftwareApplication schema with screenshot, featureList, sameAs properties
+275. Updated base.html default title to "Free AI Invoice Generator with Time Tracking | InvoiceKits"
+276. Updated base.html meta description with power words for CTR improvement
+277. Fixed Neon Edge template meta (position 3 with 0 clicks) - added compelling description with dark mode keywords
+278. Updated late fee calculator title and meta with "Free Online" and "Instantly" for CTR
+279. Added defer attribute to HTMX script for performance improvement
+280. Added Tools category for calculator-related blog posts
 
 ---
 

@@ -287,7 +287,7 @@
     {% block footer %}
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-8">
                 <div>
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">{% trans "Product" %}</h3>
                     <ul class="mt-4 space-y-2">
@@ -299,8 +299,19 @@
                     </ul>
                 </div>
                 <div>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">{% trans "Features" %}</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="{% url 'feature_ai_invoice_generator' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "AI Invoice Generator" %}</a></li>
+                        <li><a href="{% url 'feature_time_tracking' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "Time Tracking" %}</a></li>
+                        <li><a href="{% url 'for_freelancers' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "For Freelancers" %}</a></li>
+                        <li><a href="{% url 'for_consultants' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "For Consultants" %}</a></li>
+                        <li><a href="{% url 'for_small_business' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "For Small Business" %}</a></li>
+                    </ul>
+                </div>
+                <div>
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">{% trans "Free Tools" %}</h3>
                     <ul class="mt-4 space-y-2">
+                        <li><a href="{% url 'tools_index' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "All Free Tools" %}</a></li>
                         <li><a href="{% url 'invoice_calculator' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "Invoice Calculator" %}</a></li>
                         <li><a href="{% url 'late_fee_calculator' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "Late Fee Calculator" %}</a></li>
                     </ul>
