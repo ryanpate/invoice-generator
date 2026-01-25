@@ -35,6 +35,14 @@ class Command(BaseCommand):
             }
         )
 
+        tools_category, _ = BlogCategory.objects.get_or_create(
+            slug='tools',
+            defaults={
+                'name': 'Tools & Calculators',
+                'description': 'Guides for using invoicing tools and calculators'
+            }
+        )
+
         # Seed all blog posts
         self._create_invoice_guide(author, guides_category)
         self._create_batch_invoicing_post(author, guides_category)
@@ -44,6 +52,8 @@ class Command(BaseCommand):
         self._create_ai_invoice_generator_post(author, guides_category)
         self._create_time_tracking_post(author, tips_category)
         self._create_ai_billing_post(author, guides_category)
+        self._create_late_fee_calculation_post(author, tools_category)
+        self._create_invoice_calculation_guide_post(author, tools_category)
 
     def _create_invoice_guide(self, author, category):
         """Create or update the 'How to Create a Professional Invoice' post."""
@@ -2443,6 +2453,475 @@ class Command(BaseCommand):
                 'content': post_content,
                 'meta_description': 'AI billing software guide. Learn how AI automates invoice creation, predicts payments, and saves hours monthly. Complete guide to AI-powered invoicing.',
                 'meta_keywords': 'ai billing software, ai invoicing, automated billing, ai invoice generator, smart invoicing, invoice automation, ai payment prediction',
+                'status': 'published',
+            }
+        )
+
+        action = 'Created' if created else 'Updated'
+        self.stdout.write(self.style.SUCCESS(f'{action} blog post: "{post_slug}"'))
+
+    def _create_late_fee_calculation_post(self, author, category):
+        """Create blog post: How to Calculate Late Fees on Invoices."""
+        post_slug = 'how-to-calculate-late-fees-on-invoices'
+
+        post_content = '''
+<p class="lead text-xl text-gray-600 dark:text-gray-300 mb-6">Late payments cost businesses thousands annually. Understanding how to properly calculate late fees protects your cash flow and encourages clients to pay on time. This comprehensive guide covers every calculation method with real examples.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Why Charge Late Fees?</h2>
+
+<p class="mb-4">Late fees serve three important purposes:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li><strong>Compensation for delayed payment:</strong> You deserve interest on money owed to you</li>
+    <li><strong>Incentive for timely payment:</strong> Fees motivate clients to prioritize your invoices</li>
+    <li><strong>Covering administrative costs:</strong> Chasing payments takes time and resources</li>
+</ul>
+
+<p class="mb-4">According to industry data, businesses that charge late fees get paid 2-3 weeks faster on average than those that don't.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Legal Considerations Before Charging Late Fees</h2>
+
+<p class="mb-4">Before implementing late fees, understand the legal requirements:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li><strong>Written agreement:</strong> Late fee terms must be stated in your contract or on the invoice BEFORE services are rendered</li>
+    <li><strong>State usury laws:</strong> Most states cap interest rates at 18-25% annually. Some states have lower limits.</li>
+    <li><strong>Reasonable amounts:</strong> Courts may not enforce "unreasonable" fees that appear punitive</li>
+    <li><strong>Grace period requirements:</strong> Some jurisdictions require minimum grace periods</li>
+</ul>
+
+<div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-6 my-6">
+    <p class="text-yellow-800 dark:text-yellow-200"><strong>Important:</strong> Always include late fee terms on your invoice. Language like "Payment due within 30 days. Late payments subject to 1.5% monthly interest" is standard.</p>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Method 1: Flat Fee Late Charges</h2>
+
+<p class="mb-4">The simplest method—charge a fixed amount when payment is late.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">How to Calculate Flat Fee</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg mb-4">Late Fee = Fixed Amount</p>
+    <p class="text-gray-600 dark:text-gray-400">Example: $25 flat fee for any late payment</p>
+</div>
+
+<p class="mb-4"><strong>Example calculation:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Invoice amount: $1,500</li>
+    <li>Due date: January 15</li>
+    <li>Payment received: February 1</li>
+    <li>Flat late fee: $25</li>
+    <li><strong>Total due: $1,525</strong></li>
+</ul>
+
+<p class="mb-4"><strong>Best for:</strong> Small invoices, simple agreements, clients who respond better to clear fixed amounts.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Method 2: Percentage-Based Late Fees</h2>
+
+<p class="mb-4">Charge a percentage of the invoice amount. This scales with invoice size.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">How to Calculate Percentage Fee</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg mb-4">Late Fee = Invoice Amount × Percentage Rate</p>
+    <p class="text-gray-600 dark:text-gray-400">Common rates: 1.5% per month (18% annual), 2% per month (24% annual)</p>
+</div>
+
+<p class="mb-4"><strong>Example calculation (one-time percentage):</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Invoice amount: $5,000</li>
+    <li>Late fee: 5% of invoice</li>
+    <li>Late fee amount: $5,000 × 0.05 = $250</li>
+    <li><strong>Total due: $5,250</strong></li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Method 3: Simple Interest Calculation</h2>
+
+<p class="mb-4">Simple interest charges the same amount each period, calculated on the original principal only.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Simple Interest Formula</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg mb-4">Interest = Principal × Rate × Time</p>
+    <p class="text-gray-600 dark:text-gray-400">Where: Principal = invoice amount, Rate = monthly interest rate, Time = number of periods late</p>
+</div>
+
+<p class="mb-4"><strong>Example calculation:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Invoice amount: $3,000</li>
+    <li>Monthly interest rate: 1.5%</li>
+    <li>Days overdue: 45 days (1.5 months)</li>
+    <li>Interest = $3,000 × 0.015 × 1.5 = $67.50</li>
+    <li><strong>Total due: $3,067.50</strong></li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Method 4: Compound Interest Calculation</h2>
+
+<p class="mb-4">Compound interest adds previous interest to the principal, so you earn "interest on interest." This results in higher fees for extended late periods.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Compound Interest Formula</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg mb-4">Total = Principal × (1 + Rate)^Periods</p>
+    <p class="text-gray-600 dark:text-gray-400">Late Fee = Total - Principal</p>
+</div>
+
+<p class="mb-4"><strong>Example calculation:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Invoice amount: $3,000</li>
+    <li>Monthly interest rate: 1.5%</li>
+    <li>Months overdue: 3 months</li>
+    <li>Total = $3,000 × (1 + 0.015)³ = $3,000 × 1.0457 = $3,137.10</li>
+    <li>Late fee: $3,137.10 - $3,000 = $137.10</li>
+    <li><strong>Total due: $3,137.10</strong></li>
+</ul>
+
+<p class="mb-4">Compare this to simple interest for the same period: $3,000 × 0.015 × 3 = $135.00. Compound interest results in $2.10 more—the difference grows significantly over longer periods.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Combining Flat Fees and Percentage</h2>
+
+<p class="mb-4">Some businesses use both: a flat fee for administrative costs plus percentage interest for time value of money.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg mb-4">Total Late Fee = Flat Fee + (Principal × Rate × Time)</p>
+</div>
+
+<p class="mb-4"><strong>Example:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Invoice: $2,000</li>
+    <li>Administrative fee: $25</li>
+    <li>Monthly interest: 1.5%</li>
+    <li>Months late: 2</li>
+    <li>Late fee = $25 + ($2,000 × 0.015 × 2) = $25 + $60 = $85</li>
+    <li><strong>Total due: $2,085</strong></li>
+</ul>
+
+<div class="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-6 my-8">
+    <h3 class="text-lg font-semibold text-primary-800 dark:text-primary-200 mb-2">Calculate Late Fees Instantly</h3>
+    <p class="text-primary-700 dark:text-primary-300 mb-4">Skip the math. Our free late fee calculator handles flat fees, percentage, simple interest, and compound interest automatically.</p>
+    <a href="/tools/late-fee-calculator/" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-semibold">Use Free Late Fee Calculator →</a>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Common Late Fee Schedules</h2>
+
+<table class="w-full border-collapse mb-6">
+    <thead>
+        <tr class="bg-gray-100 dark:bg-gray-800">
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Payment Terms</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Common Late Fee</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Grace Period</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Net 15</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">2% + 1.5%/month</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">0-3 days</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Net 30</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">1.5%/month</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">3-7 days</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Net 45</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">1%/month</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">5-10 days</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Net 60</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">1%/month or flat $50</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">7-14 days</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Best Practices for Late Fees</h2>
+
+<ol class="list-decimal pl-6 mb-6 space-y-3">
+    <li><strong>Always disclose upfront:</strong> Include late fee terms on every invoice and in contracts</li>
+    <li><strong>Be consistent:</strong> Apply fees uniformly to maintain fairness and legal standing</li>
+    <li><strong>Send reminders first:</strong> A friendly reminder before charging fees builds better relationships</li>
+    <li><strong>Cap your fees:</strong> Set a maximum (e.g., 25% of invoice) to appear reasonable</li>
+    <li><strong>Document everything:</strong> Keep records of when fees were applied and why</li>
+    <li><strong>Consider waiving strategically:</strong> For good clients or genuine emergencies, a one-time waiver builds loyalty</li>
+</ol>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+        <li>Late fees must be disclosed in writing before services are rendered</li>
+        <li>Choose between flat fee, percentage, simple interest, or compound interest based on your business</li>
+        <li>Common rates are 1.5-2% monthly (18-24% annual)</li>
+        <li>Always check state usury laws for maximum allowable rates</li>
+        <li>Automate late fee calculation to save time and ensure consistency</li>
+    </ul>
+</div>
+
+<div class="mt-8 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg">
+    <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Related tools:</strong> Use our <a href="/tools/late-fee-calculator/" class="text-primary-600 dark:text-primary-400 hover:underline">free late fee calculator</a> to compute fees instantly, or read about <a href="/settings/late-fees/" class="text-primary-600 dark:text-primary-400 hover:underline">automatic late fee settings</a> in InvoiceKits.</p>
+</div>
+'''
+
+        post, created = BlogPost.objects.update_or_create(
+            slug=post_slug,
+            defaults={
+                'title': 'How to Calculate Late Fees on Invoices: Complete Guide 2026',
+                'author': author,
+                'category': category,
+                'excerpt': 'Learn how to calculate late fees on invoices using flat fees, percentage, simple interest, and compound interest. Includes formulas, examples, and legal considerations.',
+                'content': post_content,
+                'meta_description': 'Complete guide to calculating late fees on invoices. Learn flat fee, percentage, simple and compound interest methods with examples. Free late fee calculator included.',
+                'meta_keywords': 'calculate late fees, late fee calculator, invoice late fee, how to calculate late fees, late payment fee, overdue invoice interest',
+                'status': 'published',
+            }
+        )
+
+        action = 'Created' if created else 'Updated'
+        self.stdout.write(self.style.SUCCESS(f'{action} blog post: "{post_slug}"'))
+
+    def _create_invoice_calculation_guide_post(self, author, category):
+        """Create blog post: How to Calculate Invoice Totals."""
+        post_slug = 'how-to-calculate-invoice-totals'
+
+        post_content = '''
+<p class="lead text-xl text-gray-600 dark:text-gray-300 mb-6">Accurate invoice calculations are essential for getting paid correctly. This guide covers everything from basic line item totals to complex tax scenarios and discounts, with step-by-step examples.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">The Basic Invoice Calculation</h2>
+
+<p class="mb-4">Every invoice follows this fundamental formula:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg mb-2">Subtotal = Sum of (Quantity × Unit Price) for all line items</p>
+    <p class="font-mono text-lg mb-2">Tax = Subtotal × Tax Rate</p>
+    <p class="font-mono text-lg">Total = Subtotal + Tax - Discounts</p>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Step 1: Calculate Line Item Totals</h2>
+
+<p class="mb-4">Each line item total is quantity multiplied by unit price:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Line Total = Quantity × Unit Price</p>
+</div>
+
+<p class="mb-4"><strong>Example invoice with 3 line items:</strong></p>
+
+<table class="w-full border-collapse mb-6">
+    <thead>
+        <tr class="bg-gray-100 dark:bg-gray-800">
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Description</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">Qty</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">Unit Price</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">Line Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Website Design</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">1</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$2,500.00</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$2,500.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Logo Design</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">2</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$350.00</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$700.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Consulting Hours</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">5</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$150.00</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$750.00</td>
+        </tr>
+        <tr class="bg-gray-50 dark:bg-gray-700 font-semibold">
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2" colspan="3">Subtotal</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$3,950.00</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Step 2: Calculate Tax</h2>
+
+<p class="mb-4">Apply your tax rate to the subtotal:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Tax Amount = Subtotal × Tax Rate</p>
+</div>
+
+<p class="mb-4"><strong>Using our example with 8% tax:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Subtotal: $3,950.00</li>
+    <li>Tax rate: 8%</li>
+    <li>Tax = $3,950.00 × 0.08 = $316.00</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Tax-Inclusive vs Tax-Exclusive Pricing</h3>
+
+<p class="mb-4"><strong>Tax-exclusive (most common in B2B):</strong> Prices shown don't include tax. Add tax on top.</p>
+<ul class="list-disc pl-6 mb-4 space-y-1">
+    <li>Price: $100</li>
+    <li>Tax (10%): $10</li>
+    <li>Total: $110</li>
+</ul>
+
+<p class="mb-4"><strong>Tax-inclusive (common in retail/B2C):</strong> Prices shown already include tax. Extract tax for reporting.</p>
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Pre-tax Price = Total ÷ (1 + Tax Rate)</p>
+    <p class="font-mono text-lg">Tax Amount = Total - Pre-tax Price</p>
+</div>
+
+<p class="mb-4"><strong>Example:</strong> $110 total with 10% tax included</p>
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Pre-tax: $110 ÷ 1.10 = $100</li>
+    <li>Tax: $110 - $100 = $10</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Step 3: Apply Discounts</h2>
+
+<p class="mb-4">Discounts can be applied as flat amounts or percentages, typically before tax.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Flat (Fixed) Discount</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Discounted Subtotal = Subtotal - Flat Discount</p>
+</div>
+
+<p class="mb-4"><strong>Example:</strong> $50 off a $500 invoice = $450 subtotal</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Percentage Discount</h3>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Discount Amount = Subtotal × Discount Rate</p>
+    <p class="font-mono text-lg">Discounted Subtotal = Subtotal - Discount Amount</p>
+</div>
+
+<p class="mb-4"><strong>Example:</strong> 15% off a $500 invoice</p>
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Discount: $500 × 0.15 = $75</li>
+    <li>Discounted subtotal: $500 - $75 = $425</li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Complete Invoice Calculation Example</h2>
+
+<p class="mb-4">Putting it all together with our earlier example:</p>
+
+<table class="w-full border-collapse mb-6">
+    <tbody>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Subtotal (3 line items)</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$3,950.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Discount (10%)</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">-$395.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Discounted Subtotal</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$3,555.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Tax (8%)</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$284.40</td>
+        </tr>
+        <tr class="bg-gray-100 dark:bg-gray-800 font-bold">
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Invoice Total</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$3,839.40</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-6 my-8">
+    <h3 class="text-lg font-semibold text-primary-800 dark:text-primary-200 mb-2">Calculate Invoice Totals Instantly</h3>
+    <p class="text-primary-700 dark:text-primary-300 mb-4">Our free invoice calculator handles line items, taxes, and discounts automatically. Add unlimited line items and see totals update in real-time.</p>
+    <a href="/tools/invoice-calculator/" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-semibold">Use Free Invoice Calculator →</a>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Hourly Rate Calculations</h2>
+
+<p class="mb-4">For time-based billing, calculate line items from hours worked:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Line Total = Hours Worked × Hourly Rate</p>
+</div>
+
+<p class="mb-4"><strong>Example:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Project management: 8 hours × $85/hr = $680</li>
+    <li>Development: 24 hours × $125/hr = $3,000</li>
+    <li>Testing: 6 hours × $95/hr = $570</li>
+    <li><strong>Subtotal: $4,250</strong></li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Multi-Tax Scenarios</h2>
+
+<p class="mb-4">Some jurisdictions require multiple taxes (e.g., state + county + city):</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Total Tax = Subtotal × (Tax Rate 1 + Tax Rate 2 + ...)</p>
+</div>
+
+<p class="mb-4"><strong>Example with combined state and local tax:</strong></p>
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li>Subtotal: $1,000</li>
+    <li>State tax: 6.25%</li>
+    <li>Local tax: 2.25%</li>
+    <li>Combined rate: 8.50%</li>
+    <li>Total tax: $1,000 × 0.085 = $85</li>
+    <li><strong>Invoice total: $1,085</strong></li>
+</ul>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Common Invoice Calculation Mistakes</h2>
+
+<ol class="list-decimal pl-6 mb-6 space-y-3">
+    <li><strong>Applying discount after tax:</strong> Discounts should typically apply to subtotal, then tax calculated on discounted amount</li>
+    <li><strong>Rounding too early:</strong> Calculate with full precision, round only the final total</li>
+    <li><strong>Mixing tax-inclusive and exclusive:</strong> Be consistent—either all prices include tax or none do</li>
+    <li><strong>Forgetting deposit credits:</strong> Subtract any deposits paid from the final amount due</li>
+    <li><strong>Wrong tax rate:</strong> Verify current rates—they change frequently</li>
+</ol>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Invoice Calculation Checklist</h2>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <ul class="space-y-2">
+        <li>☐ All line items have correct quantities and unit prices</li>
+        <li>☐ Subtotal matches sum of all line items</li>
+        <li>☐ Correct tax rate applied for client's jurisdiction</li>
+        <li>☐ Discounts applied before tax (unless otherwise required)</li>
+        <li>☐ Previous payments/deposits deducted</li>
+        <li>☐ Final total is correctly calculated</li>
+        <li>☐ Currency symbol and formatting correct</li>
+    </ul>
+</div>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
+        <li>Line total = Quantity × Unit Price</li>
+        <li>Apply discounts before calculating tax</li>
+        <li>Tax = Taxable subtotal × Tax rate</li>
+        <li>Final total = Subtotal - Discounts + Tax - Deposits</li>
+        <li>Use an invoice calculator to avoid manual errors</li>
+    </ul>
+</div>
+
+<div class="mt-8 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg">
+    <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Related tools:</strong> Use our <a href="/tools/invoice-calculator/" class="text-primary-600 dark:text-primary-400 hover:underline">free invoice calculator</a> for instant totals, or try our <a href="/features/ai-invoice-generator/" class="text-primary-600 dark:text-primary-400 hover:underline">AI Invoice Generator</a> to create complete invoices from descriptions.</p>
+</div>
+'''
+
+        post, created = BlogPost.objects.update_or_create(
+            slug=post_slug,
+            defaults={
+                'title': 'How to Calculate Invoice Totals: Complete Guide with Examples',
+                'author': author,
+                'category': category,
+                'excerpt': 'Master invoice calculations with this complete guide. Learn line item totals, tax calculations, discounts, and avoid common mistakes. Includes step-by-step examples.',
+                'content': post_content,
+                'meta_description': 'Complete guide to calculating invoice totals. Step-by-step examples for line items, tax, discounts, and hourly rates. Free invoice calculator included.',
+                'meta_keywords': 'how to calculate an invoice, invoice calculator, invoice total calculation, calculate invoice tax, invoice line items, invoice subtotal',
                 'status': 'published',
             }
         )
