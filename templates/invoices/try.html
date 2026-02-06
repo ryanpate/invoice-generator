@@ -219,7 +219,13 @@
     </form>
 </div>
 
+{% block extra_js %}
 <script>
+// GA4 Event: Try page viewed
+if (typeof gtag !== 'undefined') {
+    gtag('event', 'try_page_viewed', { event_category: 'engagement' });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     let lineItemIndex = 1; // Next index to use (0 already exists)
 
@@ -311,6 +317,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     attachDeleteListeners();
+
+    // GA4 Event: Track PDF download on form submit
+    const tryForm = document.getElementById('try-invoice-form');
+    if (tryForm) {
+        tryForm.addEventListener('submit', function(e) {
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'try_pdf_downloaded', { event_category: 'conversion' });
+            }
+        });
+    }
 });
 </script>
 {% endblock %}

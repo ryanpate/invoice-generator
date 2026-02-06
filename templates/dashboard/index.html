@@ -147,6 +147,25 @@
 </div>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    {% if invoices_this_month == 0 and not recent_invoices %}
+    <!-- First-Time User Welcome -->
+    <div class="mb-10 bg-gradient-to-br from-primary-50 to-blue-50 dark:from-primary-900/20 dark:to-blue-900/20 rounded-2xl p-8 md:p-12 border border-primary-100 dark:border-primary-800/50">
+        <div class="max-w-2xl mx-auto text-center">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">Welcome to InvoiceKits!</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">Create your first invoice in under 60 seconds. Just add your company info and client details.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{% url 'invoices:create' %}" class="px-8 py-4 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition shadow-lg text-lg">
+                    Create Your First Invoice
+                </a>
+                <a href="{% url 'companies:settings' %}" class="px-8 py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                    Set Up Company Profile
+                </a>
+            </div>
+            <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">You have {{ credits.total_available }} free credit{{ credits.total_available|pluralize }} to get started. No credit card needed.</p>
+        </div>
+    </div>
+    {% else %}
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
@@ -157,7 +176,9 @@
             + New Invoice
         </a>
     </div>
+    {% endif %}
 
+    {% if recent_invoices or invoices_this_month > 0 %}
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
@@ -561,6 +582,7 @@
             </a>
         </div>
     </div>
+    {% endif %}
 
     <!-- Recent Invoices -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden transition-colors duration-200">
@@ -837,6 +859,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         showWhatsNew();
     }, 500);
+
+    // GA4 Event: Track first invoice created
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('first_invoice') === '1') {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'first_invoice_created', { event_category: 'conversion' });
+        }
+    }
 });
 </script>
 {% endblock %}

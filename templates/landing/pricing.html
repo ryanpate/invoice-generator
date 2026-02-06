@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Invoice Generator Pricing - Subscriptions & Pay-As-You-Go Credits" %} | InvoiceKits{% endblock %}
+{% block title %}{% trans "Invoice Generator Pricing — Free, Pro & Business Plans" %} | InvoiceKits{% endblock %}
 
-{% block meta_description %}{% trans "Flexible invoice generator pricing. Start free with 5 credits, buy credit packs from $9, or subscribe from $9/mo for better value. No monthly commitment required. Credits never expire." %}{% endblock %}
+{% block meta_description %}{% trans "Simple pricing for every invoicing need. Start free with 5 invoices, go Pro at $29/mo for batch upload and recurring, or Business at $79/mo for unlimited invoices and API access." %}{% endblock %}
 
-{% block meta_keywords %}{% trans "invoice generator pricing, invoice software pricing, free invoice maker, invoicing plans, batch invoice pricing, pay as you go invoicing, invoice credits" %}{% endblock %}
+{% block meta_keywords %}{% trans "invoice generator pricing, invoice software pricing, free invoice maker, invoicing plans, batch invoice pricing, professional invoice software" %}{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/pricing/{% endblock %}
 
-{% block og_title %}{% trans "Invoice Generator Pricing - Flexible Plans for Every Business" %} | InvoiceKits{% endblock %}
+{% block og_title %}{% trans "Invoice Generator Pricing — Free, Pro & Business" %} | InvoiceKits{% endblock %}
 
-{% block og_description %}{% trans "Pay-as-you-go credits or monthly subscriptions. Start free with 5 credits, buy more from $9, or subscribe for unlimited value. No credit card required." %}{% endblock %}
+{% block og_description %}{% trans "Start free with 5 invoices. Go Pro at $29/mo or Business at $79/mo for unlimited invoices, batch upload, and API access. No credit card required to start." %}{% endblock %}
 
-{% block twitter_title %}{% trans "Invoice Generator Pricing - Credits & Subscriptions" %} | InvoiceKits{% endblock %}
+{% block twitter_title %}{% trans "Invoice Generator Pricing — Free, Pro & Business" %} | InvoiceKits{% endblock %}
 
-{% block twitter_description %}{% trans "Flexible invoicing: pay-as-you-go credits from $9 or subscriptions from $9/mo. Start free, no commitment." %}{% endblock %}
+{% block twitter_description %}{% trans "Start free. Pro $29/mo. Business $79/mo. Create professional invoices with batch upload, recurring invoices, and API access." %}{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -113,45 +113,24 @@
         "itemListElement": [
             {
                 "@type": "Offer",
-                "name": "10 Credit Pack",
-                "price": "9.00",
+                "name": "Free Plan",
+                "price": "0",
                 "priceCurrency": "USD",
-                "description": "10 invoice credits, never expire"
+                "description": "5 lifetime invoices, PDF download, 1 template"
             },
             {
                 "@type": "Offer",
-                "name": "25 Credit Pack",
-                "price": "19.00",
-                "priceCurrency": "USD",
-                "description": "25 invoice credits, never expire"
-            },
-            {
-                "@type": "Offer",
-                "name": "50 Credit Pack",
-                "price": "35.00",
-                "priceCurrency": "USD",
-                "description": "50 invoice credits, never expire"
-            },
-            {
-                "@type": "Offer",
-                "name": "Starter Subscription",
-                "price": "9.00",
-                "priceCurrency": "USD",
-                "description": "50 invoices per month"
-            },
-            {
-                "@type": "Offer",
-                "name": "Professional Subscription",
+                "name": "Professional Plan",
                 "price": "29.00",
                 "priceCurrency": "USD",
-                "description": "200 invoices per month, batch upload, recurring invoices"
+                "description": "200 invoices per month, all templates, batch upload, recurring invoices, unlimited AI"
             },
             {
                 "@type": "Offer",
-                "name": "Business Subscription",
+                "name": "Business Plan",
                 "price": "79.00",
                 "priceCurrency": "USD",
-                "description": "Unlimited invoices, API access, priority support"
+                "description": "Unlimited invoices, API access, 3 team seats, client portal"
             }
         ]
     }
@@ -171,345 +150,237 @@
             </ol>
         </nav>
 
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">{% trans "Invoice Generator Pricing" %}</h1>
-            <p class="text-xl text-gray-600">{% trans "Choose your style: pay-as-you-go credits or monthly subscriptions" %}</p>
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">{% trans "Simple, Transparent Pricing" %}</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">{% trans "Start free. Upgrade when you need more invoices, batch upload, or API access." %}</p>
         </div>
 
-        <!-- Pricing Toggle/Explanation -->
-        <div class="max-w-2xl mx-auto mb-12 bg-white rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-center gap-8 text-center">
-                <div>
-                    <div class="text-2xl font-bold text-primary-600">{% trans "Credits" %}</div>
-                    <div class="text-sm text-gray-500">{% trans "Pay only when you invoice" %}</div>
-                </div>
-                <div class="text-gray-300 text-2xl">{% trans "or" %}</div>
-                <div>
-                    <div class="text-2xl font-bold text-gray-900">{% trans "Subscriptions" %}</div>
-                    <div class="text-sm text-gray-500">{% trans "Best value for regular use" %}</div>
-                </div>
-            </div>
-        </div>
+        <!-- 3-Tier Pricing Grid -->
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
 
-        <!-- Pay-As-You-Go Credit Packs Section -->
-        <div class="mb-20">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">{% trans "Pay-As-You-Go Credits" %}</h2>
-                <p class="text-gray-600">{% trans "No subscription required. Buy credits, use them anytime." %} <strong>{% trans "Credits never expire." %}</strong></p>
-            </div>
-
-            <div class="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-                <!-- Free Credits -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "Free Start" %}</h3>
-                        <div class="mb-4">
-                            <span class="text-4xl font-bold text-gray-900">$0</span>
-                        </div>
-                        <div class="text-3xl font-bold text-primary-600 mb-4">{% trans "5 credits" %}</div>
-                        <ul class="space-y-2 mb-6 text-sm">
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "Lifetime credits" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "1 template" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                {% trans "Includes watermark" %}
-                            </li>
-                        </ul>
-                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">
-                            {% trans "Get Started Free" %}
-                        </a>
+            <!-- Free -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Free" %}</h3>
+                    <p class="text-sm text-gray-500 mb-4">{% trans "Try it out, no card needed" %}</p>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold text-gray-900">$0</span>
                     </div>
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "5 invoices (lifetime credits)" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "PDF download & email" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "1 template style" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Time tracking (1 timer)" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "3 AI generations/month" %}
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            {% trans "Includes watermark" %}
+                        </li>
+                    </ul>
+                    <a href="{% url 'try_invoice' %}" class="block w-full text-center btn-outline">
+                        {% trans "Try It Free" %}
+                    </a>
                 </div>
+            </div>
 
-                <!-- 10 Credit Pack -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "10 Credits" %}</h3>
-                        <div class="mb-1">
-                            <span class="text-4xl font-bold text-gray-900">$9</span>
-                        </div>
-                        <div class="text-sm text-gray-500 mb-4">{% trans "$0.90 per invoice" %}</div>
-                        <ul class="space-y-2 mb-6 text-sm">
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "Never expire" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "All 5 templates" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "No watermark" %}
-                            </li>
-                        </ul>
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'billing:purchase_credits' 'pack_10' %}" class="block w-full text-center btn-outline">
-                            {% trans "Buy Credits" %}
-                        </a>
+            <!-- Professional — Most Popular -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden ring-2 ring-primary-600 scale-105">
+                <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">{% trans "Most Popular" %}</div>
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Professional" %}</h3>
+                    <p class="text-sm text-gray-500 mb-4">{% trans "For freelancers & small businesses" %}</p>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold text-gray-900">$29</span>
+                        <span class="text-gray-500">/{% trans "mo" %}</span>
+                    </div>
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "200 invoices/month" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "All 5 templates, no watermark" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "CSV batch upload" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Recurring invoices (up to 10)" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Time tracking (5 timers)" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Unlimited AI generations" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Payment reminders & late fees" %}
+                        </li>
+                    </ul>
+                    {% if user.is_authenticated %}
+                        {% if user.subscription_tier == 'professional' %}
+                            <button disabled class="block w-full text-center py-3 px-6 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed">{% trans "Current Plan" %}</button>
                         {% else %}
-                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">
-                            {% trans "Get Started" %}
-                        </a>
+                            <a href="{% url 'billing:checkout' 'professional' %}" class="block w-full text-center btn-primary">{% trans "Upgrade to Pro" %}</a>
                         {% endif %}
-                    </div>
-                </div>
-
-                <!-- 25 Credit Pack - Best Value -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden ring-2 ring-green-500 scale-105">
-                    <div class="bg-green-500 text-white text-center py-2 text-sm font-medium">{% trans "Best Value" %}</div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "25 Credits" %}</h3>
-                        <div class="mb-1">
-                            <span class="text-4xl font-bold text-gray-900">$19</span>
-                        </div>
-                        <div class="text-sm text-gray-500 mb-4">{% trans "$0.76 per invoice" %}</div>
-                        <ul class="space-y-2 mb-6 text-sm">
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "Never expire" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "All 5 templates" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "No watermark" %}
-                            </li>
-                        </ul>
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'billing:purchase_credits' 'pack_25' %}" class="block w-full text-center btn-primary">
-                            {% trans "Buy Credits" %}
-                        </a>
-                        {% else %}
-                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-primary">
-                            {% trans "Get Started" %}
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- 50 Credit Pack -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "50 Credits" %}</h3>
-                        <div class="mb-1">
-                            <span class="text-4xl font-bold text-gray-900">$35</span>
-                        </div>
-                        <div class="text-sm text-gray-500 mb-4">{% trans "$0.70 per invoice" %}</div>
-                        <ul class="space-y-2 mb-6 text-sm">
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "Never expire" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "All 5 templates" %}
-                            </li>
-                            <li class="flex items-center text-gray-600">
-                                <svg class="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                {% trans "No watermark" %}
-                            </li>
-                        </ul>
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'billing:purchase_credits' 'pack_50' %}" class="block w-full text-center btn-outline">
-                            {% trans "Buy Credits" %}
-                        </a>
-                        {% else %}
-                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">
-                            {% trans "Get Started" %}
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <p class="text-center text-gray-500 text-sm mt-6">
-                {% trans "Perfect for occasional invoicing. No monthly fees, no commitment." %}
-            </p>
-        </div>
-
-        <!-- Divider -->
-        <div class="relative mb-16">
-            <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300"></div>
-            </div>
-            <div class="relative flex justify-center">
-                <span class="bg-gray-50 px-6 text-lg font-medium text-gray-500">{% trans "Or subscribe for better value" %}</span>
-            </div>
-        </div>
-
-        <!-- Monthly Subscriptions Section -->
-        <div class="mb-16">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">{% trans "Monthly Subscriptions" %}</h2>
-                <p class="text-gray-600">{% trans "Best per-invoice value for businesses that invoice regularly" %}</p>
-            </div>
-
-            <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-                {% for key, tier in subscription_tiers.items %}
-                {% if key != 'enterprise' %}
-                <div class="{% if key == 'professional' %}ring-2 ring-primary-600 scale-105{% endif %} bg-white rounded-2xl shadow-lg overflow-hidden">
-                    {% if key == 'professional' %}
-                    <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">{% trans "Most Popular" %}</div>
+                    {% else %}
+                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-primary">{% trans "Start Free, Upgrade Later" %}</a>
                     {% endif %}
-                    <div class="p-8">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">{{ tier.name }}</h3>
-                        <div class="mb-1">
-                            <span class="text-4xl font-bold text-gray-900">${{ tier.price }}</span>
-                            <span class="text-gray-500">/{% trans "month" %}</span>
-                        </div>
-                        {% if tier.price > 0 %}
-                        <div class="text-sm text-green-600 font-medium mb-4">
-                            {% if tier.invoices_per_month == -1 %}{% trans "Unlimited invoices" %}{% else %}${{ tier.price|divisibleby:tier.invoices_per_month|default:"0.18" }} {% trans "per invoice" %}{% endif %}
-                        </div>
-                        {% else %}
-                        <div class="text-sm text-gray-500 mb-4">{% trans "5 invoices/month" %}</div>
-                        {% endif %}
-
-                        <ul class="space-y-3 mb-8 text-sm">
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="text-gray-600">
-                                    {% if tier.invoices_per_month == -1 %}{% trans "Unlimited" %}{% else %}{{ tier.invoices_per_month }}{% endif %} {% trans "invoices per month" %}
-                                </span>
-                            </li>
-
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 {% if not tier.watermark %}text-green-500{% else %}text-red-400{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if not tier.watermark %}M5 13l4 4L19 7{% else %}M6 18L18 6M6 6l12 12{% endif %}"></path>
-                                </svg>
-                                <span class="text-gray-600">
-                                    {% if tier.watermark %}{% trans "Includes watermark" %}{% else %}{% trans "No watermark" %}{% endif %}
-                                </span>
-                            </li>
-
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="text-gray-600">
-                                    {% if tier.templates == 'all' %}{% trans "All 5 templates" %}{% else %}{{ tier.templates|length }} {% trans "template" %}{% if tier.templates|length > 1 %}s{% endif %}{% endif %}
-                                </span>
-                            </li>
-
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 {% if tier.batch_upload %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="{% if tier.batch_upload %}text-gray-600{% else %}text-gray-400{% endif %}">
-                                    {% trans "CSV batch upload" %}
-                                </span>
-                            </li>
-
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 {% if tier.api_access %}text-green-500{% else %}text-gray-300{% endif %} mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="{% if tier.api_access %}text-gray-600{% else %}text-gray-400{% endif %}">
-                                    {% if tier.api_access %}{% trans "API access" %} ({{ tier.api_calls_per_month }} {% trans "calls/mo" %}){% else %}{% trans "API access" %}{% endif %}
-                                </span>
-                            </li>
-
-                            <li class="flex items-start">
-                                <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="text-gray-600">
-                                    {% if tier.max_active_timers == -1 %}{% trans "Unlimited time tracking" %}{% else %}{% trans "Time tracking" %} ({{ tier.max_active_timers }} {% trans "timer" %}{% if tier.max_active_timers > 1 %}s{% endif %}){% endif %}
-                                </span>
-                            </li>
-                        </ul>
-
-                        {% if user.is_authenticated %}
-                            {% if user.subscription_tier == key %}
-                                <button disabled class="block w-full text-center py-3 px-6 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed">
-                                    {% trans "Current Plan" %}
-                                </button>
-                            {% else %}
-                                <a href="{% url 'billing:checkout' key %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
-                                    {% if tier.price == 0 %}{% trans "Switch to Free" %}{% else %}{% trans "Upgrade" %}{% endif %}
-                                </a>
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url 'account_signup' %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
-                                {% if tier.price == 0 %}{% trans "Get Started Free" %}{% else %}{% trans "Start Free Trial" %}{% endif %}
-                            </a>
-                        {% endif %}
-                    </div>
                 </div>
-                {% endif %}
-                {% endfor %}
+            </div>
+
+            <!-- Business -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Business" %}</h3>
+                    <p class="text-sm text-gray-500 mb-4">{% trans "For teams & high-volume invoicing" %}</p>
+                    <div class="mb-6">
+                        <span class="text-5xl font-bold text-gray-900">$79</span>
+                        <span class="text-gray-500">/{% trans "mo" %}</span>
+                    </div>
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <strong>{% trans "Unlimited invoices" %}</strong>
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Everything in Professional" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "API access (1,000 calls/mo)" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "3 team seats" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Unlimited recurring invoices" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Unlimited time tracking" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% trans "Client portal & Stripe Connect" %}
+                        </li>
+                    </ul>
+                    {% if user.is_authenticated %}
+                        {% if user.subscription_tier == 'business' %}
+                            <button disabled class="block w-full text-center py-3 px-6 bg-gray-100 text-gray-500 rounded-lg cursor-not-allowed">{% trans "Current Plan" %}</button>
+                        {% else %}
+                            <a href="{% url 'billing:checkout' 'business' %}" class="block w-full text-center btn-outline">{% trans "Upgrade to Business" %}</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">{% trans "Start Free, Upgrade Later" %}</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
-        <!-- Comparison Box -->
+        <!-- Credit Packs (Secondary) -->
         <div class="max-w-3xl mx-auto mb-16 bg-white rounded-2xl p-8 shadow-sm">
-            <h3 class="text-xl font-bold text-gray-900 mb-6 text-center">{% trans "Credits vs Subscriptions: Which is Right for You?" %}</h3>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        {% trans "Choose Credits If:" %}
-                    </h4>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li>- {% trans "You invoice occasionally (1-10/month)" %}</li>
-                        <li>- {% trans "You want no monthly commitment" %}</li>
-                        <li>- {% trans "Your invoicing needs are unpredictable" %}</li>
-                        <li>- {% trans "You're a seasonal business" %}</li>
-                    </ul>
+            <h3 class="text-xl font-bold text-gray-900 mb-2 text-center">{% trans "Prefer Pay-As-You-Go?" %}</h3>
+            <p class="text-center text-gray-500 text-sm mb-6">{% trans "Buy credit packs instead of subscribing. 1 credit = 1 invoice. Credits never expire." %}</p>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="text-center p-4 border border-gray-200 rounded-xl">
+                    <div class="text-2xl font-bold text-gray-900">10</div>
+                    <div class="text-sm text-gray-500 mb-1">{% trans "credits" %}</div>
+                    <div class="text-lg font-semibold text-gray-900">$9</div>
+                    <div class="text-xs text-gray-400">{% trans "$0.90 each" %}</div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'billing:purchase_credits' 'pack_10' %}" class="mt-3 block text-sm text-primary-600 hover:text-primary-700 font-medium">{% trans "Buy" %}</a>
+                    {% endif %}
                 </div>
-                <div>
-                    <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 text-primary-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                        </svg>
-                        {% trans "Choose a Subscription If:" %}
-                    </h4>
-                    <ul class="space-y-2 text-sm text-gray-600">
-                        <li>- {% trans "You invoice regularly (10+/month)" %}</li>
-                        <li>- {% trans "You want the best per-invoice value" %}</li>
-                        <li>- {% trans "You need batch upload or recurring invoices" %}</li>
-                        <li>- {% trans "You want time tracking to bill hours" %}</li>
-                        <li>- {% trans "You need API access" %}</li>
-                    </ul>
+                <div class="text-center p-4 border-2 border-green-500 rounded-xl bg-green-50">
+                    <div class="text-xs font-medium text-green-600 mb-1">{% trans "Best Value" %}</div>
+                    <div class="text-2xl font-bold text-gray-900">25</div>
+                    <div class="text-sm text-gray-500 mb-1">{% trans "credits" %}</div>
+                    <div class="text-lg font-semibold text-gray-900">$19</div>
+                    <div class="text-xs text-gray-400">{% trans "$0.76 each" %}</div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'billing:purchase_credits' 'pack_25' %}" class="mt-3 block text-sm text-primary-600 hover:text-primary-700 font-medium">{% trans "Buy" %}</a>
+                    {% endif %}
+                </div>
+                <div class="text-center p-4 border border-gray-200 rounded-xl">
+                    <div class="text-2xl font-bold text-gray-900">50</div>
+                    <div class="text-sm text-gray-500 mb-1">{% trans "credits" %}</div>
+                    <div class="text-lg font-semibold text-gray-900">$35</div>
+                    <div class="text-xs text-gray-400">{% trans "$0.70 each" %}</div>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'billing:purchase_credits' 'pack_50' %}" class="mt-3 block text-sm text-primary-600 hover:text-primary-700 font-medium">{% trans "Buy" %}</a>
+                    {% endif %}
                 </div>
             </div>
+            {% if not user.is_authenticated %}
+            <p class="text-center mt-4">
+                <a href="{% url 'account_signup' %}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">{% trans "Sign up to buy credits" %} &rarr;</a>
+            </p>
+            {% endif %}
         </div>
 
         <!-- FAQ Section -->

@@ -2896,6 +2896,280 @@ class Command(BaseCommand):
     </ul>
 </div>
 
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">International Invoice Calculations</h2>
+
+<p class="mb-4">When you invoice clients across borders, understanding how to calculate an invoice with international tax rules is essential. Currency conversions, varying tax systems, and compliance requirements add layers of complexity that can trip up even experienced businesses.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Currency Conversion</h3>
+
+<p class="mb-4">If you invoice in a currency different from your home currency, you need to convert amounts for your own accounting records. Use the exchange rate on the invoice date (not the payment date) for consistency:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Home Currency Amount = Foreign Currency Amount × Exchange Rate on Invoice Date</p>
+</div>
+
+<p class="mb-4"><strong>Example:</strong> A US-based designer invoices a UK client for £2,000. On the invoice date, the GBP/USD rate is 1.27:</p>
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Invoice amount: £2,000.00</li>
+    <li>USD equivalent: £2,000 × 1.27 = $2,540.00</li>
+    <li>Record $2,540.00 in your books for tax reporting</li>
+</ul>
+
+<p class="mb-4"><strong>Tip:</strong> Always state the currency clearly on your invoice (e.g., "All amounts in GBP") and include your preferred payment method for international transfers to avoid conversion fee surprises.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">VAT for EU Invoices (Reverse Charge Mechanism)</h3>
+
+<p class="mb-4">When selling services to a VAT-registered business in another EU country, the <strong>reverse charge mechanism</strong> shifts the VAT obligation from the seller to the buyer. This means you invoice without VAT but must include specific details:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li><strong>Your VAT number</strong> and the client's VAT number (verify via the VIES system)</li>
+    <li>The note: "Reverse charge: VAT to be accounted for by the recipient" (or equivalent in the client's language)</li>
+    <li><strong>No VAT line item</strong> on the invoice — the subtotal equals the total</li>
+</ul>
+
+<p class="mb-4"><strong>Practical example — invoicing an EU client:</strong></p>
+<p class="mb-4">A French web developer invoices a German company for a website redesign:</p>
+
+<table class="w-full border-collapse mb-6">
+    <tbody>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Website redesign (40 hours × €95/hr)</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">€3,800.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Content migration</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">€500.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Subtotal</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">€4,300.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 italic">VAT (0% — Reverse charge applies)</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">€0.00</td>
+        </tr>
+        <tr class="bg-gray-100 dark:bg-gray-800 font-bold">
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total Due</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">€4,300.00</td>
+        </tr>
+    </tbody>
+</table>
+
+<p class="mb-4">The German client then self-assesses the German VAT (19%) on their own VAT return, both as output tax and input tax, resulting in a net zero effect.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">GST for Australia and India</h3>
+
+<p class="mb-4"><strong>Australia:</strong> GST is a flat 10% on most goods and services. If your business is GST-registered (annual turnover above AUD $75,000), you must charge GST on domestic invoices. Exports of services to overseas clients are generally GST-free.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Australian invoice: Subtotal + 10% GST = Total</p>
+    <p class="font-mono text-lg">Example: $5,000 + $500 GST = $5,500 AUD</p>
+</div>
+
+<p class="mb-4"><strong>India:</strong> GST rates vary by service type — 5%, 12%, 18%, or 28%. Most professional services fall under 18% GST. For interstate transactions, GST is split equally into CGST and SGST (or charged as IGST for interstate):</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Intrastate (same state): 9% CGST + 9% SGST = 18% total</li>
+    <li>Interstate (different states): 18% IGST</li>
+    <li>Exports: 0% GST (with Letter of Undertaking)</li>
+</ul>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">US Sales Tax Differences by State</h3>
+
+<p class="mb-4">The United States has no national sales tax. Instead, rates vary by state, county, and city. Key points for invoice calculations:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li><strong>5 states have no sales tax:</strong> Alaska, Delaware, Montana, New Hampshire, Oregon</li>
+    <li><strong>Highest combined rates:</strong> Tennessee (9.55%), Louisiana (9.52%), Arkansas (9.51%)</li>
+    <li><strong>Services may be exempt:</strong> Many states don't tax professional services (consulting, design, development), but rules vary</li>
+    <li><strong>Nexus rules:</strong> You only need to charge sales tax in states where you have economic nexus (typically $100K+ in sales)</li>
+</ul>
+
+<p class="mb-4">Always verify the tax rules for your specific service type and the client's jurisdiction before calculating the invoice total.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Deposit and Partial Payment Calculations</h2>
+
+<p class="mb-4">Many businesses require deposits or structure payments in installments. Knowing how to calculate an invoice with partial payments ensures both parties are clear on what's owed at each stage.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">50% Upfront Deposit</h3>
+
+<p class="mb-4">The most common arrangement for project-based work is a 50/50 split — half before work begins, half on completion:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Deposit Amount = Total Project Cost × 50%</p>
+    <p class="font-mono text-lg">Final Invoice = Total Project Cost - Deposit Received</p>
+</div>
+
+<p class="mb-4"><strong>Example:</strong> A $6,000 branding project with 50% deposit:</p>
+<ul class="list-disc pl-6 mb-6 space-y-1">
+    <li>Invoice 1 (deposit): $3,000.00 — due before work begins</li>
+    <li>Invoice 2 (final): $6,000.00 total - $3,000.00 deposit = $3,000.00 due on delivery</li>
+</ul>
+
+<p class="mb-4"><strong>Important:</strong> On the final invoice, always show the full project total, then subtract the deposit as a line item so the client sees the complete picture.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Progress Billing (Milestone Payments)</h3>
+
+<p class="mb-4">For larger projects, progress billing splits the total across project milestones. A common structure is 30/30/40:</p>
+
+<table class="w-full border-collapse mb-6">
+    <thead>
+        <tr class="bg-gray-100 dark:bg-gray-800">
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Payment</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">Milestone</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">Percentage</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">Amount</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">Remaining</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Invoice 1</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Project kickoff</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">30%</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$3,000.00</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$7,000.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Invoice 2</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Design approval</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">30%</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$3,000.00</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$4,000.00</td>
+        </tr>
+        <tr>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Invoice 3</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2">Final delivery</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">40%</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$4,000.00</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$0.00</td>
+        </tr>
+        <tr class="bg-gray-50 dark:bg-gray-700 font-semibold">
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2" colspan="2">Total Project Value</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">100%</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">$10,000.00</td>
+            <td class="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">—</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Retainer-Based Billing</h3>
+
+<p class="mb-4">Retainers involve a fixed monthly fee for an agreed number of hours. Calculating the invoice depends on whether overages are permitted:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li><strong>Fixed retainer (no overages):</strong> Invoice the flat retainer amount each month regardless of hours used. Example: $2,500/month for up to 20 hours.</li>
+    <li><strong>Retainer with overage billing:</strong> Invoice the retainer fee plus additional hours at the agreed overage rate.</li>
+</ul>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Retainer Invoice = Base Retainer + (Overage Hours × Overage Rate)</p>
+    <p class="font-mono text-lg mt-2">Example: $2,500 retainer + (5 extra hours × $150/hr) = $3,250</p>
+</div>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Calculating Remaining Balances</h3>
+
+<p class="mb-4">When a client has made partial payments, your invoice should clearly show the remaining balance:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Balance Due = Invoice Total - Sum of All Payments Received</p>
+</div>
+
+<p class="mb-4">Always list each prior payment on the invoice with its date and amount, so the client can reconcile their records. This transparency reduces payment disputes and speeds up collections.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Invoice Calculation for Different Industries</h2>
+
+<p class="mb-4">Every industry has its own billing conventions. Here's how to calculate an invoice for four common sectors, each with its own pricing model and nuances.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Construction: Progress Billing with Retention</h3>
+
+<p class="mb-4">Construction invoices typically use progress billing with a <strong>retention (retainage)</strong> holdback — usually 5-10% of each payment — that's released upon project completion. This protects the client against incomplete work.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Progress Payment = (% Complete × Contract Value) - Retention - Previous Payments</p>
+    <p class="font-mono text-lg mt-2">Example: (60% × $200,000) - 10% retention - $90,000 prior = $120,000 - $12,000 - $90,000 = $18,000</p>
+</div>
+
+<p class="mb-4">The final invoice includes release of all retained amounts once the client signs off on the completed work. For a $200,000 contract with 10% retention, the final retention release would be $20,000.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Freelance Writing: Per-Word Rates</h3>
+
+<p class="mb-4">Freelance writers commonly charge per word, making the calculation straightforward but requiring accurate word counts. Some clients pay per word while others pay per piece.</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Article Fee = Word Count × Per-Word Rate</p>
+    <p class="font-mono text-lg mt-2">Example: 2,500 words × $0.15/word = $375.00 per article</p>
+    <p class="font-mono text-lg mt-2">Invoice for 4 articles: 4 × $375.00 = $1,500.00</p>
+</div>
+
+<p class="mb-4">For content packages, list each piece as a separate line item with its word count, so the client can verify the deliverables against the invoice.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Photography: Session + Print Pricing</h3>
+
+<p class="mb-4">Photographers typically combine a session fee with product sales (prints, albums, digital files). The invoice mixes flat fees and quantity-based items:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Photography Invoice = Session Fee + (Print Qty × Print Price) + Digital Package + Travel</p>
+    <p class="font-mono text-lg mt-2">Example: $500 session + (15 prints × $25) + $200 digital package + $75 travel = $1,150.00</p>
+</div>
+
+<p class="mb-4">Include licensing terms on the invoice if digital files have usage restrictions (e.g., "Licensed for web use only; print rights available at additional cost").</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Consulting: Blended Rates</h3>
+
+<p class="mb-4">Consulting firms often use blended rates when a team of professionals at different seniority levels works on the same project. Instead of listing individual rates, a single blended hourly rate simplifies the invoice:</p>
+
+<div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mb-6">
+    <p class="font-mono text-lg">Blended Rate = (Senior Hours × Senior Rate + Junior Hours × Junior Rate) ÷ Total Hours</p>
+    <p class="font-mono text-lg mt-2">Example: (10 hrs × $300 + 30 hrs × $150) ÷ 40 hrs = $7,500 ÷ 40 = $187.50/hr blended</p>
+    <p class="font-mono text-lg mt-2">Invoice: 40 hours × $187.50 = $7,500.00</p>
+</div>
+
+<p class="mb-4">Alternatively, some clients prefer to see the breakdown by team member role. Choose whichever approach your contract specifies and remain consistent across all invoices for that engagement.</p>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Automating Invoice Calculations</h2>
+
+<p class="mb-4">Manual invoice calculations are a leading cause of billing errors. A single misplaced decimal or forgotten tax rate can result in underbilling (costing you revenue) or overbilling (damaging client trust). Here's why automation matters:</p>
+
+<ul class="list-disc pl-6 mb-6 space-y-2">
+    <li><strong>Eliminates arithmetic errors:</strong> Software calculates line totals, taxes, and discounts instantly with no rounding mistakes</li>
+    <li><strong>Ensures tax compliance:</strong> Correct tax rates are applied automatically based on your settings, reducing audit risk</li>
+    <li><strong>Saves time:</strong> What takes 10-15 minutes manually takes seconds with an invoice generator</li>
+    <li><strong>Creates consistency:</strong> Every invoice follows the same calculation logic, making reconciliation easier</li>
+    <li><strong>Reduces disputes:</strong> Accurate, professional invoices get paid faster and generate fewer client questions</li>
+</ul>
+
+<p class="mb-4">Studies show that businesses using invoice software get paid an average of <strong>14 days faster</strong> than those using manual methods like spreadsheets or Word documents. Automated calculations are just one part of the equation — features like payment reminders, recurring invoices, and online payments compound the effect.</p>
+
+<div class="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-6 my-8">
+    <h3 class="text-lg font-semibold text-primary-800 dark:text-primary-200 mb-2">Stop Calculating Invoices by Hand</h3>
+    <p class="text-primary-700 dark:text-primary-300 mb-4">InvoiceKits handles all invoice calculations automatically — line items, taxes, discounts, and totals update in real-time as you type. Create your first invoice in under 60 seconds with our AI-powered generator, or use our free calculator to verify your numbers.</p>
+    <div class="flex flex-wrap gap-3">
+        <a href="/try/" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-semibold">Try Free Invoice Generator →</a>
+        <a href="/tools/invoice-calculator/" class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 text-primary-600 dark:text-primary-400 border border-primary-300 dark:border-primary-700 rounded-lg hover:bg-primary-50 dark:hover:bg-gray-700 font-semibold">Use Free Calculator →</a>
+    </div>
+</div>
+
+<h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">Frequently Asked Questions</h2>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">How do I calculate tax on an invoice?</h3>
+<p class="mb-4">Multiply the taxable subtotal by the applicable tax rate. For example, if your subtotal is $1,000 and the tax rate is 8.25%, the tax is $1,000 × 0.0825 = $82.50, making the total $1,082.50. If multiple tax rates apply (state + local), add them together first: a 6% state tax plus a 2.25% local tax means you multiply by 8.25%. Always apply discounts before calculating tax unless your jurisdiction requires otherwise.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Should I round invoice totals?</h3>
+<p class="mb-4">Calculate with full precision through every step and round only the final total to two decimal places. Rounding intermediate values (like individual line items) can cause the total to be off by a few cents, which looks unprofessional and can cause reconciliation issues. Most accounting standards and invoice software follow the "round last" approach. If your tax authority requires rounding at the line-item level, follow their specific guidance.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">How do I calculate a discount on an invoice?</h3>
+<p class="mb-4">For a <strong>percentage discount</strong>, multiply the subtotal by the discount rate: $2,000 × 10% = $200 discount, resulting in a $1,800 discounted subtotal. For a <strong>flat discount</strong>, simply subtract the amount: $2,000 - $150 = $1,850. For <strong>early payment discounts</strong> (like 2/10 Net 30), state the terms on the invoice and calculate: $2,000 × 2% = $40 discount if paid within 10 days, making the early-pay total $1,960. Always apply discounts before calculating tax.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">What is the formula for invoice total?</h3>
+<p class="mb-4">The complete formula is: <strong>Invoice Total = (Sum of Line Item Totals) - Discounts + Tax - Deposits/Payments Received</strong>. Each line item total equals Quantity × Unit Price. Tax is calculated on the discounted subtotal (subtotal minus discounts). Finally, subtract any deposits or prior payments already received to arrive at the amount due. This formula works for virtually any type of invoice, from simple one-item bills to complex multi-line project invoices.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">How do I handle multiple tax rates on one invoice?</h3>
+<p class="mb-4">When different line items are taxed at different rates (common when selling a mix of goods and services), group items by tax rate and calculate each group separately. For example, if products are taxed at 8% and services at 0%: Products subtotal ($500) × 8% = $40 tax; Services subtotal ($1,200) × 0% = $0 tax; Total tax = $40. Show each tax rate as a separate line on the invoice so the client understands the breakdown. Your invoice should clearly label which items fall under each rate.</p>
+
+<h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-3">Should deposits be shown on invoices?</h3>
+<p class="mb-4">Yes, always show deposits on your invoices for transparency. Best practice is to show the full project total, then list the deposit as a negative line item or "Less: Deposit received on [date]" with the amount subtracted. This gives the client a complete record of the project cost and what they've already paid. For example: Subtotal $5,000, Less deposit received 01/15/2026 -$2,500, Balance Due $2,500. This approach also makes your accounting easier and reduces payment disputes.</p>
+
 <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Key Takeaways</h3>
     <ul class="list-disc pl-6 space-y-1 text-gray-700 dark:text-gray-300">
@@ -2918,9 +3192,9 @@ class Command(BaseCommand):
                 'title': 'How to Calculate Invoice Totals: Complete Guide with Examples',
                 'author': author,
                 'category': category,
-                'excerpt': 'Master invoice calculations with this complete guide. Learn line item totals, tax calculations, discounts, and avoid common mistakes. Includes step-by-step examples.',
+                'excerpt': 'Master invoice calculations with this comprehensive guide. Step-by-step examples for line items, tax calculations, discounts, deposits, international invoicing, and industry-specific formulas. Includes free invoice calculator.',
                 'content': post_content,
-                'meta_description': 'Complete guide to invoice totals. Step-by-step examples for line items, tax, discounts, and hourly rates. Free calculator.',
+                'meta_description': 'Complete guide to calculating invoice totals with step-by-step examples. Covers line items, tax, discounts, deposits, international invoicing, and industry-specific calculations. Free calculator included.',
                 'meta_keywords': 'how to calculate an invoice, invoice calculator, invoice total calculation, calculate invoice tax, invoice line items, invoice subtotal',
                 'status': 'published',
             }
