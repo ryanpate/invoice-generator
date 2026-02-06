@@ -41,7 +41,7 @@
 - Social login with Google and GitHub (OAuth fully configured via environment variables)
 - Recurring invoices for Professional+ plans (weekly, bi-weekly, monthly, quarterly, yearly)
 - One-click recurring: "Make Recurring" button on invoice detail page to convert any invoice to a recurring template
-- Blog section with SEO-optimized content (`/blog/`) - 5 posts live
+- Blog section with SEO-optimized content (`/blog/`) - 10 posts live
 - Role-specific landing pages (`/for-freelancers/`, `/for-small-business/`, `/for-consultants/`)
 - Competitor comparison page (`/compare/`)
 - Template showcase pages (`/templates/clean-slate/`, `/templates/executive/`, `/templates/bold-modern/`, `/templates/classic-professional/`, `/templates/neon-edge/`)
@@ -76,6 +76,18 @@
 - **Free SEO Tools (no login required):**
   - Invoice Calculator (`/tools/invoice-calculator/`) - Line items mode & hourly rate mode, tax/discount, live totals
   - Late Fee Calculator (`/tools/late-fee-calculator/`) - Flat fee, percentage, compound interest, payment terms presets
+  - State-specific late fee pages (`/tools/late-fee-calculator/<state>/`) - 10 states with laws, statutes, calculators
+- **Annual Pricing Option:**
+  - Monthly/Annual toggle on pricing page (Alpine.js)
+  - 20% discount for annual billing
+  - Professional: $23/mo ($278/year, save $70) | Business: $63/mo ($758/year, save $190)
+  - Updated Service schema with annual OfferCatalog entries
+- **Email Nurture Sequence:**
+  - 3-email onboarding sequence: Welcome (signup) → Day 2 → Day 5
+  - Day 2: "Create your first invoice in 60 seconds" with 3-step guide
+  - Day 5: "3 features that help you get paid faster" (AI Generator, Time Tracking, Reminders)
+  - Celery Beat task at 8:00 AM UTC daily (`process_nurture_emails`)
+  - `nurture_email_step` field on CustomUser for tracking progress
 - **Multi-Language Support (i18n):**
   - Languages: English (default), Spanish (es), French (fr)
   - URL strategy: `/es/pricing/`, `/fr/pricing/`, `/pricing/` (English - no prefix)
@@ -518,9 +530,12 @@ invoice_generator/
 | `templates/billing/templates.html` | Premium template store page |
 | `templates/billing/templates_success.html` | Template purchase success page |
 | `apps/api/views.py` | REST API endpoints |
-| `apps/invoices/tasks.py` | Celery tasks for recurring invoices and payment reminders |
+| `apps/invoices/tasks.py` | Celery tasks for recurring invoices, payment reminders, and nurture emails |
 | `templates/base.html` | Base template with SEO meta tags + Schema.org + GA4 |
 | `templates/emails/welcome.html` | HTML welcome email template |
+| `templates/emails/nurture_day2.html` | Day 2 nurture email (create first invoice) |
+| `templates/emails/nurture_day5.html` | Day 5 nurture email (feature highlights) |
+| `templates/tools/state-late-fee-calculator.html` | State-specific late fee calculator template |
 | `templates/emails/payment_receipt.html` | Payment receipt email template |
 | `templates/emails/recurring_invoice_generated.html` | Recurring invoice notification email |
 | `templates/emails/invoice_to_client.html` | Invoice email sent to clients |
@@ -635,6 +650,7 @@ invoice_generator/
 | `/templates/neon-edge/` | Neon Edge template showcase |
 | `/tools/invoice-calculator/` | Free invoice calculator tool |
 | `/tools/late-fee-calculator/` | Free late fee calculator tool |
+| `/tools/late-fee-calculator/<state>/` | State-specific late fee calculator (10 states) |
 | `/features/ai-invoice-generator/` | AI Invoice Generator feature page |
 | `/features/time-tracking/` | Time Tracking feature page |
 
@@ -784,6 +800,20 @@ All pages have been submitted for indexing via GSC URL Inspection tool:
 |-----|-----------|--------|
 | `https://www.invoicekits.com/features/ai-invoice-generator/` | Feature Landing Page | Submitted |
 | `https://www.invoicekits.com/features/time-tracking/` | Feature Landing Page | Submitted |
+
+**State Late Fee Calculator Pages (Programmatic SEO):**
+| URL | Page Type | Status |
+|-----|-----------|--------|
+| `https://www.invoicekits.com/tools/late-fee-calculator/california/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/texas/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/new-york/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/florida/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/illinois/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/pennsylvania/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/ohio/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/georgia/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/north-carolina/` | State Calculator | In Sitemap |
+| `https://www.invoicekits.com/tools/late-fee-calculator/new-jersey/` | State Calculator | In Sitemap |
 
 ### SEO TODOs
 - [x] Register with Google Search Console
@@ -1145,6 +1175,20 @@ Authentication: API Key in header `X-API-Key: <key>`
 278. Updated late fee calculator title and meta with "Free Online" and "Instantly" for CTR
 279. Added defer attribute to HTMX script for performance improvement
 280. Added Tools category for calculator-related blog posts
+281. Created 10 state-specific late fee calculator pages at `/tools/late-fee-calculator/<state>/` (CA, TX, NY, FL, IL, PA, OH, GA, NC, NJ)
+282. Added `STATE_LATE_FEE_DATA` dictionary to `apps/invoices/views.py` with state laws, statutes, grace periods, max rates
+283. Created `StateLateFeePage` view with BreadcrumbList + FAQPage JSON-LD schemas
+284. Created `templates/tools/state-late-fee-calculator.html` (647 lines) with interactive calculator, key rules, cross-linking
+285. Added state links section to main late fee calculator page for internal linking
+286. Added all 10 state URLs to sitemap in `config/urls.py`
+287. Added annual pricing toggle on `/pricing/` with Alpine.js (20% discount: Pro $23/mo, Business $63/mo annual)
+288. Updated pricing page Service schema with annual OfferCatalog entries (5 offers total)
+289. Added `nurture_email_step` field to CustomUser model with migration `0008_customuser_nurture_email_step.py`
+290. Created `process_nurture_emails` Celery task in `apps/invoices/tasks.py` (Day 2 + Day 5 emails)
+291. Added nurture emails to Celery Beat schedule at 8:00 AM UTC daily in `config/celery.py`
+292. Created `templates/emails/nurture_day2.html` - Day 2 email with 3-step invoice creation guide
+293. Created `templates/emails/nurture_day5.html` - Day 5 email showcasing AI Generator, Time Tracking, Payment Reminders
+294. Fixed welcome email: "5 invoices per month" → "5 lifetime credits", added AI Invoice Generator bullet
 
 ---
 
@@ -1174,18 +1218,18 @@ Based on analysis of Google Search Console, Google Analytics (GA4), and Bing Web
 
 | # | Action | Impact | Effort | Status |
 |---|--------|--------|--------|--------|
-| 1 | **Build /try/ no-signup invoice creator** — public page where visitors create + download watermarked PDF without account | 5-10x signup rate | Medium | IN PROGRESS |
-| 2 | **Fix homepage meta title/description** for CTR on existing impressions | 2-3x clicks | Low | TODO |
-| 3 | **Remove broken AdSense placeholders** (DASHBOARD_AD_SLOT, INVOICES_LIST_AD_SLOT show empty boxes) | Trust improvement | Trivial | TODO |
-| 4 | **Simplify pricing to 3 tiers** (Free/Pro $12/Business $49), kill credits for now | Reduce decision paralysis | Medium | TODO |
-| 5 | **Set up GA4 key events** (signup_complete, first_invoice, subscription_started) | Enable measurement | Low | TODO |
-| 6 | **Simplify new user first experience** — skip dashboard on first login, guided setup | Higher activation | Medium | TODO |
-| 7 | **Push invoice totals blog to page 1** — expand to 3000 words, embed calculator, add FAQ schema | 3x organic from that URL | Medium | TODO |
-| 8 | **Create 10 state late fee calculator pages** — programmatic SEO for "[state] late fee calculator" | 10+ new ranking pages | Medium | TODO |
-| 9 | **Post free tools on Reddit** (r/freelance, r/smallbusiness, r/Entrepreneur) | 50-200 direct users | Low | TODO |
-| 10 | **Add annual pricing** (20% discount) | Higher LTV | Low | TODO |
-| 11 | **Build email nurture sequence** (Day 0, Day 2, Day 5 post-signup) | Better activation | Low | TODO |
-| 12 | **Relaunch on Product Hunt** with AI demo video | Burst of 100-500 users | Medium | TODO |
+| 1 | **Build /try/ no-signup invoice creator** — public page where visitors create + download watermarked PDF without account | 5-10x signup rate | Medium | DONE |
+| 2 | **Fix homepage meta title/description** for CTR on existing impressions | 2-3x clicks | Low | DONE |
+| 3 | **Remove broken AdSense placeholders** (DASHBOARD_AD_SLOT, INVOICES_LIST_AD_SLOT show empty boxes) | Trust improvement | Trivial | DONE |
+| 4 | **Simplify pricing to 3 tiers** (Free/Pro $12/Business $49), kill credits for now | Reduce decision paralysis | Medium | DONE |
+| 5 | **Set up GA4 key events** (signup_complete, first_invoice, subscription_started) | Enable measurement | Low | DONE |
+| 6 | **Simplify new user first experience** — skip dashboard on first login, guided setup | Higher activation | Medium | DONE |
+| 7 | **Push invoice totals blog to page 1** — expand to 3000 words, embed calculator, add FAQ schema | 3x organic from that URL | Medium | DONE |
+| 8 | **Create 10 state late fee calculator pages** — programmatic SEO for "[state] late fee calculator" | 10+ new ranking pages | Medium | DONE |
+| 9 | **Post free tools on Reddit** (r/freelance, r/smallbusiness, r/Entrepreneur) | 50-200 direct users | Low | TODO (external) |
+| 10 | **Add annual pricing** (20% discount) | Higher LTV | Low | DONE |
+| 11 | **Build email nurture sequence** (Day 0, Day 2, Day 5 post-signup) | Better activation | Low | DONE |
+| 12 | **Relaunch on Product Hunt** with AI demo video | Burst of 100-500 users | Medium | TODO (external) |
 
 ### Key Strategic Decisions
 - **Stop building new features** until first 10 paying customers
@@ -1263,6 +1307,8 @@ The following services are deployed on Railway for recurring invoice auto-genera
 **Schedule:**
 - Recurring invoices: Daily at 6:00 AM UTC
 - Payment reminders: Daily at 6:30 AM UTC
+- Late fees: Daily at 7:00 AM UTC
+- Nurture emails: Daily at 8:00 AM UTC
 
 **Internal URLs:**
 - Redis: `redis://Redis.railway.internal:6379`
