@@ -28,6 +28,9 @@ urlpatterns = [
     path('templates/classic-professional/', views.ClassicProfessionalShowcaseView.as_view(), name='template_classic_professional'),
     path('templates/neon-edge/', views.NeonEdgeShowcaseView.as_view(), name='template_neon_edge'),
 
+    # Try invoice creator (no signup required)
+    path('try/', views.TryInvoiceView.as_view(), name='try_invoice'),
+
     # Free tools (SEO pages - no auth required)
     path('tools/', views.ToolsIndexView.as_view(), name='tools_index'),
     path('tools/invoice-calculator/', views.InvoiceCalculatorView.as_view(), name='invoice_calculator'),

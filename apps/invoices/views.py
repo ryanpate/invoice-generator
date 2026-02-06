@@ -44,7 +44,8 @@ class TeamAwareQuerysetMixin:
 
 from .forms import (
     InvoiceForm, LineItemFormSet, BatchUploadForm, SendInvoiceEmailForm,
-    RecurringInvoiceForm, RecurringLineItemFormSet, TimeEntryForm
+    RecurringInvoiceForm, RecurringLineItemFormSet, TimeEntryForm,
+    TryInvoiceForm,
 )
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
@@ -193,6 +194,107 @@ class LateFeeCalculatorView(FreeToolView):
 class ToolsIndexView(FreeToolView):
     """Landing page for all free SEO tools."""
     template_name = 'tools/index.html'
+
+
+class TryInvoiceView(View):
+    """No-signup invoice creator at /try/ — lets visitors build and download a PDF."""
+
+    def get(self, request):
+        from datetime import date
+        form = TryInvoiceForm(initial={'invoice_date': date.today()})
+        return render(request, 'invoices/try.html', {'form': form})
+
+    def post(self, request):
+        from datetime import date, timedelta
+        from decimal import Decimal
+        from .services.pdf_generator import InvoicePDFGenerator
+
+        form = TryInvoiceForm(request.POST)
+
+        # Parse line items from POST data
+        line_items = []
+        idx = 0
+        while True:
+            desc = request.POST.get(f'item_description_{idx}')
+            if desc is None:
+                break
+            qty_str = request.POST.get(f'item_quantity_{idx}', '1')
+            rate_str = request.POST.get(f'item_rate_{idx}', '0')
+            try:
+                qty = float(qty_str) if qty_str else 1
+                rate = float(rate_str) if rate_str else 0
+            except (ValueError, TypeError):
+                qty, rate = 1, 0
+            if desc.strip():
+                line_items.append({
+                    'description': desc.strip(),
+                    'quantity': qty,
+                    'rate': rate,
+                    'amount': round(qty * rate, 2),
+                })
+            idx += 1
+
+        if not form.is_valid() or not line_items:
+            if not line_items:
+                form.add_error(None, 'Please add at least one line item.')
+            return render(request, 'invoices/try.html', {'form': form})
+
+        cd = form.cleaned_data
+        tax_rate = float(cd.get('tax_rate') or 0)
+        subtotal = sum(item['amount'] for item in line_items)
+        tax_amount = round(subtotal * tax_rate / 100, 2)
+        total = round(subtotal + tax_amount, 2)
+
+        # Calculate due date from payment terms
+        invoice_date = cd['invoice_date']
+        terms_days = {'due_on_receipt': 0, 'net_15': 15, 'net_30': 30, 'net_45': 45, 'net_60': 60, 'net_90': 90}
+        due_date = invoice_date + timedelta(days=terms_days.get(cd['payment_terms'], 30))
+
+        invoice_data = {
+            'invoice_number': 'INV-PREVIEW',
+            'client_name': cd['client_name'],
+            'client_email': cd.get('client_email', ''),
+            'client_phone': '',
+            'client_address': '',
+            'invoice_date': invoice_date,
+            'due_date': due_date,
+            'payment_terms': cd['payment_terms'],
+            'currency': cd['currency'],
+            'subtotal': Decimal(str(subtotal)),
+            'tax_rate': Decimal(str(tax_rate)),
+            'tax_amount': Decimal(str(tax_amount)),
+            'total': Decimal(str(total)),
+            'notes': cd.get('notes', ''),
+            'template_style': cd['template_style'],
+            'line_items': line_items,
+        }
+
+        # Build a mock company object for the PDF generator
+        class TryCompany:
+            name = cd['company_name']
+            email = cd.get('company_email', '')
+            phone = ''
+            website = ''
+            address_line1 = ''
+            address_line2 = ''
+            city = ''
+            state = ''
+            postal_code = ''
+            country = ''
+            tax_id = ''
+            accent_color = ''
+            logo = None
+            signature = None
+            class user:
+                @staticmethod
+                def shows_watermark():
+                    return True  # Always watermark on /try/
+
+        pdf_bytes = InvoicePDFGenerator.generate_preview(invoice_data, TryCompany())
+
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="invoice-preview.pdf"'
+        return response
 
 
 class InvoiceListView(LoginRequiredMixin, TeamAwareQuerysetMixin, ListView):

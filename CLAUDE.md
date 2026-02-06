@@ -1148,6 +1148,63 @@ Authentication: API Key in header `X-API-Key: <key>`
 
 ---
 
+## Growth Action Plan (February 2026)
+
+Based on analysis of Google Search Console, Google Analytics (GA4), and Bing Webmaster data (Jan 9 - Feb 5, 2026).
+
+### Current Performance Baseline
+- **129 total active users** (89 Direct, 14 Organic, 4 Referral)
+- **9 GSC clicks** total, average position 35, 0% CTR on 99% of queries
+- **3 signups** out of 129 visitors (2.3% rate)
+- **2 invoices created**, **$0 revenue**
+- **0% retention** — nobody returns after first visit
+- Bing: 12 clicks, growing from 0→36 impressions/day
+
+### Top GSC Pages by Impressions
+| Page | Impressions | Clicks | Position |
+|------|------------|--------|----------|
+| /blog/how-to-calculate-invoice-totals/ | 290 | 3 | 12.2 |
+| /tools/late-fee-calculator/ | 241 | 1 | 24.7 |
+| /blog/invoice-vs-receipt-difference/ | 148 | 0 | 74.8 |
+| /blog/how-to-calculate-late-fees/ | 136 | 0 | 23.9 |
+| /features/time-tracking/ | 93 | 0 | 81.1 |
+| / (homepage) | 42 | 0 | 9.7 |
+
+### Prioritized Actions
+
+| # | Action | Impact | Effort | Status |
+|---|--------|--------|--------|--------|
+| 1 | **Build /try/ no-signup invoice creator** — public page where visitors create + download watermarked PDF without account | 5-10x signup rate | Medium | IN PROGRESS |
+| 2 | **Fix homepage meta title/description** for CTR on existing impressions | 2-3x clicks | Low | TODO |
+| 3 | **Remove broken AdSense placeholders** (DASHBOARD_AD_SLOT, INVOICES_LIST_AD_SLOT show empty boxes) | Trust improvement | Trivial | TODO |
+| 4 | **Simplify pricing to 3 tiers** (Free/Pro $12/Business $49), kill credits for now | Reduce decision paralysis | Medium | TODO |
+| 5 | **Set up GA4 key events** (signup_complete, first_invoice, subscription_started) | Enable measurement | Low | TODO |
+| 6 | **Simplify new user first experience** — skip dashboard on first login, guided setup | Higher activation | Medium | TODO |
+| 7 | **Push invoice totals blog to page 1** — expand to 3000 words, embed calculator, add FAQ schema | 3x organic from that URL | Medium | TODO |
+| 8 | **Create 10 state late fee calculator pages** — programmatic SEO for "[state] late fee calculator" | 10+ new ranking pages | Medium | TODO |
+| 9 | **Post free tools on Reddit** (r/freelance, r/smallbusiness, r/Entrepreneur) | 50-200 direct users | Low | TODO |
+| 10 | **Add annual pricing** (20% discount) | Higher LTV | Low | TODO |
+| 11 | **Build email nurture sequence** (Day 0, Day 2, Day 5 post-signup) | Better activation | Low | TODO |
+| 12 | **Relaunch on Product Hunt** with AI demo video | Burst of 100-500 users | Medium | TODO |
+
+### Key Strategic Decisions
+- **Stop building new features** until first 10 paying customers
+- **Kill credits model** temporarily — simplify to 3 subscription tiers
+- **Kill premium template purchases** — bundle all templates into Pro tier
+- **Focus SEO on long-tail** (state calculators, "how to" guides), not high-competition keywords
+- **Product IS the landing page** — visitors should USE the tool, not read about it
+
+### /try/ Page Implementation
+- **URL:** `/try/` (public, no auth required)
+- **View:** `TryInvoiceView` in `apps/invoices/views.py`
+- **Form:** `TryInvoiceForm` (standalone, not model-bound)
+- **PDF:** Uses `InvoicePDFGenerator.generate_preview()` with watermark always on
+- **Template:** `templates/invoices/try.html`
+- **Conversion CTA:** "Sign up to remove watermark, save invoices, use AI"
+- **Also add to:** sitemap, robots.txt Allow list, landing page hero CTA
+
+---
+
 ## Development Commands
 
 ```bash

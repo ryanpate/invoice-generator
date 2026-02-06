@@ -31,7 +31,7 @@ class StaticViewSitemap(Sitemap):
             '/templates/classic-professional/', '/templates/neon-edge/',
             '/tools/', '/tools/invoice-calculator/', '/tools/late-fee-calculator/',
             '/features/ai-invoice-generator/', '/features/time-tracking/',
-            '/affiliate/program/',
+            '/affiliate/program/', '/try/',
         ]
 
     def location(self, item):
@@ -101,6 +101,7 @@ Allow: /blog/
 Allow: /templates/
 Allow: /tools/
 Allow: /features/
+Allow: /try/
 Allow: /affiliate/program/
 Allow: /portal/request-access/
 

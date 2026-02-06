@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Try Free Invoice Generator - Create a PDF Invoice Now | InvoiceKits{% endblock %}
+{% block meta_description %}Create a professional PDF invoice right now — no signup required. Fill in your details, add line items, and download your invoice instantly. Free to try.{% endblock %}
+{% block meta_keywords %}free invoice generator, try invoice maker, create invoice online free, no signup invoice, instant PDF invoice{% endblock %}
+{% block canonical_url %}https://www.invoicekits.com/try/{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.invoicekits.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Try Invoice Generator", "item": "https://www.invoicekits.com/try/"}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Your Invoice</h1>
+        <p class="text-gray-600 dark:text-gray-400">No signup needed. Fill in the details below and download your PDF invoice.</p>
+    </div>
+
+    <form method="post" id="try-invoice-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Section -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- Your Company -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Your Company</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company Name *</label>
+                            {{ form.company_name }}
+                            {% if form.company_name.errors %}<p class="text-red-500 text-sm mt-1">{{ form.company_name.errors.0 }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Email</label>
+                            {{ form.company_email }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Information -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Client Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Name *</label>
+                            {{ form.client_name }}
+                            {% if form.client_name.errors %}<p class="text-red-500 text-sm mt-1">{{ form.client_name.errors.0 }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client Email</label>
+                            {{ form.client_email }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Details -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Invoice Details</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Invoice Date *</label>
+                            {{ form.invoice_date }}
+                            {% if form.invoice_date.errors %}<p class="text-red-500 text-sm mt-1">{{ form.invoice_date.errors.0 }}</p>{% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Terms</label>
+                            {{ form.payment_terms }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Currency</label>
+                            {{ form.currency }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Line Items</h2>
+
+                    <div id="line-items-container">
+                        <!-- First line item (always present) -->
+                        <div class="line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100 dark:border-gray-700" data-index="0">
+                            <div class="flex-1 min-w-[200px]">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description *</label>
+                                <input type="text" name="item_description_0" class="form-input" placeholder="Service or product description" required>
+                            </div>
+                            <div class="w-24">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qty *</label>
+                                <input type="number" name="item_quantity_0" class="form-input w-24" step="0.01" min="0.01" value="1" placeholder="1">
+                            </div>
+                            <div class="w-32">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rate *</label>
+                                <input type="number" name="item_rate_0" class="form-input w-32" step="0.01" min="0" placeholder="0.00">
+                            </div>
+                            <div class="w-10 pt-6 flex items-center">
+                                <button type="button" class="delete-line-item text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors p-1" title="Remove">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" id="add-line-item" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium">
+                        + Add Line Item
+                    </button>
+                </div>
+
+                <!-- Additional Settings -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Additional Settings</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tax Rate (%)</label>
+                            {{ form.tax_rate }}
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Template Style</label>
+                            {{ form.template_style }}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes / Payment Instructions</label>
+                            {{ form.notes }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-8 space-y-6">
+                    <!-- Summary -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Summary</h2>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                                <span>Subtotal</span>
+                                <span id="subtotal">$0.00</span>
+                            </div>
+                            <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                                <span>Tax</span>
+                                <span id="tax-amount">$0.00</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-semibold text-gray-900 dark:text-white pt-3 border-t border-gray-200 dark:border-gray-700">
+                                <span>Total</span>
+                                <span id="total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full mb-3 text-center">
+                            Download PDF Invoice
+                        </button>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-center">
+                            Free preview with watermark
+                        </p>
+                    </div>
+
+                    <!-- Signup CTA -->
+                    <div class="bg-gradient-to-br from-primary-50 to-blue-50 dark:from-primary-900/30 dark:to-blue-900/30 rounded-xl shadow-sm p-6 border border-primary-100 dark:border-primary-800">
+                        <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Want more?</h3>
+                        <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-2 mb-4">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Remove watermark
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Add your logo and signature
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                5 professional templates
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                AI-powered invoice generation
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Email invoices directly to clients
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                Track time and get paid faster
+                            </li>
+                        </ul>
+                        <a href="{% url 'account_signup' %}" class="btn-primary w-full block text-center">
+                            Create Free Account
+                        </a>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+                            5 free invoices included. No credit card.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let lineItemIndex = 1; // Next index to use (0 already exists)
+
+    function getCurrencySymbol() {
+        const sel = document.querySelector('[name="currency"]');
+        const symbols = {'USD':'$','EUR':'\u20ac','GBP':'\u00a3','CAD':'C$','AUD':'A$','JPY':'\u00a5','INR':'\u20b9'};
+        return symbols[sel.value] || sel.value;
+    }
+
+    function calculateTotals() {
+        let subtotal = 0;
+        document.querySelectorAll('.line-item').forEach(function(item) {
+            const qty = parseFloat(item.querySelector('[name^=item_quantity]').value) || 0;
+            const rate = parseFloat(item.querySelector('[name^=item_rate]').value) || 0;
+            subtotal += qty * rate;
+        });
+
+        const taxRate = parseFloat(document.querySelector('[name=tax_rate]').value) || 0;
+        const taxAmount = subtotal * (taxRate / 100);
+        const total = subtotal + taxAmount;
+        const sym = getCurrencySymbol();
+
+        document.getElementById('subtotal').textContent = sym + subtotal.toFixed(2);
+        document.getElementById('tax-amount').textContent = sym + taxAmount.toFixed(2);
+        document.getElementById('total').textContent = sym + total.toFixed(2);
+    }
+
+    function attachListeners() {
+        document.querySelectorAll('input[name^=item_quantity], input[name^=item_rate], input[name=tax_rate], select[name=currency]').forEach(function(input) {
+            input.removeEventListener('input', calculateTotals);
+            input.addEventListener('input', calculateTotals);
+            input.removeEventListener('change', calculateTotals);
+            input.addEventListener('change', calculateTotals);
+        });
+    }
+
+    attachListeners();
+    calculateTotals();
+
+    // Add line item
+    document.getElementById('add-line-item').addEventListener('click', function() {
+        const container = document.getElementById('line-items-container');
+        const idx = lineItemIndex++;
+
+        const div = document.createElement('div');
+        div.className = 'line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100 dark:border-gray-700';
+        div.setAttribute('data-index', idx);
+        div.innerHTML = `
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description *</label>
+                <input type="text" name="item_description_${idx}" class="form-input" placeholder="Service or product description" required>
+            </div>
+            <div class="w-24">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qty *</label>
+                <input type="number" name="item_quantity_${idx}" class="form-input w-24" step="0.01" min="0.01" value="1" placeholder="1">
+            </div>
+            <div class="w-32">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rate *</label>
+                <input type="number" name="item_rate_${idx}" class="form-input w-32" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="w-10 pt-6 flex items-center">
+                <button type="button" class="delete-line-item text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors p-1" title="Remove">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        container.appendChild(div);
+        attachListeners();
+        attachDeleteListeners();
+        calculateTotals();
+    });
+
+    // Delete line items
+    function attachDeleteListeners() {
+        document.querySelectorAll('.delete-line-item').forEach(function(btn) {
+            btn.removeEventListener('click', handleDelete);
+            btn.addEventListener('click', handleDelete);
+        });
+    }
+
+    function handleDelete(e) {
+        e.preventDefault();
+        const items = document.querySelectorAll('.line-item');
+        if (items.length <= 1) return;
+        e.target.closest('.line-item').remove();
+        calculateTotals();
+    }
+
+    attachDeleteListeners();
+});
+</script>
+{% endblock %}

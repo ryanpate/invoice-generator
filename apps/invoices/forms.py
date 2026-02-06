@@ -472,3 +472,84 @@ class TimeEntryForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class TryInvoiceForm(forms.Form):
+    """Standalone form for the /try/ page — no login required, no model binding."""
+
+    # Your company
+    company_name = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Your Company Name',
+        })
+    )
+    company_email = forms.EmailField(
+        required=False,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'you@company.com',
+        })
+    )
+
+    # Client
+    client_name = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Client or Company Name',
+        })
+    )
+    client_email = forms.EmailField(
+        required=False,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'client@example.com',
+        })
+    )
+
+    # Invoice details
+    invoice_date = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-input',
+            'type': 'date',
+        })
+    )
+    payment_terms = forms.ChoiceField(
+        choices=settings.PAYMENT_TERMS,
+        initial='net_30',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    currency = forms.ChoiceField(
+        choices=settings.CURRENCIES,
+        initial='USD',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    tax_rate = forms.DecimalField(
+        required=False,
+        min_value=0,
+        max_value=100,
+        initial=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-input',
+            'step': '0.01',
+            'placeholder': '0.00',
+        })
+    )
+    notes = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-textarea',
+            'rows': 2,
+            'placeholder': 'Payment instructions, thank you message, etc.',
+        })
+    )
+    template_style = forms.ChoiceField(
+        choices=[
+            ('clean_slate', 'Clean Slate'),
+            ('classic_professional', 'Classic Professional'),
+        ],
+        initial='clean_slate',
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
