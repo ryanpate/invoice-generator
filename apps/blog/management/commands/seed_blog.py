@@ -3194,7 +3194,7 @@ class Command(BaseCommand):
                 'category': category,
                 'excerpt': 'Master invoice calculations with this comprehensive guide. Step-by-step examples for line items, tax calculations, discounts, deposits, international invoicing, and industry-specific formulas. Includes free invoice calculator.',
                 'content': post_content,
-                'meta_description': 'Complete guide to calculating invoice totals with step-by-step examples. Covers line items, tax, discounts, deposits, international invoicing, and industry-specific calculations. Free calculator included.',
+                'meta_description': 'Step-by-step guide to invoice totals: line items, tax, discounts, deposits, and international invoicing. Free calculator.',
                 'meta_keywords': 'how to calculate an invoice, invoice calculator, invoice total calculation, calculate invoice tax, invoice line items, invoice subtotal',
                 'status': 'published',
             }
