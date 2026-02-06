@@ -188,6 +188,10 @@ class InvoicePDFGenerator:
                 }
                 return symbols.get(self.currency, self.currency)
 
+            def get_payment_terms_display(self):
+                terms_map = dict(settings.PAYMENT_TERMS)
+                return terms_map.get(self.payment_terms, self.payment_terms)
+
         class PreviewLineItem:
             def __init__(self, data):
                 self.description = data.get('description', '')
