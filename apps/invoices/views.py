@@ -196,6 +196,196 @@ class ToolsIndexView(FreeToolView):
     template_name = 'tools/index.html'
 
 
+# =============================================================================
+# State-Specific Late Fee Data (Programmatic SEO)
+# =============================================================================
+
+STATE_LATE_FEE_DATA = {
+    'california': {
+        'name': 'California',
+        'abbreviation': 'CA',
+        'max_late_fee': 'No statutory cap; must be "reasonable"',
+        'max_interest_rate': '10% per year (constitutional default); commercial transactions often exempt',
+        'statutes': ['Cal. Civ. Code \u00a7 1671 (liquidated damages)', 'Cal. Const. Art. XV, \u00a7 1 (usury)'],
+        'grace_period': 'No statutory requirement for commercial invoices',
+        'key_rules': [
+            'Late fees treated as liquidated damages \u2014 presumed valid for commercial contracts.',
+            'Courts have upheld 1.5% per month (18% annually) on commercial accounts.',
+            'The 10% constitutional usury cap has broad exemptions for B2B transactions.',
+            'Late fees that function as penalties with no relation to actual damages are unenforceable.',
+        ],
+        'notes': 'California uses a "reasonableness" standard. In practice, 1.5%/month (18%/year) is widely used and upheld for commercial accounts.',
+        'common_rate': '1.5% per month',
+    },
+    'texas': {
+        'name': 'Texas',
+        'abbreviation': 'TX',
+        'max_late_fee': 'No statutory cap; 10-12% of amount presumed reasonable',
+        'max_interest_rate': '18% per year (usury ceiling, may float to 24-28% for large loans)',
+        'statutes': ['Tex. Fin. Code \u00a7 302.001 (maximum interest)', 'Tex. Fin. Code \u00a7 303.009 (usury ceiling)'],
+        'grace_period': '1-2 days after due date required',
+        'key_rules': [
+            'No statutory maximum late fee for commercial invoices \u2014 must be reasonable.',
+            'Late fees of 10-12% of outstanding balance are generally presumed reasonable.',
+            'Monthly fees that annualize above the usury ceiling violate Texas law.',
+            'Late fees must be clearly stated in the contract to be enforceable.',
+        ],
+        'notes': 'The 18%/year usury ceiling is the key constraint. Any fee effectively exceeding this annual rate could be challenged.',
+        'common_rate': '1.5% per month',
+    },
+    'new-york': {
+        'name': 'New York',
+        'abbreviation': 'NY',
+        'max_late_fee': 'Must be contractually agreed; $50 or 5% of payment (whichever is lower) in some contexts',
+        'max_interest_rate': '16% per year (civil usury); 25% criminal usury threshold',
+        'statutes': ['N.Y. Gen. Oblig. Law \u00a7 5-501 (usury)', 'N.Y. Banking Law \u00a7 14-a (legal rate)', 'N.Y. Penal Law \u00a7 190.40 (criminal usury)'],
+        'grace_period': '5-day grace period commonly referenced',
+        'key_rules': [
+            'Civil usury cap is 16% per year; criminal usury at 25%.',
+            'For loans over $250K, up to 25% is permitted; over $2.5M, no cap.',
+            'Default legal rate (no contract) is 9% per year.',
+            'Late fees must be agreed in writing before the obligation is incurred.',
+        ],
+        'notes': 'New York has a structured usury framework. For larger commercial transactions ($250K+), limits are relaxed or eliminated.',
+        'common_rate': '1.5% per month',
+    },
+    'florida': {
+        'name': 'Florida',
+        'abbreviation': 'FL',
+        'max_late_fee': 'No statutory cap; must be reasonable and contractually stated',
+        'max_interest_rate': '18% per year simple interest (25% for loans over $500K)',
+        'statutes': ['Fla. Stat. \u00a7 687.02 (usurious contracts)', 'Fla. Stat. \u00a7 218.70-80 (Prompt Payment Act)'],
+        'grace_period': 'No statutory grace period for commercial invoices',
+        'key_rules': [
+            'No statutory maximum late fee for commercial invoices.',
+            'Interest exceeding 18%/year is usurious for transactions under $500K.',
+            'Late fees must be clearly spelled out in contracts.',
+            'The Prompt Payment Act (government contracts) specifies 1%/month on late payments.',
+        ],
+        'notes': 'Florida gives businesses significant flexibility. The 18% annual usury limit for transactions under $500K is the main constraint.',
+        'common_rate': '1.5% per month',
+    },
+    'illinois': {
+        'name': 'Illinois',
+        'abbreviation': 'IL',
+        'max_late_fee': 'No statutory cap; must be reasonable',
+        'max_interest_rate': '9% per year (written contracts); 5% (no written contract); commercial exemptions apply',
+        'statutes': ['815 ILCS 205/4 (written contract rate)', '815 ILCS 205/1 (default rate)', '815 ILCS 205/4.1a (commercial exemptions)'],
+        'grace_period': 'No statutory grace period for commercial invoices',
+        'key_rules': [
+            'Statutory maximum is 9%/year on written contracts, 5% without.',
+            'Most B2B commercial transactions are exempt from these caps.',
+            'No specific late fee legislation for commercial invoices.',
+            'The Prompt Payment Act (government payments) provides 1%/month after 90 days.',
+        ],
+        'notes': 'Illinois caps of 9%/5% have broad exemptions for commercial transactions under 815 ILCS 205/4.1a. Most B2B invoices are exempt.',
+        'common_rate': '1.5% per month',
+    },
+    'pennsylvania': {
+        'name': 'Pennsylvania',
+        'abbreviation': 'PA',
+        'max_late_fee': 'No statutory cap; courts have upheld 18% annually',
+        'max_interest_rate': '6% per year (default for loans \u226450K); commercial exemptions for larger amounts',
+        'statutes': ['41 P.S. \u00a7 201 (maximum lawful rate)', '41 P.S. \u00a7 301 (Loan Interest and Protection Law)'],
+        'grace_period': 'No statutory grace period (7 days in construction context)',
+        'key_rules': [
+            'Default rate is 6%/year for loans of $50K or less.',
+            'Business loans over $10K and obligations over $50K are exempt from usury limits.',
+            'Courts routinely approve 18%/year on past-due commercial accounts.',
+            'Triple damages for usury violations \u2014 a meaningful deterrent.',
+        ],
+        'notes': 'Pennsylvania has a low default rate (6%) but broad exemptions for commercial transactions. 18%/year is standard and upheld for B2B.',
+        'common_rate': '1.5% per month',
+    },
+    'ohio': {
+        'name': 'Ohio',
+        'abbreviation': 'OH',
+        'max_late_fee': 'No statutory cap; must be in a written contract agreed by both parties',
+        'max_interest_rate': '8% per year (default); exempt for principal over $100K',
+        'statutes': ['Ohio Rev. Code \u00a7 1343.01 (legal rate)', 'Ohio Rev. Code \u00a7 1343.03 (rate when not stipulated)'],
+        'grace_period': 'No statutory grace period',
+        'key_rules': [
+            'Statutory maximum is 8%/year on written instruments.',
+            'Amounts over $100K: parties may agree to any rate.',
+            'Interest rates printed on invoices are NOT enforceable (Ohio Supreme Court, 2008).',
+            'Both parties must expressly agree to rates in a separate written contract.',
+        ],
+        'notes': 'Ohio is notable: rates on invoices alone are NOT enforceable. Both parties must agree in a written contract. Include late fee terms in service agreements, not just invoices.',
+        'common_rate': '1.5% per month',
+    },
+    'georgia': {
+        'name': 'Georgia',
+        'abbreviation': 'GA',
+        'max_late_fee': 'No statutory cap; can apply immediately after balance is overdue',
+        'max_interest_rate': '1.5% per month (18% annually) on commercial accounts 30+ days past due',
+        'statutes': ['O.C.G.A. \u00a7 7-4-2 (legal rate; maximum rate)', 'O.C.G.A. \u00a7 7-4-16 (commercial account interest)'],
+        'grace_period': 'No grace period for late fees; 30-day wait before interest charges',
+        'key_rules': [
+            'Legal default rate is 7%/year when no contract specifies a rate.',
+            'Commercial account interest capped at 1.5%/month (18%/year) on amounts 30+ days past due.',
+            'No statutory cap on late fees (as distinct from interest).',
+            'Late fees can be charged immediately; interest requires 30-day wait.',
+        ],
+        'notes': 'Georgia distinguishes between late fees (no cap, immediate) and interest (18%/year cap, 30-day wait). This distinction is important for structuring your terms.',
+        'common_rate': '1.5% per month',
+    },
+    'north-carolina': {
+        'name': 'North Carolina',
+        'abbreviation': 'NC',
+        'max_late_fee': '4% of past-due payment amount',
+        'max_interest_rate': '8% per year (default); any rate for written contracts over $25K',
+        'statutes': ['N.C.G.S. \u00a7 24-1 (legal rate 8%)', 'N.C.G.S. \u00a7 24-10.1 (late fees on credit)', 'N.C.G.S. \u00a7 24-1.1 (rate exemptions)'],
+        'grace_period': '15 days past due required before charging late fees',
+        'key_rules': [
+            'Late fees capped at 4% of the past-due amount.',
+            '15-day grace period is a statutory requirement.',
+            'Legal rate is 8%; contractual freedom for principal over $25K.',
+            'Written contracts with higher rates are enforceable above the $25K threshold.',
+        ],
+        'notes': 'North Carolina has one of the more structured frameworks: 4% late fee cap and mandatory 15-day grace period. Ensure contracts specify interest rates for amounts over $25K.',
+        'common_rate': '4% of payment',
+    },
+    'new-jersey': {
+        'name': 'New Jersey',
+        'abbreviation': 'NJ',
+        'max_late_fee': 'No statutory cap; courts have upheld 5% late charges on commercial contracts',
+        'max_interest_rate': '6% (no contract); 16% (with contract); exempt for loans $50K+',
+        'statutes': ['N.J.S.A. \u00a7 31:1-1 (contract rate of interest)', 'N.J.S.A. \u00a7 2C:21-19 (criminal usury)'],
+        'grace_period': 'No statutory grace period',
+        'key_rules': [
+            'Civil rate: 6% without contract, 16% with contract.',
+            'Loans of $50K+ are exempt from civil usury limits.',
+            'Business entities cannot raise civil usury as a defense.',
+            'Criminal usury: 30% for individuals, 50% for business entities.',
+            'NJ Supreme Court: liquidated damages in commercial contracts are presumptively reasonable.',
+        ],
+        'notes': 'New Jersey is very business-friendly. B2B entities cannot claim civil usury, and the criminal threshold for businesses is 50%. Courts presume commercial late fee provisions are reasonable.',
+        'common_rate': '1.5% per month',
+    },
+}
+
+
+class StateLateFeePage(FreeToolView):
+    """State-specific late fee calculator page for programmatic SEO."""
+    template_name = 'tools/state-late-fee-calculator.html'
+
+    def get(self, request, *args, **kwargs):
+        state_slug = self.kwargs.get('state', '')
+        if state_slug not in STATE_LATE_FEE_DATA:
+            from django.http import Http404
+            raise Http404("State not found")
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        state_slug = self.kwargs.get('state', '')
+        state_data = STATE_LATE_FEE_DATA[state_slug]
+        context['state'] = state_data
+        context['state_slug'] = state_slug
+        context['all_states'] = STATE_LATE_FEE_DATA
+        return context
+
+
 class TryInvoiceView(View):
     """No-signup invoice creator at /try/ — lets visitors build and download a PDF."""
 

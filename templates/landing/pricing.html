@@ -120,17 +120,31 @@
             },
             {
                 "@type": "Offer",
-                "name": "Professional Plan",
+                "name": "Professional Plan (Monthly)",
                 "price": "29.00",
                 "priceCurrency": "USD",
                 "description": "200 invoices per month, all templates, batch upload, recurring invoices, unlimited AI"
             },
             {
                 "@type": "Offer",
-                "name": "Business Plan",
+                "name": "Professional Plan (Annual)",
+                "price": "278.00",
+                "priceCurrency": "USD",
+                "description": "200 invoices per month, all templates, batch upload, recurring invoices — billed annually (save 20%)"
+            },
+            {
+                "@type": "Offer",
+                "name": "Business Plan (Monthly)",
                 "price": "79.00",
                 "priceCurrency": "USD",
                 "description": "Unlimited invoices, API access, 3 team seats, client portal"
+            },
+            {
+                "@type": "Offer",
+                "name": "Business Plan (Annual)",
+                "price": "758.00",
+                "priceCurrency": "USD",
+                "description": "Unlimited invoices, API access, 3 team seats, client portal — billed annually (save 20%)"
             }
         ]
     }
@@ -139,7 +153,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="py-16 bg-gray-50">
+<div class="py-16 bg-gray-50" x-data="{ annual: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumb Navigation -->
         <nav class="mb-8">
@@ -152,7 +166,17 @@
 
         <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">{% trans "Simple, Transparent Pricing" %}</h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">{% trans "Start free. Upgrade when you need more invoices, batch upload, or API access." %}</p>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-6">{% trans "Start free. Upgrade when you need more invoices, batch upload, or API access." %}</p>
+
+            <!-- Monthly/Annual Toggle -->
+            <div class="flex items-center justify-center gap-3">
+                <span class="text-sm font-medium" :class="annual ? 'text-gray-400' : 'text-gray-900'">{% trans "Monthly" %}</span>
+                <button @click="annual = !annual" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2" :class="annual ? 'bg-primary-600' : 'bg-gray-300'">
+                    <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform" :class="annual ? 'translate-x-6' : 'translate-x-1'"></span>
+                </button>
+                <span class="text-sm font-medium" :class="annual ? 'text-gray-900' : 'text-gray-400'">{% trans "Annual" %}</span>
+                <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700" x-show="annual" x-transition>{% trans "Save 20%" %}</span>
+            </div>
         </div>
 
         <!-- 3-Tier Pricing Grid -->
@@ -217,8 +241,15 @@
                     <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Professional" %}</h3>
                     <p class="text-sm text-gray-500 mb-4">{% trans "For freelancers & small businesses" %}</p>
                     <div class="mb-6">
-                        <span class="text-5xl font-bold text-gray-900">$29</span>
-                        <span class="text-gray-500">/{% trans "mo" %}</span>
+                        <div x-show="!annual">
+                            <span class="text-5xl font-bold text-gray-900">$29</span>
+                            <span class="text-gray-500">/{% trans "mo" %}</span>
+                        </div>
+                        <div x-show="annual" x-cloak>
+                            <span class="text-5xl font-bold text-gray-900">$23</span>
+                            <span class="text-gray-500">/{% trans "mo" %}</span>
+                            <div class="text-sm text-gray-500 mt-1">{% trans "$278/year" %} <span class="text-green-600 font-medium">{% trans "(save $70)" %}</span></div>
+                        </div>
                     </div>
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center text-gray-600">
@@ -282,8 +313,15 @@
                     <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Business" %}</h3>
                     <p class="text-sm text-gray-500 mb-4">{% trans "For teams & high-volume invoicing" %}</p>
                     <div class="mb-6">
-                        <span class="text-5xl font-bold text-gray-900">$79</span>
-                        <span class="text-gray-500">/{% trans "mo" %}</span>
+                        <div x-show="!annual">
+                            <span class="text-5xl font-bold text-gray-900">$79</span>
+                            <span class="text-gray-500">/{% trans "mo" %}</span>
+                        </div>
+                        <div x-show="annual" x-cloak>
+                            <span class="text-5xl font-bold text-gray-900">$63</span>
+                            <span class="text-gray-500">/{% trans "mo" %}</span>
+                            <div class="text-sm text-gray-500 mt-1">{% trans "$758/year" %} <span class="text-green-600 font-medium">{% trans "(save $190)" %}</span></div>
+                        </div>
                     </div>
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center text-gray-600">

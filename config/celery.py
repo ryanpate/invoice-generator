@@ -28,6 +28,11 @@ app.conf.beat_schedule = {
         'schedule': crontab(hour=7, minute=0),  # Run at 7:00 AM UTC daily (after reminders)
         'options': {'queue': 'default'},
     },
+    'process-nurture-emails-daily': {
+        'task': 'apps.invoices.tasks.process_nurture_emails',
+        'schedule': crontab(hour=8, minute=0),  # Run at 8:00 AM UTC daily
+        'options': {'queue': 'default'},
+    },
 }
 app.conf.timezone = 'UTC'
 

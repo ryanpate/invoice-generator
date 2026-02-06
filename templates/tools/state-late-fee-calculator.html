@@ -1,0 +1,647 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ state.name }} Late Fee Calculator — Invoice Late Payment Laws | InvoiceKits{% endblock %}
+
+{% block meta_description %}Calculate late fees for {{ state.name }} invoices. {{ state.name }} allows up to {{ state.max_interest_rate }}. Free calculator with {{ state.name }}-specific rules, statutes, and grace periods.{% endblock %}
+
+{% block meta_keywords %}{{ state.name }} late fee calculator, {{ state.abbreviation }} invoice late fee, {{ state.name }} late payment interest, {{ state.name }} usury rate, {{ state.name }} invoice penalty, late fee laws {{ state.abbreviation }}{% endblock %}
+
+{% block canonical_url %}https://www.invoicekits.com/tools/late-fee-calculator/{{ state_slug }}/{% endblock %}
+
+{% block og_title %}{{ state.name }} Late Fee Calculator — Invoice Late Payment Laws | InvoiceKits{% endblock %}
+
+{% block og_description %}Calculate late fees for {{ state.name }} invoices. Free calculator with {{ state.abbreviation }}-specific rules, maximum rates, statutes, and grace periods.{% endblock %}
+
+{% block twitter_title %}{{ state.name }} Late Fee Calculator | InvoiceKits{% endblock %}
+
+{% block twitter_description %}Calculate late fees for {{ state.name }} invoices. Free calculator with {{ state.abbreviation }}-specific rules, maximum rates, and grace periods.{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.invoicekits.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Free Tools",
+            "item": "https://www.invoicekits.com/tools/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Late Fee Calculator",
+            "item": "https://www.invoicekits.com/tools/late-fee-calculator/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "{{ state.name }} Late Fee Calculator",
+            "item": "https://www.invoicekits.com/tools/late-fee-calculator/{{ state_slug }}/"
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "What is the maximum late fee allowed in {{ state.name }}?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "In {{ state.name }} ({{ state.abbreviation }}), the maximum late fee is: {{ state.max_late_fee }}. The maximum interest rate is {{ state.max_interest_rate }}. Always include late fee terms in your contracts before invoicing."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is there a grace period for late fees in {{ state.name }}?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ state.name }} grace period: {{ state.grace_period }}. Check your specific contract terms and applicable {{ state.abbreviation }} statutes for details."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is the most common late fee rate used in {{ state.name }}?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The most common late fee rate for commercial invoices in {{ state.name }} is {{ state.common_rate }}. {{ state.notes }}"
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Which {{ state.name }} statutes govern late fees on invoices?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The key {{ state.name }} statutes governing late fees and interest on invoices are: {% for statute in state.statutes %}{{ statute }}{% if not forloop.last %}; {% endif %}{% endfor %}. Consult a {{ state.abbreviation }} attorney for advice specific to your situation."
+            }
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "{{ state.name }} Late Fee Calculator",
+    "description": "Free online late fee calculator for {{ state.name }} invoices with state-specific rules, maximum rates, statutes, and grace periods.",
+    "url": "https://www.invoicekits.com/tools/late-fee-calculator/{{ state_slug }}/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Any",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "provider": {
+        "@type": "Organization",
+        "name": "InvoiceKits",
+        "url": "https://www.invoicekits.com"
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-primary-600 to-primary-800 overflow-hidden">
+    <div class="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        <!-- Breadcrumb -->
+        <nav class="mb-6">
+            <ol class="flex items-center space-x-2 text-sm text-primary-200">
+                <li><a href="{% url 'landing' %}" class="hover:text-white">{% trans "Home" %}</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li><a href="{% url 'tools_index' %}" class="hover:text-white">{% trans "Free Tools" %}</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li><a href="{% url 'late_fee_calculator' %}" class="hover:text-white">{% trans "Late Fee Calculator" %}</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-white">{{ state.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="text-center">
+            <div class="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-primary-100 text-sm font-medium mb-4">
+                <span class="mr-2">{{ state.abbreviation }}</span> {% trans "State Law Guide" %}
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                {{ state.name }} {% trans "Late Fee Calculator" %}
+            </h1>
+            <p class="text-lg text-primary-100 max-w-2xl mx-auto">
+                {% blocktrans with state_name=state.name %}Calculate late fees for {{ state_name }} invoices using state-specific rules, maximum rates, and grace periods.{% endblocktrans %}
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Facts Card -->
+<section class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Quick Facts Sidebar -->
+            <div class="lg:col-span-1 order-2 lg:order-1">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 sticky top-8">
+                    <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ state.abbreviation }} {% trans "Quick Facts" %}
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div class="border-b border-gray-100 dark:border-gray-700 pb-3">
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{% trans "Max Late Fee" %}</div>
+                            <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ state.max_late_fee }}</div>
+                        </div>
+                        <div class="border-b border-gray-100 dark:border-gray-700 pb-3">
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{% trans "Max Interest Rate" %}</div>
+                            <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ state.max_interest_rate }}</div>
+                        </div>
+                        <div class="border-b border-gray-100 dark:border-gray-700 pb-3">
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{% trans "Grace Period" %}</div>
+                            <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ state.grace_period }}</div>
+                        </div>
+                        <div>
+                            <div class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">{% trans "Common Rate" %}</div>
+                            <div class="text-sm font-semibold text-primary-600 dark:text-primary-400">{{ state.common_rate }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Applicable Statutes -->
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">{% trans "Applicable Statutes" %}</h3>
+                        <ul class="space-y-2">
+                            {% for statute in state.statutes %}
+                            <li class="flex items-start text-sm text-gray-600 dark:text-gray-300">
+                                <svg class="w-4 h-4 mr-2 mt-0.5 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                {{ statute }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculator + Content Area -->
+            <div class="lg:col-span-2 order-1 lg:order-2 space-y-8">
+
+                <!-- Calculator -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 md:p-8">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        {% blocktrans with state_name=state.name %}Calculate {{ state_name }} Late Fees{% endblocktrans %}
+                    </h2>
+
+                    <!-- Invoice Details -->
+                    <div class="mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Invoice Amount ($)" %}</label>
+                                <input type="number" id="invoice-amount" value="1000" min="0" step="0.01" onchange="calculateLateFee()"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent text-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Due Date" %}</label>
+                                <input type="date" id="due-date" onchange="calculateLateFee()"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Payment Date" %}</label>
+                                <input type="date" id="payment-date" onchange="calculateLateFee()"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                        </div>
+
+                        <!-- Quick Terms -->
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Quick Set Due Date" %}</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" onclick="setDueDate(15)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 15" %}</button>
+                                <button type="button" onclick="setDueDate(30)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 30" %}</button>
+                                <button type="button" onclick="setDueDate(45)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 45" %}</button>
+                                <button type="button" onclick="setDueDate(60)" class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">{% trans "Net 60" %}</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <hr class="my-6 border-gray-200 dark:border-gray-700">
+
+                    <!-- Late Fee Settings -->
+                    <div class="mb-6">
+                        <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-4">{% trans "Late Fee Settings" %}</h3>
+
+                        <!-- Fee Method -->
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{% trans "Late Fee Method" %}</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="relative flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <input type="radio" name="fee-method" value="flat" class="mr-3" onchange="updateFeeMethod()">
+                                    <div>
+                                        <span class="font-medium text-sm text-gray-900 dark:text-white">{% trans "Flat Fee Only" %}</span>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{% trans "Fixed dollar amount" %}</p>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <input type="radio" name="fee-method" value="percent" class="mr-3" checked onchange="updateFeeMethod()">
+                                    <div>
+                                        <span class="font-medium text-sm text-gray-900 dark:text-white">{% trans "Percentage Only" %}</span>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{% trans "% of invoice amount" %}</p>
+                                    </div>
+                                </label>
+                                <label class="relative flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <input type="radio" name="fee-method" value="both" class="mr-3" onchange="updateFeeMethod()">
+                                    <div>
+                                        <span class="font-medium text-sm text-gray-900 dark:text-white">{% trans "Flat + Percentage" %}</span>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{% trans "Combined fees" %}</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Fee Inputs -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div id="flat-fee-input">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{% trans "Flat Fee ($)" %}</label>
+                                <input type="number" id="flat-fee" value="25" min="0" step="0.01" onchange="calculateLateFee()"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                            <div id="percent-fee-input">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    {% trans "Interest Rate (%)" %}
+                                    <select id="rate-period" onchange="calculateLateFee()" class="ml-2 text-sm border-none bg-transparent text-primary-600 dark:text-primary-400 focus:ring-0">
+                                        <option value="monthly">{% trans "per month" %}</option>
+                                        <option value="annual">{% trans "per year" %}</option>
+                                        <option value="daily">{% trans "per day" %}</option>
+                                    </select>
+                                </label>
+                                <input type="number" id="percent-rate" value="1.5" min="0" max="100" step="0.01" onchange="calculateLateFee()"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            </div>
+                        </div>
+
+                        <!-- Compound Interest Toggle -->
+                        <div class="mt-4" id="compound-toggle">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" id="compound-interest" onchange="calculateLateFee()" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                <span class="ml-3 text-gray-700 dark:text-gray-300">
+                                    <span class="font-medium">{% trans "Apply compound interest" %}</span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400 block">{% trans "Interest calculated on principal + accumulated interest" %}</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                        <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-4">{% trans "Results" %}</h3>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">{% trans "Days Overdue" %}</div>
+                                <div id="result-days" class="text-xl font-bold text-gray-900 dark:text-white">0</div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">{% trans "Original Amount" %}</div>
+                                <div id="result-original" class="text-xl font-bold text-gray-900 dark:text-white">$1,000.00</div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">{% trans "Late Fee" %}</div>
+                                <div id="result-fee" class="text-xl font-bold text-red-600 dark:text-red-400">$0.00</div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-lg p-3 text-center">
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">{% trans "Total Due" %}</div>
+                                <div id="result-total" class="text-xl font-bold text-primary-600 dark:text-primary-400">$1,000.00</div>
+                            </div>
+                        </div>
+
+                        <!-- Breakdown -->
+                        <div id="fee-breakdown" class="bg-white dark:bg-gray-800 rounded-lg p-4">
+                            <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">{% trans "Fee Breakdown" %}</h4>
+                            <div id="breakdown-content" class="space-y-2 text-sm">
+                                <div class="flex justify-between text-gray-600 dark:text-gray-400">
+                                    <span>{% trans "Interest fee" %}</span>
+                                    <span id="breakdown-interest">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                        <button type="button" onclick="window.print()"
+                                class="inline-flex items-center justify-center px-5 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-sm">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                            </svg>
+                            {% trans "Print Results" %}
+                        </button>
+                        <a href="{% url 'late_fee_calculator' %}"
+                           class="inline-flex items-center justify-center px-5 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition text-sm">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            {% trans "Full Calculator" %}
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Key Rules Section -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                        {{ state.name }} {% trans "Late Fee Rules" %}
+                    </h2>
+
+                    <div class="space-y-4">
+                        {% for rule in state.key_rules %}
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mr-4 mt-0.5">
+                                <svg class="w-4 h-4 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300">{{ rule }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mt-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">{% trans "Important Note" %}</h3>
+                                <p class="text-sm text-amber-700 dark:text-amber-300/80">{{ state.notes }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disclaimer -->
+                    <div class="mt-4 text-xs text-gray-500 dark:text-gray-400">
+                        <p>{% blocktrans with state_name=state.name %}This information is for general educational purposes only and does not constitute legal advice. {{ state_name }} laws may change. Consult a licensed attorney in your state for advice specific to your situation.{% endblocktrans %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-16 bg-white dark:bg-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+            {{ state.name }} {% trans "Late Fee FAQs" %}
+        </h2>
+
+        <div class="space-y-6">
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% blocktrans with state_name=state.name %}What is the maximum late fee allowed in {{ state_name }}?{% endblocktrans %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% blocktrans with state_name=state.name abbreviation=state.abbreviation max_late_fee=state.max_late_fee max_interest_rate=state.max_interest_rate %}In {{ state_name }} ({{ abbreviation }}), the maximum late fee is: {{ max_late_fee }}. The maximum interest rate is {{ max_interest_rate }}. Always include late fee terms in your contracts before invoicing.{% endblocktrans %}</p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% blocktrans with state_name=state.name %}Is there a grace period for late fees in {{ state_name }}?{% endblocktrans %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% blocktrans with state_name=state.name grace_period=state.grace_period abbreviation=state.abbreviation %}{{ state_name }} grace period: {{ grace_period }}. Check your specific contract terms and applicable {{ abbreviation }} statutes for details.{% endblocktrans %}</p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% blocktrans with state_name=state.name %}What is the most common late fee rate used in {{ state_name }}?{% endblocktrans %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{% blocktrans with state_name=state.name common_rate=state.common_rate notes=state.notes %}The most common late fee rate for commercial invoices in {{ state_name }} is {{ common_rate }}. {{ notes }}{% endblocktrans %}</p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% blocktrans with state_name=state.name %}Which {{ state_name }} statutes govern late fees on invoices?{% endblocktrans %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">
+                    {% blocktrans with state_name=state.name abbreviation=state.abbreviation %}The key {{ state_name }} statutes governing late fees and interest on invoices are:{% endblocktrans %}
+                </p>
+                <ul class="mt-2 space-y-1 text-gray-600 dark:text-gray-300 list-disc list-inside">
+                    {% for statute in state.statutes %}
+                    <li>{{ statute }}</li>
+                    {% endfor %}
+                </ul>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{% blocktrans with abbreviation=state.abbreviation %}Consult a {{ abbreviation }} attorney for advice specific to your situation.{% endblocktrans %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Content Section -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">{% trans "Related Resources" %}</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <!-- Main Calculator -->
+            <a href="{% url 'late_fee_calculator' %}" class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md transition group">
+                <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mb-4">
+                    <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 mb-1">{% trans "Late Fee Calculator" %}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{% trans "Full-featured calculator with flat fees, percentage rates, and compound interest." %}</p>
+            </a>
+
+            <!-- Blog Post -->
+            <a href="/blog/how-to-calculate-late-fees-on-invoices/" class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md transition group">
+                <div class="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
+                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 mb-1">{% trans "How to Calculate Late Fees" %}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{% trans "Complete guide with formulas, examples, and best practices for charging late fees." %}</p>
+            </a>
+
+            <!-- Invoice Calculator -->
+            <a href="{% url 'invoice_calculator' %}" class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md transition group">
+                <div class="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mb-4">
+                    <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 mb-1">{% trans "Invoice Calculator" %}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400">{% trans "Calculate invoice totals with line items, tax, and discounts." %}</p>
+            </a>
+        </div>
+
+        <!-- Other States Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center">{% trans "Late Fee Laws by State" %}</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                {% for slug, data in all_states.items %}
+                <a href="{% url 'state_late_fee_calculator' state=slug %}"
+                   class="flex items-center p-3 rounded-lg border {% if slug == state_slug %}border-primary-500 bg-primary-50 dark:bg-primary-900/20{% else %}border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:bg-gray-50 dark:hover:bg-gray-700{% endif %} transition">
+                    <span class="flex-shrink-0 w-8 h-8 rounded-full {% if slug == state_slug %}bg-primary-600 text-white{% else %}bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300{% endif %} flex items-center justify-center text-xs font-bold mr-3">
+                        {{ data.abbreviation }}
+                    </span>
+                    <span class="text-sm font-medium {% if slug == state_slug %}text-primary-700 dark:text-primary-300{% else %}text-gray-700 dark:text-gray-300{% endif %}">
+                        {{ data.name }}
+                    </span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-primary-600">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">{% trans "Create Invoices with Automatic Late Fees" %}</h2>
+        <p class="text-primary-100 mb-8 max-w-2xl mx-auto">
+            {% blocktrans with state_name=state.name %}Stop calculating late fees manually. InvoiceKits automatically applies {{ state_name }}-compliant late fees, sends payment reminders, and tracks every overdue invoice.{% endblocktrans %}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                {% trans "Try InvoiceKits Free" %}
+            </a>
+            <a href="{% url 'pricing' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
+                {% trans "View Pricing" %}
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+// Set default dates
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    const thirtyDaysAgo = new Date(today);
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    document.getElementById('due-date').value = thirtyDaysAgo.toISOString().split('T')[0];
+    document.getElementById('payment-date').value = today.toISOString().split('T')[0];
+
+    updateFeeMethod();
+    calculateLateFee();
+});
+
+function setDueDate(days) {
+    const today = new Date();
+    const dueDate = new Date(today);
+    dueDate.setDate(dueDate.getDate() - days);
+    document.getElementById('due-date').value = dueDate.toISOString().split('T')[0];
+    calculateLateFee();
+}
+
+function updateFeeMethod() {
+    const method = document.querySelector('input[name="fee-method"]:checked').value;
+    const flatInput = document.getElementById('flat-fee-input');
+    const percentInput = document.getElementById('percent-fee-input');
+    const compoundToggle = document.getElementById('compound-toggle');
+
+    if (method === 'flat') {
+        flatInput.classList.remove('hidden');
+        percentInput.classList.add('hidden');
+        compoundToggle.classList.add('hidden');
+    } else if (method === 'percent') {
+        flatInput.classList.add('hidden');
+        percentInput.classList.remove('hidden');
+        compoundToggle.classList.remove('hidden');
+    } else {
+        flatInput.classList.remove('hidden');
+        percentInput.classList.remove('hidden');
+        compoundToggle.classList.remove('hidden');
+    }
+
+    calculateLateFee();
+}
+
+function formatCurrency(amount) {
+    return '$' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function calculateLateFee() {
+    const amount = parseFloat(document.getElementById('invoice-amount').value) || 0;
+    const dueDate = new Date(document.getElementById('due-date').value);
+    const paymentDate = new Date(document.getElementById('payment-date').value);
+    const method = document.querySelector('input[name="fee-method"]:checked').value;
+    const flatFee = parseFloat(document.getElementById('flat-fee').value) || 0;
+    const percentRate = parseFloat(document.getElementById('percent-rate').value) || 0;
+    const ratePeriod = document.getElementById('rate-period').value;
+    const isCompound = document.getElementById('compound-interest').checked;
+
+    // Calculate days overdue
+    const timeDiff = paymentDate - dueDate;
+    const daysOverdue = Math.max(0, Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
+
+    // Convert rate to daily
+    let dailyRate = 0;
+    if (ratePeriod === 'monthly') {
+        dailyRate = percentRate / 30;
+    } else if (ratePeriod === 'annual') {
+        dailyRate = percentRate / 365;
+    } else {
+        dailyRate = percentRate;
+    }
+
+    // Calculate fees
+    let totalFee = 0;
+    let flatFeeAmount = 0;
+    let interestFee = 0;
+
+    if (daysOverdue > 0) {
+        if (method === 'flat' || method === 'both') {
+            flatFeeAmount = flatFee;
+        }
+
+        if (method === 'percent' || method === 'both') {
+            if (isCompound && daysOverdue > 0) {
+                // Compound interest: A = P(1 + r)^t - P
+                const compoundFactor = Math.pow(1 + (dailyRate / 100), daysOverdue);
+                interestFee = amount * (compoundFactor - 1);
+            } else {
+                // Simple interest: I = P * r * t
+                interestFee = amount * (dailyRate / 100) * daysOverdue;
+            }
+        }
+
+        totalFee = flatFeeAmount + interestFee;
+    }
+
+    const totalDue = amount + totalFee;
+
+    // Update display
+    document.getElementById('result-days').textContent = daysOverdue;
+    document.getElementById('result-original').textContent = formatCurrency(amount);
+    document.getElementById('result-fee').textContent = formatCurrency(totalFee);
+    document.getElementById('result-total').textContent = formatCurrency(totalDue);
+
+    // Update breakdown
+    let breakdownHTML = '';
+    if (flatFeeAmount > 0) {
+        breakdownHTML += `<div class="flex justify-between text-gray-600 dark:text-gray-400">
+            <span>Flat fee</span>
+            <span>${formatCurrency(flatFeeAmount)}</span>
+        </div>`;
+    }
+    if (interestFee > 0) {
+        const interestType = isCompound ? 'Compound interest' : 'Simple interest';
+        breakdownHTML += `<div class="flex justify-between text-gray-600 dark:text-gray-400">
+            <span>${interestType} (${daysOverdue} days @ ${dailyRate.toFixed(4)}%/day)</span>
+            <span>${formatCurrency(interestFee)}</span>
+        </div>`;
+    }
+    if (breakdownHTML === '') {
+        breakdownHTML = `<div class="text-gray-500 dark:text-gray-400 text-center">No late fee (invoice not overdue)</div>`;
+    }
+    document.getElementById('breakdown-content').innerHTML = breakdownHTML;
+}
+</script>
+{% endblock %}

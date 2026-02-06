@@ -1,5 +1,6 @@
 """
-Celery tasks for recurring invoice processing, payment reminders, and late fees.
+Celery tasks for recurring invoice processing, payment reminders, late fees,
+and onboarding nurture emails.
 """
 import logging
 from datetime import timedelta
@@ -598,3 +599,96 @@ def send_late_fee_client_notification(self, invoice_id, fee_amount):
             exc_info=True
         )
         raise self.retry(exc=e, countdown=60 * 5)
+
+
+@shared_task(bind=True, max_retries=3)
+def process_nurture_emails(self):
+    """
+    Send onboarding nurture emails to new users.
+    Runs daily at 8:00 AM UTC via Celery Beat.
+
+    Schedule:
+    - Step 0 → 1: Day 2 after signup — tips to create first invoice
+    - Step 1 → 2: Day 5 after signup — showcase AI, time tracking, etc.
+    """
+    from apps.accounts.models import CustomUser
+    from django.utils.html import strip_tags
+
+    now = timezone.now()
+    sent_count = 0
+    failed_count = 0
+
+    # Day 2 emails: users who signed up 2 days ago, still on step 0
+    day2_cutoff_start = now - timedelta(days=3)
+    day2_cutoff_end = now - timedelta(days=2)
+    day2_users = CustomUser.objects.filter(
+        nurture_email_step=0,
+        created_at__gte=day2_cutoff_start,
+        created_at__lt=day2_cutoff_end,
+        is_active=True,
+    )
+
+    for user in day2_users:
+        try:
+            site_url = getattr(settings, 'SITE_URL', 'https://www.invoicekits.com')
+            html_message = render_to_string('emails/nurture_day2.html', {
+                'user': user,
+                'site_url': site_url,
+            })
+            plain_message = strip_tags(html_message)
+
+            send_mail(
+                subject='Create your first invoice in 60 seconds',
+                message=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            user.nurture_email_step = 1
+            user.save(update_fields=['nurture_email_step'])
+            sent_count += 1
+            logger.info(f"Sent Day 2 nurture email to {user.email}")
+
+        except Exception as e:
+            failed_count += 1
+            logger.error(f"Failed Day 2 nurture for {user.email}: {e}", exc_info=True)
+
+    # Day 5 emails: users who signed up 5 days ago, on step 1
+    day5_cutoff_start = now - timedelta(days=6)
+    day5_cutoff_end = now - timedelta(days=5)
+    day5_users = CustomUser.objects.filter(
+        nurture_email_step=1,
+        created_at__gte=day5_cutoff_start,
+        created_at__lt=day5_cutoff_end,
+        is_active=True,
+    )
+
+    for user in day5_users:
+        try:
+            site_url = getattr(settings, 'SITE_URL', 'https://www.invoicekits.com')
+            html_message = render_to_string('emails/nurture_day5.html', {
+                'user': user,
+                'site_url': site_url,
+            })
+            plain_message = strip_tags(html_message)
+
+            send_mail(
+                subject='3 features that help you get paid faster',
+                message=plain_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                html_message=html_message,
+                fail_silently=False,
+            )
+            user.nurture_email_step = 2
+            user.save(update_fields=['nurture_email_step'])
+            sent_count += 1
+            logger.info(f"Sent Day 5 nurture email to {user.email}")
+
+        except Exception as e:
+            failed_count += 1
+            logger.error(f"Failed Day 5 nurture for {user.email}: {e}", exc_info=True)
+
+    logger.info(f"Nurture email processing complete: {sent_count} sent, {failed_count} failed")
+    return {'sent': sent_count, 'failed': failed_count}

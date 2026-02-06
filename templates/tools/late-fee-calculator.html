@@ -417,6 +417,87 @@
     </div>
 </section>
 
+<!-- State-Specific Late Fee Laws -->
+<section class="py-16 bg-white dark:bg-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center">{% trans "State-Specific Late Fee Laws" %}</h2>
+        <p class="text-gray-600 dark:text-gray-300 text-center mb-8 max-w-2xl mx-auto">{% trans "Late fee rules vary by state. Select your state to see maximum rates, grace periods, and applicable statutes." %}</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a href="{% url 'state_late_fee_calculator' state='california' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">CA</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "California" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans 'No statutory cap; must be "reasonable"' %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='texas' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">TX</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "Texas" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "18%/year usury ceiling for most transactions" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='new-york' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">NY</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "New York" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "16% civil usury cap; 25% criminal threshold" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='florida' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">FL</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "Florida" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "18%/year limit for transactions under $500K" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='illinois' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">IL</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "Illinois" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "9%/year cap with broad B2B exemptions" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='pennsylvania' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">PA</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "Pennsylvania" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "6% default; commercial exemptions over $50K" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='ohio' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">OH</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "Ohio" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "Invoice-only rates NOT enforceable; needs contract" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='georgia' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">GA</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "Georgia" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "No late fee cap; 18%/year interest cap after 30 days" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='north-carolina' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">NC</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "North Carolina" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "4% late fee cap; 15-day mandatory grace period" %}</p>
+                </div>
+            </a>
+            <a href="{% url 'state_late_fee_calculator' state='new-jersey' %}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition group">
+                <span class="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-sm font-bold text-primary-700 dark:text-primary-300 mr-4">NJ</span>
+                <div>
+                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">{% trans "New Jersey" %}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{% trans "Very business-friendly; B2B entities cannot claim usury" %}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
 <!-- CTA Section -->
 <section class="py-16 bg-primary-600">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -67,6 +67,9 @@ class CustomUser(AbstractUser):
         help_text='Date when AI generation count was last reset'
     )
 
+    # Onboarding nurture emails (0=welcome sent, 1=day2 sent, 2=day5 sent)
+    nurture_email_step = models.PositiveSmallIntegerField(default=0)
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
