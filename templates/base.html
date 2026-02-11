@@ -31,10 +31,21 @@
     <link rel="canonical" href="{% block canonical_url %}https://www.invoicekits.com/{% endblock %}">
 
     <!-- Hreflang tags for multi-language SEO -->
-    <link rel="alternate" hreflang="en" href="https://www.invoicekits.com{{ request.path }}" />
-    <link rel="alternate" hreflang="es" href="https://www.invoicekits.com/es{{ request.path }}" />
-    <link rel="alternate" hreflang="fr" href="https://www.invoicekits.com/fr{{ request.path }}" />
-    <link rel="alternate" hreflang="x-default" href="https://www.invoicekits.com{{ request.path }}" />
+    {% with clean_path=request.path %}
+    {% if clean_path|slice:":4" == "/es/" or clean_path|slice:":4" == "/fr/" %}
+    {% with stripped_path=clean_path|slice:"3:" %}
+    <link rel="alternate" hreflang="en" href="https://www.invoicekits.com{{ stripped_path }}" />
+    <link rel="alternate" hreflang="es" href="https://www.invoicekits.com/es{{ stripped_path }}" />
+    <link rel="alternate" hreflang="fr" href="https://www.invoicekits.com/fr{{ stripped_path }}" />
+    <link rel="alternate" hreflang="x-default" href="https://www.invoicekits.com{{ stripped_path }}" />
+    {% endwith %}
+    {% else %}
+    <link rel="alternate" hreflang="en" href="https://www.invoicekits.com{{ clean_path }}" />
+    <link rel="alternate" hreflang="es" href="https://www.invoicekits.com/es{{ clean_path }}" />
+    <link rel="alternate" hreflang="fr" href="https://www.invoicekits.com/fr{{ clean_path }}" />
+    <link rel="alternate" hreflang="x-default" href="https://www.invoicekits.com{{ clean_path }}" />
+    {% endif %}
+    {% endwith %}
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232563eb'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-weight='bold'>IK</text></svg>">
