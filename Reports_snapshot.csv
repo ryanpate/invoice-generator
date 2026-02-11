@@ -4,104 +4,104 @@
 # Property: Invoicekits
 # ----------------------------------------
 #  
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Nth day,Active users
-0000,0
-0001,0
-0002,0
-0003,0
-0004,0
-0005,0
-0006,0
-0007,0
-0008,0
-0009,0
-0010,0
-0011,0
+0000,13
+0001,9
+0002,5
+0003,5
+0004,13
+0005,8
+0006,2
+0007,3
+0008,1
+0009,2
+0010,1
+0011,1
 0012,0
-0013,0
-0014,0
-0015,0
-0016,0
-0017,0
-0018,0
-0019,0
-0020,0
-0021,0
-0022,0
+0013,2
+0014,10
+0015,1
+0016,2
+0017,2
+0018,3
+0019,2
+0020,2
+0021,19
+0022,1
 0023,0
-0024,0
-0025,0
-0026,0
-0027,8
+0024,1
+0025,7
+0026,6
+0027,0
 
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Nth day,New users
-0000,0
-0001,0
-0002,0
-0003,0
-0004,0
-0005,0
-0006,0
-0007,0
+0000,12
+0001,8
+0002,4
+0003,4
+0004,12
+0005,7
+0006,1
+0007,2
 0008,0
-0009,0
-0010,0
+0009,1
+0010,1
 0011,0
 0012,0
-0013,0
-0014,0
-0015,0
-0016,0
-0017,0
-0018,0
-0019,0
-0020,0
-0021,0
-0022,0
+0013,2
+0014,10
+0015,1
+0016,1
+0017,2
+0018,3
+0019,2
+0020,2
+0021,18
+0022,1
 0023,0
 0024,0
-0025,0
-0026,0
-0027,8
+0025,7
+0026,6
+0027,0
 
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Nth day,Average engagement time per active user
-0000,0
-0001,0
-0002,0
-0003,0
-0004,0
-0005,0
-0006,0
-0007,0
-0008,0
-0009,0
+0000,22.23076923076923
+0001,7.666666666666667
+0002,11
+0003,3.6
+0004,1.8461538461538463
+0005,15
+0006,161.5
+0007,99.33333333333333
+0008,8
+0009,15.5
 0010,0
-0011,0
+0011,3
 0012,0
 0013,0
-0014,0
+0014,5.2
 0015,0
-0016,0
-0017,0
+0016,25.5
+0017,74.5
 0018,0
-0019,0
+0019,163.5
 0020,0
-0021,0
-0022,0
+0021,6.7368421052631575
+0022,5
 0023,0
 0024,0
-0025,0
-0026,0
-0027,41.25
+0025,127
+0026,1.3333333333333333
+0027,0
 
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Nth day,Total revenue
 0000,0
 0001,0
@@ -133,121 +133,175 @@ Nth day,Total revenue
 0027,0
 
 # Where do your new users come from?
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 First user primary channel group (Default Channel Group),New users
-Direct,8
+Direct,89
+Organic Search,14
+Referral,4
 
 #  
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Session primary channel group (Default Channel Group),Sessions
-Direct,11
+Direct,100
+Referral,25
+Organic Search,16
 
 #  
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Country ID,Active users
-CA,1
-KR,1
-US,4
+CA,6
+CN,6
+DE,2
+FR,4
+HK,2
+HU,1
+IE,1
+IN,2
+IR,1
+KR,3
+LT,1
+LU,1
+PH,1
+PL,5
+RU,2
+SA,5
+SG,1
+US,60
 
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Country,Active users
-US,4
-CA,1
-KR,1
+US,60
+CA,6
+CN,6
+PL,5
+SA,5
+FR,4
+KR,3
 
 # How are active users trending?
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Nth day,30 days,7 days,1 day
-0000,0,0,0
-0001,0,0,0
-0002,0,0,0
-0003,0,0,0
-0004,0,0,0
-0005,0,0,0
-0006,0,0,0
-0007,0,0,0
-0008,0,0,0
-0009,0,0,0
-0010,0,0,0
-0011,0,0,0
-0012,0,0,0
-0013,0,0,0
-0014,0,0,0
-0015,0,0,0
-0016,0,0,0
-0017,0,0,0
-0018,0,0,0
-0019,0,0,0
-0020,0,0,0
-0021,0,0,0
-0022,0,0,0
-0023,0,0,0
-0024,0,0,0
-0025,0,0,0
-0026,0,0,0
-0027,8,8,8
+0000,34,34,13
+0001,42,42,9
+0002,46,46,5
+0003,50,50,5
+0004,62,62,13
+0005,69,62,8
+0006,70,49,2
+0007,72,39,3
+0008,72,31,1
+0009,73,28,2
+0010,74,25,1
+0011,74,13,1
+0012,74,6,0
+0013,76,7,2
+0014,86,15,10
+0015,87,16,1
+0016,88,16,2
+0017,90,17,2
+0018,93,20,3
+0019,95,22,2
+0020,97,22,2
+0021,115,31,19
+0022,116,31,1
+0023,116,29,0
+0024,116,27,1
+0025,123,31,7
+0026,129,35,6
+0027,129,33,0
 
 # How well do you retain your users?
-# Start date: 20251123
-# End date: 20260103
+# Start date: 20251221
+# End date: 20260131
 Date,Week 0,Week 1,Week 2,Week 3,Week 4,Week 5
-Nov 23 - Nov 29,0,0,0,0,0,0
-Nov 30 - Dec 6,0,0,0,0,0,-1
-Dec 7 - Dec 13,0,0,0,0,-1,-1
-Dec 14 - Dec 20,0,0,0,-1,-1,-1
-Dec 21 - Dec 27,0,0,-1,-1,-1,-1
-Dec 28 - Jan 3,0,-1,-1,-1,-1,-1
+Dec 21 - Dec 27,0,0,0,0,0,0
+Dec 28 - Jan 3,0,0,0,0,0,-1
+Jan 4 - Jan 10,42,1,1,1,-1,-1
+Jan 11 - Jan 17,30,0,0,-1,-1,-1
+Jan 18 - Jan 24,15,1,-1,-1,-1,-1
+Jan 25 - Jan 31,29,-1,-1,-1,-1,-1
 
 #  
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Page title and screen class,Views
-InvoiceKits - Create Professional Invoices in Seconds,13
-Create Invoice - InvoiceKits,7
-Create Account - InvoiceKits,4
-Dashboard - InvoiceKits,3
-INV-00006 - InvoiceKits,2
+Free Invoice Generator - Create Professional Invoices | InvoiceKits,101
+Dashboard - InvoiceKits,29
+AI Invoice Generator with Time Tracking - Create Professional Invoices Free | InvoiceKits,26
+Sign In - InvoiceKits,21
+Free Online Invoice Calculator | Calculate Invoice Totals Instantly,11
+How to Calculate Late Fees on Invoices: Complete Guide 2026 | InvoiceKits Blog,10
+Executive Invoice Template - Navy & Gold Professional Design | InvoiceKits,6
+Free Online Late Fee Calculator | Calculate Invoice Penalties Instantly,5
+Invoice Generator Pricing - Subscriptions & Pay-As-You-Go Credits | InvoiceKits,5
+API Documentation - InvoiceKits,4
+Billing - InvoiceKits,4
+Invoice vs Receipt: What's the Difference? (Complete Guide) | InvoiceKits Blog,4
+Invoices - InvoiceKits,4
+Contact Us - InvoiceKits,3
+Create Account - InvoiceKits,3
+Invoice Generator Pricing - Free Plan & Pro Plans from $9/mo | InvoiceKits,3
+AI Invoice Generator - Create Invoices from Natural Language | InvoiceKits,2
+Affiliate Program - Earn 20% Commission | InvoiceKits,2
+Create Invoice - InvoiceKits,2
 Sign Out - InvoiceKits,2
-Invoices - InvoiceKits,1
-Send Invoice INV-00006 - InvoiceKits,1
-Sign In - InvoiceKits,1
+Terms of Service - InvoiceKits,2
+Time Tracking - InvoiceKits,2
+AI Invoice Generator: How to Create Invoices with Natural Language | InvoiceKits Blog,1
+Batch Invoice Generator: How to Create 100+ Invoices in Minutes | InvoiceKits Blog,1
+Bold Modern Invoice Template - Vibrant Creative Design | InvoiceKits,1
+Buy Credits - InvoiceKits,1
+Classic Professional Invoice Template - Traditional Business Design | InvoiceKits,1
+Clean Slate Invoice Template - Minimalist Professional Design | InvoiceKits,1
+Company Settings - InvoiceKits,1
+Free Invoice Calculator - Calculate Invoice Totals Instantly | InvoiceKits,1
+Free Late Fee Calculator - Calculate Invoice Late Fees & Interest | InvoiceKits,1
+Help Center - InvoiceKits,1
+How to Calculate Invoice Totals: Complete Guide with Examples | InvoiceKits Blog,1
+INV-00001 - InvoiceKits,1
+Invoice Tips & Guides | InvoiceKits Blog,1
+InvoiceKits vs Competitors - Invoice Generator Comparison 2026 | InvoiceKits,1
+Neon Edge Invoice Template - Dark Mode Bold Design | InvoiceKits,1
+Privacy Policy - InvoiceKits,1
+"Small Business Invoicing Guide: Templates, Terms, and Tools | InvoiceKits Blog",1
+Time Tracking Invoice Software - Track Hours & Bill Clients | InvoiceKits,1
 
 #  
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Event name,Event count
-page_view,34
-user_engagement,22
-scroll,13
-session_start,11
-form_start,10
-form_submit,10
-first_visit,8
+page_view,269
+user_engagement,180
+session_start,142
+first_visit,107
+scroll,97
+form_start,17
+form_submit,16
 
 # What are your top performing key events?
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Event name,Key events
 
 
 # Where does your average 120d value come from?
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 First user primary channel group (Default Channel Group),Average 120d value
 
 
 #  
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Item name,Items purchased
 
 
 # How does activity on your platforms compare?
-# Start date: 20251211
-# End date: 20260107
+# Start date: 20260109
+# End date: 20260205
 Platform,Key events
