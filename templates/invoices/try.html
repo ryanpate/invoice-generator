@@ -94,6 +94,82 @@
                     </div>
                 </div>
 
+                <!-- Voice Invoice Generator (guest-limited) -->
+                <div id="voice-section" class="hidden bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl shadow-sm p-6 transition-colors duration-200 border border-blue-100 dark:border-blue-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold text-blue-900 dark:text-blue-100 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m14 0a7 7 0 00-14 0m14 0v1a7 7 0 01-14 0v-1m14 0H5m7 7v4m-4 0h8"/>
+                            </svg>
+                            Voice Invoice
+                            <span class="px-2 py-0.5 text-xs font-medium bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded-full">New</span>
+                        </h2>
+                    </div>
+                    <p class="text-sm text-blue-700 dark:text-blue-300 mb-4">
+                        Speak your invoice details and we'll fill the form for you.
+                    </p>
+
+                    <button type="button" id="try-voice-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m14 0a7 7 0 00-14 0m14 0v1a7 7 0 01-14 0v-1m14 0H5m7 7v4m-4 0h8"/>
+                        </svg>
+                        Record Invoice Details
+                    </button>
+
+                    <!-- Recording UI -->
+                    <div id="try-recording-ui" class="hidden mt-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-700">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="relative flex h-3 w-3">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                </span>
+                                <span class="text-red-700 dark:text-red-300 font-medium">Recording...</span>
+                                <span id="try-voice-timer" class="text-red-600 dark:text-red-400 font-mono text-lg">00:00</span>
+                            </div>
+                            <button type="button" id="try-voice-stop" class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                                Stop &amp; Generate
+                            </button>
+                        </div>
+                        <p id="try-voice-warning" class="hidden mt-2 text-sm text-red-500 dark:text-red-400"></p>
+                    </div>
+
+                    <!-- Processing UI -->
+                    <div id="try-processing-ui" class="hidden mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5 animate-spin text-blue-600" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span class="text-blue-700 dark:text-blue-300 font-medium">Listening and parsing your invoice...</span>
+                        </div>
+                    </div>
+
+                    <!-- Result UI -->
+                    <div id="try-result-ui" class="hidden mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
+                        <div class="mb-3">
+                            <span class="text-sm font-medium text-green-800 dark:text-green-200">Heard:</span>
+                            <p id="try-transcript" class="text-sm text-green-700 dark:text-green-300 italic mt-1"></p>
+                        </div>
+                        <p id="try-fields-filled" class="text-sm text-green-700 dark:text-green-300 mb-3"></p>
+                        <div class="flex gap-3">
+                            <button type="button" id="try-apply-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Apply to Invoice
+                            </button>
+                            <button type="button" id="try-retry-btn" class="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium transition-colors">
+                                Try Again
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Error -->
+                    <div id="try-voice-error" class="hidden mt-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 rounded-lg text-sm"></div>
+                </div>
+
                 <!-- Line Items -->
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 transition-colors duration-200">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Line Items</h2>
@@ -328,6 +404,339 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // ==========================================
+    // Voice Recording for /try/ page
+    // ==========================================
+
+    const voiceSection = document.getElementById('voice-section');
+    const tryVoiceBtn = document.getElementById('try-voice-btn');
+    const tryRecordingUI = document.getElementById('try-recording-ui');
+    const tryProcessingUI = document.getElementById('try-processing-ui');
+    const tryResultUI = document.getElementById('try-result-ui');
+    const tryVoiceStop = document.getElementById('try-voice-stop');
+    const tryVoiceTimer = document.getElementById('try-voice-timer');
+    const tryVoiceWarning = document.getElementById('try-voice-warning');
+    const tryTranscript = document.getElementById('try-transcript');
+    const tryFieldsFilled = document.getElementById('try-fields-filled');
+    const tryApplyBtn = document.getElementById('try-apply-btn');
+    const tryRetryBtn = document.getElementById('try-retry-btn');
+    const tryVoiceError = document.getElementById('try-voice-error');
+
+    let tryMediaRecorder = null;
+    let tryAudioChunks = [];
+    let tryRecordingStream = null;
+    let tryTimerInterval = null;
+    let tryRecordingSeconds = 0;
+    let tryVoiceInvoiceData = null;
+
+    // Feature detection: show voice section only if supported
+    if (navigator.mediaDevices && typeof MediaRecorder !== 'undefined') {
+        voiceSection.classList.remove('hidden');
+    }
+
+    function showTryVoiceError(msg) {
+        tryVoiceError.textContent = msg;
+        tryVoiceError.classList.remove('hidden');
+    }
+
+    function hideTryVoiceError() {
+        tryVoiceError.classList.add('hidden');
+    }
+
+    function resetTryVoiceUI() {
+        tryRecordingUI.classList.add('hidden');
+        tryProcessingUI.classList.add('hidden');
+        tryResultUI.classList.add('hidden');
+        tryVoiceWarning.classList.add('hidden');
+        tryVoiceBtn.disabled = false;
+        tryVoiceBtn.classList.remove('hidden');
+        tryVoiceInvoiceData = null;
+        stopTryTimer();
+    }
+
+    function startTryTimer() {
+        tryRecordingSeconds = 0;
+        tryVoiceTimer.textContent = '00:00';
+        tryTimerInterval = setInterval(() => {
+            tryRecordingSeconds++;
+            const mins = String(Math.floor(tryRecordingSeconds / 60)).padStart(2, '0');
+            const secs = String(tryRecordingSeconds % 60).padStart(2, '0');
+            tryVoiceTimer.textContent = `${mins}:${secs}`;
+
+            if (tryRecordingSeconds === 55) {
+                tryVoiceWarning.textContent = 'Wrapping up in 5 seconds...';
+                tryVoiceWarning.classList.remove('hidden');
+            }
+
+            if (tryRecordingSeconds >= 60) {
+                stopTryRecording();
+            }
+        }, 1000);
+    }
+
+    function stopTryTimer() {
+        if (tryTimerInterval) {
+            clearInterval(tryTimerInterval);
+            tryTimerInterval = null;
+        }
+    }
+
+    function releaseTryStream() {
+        if (tryRecordingStream) {
+            tryRecordingStream.getTracks().forEach(t => t.stop());
+            tryRecordingStream = null;
+        }
+    }
+
+    // Start recording
+    if (tryVoiceBtn) {
+        tryVoiceBtn.addEventListener('click', async () => {
+            try {
+                tryRecordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            } catch (err) {
+                if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                    showTryVoiceError('Microphone access is needed for voice input. You can still fill in the form manually.');
+                } else {
+                    showTryVoiceError('Could not access microphone. Please check your browser settings.');
+                }
+                return;
+            }
+
+            tryAudioChunks = [];
+            const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm'
+                           : MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4'
+                           : '';
+
+            if (!mimeType) {
+                showTryVoiceError('Your browser does not support audio recording. Please fill in the form manually.');
+                releaseTryStream();
+                return;
+            }
+
+            tryMediaRecorder = new MediaRecorder(tryRecordingStream, { mimeType });
+            tryMediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) tryAudioChunks.push(e.data);
+            };
+            tryMediaRecorder.onstop = handleTryRecordingComplete;
+            tryMediaRecorder.start(100);
+
+            tryVoiceBtn.classList.add('hidden');
+            tryRecordingUI.classList.remove('hidden');
+            hideTryVoiceError();
+            startTryTimer();
+        });
+    }
+
+    // Stop recording
+    if (tryVoiceStop) {
+        tryVoiceStop.addEventListener('click', stopTryRecording);
+    }
+
+    function stopTryRecording() {
+        if (tryMediaRecorder && tryMediaRecorder.state === 'recording') {
+            tryMediaRecorder.stop();
+        }
+    }
+
+    async function handleTryRecordingComplete() {
+        stopTryTimer();
+        releaseTryStream();
+
+        if (tryRecordingSeconds < 1) {
+            resetTryVoiceUI();
+            showTryVoiceError('Recording too short. Hold the mic for at least a few seconds.');
+            return;
+        }
+
+        const mimeType = tryMediaRecorder.mimeType || 'audio/webm';
+        const blob = new Blob(tryAudioChunks, { type: mimeType });
+
+        if (blob.size > 10 * 1024 * 1024) {
+            resetTryVoiceUI();
+            showTryVoiceError('Recording too long. Try a shorter description.');
+            return;
+        }
+
+        tryRecordingUI.classList.add('hidden');
+        tryProcessingUI.classList.remove('hidden');
+
+        const base64 = await tryBlobToBase64(blob);
+
+        try {
+            const response = await fetch('{% url "invoices:ai_voice_generate" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    audio_data: base64,
+                    media_type: mimeType
+                })
+            });
+
+            const data = await response.json();
+
+            tryProcessingUI.classList.add('hidden');
+
+            if (data.success) {
+                tryVoiceInvoiceData = data.invoice_data;
+                showTryVoiceResult(data);
+            } else {
+                resetTryVoiceUI();
+                showTryVoiceError(data.error || 'Failed to process voice recording.');
+            }
+        } catch (error) {
+            console.error('Voice generation error:', error);
+            resetTryVoiceUI();
+            showTryVoiceError('Connection lost. Your recording wasn\'t sent. Please try again.');
+        }
+    }
+
+    function tryBlobToBase64(blob) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64 = reader.result.split(',')[1];
+                resolve(base64);
+            };
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    function showTryVoiceResult(data) {
+        const inv = data.invoice_data;
+
+        tryTranscript.textContent = inv.transcript || '(no transcript available)';
+
+        const filled = [];
+        if (inv.client_name) filled.push('client name');
+        if (inv.client_email) filled.push('email');
+        if (inv.client_address) filled.push('address');
+        if (inv.payment_terms) filled.push('payment terms');
+        if (inv.currency) filled.push('currency');
+        if (inv.tax_rate !== null && inv.tax_rate !== undefined) filled.push('tax rate');
+        if (inv.notes) filled.push('notes');
+        const itemCount = (inv.line_items || []).length;
+        if (itemCount > 0) filled.push(`${itemCount} line item${itemCount > 1 ? 's' : ''}`);
+
+        tryFieldsFilled.textContent = filled.length > 0
+            ? `Filled: ${filled.join(', ')}`
+            : 'No fields could be extracted.';
+
+        tryResultUI.classList.remove('hidden');
+    }
+
+    // Apply voice result to try form
+    if (tryApplyBtn) {
+        tryApplyBtn.addEventListener('click', () => {
+            if (!tryVoiceInvoiceData) return;
+
+            const d = tryVoiceInvoiceData;
+
+            // Populate simple fields (only if empty)
+            const fieldMap = {
+                'id_client_name': d.client_name,
+                'id_client_email': d.client_email,
+                'id_notes': d.notes,
+            };
+
+            for (const [fieldId, value] of Object.entries(fieldMap)) {
+                if (value) {
+                    const el = document.getElementById(fieldId);
+                    if (el && !el.value.trim()) {
+                        el.value = value;
+                    }
+                }
+            }
+
+            // Populate dropdowns
+            if (d.payment_terms) {
+                const ptEl = document.getElementById('id_payment_terms');
+                if (ptEl) ptEl.value = d.payment_terms;
+            }
+            if (d.currency) {
+                const curEl = document.getElementById('id_currency');
+                if (curEl) curEl.value = d.currency;
+            }
+            if (d.tax_rate !== null && d.tax_rate !== undefined) {
+                const taxEl = document.getElementById('id_tax_rate');
+                if (taxEl && (!taxEl.value || parseFloat(taxEl.value) === 0)) {
+                    taxEl.value = d.tax_rate;
+                }
+            }
+
+            // Add line items using /try/ page's naming convention
+            if (d.line_items && d.line_items.length > 0) {
+                const container = document.getElementById('line-items-container');
+                const existingItems = container.querySelectorAll('.line-item');
+
+                d.line_items.forEach((item, i) => {
+                    // Try to fill the first empty existing row
+                    if (i === 0 && existingItems.length > 0) {
+                        const firstDesc = existingItems[0].querySelector('[name^=item_description]');
+                        if (firstDesc && !firstDesc.value.trim()) {
+                            firstDesc.value = item.description;
+                            const firstQty = existingItems[0].querySelector('[name^=item_quantity]');
+                            if (firstQty) firstQty.value = item.quantity;
+                            const firstRate = existingItems[0].querySelector('[name^=item_rate]');
+                            if (firstRate) firstRate.value = item.unit_price;
+                            return;
+                        }
+                    }
+
+                    // Create new line item row
+                    const idx = lineItemIndex++;
+                    const div = document.createElement('div');
+                    div.className = 'line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100 dark:border-gray-700';
+                    div.setAttribute('data-index', idx);
+                    div.innerHTML = `
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description *</label>
+                            <input type="text" name="item_description_${idx}" class="form-input" value="${item.description.replace(/"/g, '&quot;')}" required>
+                        </div>
+                        <div class="w-24">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qty *</label>
+                            <input type="number" name="item_quantity_${idx}" class="form-input w-24" step="0.01" min="0.01" value="${item.quantity}">
+                        </div>
+                        <div class="w-32">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rate *</label>
+                            <input type="number" name="item_rate_${idx}" class="form-input w-32" step="0.01" min="0" value="${item.unit_price}">
+                        </div>
+                        <div class="w-10 pt-6 flex items-center">
+                            <button type="button" class="delete-line-item text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors p-1" title="Remove">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+
+                attachListeners();
+                attachDeleteListeners();
+            }
+
+            calculateTotals();
+            resetTryVoiceUI();
+        });
+    }
+
+    // Try Again
+    if (tryRetryBtn) {
+        tryRetryBtn.addEventListener('click', resetTryVoiceUI);
+    }
+
+    // Warn before leaving during recording
+    window.addEventListener('beforeunload', (e) => {
+        if (tryMediaRecorder && tryMediaRecorder.state === 'recording') {
+            e.preventDefault();
+            e.returnValue = 'Recording in progress — leave anyway?';
+        }
+    });
 });
 </script>
 {% endblock %}
