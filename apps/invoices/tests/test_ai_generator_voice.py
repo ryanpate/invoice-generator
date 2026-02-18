@@ -1,7 +1,6 @@
 """Tests for voice-to-invoice AI generation."""
 import base64
-import json
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -21,6 +20,7 @@ class TestGenerateFromAudio(TestCase):
             password='testpass123',
         )
         self.generator = AIInvoiceGenerator(self.user)
+        self.generator.api_key = 'test-api-key'  # Mock API key for tests
         self.audio_data = base64.b64encode(b'fake-audio-data').decode('utf-8')
         self.media_type = 'audio/webm'
 

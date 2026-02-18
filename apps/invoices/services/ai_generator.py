@@ -334,6 +334,9 @@ RULES:
                 'error': str (if not success)
             }
         """
+        if not self.api_key:
+            return {'success': False, 'error': 'AI generation is not configured. Please contact support.'}
+
         if media_type not in self.ALLOWED_MEDIA_TYPES:
             return {
                 'success': False,
@@ -517,7 +520,10 @@ RULES:
         if value is None:
             return None
         try:
+            import math
             num = float(value)
+            if not math.isfinite(num):
+                return None
             if min_val is not None and num < min_val:
                 return None
             if max_val is not None and num > max_val:
