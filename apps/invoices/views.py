@@ -1442,6 +1442,73 @@ def ai_generate_line_items(request):
     return JsonResponse(result)
 
 
+def ai_voice_generate(request):
+    """
+    AJAX endpoint to generate full invoice data from voice audio.
+
+    Accepts a POST with base64 audio data. Works for both authenticated
+    users (quota-based) and guests (session-based cap of 1).
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'POST required'}, status=405)
+
+    if request.headers.get('X-Requested-With') != 'XMLHttpRequest':
+        return JsonResponse({'success': False, 'error': 'AJAX required'}, status=400)
+
+    import json as json_mod
+    try:
+        data = json_mod.loads(request.body)
+    except json_mod.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid request data.'}, status=400)
+
+    audio_data = data.get('audio_data', '')
+    media_type = data.get('media_type', '')
+
+    if not audio_data:
+        return JsonResponse({'success': False, 'error': 'No audio data provided.'})
+
+    if not media_type:
+        return JsonResponse({'success': False, 'error': 'No media type provided.'})
+
+    # Quota check: authenticated user or guest session
+    if request.user.is_authenticated:
+        if not request.user.can_use_ai_generator():
+            remaining = request.user.get_ai_generations_remaining()
+            limit = request.user.get_ai_generation_limit()
+            return JsonResponse({
+                'success': False,
+                'error': f"You've used all {limit} AI generations this month. Upgrade your plan for more."
+            })
+    else:
+        used = request.session.get('voice_generations_used', 0)
+        if used >= 1:
+            return JsonResponse({
+                'success': False,
+                'error': 'Sign up free to keep using voice invoicing.'
+            })
+
+    # Generate invoice data from audio
+    from .services.ai_generator import AIInvoiceGenerator
+
+    user = request.user if request.user.is_authenticated else None
+    generator = AIInvoiceGenerator(user)
+    result = generator.generate_from_audio(audio_data, media_type)
+
+    if result['success']:
+        # Increment usage
+        if request.user.is_authenticated:
+            request.user.increment_ai_generation()
+            remaining = request.user.get_ai_generations_remaining()
+            result['remaining'] = remaining
+            result['is_unlimited'] = remaining is None
+        else:
+            request.session['voice_generations_used'] = request.session.get('voice_generations_used', 0) + 1
+            result['remaining'] = 0
+            result['is_unlimited'] = False
+
+    return JsonResponse(result)
+
+
 @login_required
 def client_payment_stats(request):
     """

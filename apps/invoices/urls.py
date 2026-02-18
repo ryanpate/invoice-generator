@@ -29,6 +29,7 @@ urlpatterns = [
 
     # AI Invoice Generator
     path('ai-generate/', views.ai_generate_line_items, name='ai_generate_line_items'),
+    path('ai-voice-generate/', views.ai_voice_generate, name='ai_voice_generate'),
 
     # Batch processing
     path('batch/', views.BatchUploadView.as_view(), name='batch_upload'),
