@@ -156,6 +156,15 @@
   - Purple gradient UI with sparkle icon and "Beta" badge
   - Dashboard card showing usage (X/Y remaining or "Unlimited")
   - Featured in "What's New" modal for user discovery
+  - **Voice-to-Invoice:** Dictate invoice details via microphone, Claude Audio API transcribes + parses into structured data
+    - Mic button in AI Generate section on create/edit pages (browser MediaRecorder API)
+    - Simplified voice-only section on /try/ page with 1-use guest cap
+    - Single API call: audio → transcription + field extraction (client name, email, address, payment terms, currency, line items, etc.)
+    - Preview transcript and filled fields before applying to form
+    - "Apply to Invoice" populates only empty fields (doesn't overwrite existing values)
+    - 60-second max recording with auto-stop and 55-second warning
+    - Browser feature detection — mic button hidden on unsupported browsers
+    - Shares same AI generation quota as text-based generation
 - **Time Tracking:**
   - Real-time timer with live HH:MM:SS display
   - Dashboard timer widget to start/stop/discard timers
@@ -518,7 +527,7 @@ invoice_generator/
 | `templates/invoices/public_view.html` | Public invoice view page (for QR code links) |
 | `apps/invoices/services/email_sender.py` | Invoice email & payment receipt sending |
 | `apps/invoices/services/client_analytics.py` | Client payment history analytics (A-F rating, average days) |
-| `apps/invoices/services/ai_generator.py` | AI Invoice Generator using Claude API |
+| `apps/invoices/services/ai_generator.py` | AI Invoice Generator using Claude API (text + voice) |
 | `apps/invoices/services/time_billing.py` | Time tracking billing service (convert entries to invoices) |
 | `templates/time_tracking/list.html` | Time entry list with active timers and filters |
 | `templates/time_tracking/create.html` | Manual time entry form |
@@ -1189,6 +1198,12 @@ Authentication: API Key in header `X-API-Key: <key>`
 292. Created `templates/emails/nurture_day2.html` - Day 2 email with 3-step invoice creation guide
 293. Created `templates/emails/nurture_day5.html` - Day 5 email showcasing AI Generator, Time Tracking, Payment Reminders
 294. Fixed welcome email: "5 invoices per month" → "5 lifetime credits", added AI Invoice Generator bullet
+295. Added Voice-to-Invoice feature: dictate invoice details via microphone, Claude Audio API transcribes + parses into structured data
+296. Added `generate_from_audio()` method to `AIInvoiceGenerator` with VOICE_SYSTEM_PROMPT, audio validation, field cleaning
+297. Added `ai_voice_generate` AJAX endpoint at `/invoices/ai-voice-generate/` supporting both authenticated users (quota) and guests (1/session)
+298. Added voice recording UI (mic button, recording timer, processing spinner, result preview) to invoice create and edit pages
+299. Added simplified voice-only section to /try/ page with guest cap and signup CTA
+300. Created 13 backend tests for voice generation service and view endpoint
 
 ---
 
