@@ -127,11 +127,79 @@
 
                     <div id="ai-content" class="hidden">
                         <p class="text-sm text-purple-700 dark:text-purple-300 mb-4">
-                            Describe your work in plain English and let AI generate line items for you.
+                            Describe your work in plain English or use your voice — AI will generate invoice fields for you.
                         </p>
 
-                        <div class="mb-4">
-                            <textarea id="ai-description" rows="3" placeholder="Example: Built a React dashboard with 3 charts, 12 hours at $150/hr. Also fixed 2 bugs." class="w-full rounded-lg border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-purple-500 focus:border-purple-500 placeholder-gray-400 dark:placeholder-gray-500"></textarea>
+                        <!-- Text input + Voice button row -->
+                        <div class="flex gap-3 mb-4">
+                            <div class="flex-1" id="ai-text-input">
+                                <textarea id="ai-description" rows="3" placeholder="Example: Built a React dashboard with 3 charts, 12 hours at $150/hr. Also fixed 2 bugs." class="w-full rounded-lg border-purple-200 dark:border-purple-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-purple-500 focus:border-purple-500 placeholder-gray-400 dark:placeholder-gray-500"></textarea>
+                            </div>
+                            <div id="voice-btn-container" class="flex-shrink-0 hidden">
+                                <button type="button" id="ai-voice-btn" class="h-full px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex flex-col items-center justify-center gap-1" title="Record voice invoice">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-14 0m14 0a7 7 0 00-14 0m14 0v1a7 7 0 01-14 0v-1m14 0H5m7 7v4m-4 0h8"/>
+                                    </svg>
+                                    <span class="text-xs">Voice</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Recording UI -->
+                        <div id="voice-recording-ui" class="hidden mb-4 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-700">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <span class="relative flex h-3 w-3">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                    </span>
+                                    <span class="text-red-700 dark:text-red-300 font-medium">Recording...</span>
+                                    <span id="voice-timer" class="text-red-600 dark:text-red-400 font-mono text-lg">00:00</span>
+                                </div>
+                                <button type="button" id="voice-stop-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+                                    Stop &amp; Generate
+                                </button>
+                            </div>
+                            <p id="voice-warning" class="hidden mt-2 text-sm text-red-500 dark:text-red-400"></p>
+                        </div>
+
+                        <!-- Voice Processing UI -->
+                        <div id="voice-processing-ui" class="hidden mb-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-700">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 animate-spin text-purple-600" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span class="text-purple-700 dark:text-purple-300 font-medium">Listening and parsing your invoice...</span>
+                            </div>
+                        </div>
+
+                        <!-- Voice Result UI -->
+                        <div id="voice-result-ui" class="hidden mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
+                            <div class="mb-3">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                    <span class="text-sm font-medium text-green-800 dark:text-green-200">Heard:</span>
+                                </div>
+                                <p id="voice-transcript" class="text-sm text-green-700 dark:text-green-300 italic ml-6"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p id="voice-fields-filled" class="text-sm text-green-700 dark:text-green-300 ml-6"></p>
+                            </div>
+                            <div class="flex gap-3 ml-6">
+                                <button type="button" id="voice-apply-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors text-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Apply to Invoice
+                                </button>
+                                <button type="button" id="voice-retry-btn" class="inline-flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-sm font-medium transition-colors">
+                                    Try Again
+                                </button>
+                            </div>
                         </div>
 
                         <button type="button" id="ai-generate-btn" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
@@ -152,9 +220,7 @@
                                     Add All to Invoice
                                 </button>
                             </div>
-                            <div id="ai-items-list" class="space-y-2">
-                                <!-- AI generated items will be inserted here -->
-                            </div>
+                            <div id="ai-items-list" class="space-y-2"></div>
                         </div>
 
                         <!-- Error Message -->
@@ -708,6 +774,290 @@ document.addEventListener('DOMContentLoaded', function() {
         attachCalculateListeners();
         attachDeleteListeners();
     }
+
+    // ==========================================
+    // Voice Recording for AI Invoice Generation
+    // ==========================================
+
+    const voiceBtnContainer = document.getElementById('voice-btn-container');
+    const voiceBtn = document.getElementById('ai-voice-btn');
+    const voiceRecordingUI = document.getElementById('voice-recording-ui');
+    const voiceProcessingUI = document.getElementById('voice-processing-ui');
+    const voiceResultUI = document.getElementById('voice-result-ui');
+    const voiceStopBtn = document.getElementById('voice-stop-btn');
+    const voiceTimer = document.getElementById('voice-timer');
+    const voiceWarning = document.getElementById('voice-warning');
+    const voiceTranscript = document.getElementById('voice-transcript');
+    const voiceFieldsFilled = document.getElementById('voice-fields-filled');
+    const voiceApplyBtn = document.getElementById('voice-apply-btn');
+    const voiceRetryBtn = document.getElementById('voice-retry-btn');
+
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordingStream = null;
+    let timerInterval = null;
+    let recordingSeconds = 0;
+    let voiceInvoiceData = null;
+
+    // Feature detection: show voice button only if supported
+    if (navigator.mediaDevices && typeof MediaRecorder !== 'undefined') {
+        voiceBtnContainer.classList.remove('hidden');
+    }
+
+    function resetVoiceUI() {
+        voiceRecordingUI.classList.add('hidden');
+        voiceProcessingUI.classList.add('hidden');
+        voiceResultUI.classList.add('hidden');
+        voiceWarning.classList.add('hidden');
+        document.getElementById('ai-text-input').classList.remove('hidden');
+        voiceBtn.disabled = false;
+        voiceInvoiceData = null;
+        stopTimer();
+    }
+
+    function startTimer() {
+        recordingSeconds = 0;
+        voiceTimer.textContent = '00:00';
+        timerInterval = setInterval(() => {
+            recordingSeconds++;
+            const mins = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
+            const secs = String(recordingSeconds % 60).padStart(2, '0');
+            voiceTimer.textContent = `${mins}:${secs}`;
+
+            if (recordingSeconds === 55) {
+                voiceWarning.textContent = 'Wrapping up in 5 seconds...';
+                voiceWarning.classList.remove('hidden');
+            }
+
+            if (recordingSeconds >= 60) {
+                stopRecording();
+            }
+        }, 1000);
+    }
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+
+    function releaseStream() {
+        if (recordingStream) {
+            recordingStream.getTracks().forEach(t => t.stop());
+            recordingStream = null;
+        }
+    }
+
+    // Start recording
+    if (voiceBtn) {
+        voiceBtn.addEventListener('click', async () => {
+            try {
+                recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            } catch (err) {
+                if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                    showAiError('Microphone access is needed for voice input. You can still type your description above.');
+                } else {
+                    showAiError('Could not access microphone. Please check your browser settings.');
+                }
+                return;
+            }
+
+            audioChunks = [];
+            const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm'
+                           : MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4'
+                           : '';
+
+            if (!mimeType) {
+                showAiError('Your browser does not support audio recording. Please type your description instead.');
+                releaseStream();
+                return;
+            }
+
+            mediaRecorder = new MediaRecorder(recordingStream, { mimeType });
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) audioChunks.push(e.data);
+            };
+            mediaRecorder.onstop = handleRecordingComplete;
+            mediaRecorder.start(100);
+
+            document.getElementById('ai-text-input').classList.add('hidden');
+            voiceRecordingUI.classList.remove('hidden');
+            hideAiError();
+            startTimer();
+        });
+    }
+
+    // Stop recording
+    if (voiceStopBtn) {
+        voiceStopBtn.addEventListener('click', stopRecording);
+    }
+
+    function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+        }
+    }
+
+    async function handleRecordingComplete() {
+        stopTimer();
+        releaseStream();
+
+        if (recordingSeconds < 1) {
+            resetVoiceUI();
+            showAiError('Recording too short. Hold the mic for at least a few seconds.');
+            return;
+        }
+
+        const mimeType = mediaRecorder.mimeType || 'audio/webm';
+        const blob = new Blob(audioChunks, { type: mimeType });
+
+        if (blob.size > 10 * 1024 * 1024) {
+            resetVoiceUI();
+            showAiError('Recording too long. Try a shorter description.');
+            return;
+        }
+
+        voiceRecordingUI.classList.add('hidden');
+        voiceProcessingUI.classList.remove('hidden');
+
+        const base64 = await blobToBase64(blob);
+
+        try {
+            const response = await fetch('{% url "invoices:ai_voice_generate" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    audio_data: base64,
+                    media_type: mimeType
+                })
+            });
+
+            const data = await response.json();
+
+            voiceProcessingUI.classList.add('hidden');
+
+            if (data.success) {
+                voiceInvoiceData = data.invoice_data;
+                showVoiceResult(data);
+                if (data.remaining !== undefined) {
+                    updateAiRemaining(data.remaining, data.is_unlimited);
+                }
+            } else {
+                resetVoiceUI();
+                showAiError(data.error || 'Failed to process voice recording.');
+            }
+        } catch (error) {
+            console.error('Voice generation error:', error);
+            resetVoiceUI();
+            showAiError('Connection lost. Your recording wasn\'t sent. Please try again.');
+        }
+    }
+
+    function blobToBase64(blob) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64 = reader.result.split(',')[1];
+                resolve(base64);
+            };
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    function showVoiceResult(data) {
+        const inv = data.invoice_data;
+
+        voiceTranscript.textContent = inv.transcript || '(no transcript available)';
+
+        const filled = [];
+        if (inv.client_name) filled.push('client name');
+        if (inv.client_email) filled.push('email');
+        if (inv.client_address) filled.push('address');
+        if (inv.payment_terms) filled.push('payment terms');
+        if (inv.currency) filled.push('currency');
+        if (inv.tax_rate !== null && inv.tax_rate !== undefined) filled.push('tax rate');
+        if (inv.notes) filled.push('notes');
+        if (inv.invoice_name) filled.push('invoice name');
+        const itemCount = (inv.line_items || []).length;
+        if (itemCount > 0) filled.push(`${itemCount} line item${itemCount > 1 ? 's' : ''}`);
+
+        voiceFieldsFilled.textContent = filled.length > 0
+            ? `Filled: ${filled.join(', ')}`
+            : 'No fields could be extracted.';
+
+        voiceResultUI.classList.remove('hidden');
+    }
+
+    // Apply voice result to form
+    if (voiceApplyBtn) {
+        voiceApplyBtn.addEventListener('click', () => {
+            if (!voiceInvoiceData) return;
+
+            const d = voiceInvoiceData;
+
+            const fieldMap = {
+                'id_client_name': d.client_name,
+                'id_client_email': d.client_email,
+                'id_client_phone': d.client_phone,
+                'id_client_address': d.client_address,
+                'id_invoice_name': d.invoice_name,
+                'id_notes': d.notes,
+            };
+
+            for (const [fieldId, value] of Object.entries(fieldMap)) {
+                if (value) {
+                    const el = document.getElementById(fieldId);
+                    if (el && !el.value.trim()) {
+                        el.value = value;
+                    }
+                }
+            }
+
+            if (d.payment_terms) {
+                const ptEl = document.getElementById('id_payment_terms');
+                if (ptEl) ptEl.value = d.payment_terms;
+            }
+            if (d.currency) {
+                const curEl = document.getElementById('id_currency');
+                if (curEl) curEl.value = d.currency;
+            }
+            if (d.tax_rate !== null && d.tax_rate !== undefined) {
+                const taxEl = document.getElementById('id_tax_rate');
+                if (taxEl && (!taxEl.value || parseFloat(taxEl.value) === 0)) {
+                    taxEl.value = d.tax_rate;
+                }
+            }
+
+            if (d.line_items && d.line_items.length > 0) {
+                d.line_items.forEach(item => addLineItemToForm(item));
+            }
+
+            calculateTotals();
+
+            resetVoiceUI();
+
+            aiContent.classList.add('hidden');
+            aiChevron.classList.remove('rotate-90');
+        });
+    }
+
+    // Try Again button
+    if (voiceRetryBtn) {
+        voiceRetryBtn.addEventListener('click', resetVoiceUI);
+    }
+
+    // Warn before leaving during recording
+    window.addEventListener('beforeunload', (e) => {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            e.preventDefault();
+            e.returnValue = 'Recording in progress — leave anyway?';
+        }
+    });
 });
 </script>
 {% endblock %}
