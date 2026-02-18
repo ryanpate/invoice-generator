@@ -40,7 +40,7 @@ class StaticViewSitemap(Sitemap):
             '/tools/late-fee-calculator/georgia/',
             '/tools/late-fee-calculator/north-carolina/',
             '/tools/late-fee-calculator/new-jersey/',
-            '/features/ai-invoice-generator/', '/features/time-tracking/',
+            '/features/ai-invoice-generator/', '/features/time-tracking/', '/features/voice-invoice/',
             '/affiliate/program/', '/try/',
         ]
 

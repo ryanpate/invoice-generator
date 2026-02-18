@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Free Invoice Generator — Create & Download PDF Invoices Instantly" %} | InvoiceKits{% endblock %}
+{% block title %}{% trans "Voice Invoice Generator — Create Invoices by Speaking | Free AI Invoicing" %} | InvoiceKits{% endblock %}
 
-{% block meta_description %}{% trans "Create professional PDF invoices in under 60 seconds — no signup required. Add line items, tax, and notes, then download or email your invoice. Try it free now." %}{% endblock %}
+{% block meta_description %}{% trans "Create professional invoices by voice or AI text — no signup required. Tap the mic, describe your work, and download your PDF invoice in seconds. Free to try." %}{% endblock %}
 
-{% block meta_keywords %}{% trans "ai invoice generator, time tracking invoice software, free invoice maker, ai billing software, invoice time tracker, automated invoice creation, freelancer invoice generator" %}{% endblock %}
+{% block meta_keywords %}{% trans "voice invoice generator, ai invoice generator, voice to invoice, dictate invoice, time tracking invoice software, free invoice maker, ai billing software, invoice time tracker" %}{% endblock %}
 
 {% block footer %}{% endblock %}
 
@@ -17,10 +17,10 @@
         <div class="text-center">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
                 {% trans "AI-Powered Invoice Generator" %}<br>
-                <span class="text-primary-200">{% trans "With Built-In Time Tracking" %}</span>
+                <span class="text-primary-200">{% trans "With Voice, Text & Time Tracking" %}</span>
             </h1>
             <p class="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-                {% trans "The smartest invoice generator for freelancers and small businesses. Describe your work in plain English and let AI generate your invoice. Track billable hours with our live timer. Create professional PDF invoices instantly." %}
+                {% trans "The smartest invoice generator for freelancers and small businesses. Tap the mic and dictate your invoice — or type in plain English. Track billable hours with our live timer. Create professional PDF invoices instantly." %}
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="{% url 'try_invoice' %}" class="px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
@@ -51,7 +51,7 @@
             <p class="text-xl text-gray-600 max-w-2xl mx-auto">{% trans "Revolutionary features that save hours on invoicing" %}</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <!-- AI Invoice Generator Card -->
             <a href="{% url 'feature_ai_invoice_generator' %}" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-700 p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                 <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
@@ -70,6 +70,34 @@
                     <h3 class="text-2xl font-bold mb-3">{% trans "AI Invoice Generator" %}</h3>
                     <p class="text-purple-100 mb-6">
                         {% trans "Describe your work in plain English — \"Built React dashboard, 12 hours at $150/hr\" — and our AI instantly creates invoice line items. No more manual data entry." %}
+                    </p>
+                    <div class="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform">
+                        {% trans "Learn More" %}
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Voice Invoice Card (NEW) -->
+            <a href="{% url 'feature_voice_invoice' %}" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-blue-400/20 rounded-full blur-3xl"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                            </svg>
+                        </div>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm">
+                            {% trans "NEW" %}
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">{% trans "Voice-to-Invoice" %}</h3>
+                    <p class="text-blue-100 mb-6">
+                        {% trans "Tap the mic and dictate — \"Invoice for Acme Corp, website redesign, 15 hours at $100/hr, Net 30\" — and Claude fills every invoice field instantly." %}
                     </p>
                     <div class="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform">
                         {% trans "Learn More" %}
@@ -134,7 +162,21 @@
                 <p class="text-gray-600">{% trans "Describe your work in plain English and let AI create invoice line items instantly. Save hours on data entry." %}</p>
             </a>
 
-            <!-- Feature 2 -->
+            <!-- Feature - Voice Invoice -->
+            <a href="{% url 'feature_voice_invoice' %}" class="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all hover:shadow-lg group">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded">NEW</span>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors">{% trans "Voice-to-Invoice" %}</h3>
+                <p class="text-gray-600">{% trans "Tap the mic and speak your invoice details. Claude transcribes and fills every field — client, items, rates, and payment terms." %}</p>
+            </a>
+
+            <!-- Feature - Instant PDF -->
             <div class="p-8 bg-gray-50 rounded-2xl">
                 <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-6">
                     <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

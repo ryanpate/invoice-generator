@@ -135,6 +135,17 @@ class TimeTrackingView(TemplateView):
         return context
 
 
+class VoiceInvoiceView(TemplateView):
+    """Landing page for Voice-to-Invoice feature."""
+    template_name = 'features/voice-invoice.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
+        context['ai_limits'] = settings.AI_GENERATION_LIMITS
+        return context
+
+
 # Template Showcase Views
 class TemplateShowcaseView(TemplateView):
     """Base view for template showcase pages."""
