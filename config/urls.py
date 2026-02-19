@@ -59,6 +59,11 @@ def health_check(request):
     return JsonResponse({'status': 'ok'})
 
 
+def indexnow_key_file(request):
+    """Serve IndexNow API key verification file for Bing."""
+    return HttpResponse("a7f3c9d2e1b5480f9c3a7d6e2b4f8c1a", content_type='text/plain')
+
+
 def bing_site_auth(request):
     """Serve Bing Webmaster Tools verification file."""
     content = """<?xml version="1.0"?>
@@ -140,6 +145,7 @@ urlpatterns = [
     path('robots.txt', robots_txt, name='robots_txt'),
     path('ads.txt', ads_txt, name='ads_txt'),
     path('BingSiteAuth.xml', bing_site_auth, name='bing_site_auth'),
+    path('a7f3c9d2e1b5480f9c3a7d6e2b4f8c1a.txt', indexnow_key_file, name='indexnow_key'),
     path('service-worker.js', service_worker, name='service_worker'),
     path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),

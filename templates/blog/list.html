@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{% if category %}{{ category.name }} - {% endif %}Invoice Tips & Guides | InvoiceKits Blog{% endblock %}
+{% block title %}{% if category %}{{ category.name }} - {% endif %}Invoice Generator Blog — Free Guides for Freelancers & Small Businesses | InvoiceKits{% endblock %}
 
 {% block meta_description %}{% if category %}{{ category.description|default:"Read our latest articles about "|add:category.name|lower }}{% else %}Expert tips and guides on invoicing, freelancing, and small business billing. Learn how to create professional invoices and get paid faster.{% endif %}{% endblock %}
 
@@ -8,7 +8,7 @@
 
 {% block canonical_url %}https://www.invoicekits.com/blog/{% if category %}category/{{ category.slug }}/{% endif %}{% endblock %}
 
-{% block og_title %}{% if category %}{{ category.name }} Articles{% else %}InvoiceKits Blog - Invoice Tips & Guides{% endif %}{% endblock %}
+{% block og_title %}{% if category %}{{ category.name }} Articles{% else %}Invoice Generator Blog — Free Guides for Freelancers & Small Businesses{% endif %}{% endblock %}
 
 {% block og_description %}Expert tips and guides on invoicing, freelancing, and small business billing.{% endblock %}
 
@@ -68,7 +68,7 @@
         <!-- Header -->
         <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                {% if category %}{{ category.name }}{% else %}InvoiceKits Blog{% endif %}
+                {% if category %}{{ category.name }}{% else %}Invoice Tips, Guides & Templates{% endif %}
             </h1>
             <p class="text-xl text-gray-600 dark:text-gray-400">
                 {% if category %}{{ category.description|default:"Articles and guides" }}{% else %}Tips, guides, and best practices for professional invoicing{% endif %}
