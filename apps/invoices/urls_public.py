@@ -17,6 +17,9 @@ urlpatterns = [
     path('for-consultants/', views.ConsultantsLandingPageView.as_view(), name='for_consultants'),
     path('compare/', views.CompareLandingPageView.as_view(), name='compare'),
 
+    # SEO landing pages
+    path('batch-invoice-generator/', views.BatchInvoiceGeneratorView.as_view(), name='batch_invoice_generator'),
+
     # Feature landing pages
     path('features/ai-invoice-generator/', views.AIInvoiceGeneratorView.as_view(), name='feature_ai_invoice_generator'),
     path('features/time-tracking/', views.TimeTrackingView.as_view(), name='feature_time_tracking'),

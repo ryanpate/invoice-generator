@@ -1,0 +1,635 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Batch Invoice Generator — Create 100+ Invoices from CSV in Minutes | InvoiceKits{% endblock %}
+
+{% block meta_description %}Batch invoice generator that creates hundreds of invoices from a single CSV file. Upload your spreadsheet, generate professional PDFs instantly. Free to try, no coding required.{% endblock %}
+
+{% block meta_keywords %}batch invoice generator, bulk invoice generator, CSV invoice upload, bulk invoice creation, mass invoice generator, multiple invoice creator, invoice from spreadsheet, batch billing software{% endblock %}
+
+{% block canonical_url %}https://www.invoicekits.com/batch-invoice-generator/{% endblock %}
+
+{% block og_title %}Batch Invoice Generator — Create 100+ Invoices from CSV | InvoiceKits{% endblock %}
+
+{% block og_description %}Upload a CSV, get hundreds of professional PDF invoices. The only batch invoice generator with AI, templates, and automatic delivery.{% endblock %}
+
+{% block twitter_title %}Batch Invoice Generator — CSV to Invoices in Minutes | InvoiceKits{% endblock %}
+
+{% block twitter_description %}Create 100+ invoices from a single CSV file. Professional PDFs with 5 template styles. Free to try.{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.invoicekits.com/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Batch Invoice Generator",
+            "item": "https://www.invoicekits.com/batch-invoice-generator/"
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Generate Batch Invoices from CSV",
+    "description": "Create hundreds of professional invoices from a single CSV spreadsheet using InvoiceKits batch invoice generator.",
+    "step": [
+        {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Prepare your CSV file",
+            "text": "Download the CSV template and fill in your invoice data: client names, emails, line items, amounts, and due dates."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Upload to InvoiceKits",
+            "text": "Go to the batch upload page and drag-and-drop your CSV file. InvoiceKits validates the data instantly."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Review and generate",
+            "text": "Preview the parsed invoices, select your PDF template, and click Generate. All invoices are created in seconds."
+        },
+        {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "Download or send",
+            "text": "Download all invoices as a ZIP file or send them directly to clients via email with PDF attachments."
+        }
+    ]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "How many invoices can I create at once with batch upload?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "There is no hard limit on the number of invoices per CSV upload. Professional plan users regularly generate 100-500 invoices in a single batch. The system processes them in seconds."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What CSV format does the batch invoice generator accept?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The CSV file needs columns for client name, client email, item description, quantity, unit price, tax rate (optional), due date, and currency. You can download a pre-formatted template with all the correct column headers."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I use different templates for batch invoices?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. When you upload your CSV, you select which of the 5 professional PDF templates to use. All invoices in the batch will use the same template, styled with your company logo and branding."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do batch invoices support multiple currencies?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Each row in your CSV can specify a different currency code (USD, EUR, GBP, etc.). The batch generator formats amounts according to the specified currency."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How is batch invoicing different from recurring invoices?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Batch invoicing creates many different invoices at once from a CSV file — ideal for billing multiple clients for different amounts. Recurring invoices automatically generate the same invoice on a schedule (weekly, monthly, etc.) for ongoing services."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Which plan includes batch invoice upload?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Batch CSV upload is available on the Professional plan ($29/month) and Business plan ($79/month). Free and Starter users can create invoices individually or upgrade for batch processing."
+            }
+        }
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-green-600 via-emerald-700 to-teal-800 overflow-hidden">
+    <div class="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+    <div class="absolute top-20 left-10 w-72 h-72 bg-green-500/30 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+            <ol class="flex items-center space-x-2 text-sm text-green-200">
+                <li><a href="{% url 'landing' %}" class="hover:text-white">Home</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-white">Batch Invoice Generator</li>
+            </ol>
+        </nav>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="inline-block px-4 py-1 bg-green-500/30 text-green-100 rounded-full text-sm font-medium mb-6">
+                    Only Tool With Batch CSV Upload
+                </span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                    Batch Invoice Generator
+                </h1>
+                <p class="text-xl text-green-100 mb-4">
+                    Create 100+ professional PDF invoices from a single CSV file in minutes. No manual data entry. No copy-paste. No mistakes.
+                </p>
+                <p class="text-lg text-green-200 mb-8">
+                    Upload your spreadsheet. Pick a template. Download all invoices as a ZIP or email them directly to clients.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-white text-green-700 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg text-center">
+                        Try Batch Upload Free
+                    </a>
+                    <a href="#how-it-works" class="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition text-center">
+                        See How It Works
+                    </a>
+                </div>
+                <p class="mt-6 text-green-200 text-sm">
+                    Available on Professional ($29/mo) and Business ($79/mo) plans.
+                </p>
+            </div>
+
+            <!-- CSV to Invoices Visual -->
+            <div class="hidden lg:block">
+                <div class="relative">
+                    <!-- CSV File -->
+                    <div class="bg-gray-900 rounded-xl p-4 shadow-2xl transform -rotate-2 mb-4">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="text-gray-400 text-xs ml-2">invoices.csv</span>
+                        </div>
+                        <div class="font-mono text-xs text-green-400 space-y-1">
+                            <p class="text-gray-500">client_name,client_email,description,qty,rate</p>
+                            <p>Acme Corp,john@acme.com,Web Design,1,2500</p>
+                            <p>TechStart,sara@tech.io,API Integration,40,150</p>
+                            <p>DesignCo,mike@design.co,Brand Package,1,4000</p>
+                            <p class="text-gray-600">... 97 more rows</p>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="flex justify-center my-2">
+                        <svg class="w-8 h-8 text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </div>
+
+                    <!-- Generated Invoices -->
+                    <div class="flex gap-2 justify-center">
+                        <div class="bg-white rounded-lg p-3 shadow-lg transform rotate-[-4deg] w-24">
+                            <div class="w-full h-2 bg-green-600 rounded mb-2"></div>
+                            <div class="space-y-1">
+                                <div class="h-1.5 bg-gray-200 rounded w-full"></div>
+                                <div class="h-1.5 bg-gray-200 rounded w-3/4"></div>
+                                <div class="h-1.5 bg-gray-100 rounded w-full mt-2"></div>
+                                <div class="h-1.5 bg-gray-100 rounded w-full"></div>
+                            </div>
+                            <div class="mt-2 text-right">
+                                <span class="text-[8px] font-bold text-gray-900">$2,500</span>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-lg w-24">
+                            <div class="w-full h-2 bg-green-600 rounded mb-2"></div>
+                            <div class="space-y-1">
+                                <div class="h-1.5 bg-gray-200 rounded w-full"></div>
+                                <div class="h-1.5 bg-gray-200 rounded w-3/4"></div>
+                                <div class="h-1.5 bg-gray-100 rounded w-full mt-2"></div>
+                                <div class="h-1.5 bg-gray-100 rounded w-full"></div>
+                            </div>
+                            <div class="mt-2 text-right">
+                                <span class="text-[8px] font-bold text-gray-900">$6,000</span>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-lg transform rotate-[4deg] w-24">
+                            <div class="w-full h-2 bg-green-600 rounded mb-2"></div>
+                            <div class="space-y-1">
+                                <div class="h-1.5 bg-gray-200 rounded w-full"></div>
+                                <div class="h-1.5 bg-gray-200 rounded w-3/4"></div>
+                                <div class="h-1.5 bg-gray-100 rounded w-full mt-2"></div>
+                                <div class="h-1.5 bg-gray-100 rounded w-full"></div>
+                            </div>
+                            <div class="mt-2 text-right">
+                                <span class="text-[8px] font-bold text-gray-900">$4,000</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-center text-green-200 text-sm mt-3">100 invoices generated in 12 seconds</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Problem Section -->
+<section class="py-20 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Creating Invoices One by One Is Costing You Hours</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+                If you bill more than 10 clients per month, manual invoicing is eating your productive time. Here's the math:
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <!-- Manual Way -->
+            <div class="bg-red-50 dark:bg-red-900/20 rounded-xl p-8 border border-red-200 dark:border-red-800">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-red-900 dark:text-red-300">Manual: One at a Time</h3>
+                </div>
+                <ul class="space-y-3 text-red-800 dark:text-red-300">
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 text-red-400">-</span>
+                        <span>5 minutes per invoice (data entry, formatting, review)</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 text-red-400">-</span>
+                        <span>100 invoices = 8+ hours of work</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 text-red-400">-</span>
+                        <span>Copy-paste errors on client details</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 text-red-400">-</span>
+                        <span>Inconsistent formatting between invoices</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 text-red-400">-</span>
+                        <span>Sending each invoice email individually</span>
+                    </li>
+                </ul>
+                <div class="mt-6 pt-4 border-t border-red-200 dark:border-red-800">
+                    <p class="text-2xl font-bold text-red-900 dark:text-red-300">~8 hours for 100 invoices</p>
+                </div>
+            </div>
+
+            <!-- Batch Way -->
+            <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-8 border border-green-200 dark:border-green-800">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-900 dark:text-green-300">Batch: CSV Upload</h3>
+                </div>
+                <ul class="space-y-3 text-green-800 dark:text-green-300">
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span>Export data from your system to CSV</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span>Upload one file, generate all invoices</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span>Zero data entry errors</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span>Consistent professional formatting</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span>Download as ZIP or email all at once</span>
+                    </li>
+                </ul>
+                <div class="mt-6 pt-4 border-t border-green-200 dark:border-green-800">
+                    <p class="text-2xl font-bold text-green-900 dark:text-green-300">~5 minutes for 100 invoices</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section id="how-it-works" class="py-20 bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">How Batch Invoice Generation Works</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">Four steps from spreadsheet to sent invoices</p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl font-bold text-green-600">1</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Prepare Your CSV</h3>
+                <p class="text-gray-600 dark:text-gray-400">Download our template or use your own spreadsheet. Columns: client name, email, description, quantity, rate, due date.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl font-bold text-green-600">2</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Upload &amp; Validate</h3>
+                <p class="text-gray-600 dark:text-gray-400">Drag and drop your CSV. InvoiceKits validates every row and flags any issues before generating.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl font-bold text-green-600">3</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Choose Template</h3>
+                <p class="text-gray-600 dark:text-gray-400">Select from 5 professional PDF templates. Your company logo and branding are applied to every invoice.</p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-2xl font-bold text-green-600">4</span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Download or Send</h3>
+                <p class="text-gray-600 dark:text-gray-400">Download all PDFs as a ZIP file, or email each invoice directly to the client with a personalized message.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CSV Format Section -->
+<section class="py-20 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Simple CSV Format</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">
+                    If you can use a spreadsheet, you can use batch invoicing. The CSV format is straightforward:
+                </p>
+                <ul class="space-y-3 text-gray-700 dark:text-gray-300">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span><strong>Required columns:</strong> client_name, client_email, item_description, quantity, unit_price</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span><strong>Optional columns:</strong> tax_rate, due_date, currency, notes, invoice_name</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span><strong>Multiple line items:</strong> Add multiple rows with the same client to create multi-line invoices</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                        <span><strong>Multi-currency:</strong> Set a different currency per invoice row</span>
+                    </li>
+                </ul>
+                <a href="{% url 'account_signup' %}" class="inline-block mt-8 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+                    Sign Up &amp; Download CSV Template
+                </a>
+            </div>
+
+            <!-- CSV Preview -->
+            <div class="bg-gray-900 rounded-xl p-6 shadow-xl">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="text-gray-400 text-sm ml-2">batch_invoices.csv</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs font-mono">
+                        <thead>
+                            <tr class="text-gray-500 border-b border-gray-700">
+                                <td class="pr-4 py-1">client_name</td>
+                                <td class="pr-4 py-1">client_email</td>
+                                <td class="pr-4 py-1">description</td>
+                                <td class="pr-4 py-1">qty</td>
+                                <td class="pr-4 py-1">rate</td>
+                                <td class="py-1">due_date</td>
+                            </tr>
+                        </thead>
+                        <tbody class="text-green-400">
+                            <tr><td class="pr-4 py-1">Acme Corp</td><td class="pr-4 py-1">john@acme.com</td><td class="pr-4 py-1">Web Design</td><td class="pr-4 py-1">1</td><td class="pr-4 py-1">2500</td><td class="py-1">2026-03-15</td></tr>
+                            <tr><td class="pr-4 py-1">Acme Corp</td><td class="pr-4 py-1">john@acme.com</td><td class="pr-4 py-1">SEO Setup</td><td class="pr-4 py-1">1</td><td class="pr-4 py-1">800</td><td class="py-1">2026-03-15</td></tr>
+                            <tr><td class="pr-4 py-1">TechStart</td><td class="pr-4 py-1">sara@tech.io</td><td class="pr-4 py-1">API Work</td><td class="pr-4 py-1">40</td><td class="pr-4 py-1">150</td><td class="py-1">2026-03-01</td></tr>
+                            <tr><td class="pr-4 py-1">DesignCo</td><td class="pr-4 py-1">mike@design.co</td><td class="pr-4 py-1">Branding</td><td class="pr-4 py-1">1</td><td class="pr-4 py-1">4000</td><td class="py-1">2026-03-20</td></tr>
+                            <tr class="text-gray-600"><td class="pr-4 py-1" colspan="6">... more rows</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Who Uses Batch Invoicing -->
+<section class="py-20 bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Who Uses Batch Invoice Generation?</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">Any business that bills multiple clients regularly</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Property Management</h3>
+                <p class="text-gray-600 dark:text-gray-400">Generate rent invoices for 50+ tenants each month from a single spreadsheet. Same due date, different amounts, all done in one upload.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Agencies &amp; Consultancies</h3>
+                <p class="text-gray-600 dark:text-gray-400">Bill 20+ retainer clients at the start of each month. Export hours from your project tracker, upload the CSV, and send all invoices in minutes.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+                <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/50 rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Education &amp; Training</h3>
+                <p class="text-gray-600 dark:text-gray-400">Invoice hundreds of students or workshop attendees. Export your registration list, add pricing, upload, and every invoice is generated with the correct details.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison With Competitors -->
+<section class="py-20 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">No Other Invoice Tool Has Batch Upload</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">InvoiceKits is the only invoice generator with native CSV batch processing</p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full max-w-4xl mx-auto">
+                <thead>
+                    <tr class="border-b-2 border-gray-200 dark:border-gray-700">
+                        <th class="text-left py-4 px-4 text-gray-900 dark:text-white font-semibold">Feature</th>
+                        <th class="py-4 px-4 text-center">
+                            <span class="text-green-600 font-bold">InvoiceKits</span>
+                        </th>
+                        <th class="py-4 px-4 text-center text-gray-500 dark:text-gray-400">Zoho Invoice</th>
+                        <th class="py-4 px-4 text-center text-gray-500 dark:text-gray-400">FreshBooks</th>
+                        <th class="py-4 px-4 text-center text-gray-500 dark:text-gray-400">Wave</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-100 dark:border-gray-800 bg-green-50/50 dark:bg-green-900/10">
+                        <td class="py-3 px-4 font-medium text-gray-900 dark:text-white">Batch CSV upload</td>
+                        <td class="py-3 px-4 text-center text-green-600 font-bold text-lg">&#10003;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-800">
+                        <td class="py-3 px-4 font-medium text-gray-900 dark:text-white">AI invoice generation</td>
+                        <td class="py-3 px-4 text-center text-green-600 font-bold text-lg">&#10003;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-800">
+                        <td class="py-3 px-4 font-medium text-gray-900 dark:text-white">Voice-to-invoice</td>
+                        <td class="py-3 px-4 text-center text-green-600 font-bold text-lg">&#10003;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-800">
+                        <td class="py-3 px-4 font-medium text-gray-900 dark:text-white">ZIP download of all PDFs</td>
+                        <td class="py-3 px-4 text-center text-green-600 font-bold text-lg">&#10003;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                        <td class="py-3 px-4 text-center text-red-400">&#10007;</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-800">
+                        <td class="py-3 px-4 font-medium text-gray-900 dark:text-white">Professional starting price</td>
+                        <td class="py-3 px-4 text-center text-green-600 font-bold">$29/mo</td>
+                        <td class="py-3 px-4 text-center text-gray-600 dark:text-gray-400">Free*</td>
+                        <td class="py-3 px-4 text-center text-gray-600 dark:text-gray-400">$19/mo</td>
+                        <td class="py-3 px-4 text-center text-gray-600 dark:text-gray-400">$19/mo</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4">*Zoho Invoice free tier does not include batch processing of any kind.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-20 bg-gray-50 dark:bg-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">How many invoices can I create at once with batch upload?</h3>
+                <p class="text-gray-600 dark:text-gray-400">There is no hard limit on the number of invoices per CSV upload. Professional plan users regularly generate 100-500 invoices in a single batch. The system processes them in seconds.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">What CSV format does the batch invoice generator accept?</h3>
+                <p class="text-gray-600 dark:text-gray-400">The CSV file needs columns for client name, client email, item description, quantity, unit price, tax rate (optional), due date, and currency. You can download a pre-formatted template with all the correct column headers.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Can I use different templates for batch invoices?</h3>
+                <p class="text-gray-600 dark:text-gray-400">Yes. When you upload your CSV, you select which of the 5 professional PDF templates to use. All invoices in the batch will use the same template, styled with your company logo and branding.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Do batch invoices support multiple currencies?</h3>
+                <p class="text-gray-600 dark:text-gray-400">Yes. Each row in your CSV can specify a different currency code (USD, EUR, GBP, etc.). The batch generator formats amounts according to the specified currency.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">How is batch invoicing different from recurring invoices?</h3>
+                <p class="text-gray-600 dark:text-gray-400">Batch invoicing creates many different invoices at once from a CSV file -- ideal for billing multiple clients for different amounts. Recurring invoices automatically generate the same invoice on a schedule (weekly, monthly, etc.) for ongoing services. InvoiceKits supports both.</p>
+            </div>
+
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Which plan includes batch invoice upload?</h3>
+                <p class="text-gray-600 dark:text-gray-400">Batch CSV upload is available on the Professional plan ($29/month) and Business plan ($79/month). Free and Starter users can create invoices individually or upgrade for batch processing.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-br from-green-600 via-emerald-700 to-teal-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+            Stop Creating Invoices One at a Time
+        </h2>
+        <p class="text-xl text-green-100 mb-8">
+            Upload a CSV. Generate hundreds of professional invoices. Send them all in minutes.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'account_signup' %}" class="px-8 py-4 bg-white text-green-700 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg text-lg">
+                Start Batch Invoicing Free
+            </a>
+            <a href="{% url 'pricing' %}" class="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition text-lg">
+                View Pricing Plans
+            </a>
+        </div>
+        <p class="mt-6 text-green-200">
+            5 free credits on signup. No credit card required.
+        </p>
+    </div>
+</section>
+
+<!-- Related Features -->
+<section class="py-16 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Related Features</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <a href="{% url 'feature_ai_invoice_generator' %}" class="block bg-purple-50 dark:bg-purple-900/20 rounded-xl p-6 border border-purple-200 dark:border-purple-800 hover:shadow-md transition">
+                <h3 class="text-lg font-semibold text-purple-900 dark:text-purple-300 mb-2">AI Invoice Generator</h3>
+                <p class="text-purple-700 dark:text-purple-400 text-sm">Describe your work in plain English and let AI create accurate line items for one-off invoices.</p>
+            </a>
+            <a href="{% url 'feature_voice_invoice' %}" class="block bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800 hover:shadow-md transition">
+                <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-2">Voice-to-Invoice</h3>
+                <p class="text-blue-700 dark:text-blue-400 text-sm">Tap the mic, describe your work out loud, and get a filled invoice instantly. No typing needed.</p>
+            </a>
+            <a href="{% url 'feature_time_tracking' %}" class="block bg-green-50 dark:bg-green-900/20 rounded-xl p-6 border border-green-200 dark:border-green-800 hover:shadow-md transition">
+                <h3 class="text-lg font-semibold text-green-900 dark:text-green-300 mb-2">Time Tracking</h3>
+                <p class="text-green-700 dark:text-green-400 text-sm">Track billable hours with a live timer and convert time entries to invoices in one click.</p>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

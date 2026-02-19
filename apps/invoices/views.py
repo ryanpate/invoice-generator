@@ -135,6 +135,11 @@ class TimeTrackingView(TemplateView):
         return context
 
 
+class BatchInvoiceGeneratorView(TemplateView):
+    """Landing page for Batch Invoice Generator feature."""
+    template_name = 'landing/batch-invoice-generator.html'
+
+
 class VoiceInvoiceView(TemplateView):
     """Landing page for Voice-to-Invoice feature."""
     template_name = 'features/voice-invoice.html'
