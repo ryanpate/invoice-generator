@@ -56,6 +56,19 @@ class CustomUser(AbstractUser):
         help_text='List of premium template slugs unlocked by purchase'
     )
 
+    # Payment source tracking
+    PAYMENT_SOURCE_CHOICES = [
+        ('stripe', 'Stripe'),
+        ('apple', 'Apple'),
+    ]
+
+    payment_source = models.CharField(
+        max_length=10,
+        choices=PAYMENT_SOURCE_CHOICES,
+        default='stripe',
+        help_text='Which payment system manages this user subscription'
+    )
+
     # AI Invoice Generator usage tracking
     ai_generations_used = models.PositiveIntegerField(
         default=0,
