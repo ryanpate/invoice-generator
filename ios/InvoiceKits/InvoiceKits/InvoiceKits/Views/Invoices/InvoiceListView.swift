@@ -106,16 +106,18 @@ struct InvoiceListView: View {
 
     // MARK: - Content
 
-    @ViewBuilder
     private var content: some View {
-        if isLoading && invoices.isEmpty {
-            ProgressView("Loading invoices...")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if filteredInvoices.isEmpty {
-            emptyState
-        } else {
-            invoiceList
+        Group {
+            if isLoading && invoices.isEmpty {
+                ProgressView("Loading invoices...")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if filteredInvoices.isEmpty {
+                emptyState
+            } else {
+                invoiceList
+            }
         }
+        .task { await loadInvoices() }
     }
 
     private var invoiceList: some View {

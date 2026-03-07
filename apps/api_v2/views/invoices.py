@@ -1,10 +1,10 @@
 """
 Invoice views for API v2.
 """
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import FileResponse
 from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -23,7 +23,7 @@ class InvoiceV2ViewSet(viewsets.ModelViewSet):
     """
     Invoice CRUD endpoints for the iOS app.
 
-    list:   GET  /api/v2/invoices/            — paginated list, supports ?status= and ?search=
+    list:   GET  /api/v2/invoices/            — flat array, supports ?status= and ?search=
     create: POST /api/v2/invoices/            — create invoice with nested line_items
     retrieve: GET  /api/v2/invoices/{id}/     — full detail with line items
     update: PUT  /api/v2/invoices/{id}/       — full update
@@ -41,6 +41,7 @@ class InvoiceV2ViewSet(viewsets.ModelViewSet):
     """
 
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     # ------------------------------------------------------------------
     # Serializer dispatch
@@ -294,3 +295,59 @@ class InvoiceV2ViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+# ---------------------------------------------------------------------------
+# Dashboard stats — GET /api/v2/dashboard/stats/
+# ---------------------------------------------------------------------------
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def dashboard_stats_view(request):
+    """
+    Return summary statistics for the authenticated user's invoices.
+
+    Response shape (matches iOS DashboardStatsResponse):
+      total_invoices     int    — count of all invoices owned by this user
+      total_revenue      str    — sum of totals for paid invoices (decimal string)
+      outstanding_amount str    — sum of totals for sent + overdue invoices
+      overdue_count      int    — count of overdue invoices
+      recent_invoices    list   — last 5 invoices (InvoiceListV2Serializer)
+    """
+    user = request.user
+    base_qs = Invoice.objects.filter(company__user=user)
+
+    total_invoices = base_qs.count()
+
+    total_revenue = (
+        base_qs.filter(status='paid')
+        .aggregate(total=Sum('total'))['total']
+        or 0
+    )
+
+    outstanding_amount = (
+        base_qs.filter(status__in=['sent', 'overdue'])
+        .aggregate(total=Sum('total'))['total']
+        or 0
+    )
+
+    overdue_count = base_qs.filter(status='overdue').count()
+
+    recent_invoices = (
+        base_qs.prefetch_related('line_items')
+        .order_by('-created_at')[:5]
+    )
+    recent_serializer = InvoiceListV2Serializer(
+        recent_invoices, many=True, context={'request': request}
+    )
+
+    return Response(
+        {
+            'total_invoices': total_invoices,
+            'total_revenue': str(total_revenue),
+            'outstanding_amount': str(outstanding_amount),
+            'overdue_count': overdue_count,
+            'recent_invoices': recent_serializer.data,
+        },
+        status=status.HTTP_200_OK,
+    )

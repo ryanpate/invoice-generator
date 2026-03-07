@@ -51,6 +51,7 @@ class TimeEntryV2ViewSet(viewsets.ModelViewSet):
     """
 
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve'):

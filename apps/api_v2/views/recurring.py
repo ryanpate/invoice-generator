@@ -34,6 +34,7 @@ class RecurringInvoiceV2ViewSet(viewsets.ModelViewSet):
     """
 
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     # ------------------------------------------------------------------
     # Permission guard — all actions require the recurring invoices feature

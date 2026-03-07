@@ -3,7 +3,7 @@ import requests
 from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -137,3 +137,34 @@ def delete_account_view(request):
     user = request.user
     user.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile_view(request):
+    """
+    Return the authenticated user's profile.
+
+    Response shape (matches iOS UserProfileResponse):
+      id                   int         — user primary key
+      email                str
+      subscription_tier    str         — free | starter | professional | business
+      ai_generations_used  int         — generations used this month
+      ai_generations_limit int | null  — monthly cap (null = unlimited)
+    """
+    user = request.user
+
+    # get_ai_generation_limit() returns None for unlimited tiers (pro/business)
+    # and an int (3, 10, …) for limited tiers.
+    ai_limit = user.get_ai_generation_limit()
+
+    return Response(
+        {
+            'id': user.id,
+            'email': user.email,
+            'subscription_tier': user.subscription_tier,
+            'ai_generations_used': user.ai_generations_used,
+            'ai_generations_limit': ai_limit,
+        },
+        status=status.HTTP_200_OK,
+    )
