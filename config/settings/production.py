@@ -111,3 +111,20 @@ LOGGING = {
 # Email verification disabled until SMTP credentials are configured
 # Change to 'mandatory' once EMAIL_HOST_USER and EMAIL_HOST_PASSWORD are set
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# Sign in with Apple (iOS app)
+APPLE_CLIENT_ID = os.environ.get('APPLE_CLIENT_ID', 'com.invoicekits.InvoiceKits')
+APPLE_TEAM_ID = os.environ.get('APPLE_TEAM_ID', '')
+
+# CORS — iOS apps don't need CORS (not a browser), but web-based API consumers do
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    'https://www.invoicekits.com',
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'authorization',
+    'content-type',
+    'x-api-key',
+]
