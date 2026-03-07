@@ -51,6 +51,7 @@ LOCAL_APPS = [
     'apps.invoices',
     'apps.billing',
     'apps.api',
+    'apps.api_v2',
     'apps.blog',
     'apps.clients',
     'apps.affiliates',

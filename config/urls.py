@@ -167,6 +167,7 @@ urlpatterns = [
 
     # API
     path('api/v1/', include('apps.api.urls')),
+    path('api/v2/', include('apps.api_v2.urls')),
 
     # Affiliate Program
     path('affiliate/', include('apps.affiliates.urls')),
