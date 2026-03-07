@@ -6,6 +6,8 @@ django-filter==23.5
 
 # Authentication
 django-allauth==0.60.0
+djangorestframework-simplejwt==5.3.1
+PyJWT[crypto]>=2.8.0
 
 # Stripe Payments
 dj-stripe==2.8.3

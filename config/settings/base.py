@@ -2,6 +2,7 @@
 Base Django settings for Invoice Generator Pro.
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 from decouple import config, Csv
 
@@ -33,6 +34,7 @@ THIRD_PARTY_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
     'django_filters',
     'django_celery_results',
@@ -189,6 +191,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'apps.api.authentication.APIKeyAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -439,6 +442,7 @@ PAYMENT_TERMS = [
 
 # AI Invoice Generator Configuration
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+APPLE_CLIENT_ID = config('APPLE_CLIENT_ID', default='')
 
 # AI generation limits per subscription tier (None = unlimited)
 AI_GENERATION_LIMITS = {
@@ -446,4 +450,12 @@ AI_GENERATION_LIMITS = {
     'starter': 10,
     'professional': None,  # Unlimited
     'business': None,  # Unlimited
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
