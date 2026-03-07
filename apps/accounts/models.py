@@ -329,7 +329,7 @@ class CustomUser(AbstractUser):
         # Get count from user's company recurring invoices
         from apps.invoices.models import RecurringInvoice
         try:
-            company = self.companies.first()
+            company = self.get_company()
             if not company:
                 return False
             current_count = RecurringInvoice.objects.filter(
