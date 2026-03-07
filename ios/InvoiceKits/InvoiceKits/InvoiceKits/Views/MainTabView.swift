@@ -17,44 +17,32 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             // MARK: Invoices
-            NavigationStack {
-                Text("Invoices")
-                    .navigationTitle("Invoices")
-            }
-            .tabItem {
-                Label("Invoices", systemImage: "list.bullet")
-            }
-            .tag(Tab.invoices)
+            InvoiceListView()
+                .tabItem {
+                    Label("Invoices", systemImage: "list.bullet")
+                }
+                .tag(Tab.invoices)
 
             // MARK: Time Tracking
-            NavigationStack {
-                Text("Time Tracking")
-                    .navigationTitle("Time Tracking")
-            }
-            .tabItem {
-                Label("Time", systemImage: "timer")
-            }
-            .tag(Tab.time)
+            TimeEntryListView()
+                .tabItem {
+                    Label("Time", systemImage: "timer")
+                }
+                .tag(Tab.time)
 
             // MARK: Dashboard
-            NavigationStack {
-                Text("Dashboard")
-                    .navigationTitle("Dashboard")
-            }
-            .tabItem {
-                Label("Dashboard", systemImage: "chart.bar")
-            }
-            .tag(Tab.dashboard)
+            DashboardView()
+                .tabItem {
+                    Label("Dashboard", systemImage: "chart.bar")
+                }
+                .tag(Tab.dashboard)
 
             // MARK: Settings
-            NavigationStack {
-                Text("Settings")
-                    .navigationTitle("Settings")
-            }
-            .tabItem {
-                Label("Settings", systemImage: "gear")
-            }
-            .tag(Tab.settings)
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
+                .tag(Tab.settings)
         }
     }
 }
