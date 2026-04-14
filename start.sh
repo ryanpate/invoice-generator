@@ -7,6 +7,10 @@ export GI_TYPELIB_PATH=/nix/var/nix/profiles/default/lib/girepository-1.0
 . /opt/venv/bin/activate
 
 case "${SERVICE_TYPE}" in
+  "cron")
+    echo "[START] Running daily scheduled tasks..."
+    exec python manage.py run_daily_tasks
+    ;;
   "celery-worker")
     echo "[START] Launching celery worker..."
     exec celery -A config worker -l info --concurrency 2
@@ -21,6 +25,15 @@ case "${SERVICE_TYPE}" in
     python manage.py create_superuser_from_env
     python manage.py seed_blog
     echo "[START] Launching gunicorn..."
-    exec gunicorn config.wsgi:application --bind [::]:$PORT --workers 1 --timeout 120 --max-requests 500 --max-requests-jitter 50
+    exec gunicorn config.wsgi:application \
+      --bind [::]:$PORT \
+      --workers 1 \
+      --threads 2 \
+      --worker-class gthread \
+      --preload \
+      --timeout 120 \
+      --max-requests 250 \
+      --max-requests-jitter 25 \
+      --worker-tmp-dir /dev/shm
     ;;
 esac
