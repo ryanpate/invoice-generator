@@ -11,14 +11,6 @@ case "${SERVICE_TYPE}" in
     echo "[START] Running daily scheduled tasks..."
     exec python manage.py run_daily_tasks
     ;;
-  "celery-worker")
-    echo "[START] Launching celery worker..."
-    exec celery -A config worker -l info --concurrency 2
-    ;;
-  "celery-beat")
-    echo "[START] Launching celery beat scheduler..."
-    exec celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    ;;
   *)
     echo "[START] Running migrations..."
     python manage.py migrate
