@@ -71,11 +71,6 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='InvoiceKits <noreply@
 # Site URL for emails and links
 SITE_URL = config('SITE_URL', default='https://www.invoicekits.com')
 
-# Celery
-CELERY_BROKER_URL = config('REDIS_URL', default='')
-if CELERY_BROKER_URL:
-    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
-
 # Stripe live mode
 STRIPE_LIVE_MODE = True
 
