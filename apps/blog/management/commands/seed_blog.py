@@ -504,7 +504,7 @@ class Command(BaseCommand):
                 'category': category,
                 'excerpt': 'Learn how batch invoicing can save you hours every billing cycle. This guide covers CSV invoice upload, bulk invoice generation best practices, and step-by-step instructions for processing multiple invoices at once.',
                 'content': post_content,
-                'meta_description': 'Save hours with batch invoice generation. Create 100+ invoices in minutes using CSV upload. Complete guide to bulk invoicing.',
+                'meta_description': 'Generate 100+ professional invoices in minutes with CSV batch upload. Step-by-step guide for agencies, subscription businesses, and bookkeepers. Free to try.',
                 'meta_keywords': 'batch invoice generator, CSV invoice upload, bulk invoice generation, batch invoicing, multiple invoices, bulk billing, invoice automation',
                 'status': 'published',
             }
@@ -2671,7 +2671,7 @@ class Command(BaseCommand):
                 'category': category,
                 'excerpt': 'Learn how to calculate late fees on invoices using flat fees, percentage, simple interest, and compound interest. Includes formulas, examples, and legal considerations.',
                 'content': post_content,
-                'meta_description': 'Learn to calculate late fees on invoices. Covers flat fee, percentage, simple and compound interest with examples. Free calculator.',
+                'meta_description': 'Calculate late fees on overdue invoices in seconds — flat fee, percentage, and compound interest with worked examples. Free late fee calculator, no signup.',
                 'meta_keywords': 'calculate late fees, late fee calculator, invoice late fee, how to calculate late fees, late payment fee, overdue invoice interest',
                 'status': 'published',
             }
@@ -3194,7 +3194,7 @@ class Command(BaseCommand):
                 'category': category,
                 'excerpt': 'Master invoice calculations with this comprehensive guide. Step-by-step examples for line items, tax calculations, discounts, deposits, international invoicing, and industry-specific formulas. Includes free invoice calculator.',
                 'content': post_content,
-                'meta_description': 'Step-by-step guide to invoice totals: line items, tax, discounts, deposits, and international invoicing. Free calculator.',
+                'meta_description': 'Calculate any invoice total in seconds — subtotal, discount, tax, deposits, and line items explained with worked examples. Free calculator, no signup.',
                 'meta_keywords': 'how to calculate an invoice, invoice calculator, invoice total calculation, calculate invoice tax, invoice line items, invoice subtotal',
                 'status': 'published',
             }
