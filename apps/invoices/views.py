@@ -381,6 +381,64 @@ STATE_LATE_FEE_DATA = {
 }
 
 
+# Unique long-form content per state (merged into the state context at render time).
+# Kept separate from STATE_LATE_FEE_DATA so the quick-facts/nav structure stays untouched.
+# These add genuinely differentiated body copy (intro, worked example, interest Q&A) so the
+# programmatic state pages are not thin duplicates — the main lever for moving them off page 2.
+STATE_LATE_FEE_EXTRA = {
+    'california': {
+        'intro': "California has no statute that fixes a maximum late fee for commercial invoices. Instead, courts apply a reasonableness test under the liquidated-damages rules of Civil Code § 1671: the fee must bear a sensible relationship to the cost of late payment rather than act as a penalty.",
+        'example': "On a $2,000 invoice paid 30 days late at the common 1.5%/month rate, the late fee is $2,000 × 1.5% = $30 for the first month. Two months late is roughly $60 in simple interest.",
+        'interest_qa': "Yes. While California's constitutional usury rate is 10%/year, most business-to-business transactions fall under recognized exemptions, and courts have repeatedly upheld 1.5%/month (18%/year) on commercial accounts when it is stated in the contract.",
+    },
+    'texas': {
+        'intro': "Texas does not cap commercial late fees by statute, but it does cap effective interest. The key guardrail is the usury ceiling in Tex. Fin. Code § 302.001 — a late fee that annualizes above roughly 18% can be challenged as usurious.",
+        'example': "A $2,000 invoice 30 days overdue at 1.5%/month incurs a $30 late fee ($2,000 × 1.5%). Flat late fees of 10–12% of the balance ($200–$240 here) are also generally presumed reasonable in Texas.",
+        'interest_qa': "Yes, up to the usury ceiling (commonly 18%/year). State the rate in the contract; a monthly fee that annualizes beyond the ceiling can violate Texas usury law.",
+    },
+    'new-york': {
+        'intro': "New York governs late charges through a structured usury framework rather than a flat cap. Civil usury sits at 16%/year and criminal usury at 25%, with higher thresholds for large commercial loans.",
+        'example': "On a $2,000 invoice 30 days late at 1.5%/month, the late fee is $30. Annualized that is 18% — above the 16% civil usury rate — so for smaller B2B balances many New York businesses keep the rate at or under 16%/year to stay clearly compliant.",
+        'interest_qa': "Yes, but mind the 16%/year civil usury cap for ordinary commercial balances. For transactions above $250K the ceiling relaxes, and the late-fee terms must be agreed in writing before the obligation arises.",
+    },
+    'florida': {
+        'intro': "Florida gives businesses wide latitude on late fees as long as they are reasonable and written into the contract. The main limit is the usury statute, Fla. Stat. § 687.02, which caps interest at 18%/year for transactions under $500K.",
+        'example': "A $2,000 invoice 30 days overdue at 1.5%/month produces a $30 late fee. At that rate the annualized 18% sits right at Florida's usury limit, so it is a common ceiling for smaller commercial accounts.",
+        'interest_qa': "Yes. Interest up to 18%/year is permitted on transactions under $500K (25% above that). Charging beyond the applicable cap risks the contract being deemed usurious.",
+    },
+    'illinois': {
+        'intro': "Illinois sets statutory rates of 9%/year on written contracts and 5% otherwise, but the bigger story for invoices is the broad commercial exemption under 815 ILCS 205/4.1a, which frees most B2B transactions from those caps.",
+        'example': "On a $2,000 invoice 30 days late at the common 1.5%/month, the late fee is $30. Because most commercial accounts are exempt from the 9%/5% caps, that 18% annualized rate is widely used in Illinois B2B contracts.",
+        'interest_qa': "Yes. Although the headline rates are 9% (written) and 5% (no contract), most business-to-business invoices qualify for the commercial exemption, so contractually agreed rates like 1.5%/month are routinely enforced.",
+    },
+    'pennsylvania': {
+        'intro': "Pennsylvania's default lawful rate is just 6%/year for loans of $50K or less, but business obligations over $50K (and loans over $10K) are exempt — so commercial invoice late fees have far more room than the headline number suggests.",
+        'example': "A $2,000 invoice 30 days overdue at 1.5%/month yields a $30 late fee. Pennsylvania courts have routinely upheld 18%/year on past-due commercial accounts when it is written into the contract.",
+        'interest_qa': "Yes for most commercial accounts. The 6% default applies to small consumer-type loans; B2B obligations over $50K are exempt and 18%/year is standard. Pennsylvania allows triple damages for genuine usury violations, so keep the rate documented and reasonable.",
+    },
+    'ohio': {
+        'intro': "Ohio is the one state where the wording of your paperwork matters most: the Ohio Supreme Court held in 2008 that an interest rate printed on an invoice alone is not enforceable. Both parties must agree to the rate in a separate written contract.",
+        'example': "On a $2,000 invoice 30 days late at 1.5%/month, the fee is $30 — but only if that rate appears in a signed agreement, not just on the invoice. Without that, Ohio's 8%/year statutory rate applies.",
+        'interest_qa': "Yes, but only if the rate is in a written contract both parties accepted. The statutory default is 8%/year (amounts over $100K can be any agreed rate). A rate that appears solely on the invoice is unenforceable in Ohio.",
+    },
+    'georgia': {
+        'intro': "Georgia draws a clear line between late fees and interest. Late fees (a flat or percentage charge) have no statutory cap and can apply immediately, while statutory interest on commercial accounts is capped at 1.5%/month and only after a 30-day wait.",
+        'example': "A $2,000 invoice 30 days overdue can carry an immediate late fee (no cap) plus statutory interest of up to 1.5%/month — about $30 — once the 30-day mark passes under O.C.G.A. § 7-4-16.",
+        'interest_qa': "Yes. Commercial-account interest is capped at 1.5%/month (18%/year) and begins after the invoice is 30 days past due. Separately, you may also charge an immediate late fee, which Georgia does not cap.",
+    },
+    'north-carolina': {
+        'intro': "North Carolina is one of the most prescriptive states: late fees are capped at 4% of the past-due amount, and you must wait a statutory 15-day grace period before charging one.",
+        'example': "On a $2,000 invoice, the maximum late fee is 4% = $80, and it can only be charged once payment is at least 15 days past due. Interest beyond that follows the 8%/year legal rate unless your contract (for balances over $25K) sets a different rate.",
+        'interest_qa': "Yes, within limits. The legal rate is 8%/year; for written contracts on principal over $25K you can agree to a higher rate. Remember the separate 4% cap on the late fee itself and the mandatory 15-day grace period.",
+    },
+    'new-jersey': {
+        'intro': "New Jersey is notably business-friendly: a company cannot raise civil usury as a defense, and the criminal-usury threshold for business entities is 50%. Courts presume commercial late-fee provisions are reasonable.",
+        'example': "A $2,000 invoice 30 days late at 1.5%/month gives a $30 late fee; courts have also upheld flat 5% late charges ($100 here) on commercial contracts. Because B2B entities cannot claim civil usury, well-drafted commercial terms are rarely struck down.",
+        'interest_qa': "Yes. The civil rates (6% without a contract, 16% with one) effectively do not constrain business borrowers, who cannot assert civil usury. Stay well below the 50% criminal-usury line and put the rate in writing.",
+    },
+}
+
+
 class StateLateFeePage(FreeToolView):
     """State-specific late fee calculator page for programmatic SEO."""
     template_name = 'tools/state-late-fee-calculator.html'
@@ -395,7 +453,7 @@ class StateLateFeePage(FreeToolView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         state_slug = self.kwargs.get('state', '')
-        state_data = STATE_LATE_FEE_DATA[state_slug]
+        state_data = {**STATE_LATE_FEE_DATA[state_slug], **STATE_LATE_FEE_EXTRA.get(state_slug, {})}
         context['state'] = state_data
         context['state_slug'] = state_slug
         context['all_states'] = STATE_LATE_FEE_DATA

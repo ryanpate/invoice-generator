@@ -86,6 +86,14 @@
                 "@type": "Answer",
                 "text": "The key {{ state.name }} statutes governing late fees and interest on invoices are: {% for statute in state.statutes %}{{ statute }}{% if not forloop.last %}; {% endif %}{% endfor %}. Consult a {{ state.abbreviation }} attorney for advice specific to your situation."
             }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I charge interest on overdue invoices in {{ state.name }}?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "{{ state.interest_qa }}"
+            }
         }
     ]
 }
@@ -368,6 +376,10 @@
                         {{ state.name }} {% trans "Late Fee Rules" %}
                     </h2>
 
+                    {% if state.intro %}
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">{{ state.intro }}</p>
+                    {% endif %}
+
                     <div class="space-y-4">
                         {% for rule in state.key_rules %}
                         <div class="flex items-start">
@@ -380,6 +392,21 @@
                         </div>
                         {% endfor %}
                     </div>
+
+                    {% if state.example %}
+                    <!-- Worked Example -->
+                    <div class="mt-6 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-primary-600 dark:text-primary-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            <div>
+                                <h3 class="text-sm font-semibold text-primary-800 dark:text-primary-300 mb-1">{% blocktrans with state_name=state.name %}Worked Example: {{ state_name }} Late Fee{% endblocktrans %}</h3>
+                                <p class="text-sm text-primary-700 dark:text-primary-300/80">{{ state.example }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
 
                     <!-- Notes -->
                     <div class="mt-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
@@ -436,6 +463,12 @@
                 </ul>
                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{% blocktrans with abbreviation=state.abbreviation %}Consult a {{ abbreviation }} attorney for advice specific to your situation.{% endblocktrans %}</p>
             </div>
+            {% if state.interest_qa %}
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">{% blocktrans with state_name=state.name %}Can I charge interest on overdue invoices in {{ state_name }}?{% endblocktrans %}</h3>
+                <p class="text-gray-600 dark:text-gray-300">{{ state.interest_qa }}</p>
+            </div>
+            {% endif %}
         </div>
     </div>
 </section>
