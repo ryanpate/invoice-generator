@@ -466,7 +466,10 @@ class TryInvoiceView(View):
     def get(self, request):
         from datetime import date
         form = TryInvoiceForm(initial={'invoice_date': date.today()})
-        return render(request, 'invoices/try.html', {'form': form})
+        # Optional ?prefill= seeds the first line item's description so feature-page
+        # heroes can hand a visitor's typed work straight into the working builder.
+        prefill = request.GET.get('prefill', '').strip()[:500]
+        return render(request, 'invoices/try.html', {'form': form, 'prefill': prefill})
 
     def post(self, request):
         from datetime import date, timedelta
