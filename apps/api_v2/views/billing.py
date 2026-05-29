@@ -26,12 +26,16 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 APPLE_PRODUCT_TIER_MAP = {
-    'com.invoicekits.starter.monthly': 'starter',
-    'com.invoicekits.professional.monthly': 'professional',
-    'com.invoicekits.business.monthly': 'business',
-    'com.invoicekits.starter.annual': 'starter',
-    'com.invoicekits.professional.annual': 'professional',
+    'com.invoicekits.pro.monthly': 'professional',
+    'com.invoicekits.pro.annual': 'professional',
+    'com.invoicekits.business.monthly.v2': 'business',
     'com.invoicekits.business.annual': 'business',
+}
+
+APPLE_CREDIT_PACK_MAP = {
+    'com.invoicekits.credits.10': 10,
+    'com.invoicekits.credits.25': 25,
+    'com.invoicekits.credits.50': 50,
 }
 
 
@@ -177,23 +181,40 @@ def verify_apple_receipt(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    # Map product ID to tier
+    # TODO: Replace stub with real Apple App Store Server API verification.
+    # For now, trust the client-supplied product_id after basic validation.
+    # SECURITY RISK: A malicious client could send any product_id to gain access.
+    # Post-launch, implement JWS verification using Apple's public keys.
+    logger.warning(
+        'Apple receipt verification is stubbed. '
+        'Processing product_id=%s for user=%s without server-side JWS validation.',
+        product_id,
+        user.email,
+    )
+
+    # Handle credit pack purchases
+    credit_amount = APPLE_CREDIT_PACK_MAP.get(product_id)
+    if credit_amount:
+        user.add_credits(credit_amount)
+        user.payment_source = 'apple'
+        user.save(update_fields=['payment_source'])
+        return Response(
+            {
+                'type': 'credits',
+                'credits_added': credit_amount,
+                'credits_balance': user.credits_balance,
+                'product_id': product_id,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    # Handle subscription purchases
     tier = APPLE_PRODUCT_TIER_MAP.get(product_id)
     if not tier:
         return Response(
             {'error': f'Unknown product_id: {product_id}'},
             status=status.HTTP_400_BAD_REQUEST,
         )
-
-    # TODO: Replace stub with real Apple App Store Server API verification.
-    # For now, trust the client-supplied product_id after basic validation.
-    logger.warning(
-        'Apple receipt verification is stubbed. '
-        'Granting tier=%s to user=%s based on product_id=%s without server-side validation.',
-        tier,
-        user.email,
-        product_id,
-    )
 
     user.subscription_tier = tier
     user.subscription_status = 'active'
@@ -202,14 +223,11 @@ def verify_apple_receipt(request):
 
     return Response(
         {
+            'type': 'subscription',
             'subscription_tier': user.subscription_tier,
             'subscription_status': user.subscription_status,
             'payment_source': user.payment_source,
             'product_id': product_id,
-            'warning': (
-                'Receipt verification is not yet implemented server-side. '
-                'Tier granted based on client-supplied product_id.'
-            ),
         },
         status=status.HTTP_200_OK,
     )

@@ -677,7 +677,7 @@ class AppleReceiptVerificationTests(TestCase):
     def test_verify_known_product_upgrades_tier(self):
         payload = {
             'transaction_jws': 'eyJzdHViIjoidHJ1ZSJ9',
-            'product_id': 'com.invoicekits.professional.monthly',
+            'product_id': 'com.invoicekits.pro.monthly',
         }
         response = self.client.post(APPLE_RECEIPT_URL, payload, format='json')
         self.assertEqual(response.status_code, 200)
@@ -713,7 +713,7 @@ class AppleReceiptVerificationTests(TestCase):
         anon = APIClient()
         response = anon.post(
             APPLE_RECEIPT_URL,
-            {'transaction_jws': 'x', 'product_id': 'com.invoicekits.professional.monthly'},
+            {'transaction_jws': 'x', 'product_id': 'com.invoicekits.pro.monthly'},
             format='json',
         )
         self.assertIn(response.status_code, [401, 403])
