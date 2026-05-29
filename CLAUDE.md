@@ -189,6 +189,77 @@
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
 | Healthcheck | Removed | Startup time exceeds Railway timeout | Re-add to `railway.json` if startup is optimized |
 
+- **Native iOS App (SwiftUI):**
+  - iOS 17+ with @Observable pattern and SwiftData caching
+  - JWT authentication (email/password, Apple Sign-In, Google Sign-In)
+  - 4 tabs: Invoices, Time Tracking, Dashboard, Settings
+  - Invoice CRUD with AI Generate (text + voice) at top of create/edit form
+  - Time tracking with real-time timer
+  - Dashboard with revenue stats and recent invoices
+  - Settings: account, app settings, payment reminders, late fees, subscription & billing
+  - Splash screen with fade-in/fade-out animation
+  - Onboarding flow on first login (push notifications + Face ID/Touch ID)
+  - Biometric lock screen
+  - StoreKit 2 integration for subscriptions and credit pack purchases
+  - Haptic feedback throughout
+  - Bundle ID: `com.invoicekits.InvoiceKits`
+  - API: `https://www.invoicekits.com/api/v2` (Django REST Framework)
+  - App Store Connect: app created, subscription/credit products being configured
+
+### iOS App - StoreKit Product IDs
+| Product ID | Type | Price |
+|---|---|---|
+| `com.invoicekits.pro.monthly` | Auto-Renewable Subscription | $12.99/mo |
+| `com.invoicekits.pro.annual` | Auto-Renewable Subscription | $109.99/yr |
+| `com.invoicekits.business.monthly.v2` | Auto-Renewable Subscription | $49.99/mo |
+| `com.invoicekits.business.annual` | Auto-Renewable Subscription | $479.99/yr |
+| `com.invoicekits.credits.10` | Consumable | $4.99 |
+| `com.invoicekits.credits.25` | Consumable | $9.99 |
+| `com.invoicekits.credits.50` | Consumable | $17.99 |
+
+### iOS App - Key Files
+| File | Purpose |
+|------|---------|
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Constants.swift` | API URL, StoreKit product IDs |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/App/InvoiceKitsApp.swift` | App entry point, RootView routing |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/App/AppState.swift` | Central observable state |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Services/APIClient.swift` | Network layer (snake_case <-> camelCase) |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Services/StoreManager.swift` | StoreKit 2 IAP management |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Services/AuthManager.swift` | JWT auth + token refresh |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Views/MainTabView.swift` | Tab bar with 4 tabs |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Views/Invoices/InvoiceFormView.swift` | Create/edit invoice form |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Views/Invoices/AIGenerateSection.swift` | AI text + voice generation |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Views/Settings/SubscriptionView.swift` | Billing & subscription UI |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Views/OnboardingView.swift` | First-launch onboarding |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Views/SplashScreenView.swift` | Animated splash screen |
+| `ios/InvoiceKits/InvoiceKits/InvoiceKits/Products.storekit` | Local StoreKit testing config |
+
+### iOS App - Remaining TODOs
+
+#### App Store Compliance (Blocking - Must Fix Before Submission)
+- [ ] Build server-side `/api/v2/billing/verify-receipt/` endpoint (purchases silently fail to sync without it)
+- [ ] Build server-side `/api/v2/billing/app-store-notification/` endpoint (subscription lifecycle events)
+- [ ] Complete App Store Connect subscription & credit product configuration
+- [ ] Add Privacy Policy URL in App Store Connect Privacy Policy field (`https://www.invoicekits.com/privacy/`)
+- [ ] Add Terms of Use (EULA) link in App Store Connect (either App Description or EULA field, URL: `https://www.invoicekits.com/terms/`)
+- [ ] Provide demo account credentials in App Review Information section of App Store Connect
+- [ ] Prepare explanation of free-tier → paid flow for App Review (InvoiceKits uses credits, not free trials)
+
+#### App Store Submission
+- [ ] TestFlight beta distribution
+- [ ] App Store screenshots and metadata
+- [ ] Submit for App Store review
+
+#### Completed (App Store Audit - March 2026)
+- [x] Added Terms of Use & Privacy Policy links directly on SubscriptionView purchase screen (Guideline 3.1.2(c))
+- [x] Fixed annual subscription price display — was showing "/month" for all plans, now correctly shows "/year" for annual
+- [x] Fixed tier matching in `isCurrentPlan()` — API returns "starter"/"professional" but StoreKit IDs use "pro"
+- [x] Removed non-functional Google Sign-In stub buttons from SignInView and SignUpView (would cause rejection)
+- [x] Made Terms of Service and Privacy Policy links tappable on SignUpView (were plain text, now functional Link views)
+- [x] No external payment mechanisms found (all payments via StoreKit — Guideline 3.1.1 compliant)
+- [x] Account deletion implemented with two-step confirmation (Apple requirement)
+- [x] Restore Purchases button present on SubscriptionView
+
 ---
 
 ## Competitive Analysis (January 2026)
@@ -213,7 +284,7 @@
 | Expense tracking | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
 | Payment reminders | ✅ Automated | ✅ Automated | ✅ Automated | ⚠️ Limited |
 | Client payment scoring | ✅ A-F Rating | ❌ Missing | ❌ Missing | ❌ Missing |
-| Mobile app | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
+| Mobile app | ✅ iOS (SwiftUI) | ✅ Full | ✅ Full | ✅ Full |
 | Bank connections | ❌ Missing | ✅ Full | ✅ Full | ✅ Full |
 | Batch invoicing | ✅ Best-in-class | ❌ None | ❌ None | ❌ None |
 
@@ -362,7 +433,7 @@ Based on competitive analysis vs Zoho Invoice, FreshBooks, and Wave (January 202
 - [ ] **Industry Templates:** Construction (progress billing, lien waivers), Photography (licensing terms, usage rights)
 
 **Phase 4 - Mobile & Partnerships (Month 3):**
-- [ ] **Mobile App:** React Native or Flutter for iOS/Android
+- [x] **Mobile App:** Native iOS app (SwiftUI, iOS 17+) — App Store Connect setup in progress
 - [ ] **Instant Payouts:** Partner with factoring service for immediate cash (2% fee)
 - [ ] **Buy Now Pay Later:** Affirm/Klarna integration for client payment flexibility
 - [ ] **Expense Tracking:** Receipt OCR, expense categorization
@@ -1204,6 +1275,12 @@ Authentication: API Key in header `X-API-Key: <key>`
 298. Added voice recording UI (mic button, recording timer, processing spinner, result preview) to invoice create and edit pages
 299. Added simplified voice-only section to /try/ page with guest cap and signup CTA
 300. Created 13 backend tests for voice generation service and view endpoint
+301. App Store audit: Added Terms of Use (EULA) and Privacy Policy links to SubscriptionView purchase screen (Guideline 3.1.2(c))
+302. App Store audit: Fixed annual subscription price display — SubscriptionProductRow now shows "/year" for annual plans instead of hardcoded "/month"
+303. App Store audit: Fixed `isCurrentPlan()` tier matching — maps API tier names ("starter", "professional") to StoreKit product IDs containing "pro"
+304. App Store audit: Removed non-functional Google Sign-In stub buttons from SignInView and SignUpView (no GoogleSignIn SDK integrated)
+305. App Store audit: Made Terms of Service and Privacy Policy tappable Link views on SignUpView (were plain text)
+306. App Store audit: Removed unused GoogleSignInButton and GoogleSignUpButton private structs from auth views
 
 ---
 
