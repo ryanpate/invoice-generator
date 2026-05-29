@@ -1281,6 +1281,11 @@ Authentication: API Key in header `X-API-Key: <key>`
 304. App Store audit: Removed non-functional Google Sign-In stub buttons from SignInView and SignUpView (no GoogleSignIn SDK integrated)
 305. App Store audit: Made Terms of Service and Privacy Policy tappable Link views on SignUpView (were plain text)
 306. App Store audit: Removed unused GoogleSignInButton and GoogleSignUpButton private structs from auth views
+307. SEO Tier 1 (May 2026): De-prioritized ES/FR locales — `/es/` and `/fr/` pages now emit `<meta name="robots" content="noindex, follow">` with canonical pointed at the English equivalent (near-zero clicks were diluting crawl/index budget); kept crawlable in robots.txt so Google can see the noindex
+308. SEO Tier 1 (May 2026): Fixed self-referencing canonical in `templates/base.html` — English pages now default to a path-based canonical (`https://www.invoicekits.com{{ request.path }}`) instead of the hardcoded homepage, which was causing "Alternate page with proper canonical" deindexing; hreflang reduced to en + x-default
+309. SEO Tier 1 (May 2026): Fixed the source of 14 GSC "Not found (404)" errors — the language switcher in `base.html` built `/es` `/fr` links from the active `LANGUAGE_CODE` (cookie/Accept-Language) instead of the URL path, producing malformed crawl URLs (e.g. `/frmplates/neon-edge/`, `/esols/invoice-calculator/`, `/frrms/`); now derives the prefix from `request.path`
+310. SEO Tier 1 (May 2026): Re-pointed both `/tools/invoice-calculator/` conversion CTAs from the signup wall (`account_signup`) to the no-signup creator (`/try/`) to match search intent
+311. SEO Tier 1 (May 2026): Shipped on branch `seo-tier1-fixes`, merged to `main` (commit `2aeb062`), deployed via Railway
 
 ---
 
@@ -1338,6 +1343,30 @@ Based on analysis of Google Search Console, Google Analytics (GA4), and Bing Web
 - **Template:** `templates/invoices/try.html`
 - **Conversion CTA:** "Sign up to remove watermark, save invoices, use AI"
 - **Also add to:** sitemap, robots.txt Allow list, landing page hero CTA
+
+---
+
+## SEO Tier Work (May 2026)
+
+Derived from analysis of GSC Performance + Coverage exports (Feb 28–May 27, 2026: ~95 clicks / ~30K impressions / ~0.3% CTR). Core finding: the site ranks well for non-commercial "homework"/AI-overview queries (one page, `/blog/how-to-calculate-invoice-totals/`, carried ~65% of impressions at near-0% CTR) while buyer keywords ("ai invoice generator", "time tracking and invoicing") sit on page 6–10. Indexing was trending down (indexed 32→24, not-indexed 31→74). Strategy: consolidate, don't expand — kill dead weight, point authority at `/try/` and the tool pages, win the page-2 state late-fee keywords, and buy buyer-intent clicks with a small ads test while organic matures.
+
+### Tier 1 — COMPLETED & DEPLOYED (commit `2aeb062` on `main`)
+- ES/FR pages set to `noindex,follow` + canonical to English equivalent (deployment-history #307)
+- Self-referencing path-based canonical on English pages; hreflang reduced to en + x-default (#308)
+- Fixed language-switcher bug that generated the 14 malformed 404 URLs (#309)
+- `/tools/invoice-calculator/` CTAs re-pointed to `/try/` (#310)
+
+### Tier 2 — PLANNED (not started; deferred by user)
+- **Item 5 — Differentiate state late-fee pages** (highest near-term win; they rank pos 13–24, page 2). Add genuinely unique per-state content beyond the templated calculator. NOTE: `STATE_LATE_FEE_DATA` in `apps/invoices/views.py` already holds rich unique fields (`key_rules`, `notes`, `statutes`, `max_late_fee`, `max_interest_rate`, `grace_period`, `common_rate`) for all 10 states, and `templates/tools/state-late-fee-calculator.html` already renders key_rules + notes + a 4-Q FAQ with FAQPage schema. Differentiation work = expand prose depth, add worked examples, add "can I charge interest in [state]" Q&A. Also re-point its bottom CTA (currently `account_signup`, ~line 511) to `/try/`.
+- **Item 6 — Re-point feature pages** `/features/ai-invoice-generator/`, `/features/time-tracking/`, `/features/voice-invoice/` (rank pos 60–90 as brochures). Make tool-first (mini generator above the fold like `/try/`) or consolidate authority into `/try/`. `/try/` currently earns no search traffic — biggest missed alignment. (`/features/voice-invoice/` already links to `try_invoice`.)
+- **Item 7 — CTR title/meta rewrites** on the ~30 pages getting impressions (add "Free", "No Signup", "2026", numbers). Homepage (3.18%) and pricing (3.16%) prove good snippets pull clicks.
+
+### Tier 4 — PLANNED (non-SEO traffic / faster than organic)
+- Google Ads test on "free invoice generator" / "invoice maker" → `/try/` to buy page-1 buyer intent and learn true conversion economics within a week.
+- Reddit (r/freelance, r/smallbusiness, r/Entrepreneur) + Product Hunt relaunch — already TODOs in the Growth Action Plan table; backlinks also help the not-indexed pages get indexed (domain authority is the gating factor).
+
+### Item 4 — Tailwind off-CDN (DEFERRED to its own session)
+`base.html` loads `cdn.tailwindcss.com` (dev-only build → console warning + runtime perf cost on mobile, the best-performing segment). Migration to compiled static CSS is risky (a missed content-scan class breaks styling site-wide; `main` auto-deploys) and needs a real build + visual QA. Full ready-to-run plan saved in project memory: `tailwind-off-cdn-plan.md`. Node v22.17.0 / npm 10.9.2 confirmed available.
 
 ---
 

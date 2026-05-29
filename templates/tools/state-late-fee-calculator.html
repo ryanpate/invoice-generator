@@ -508,7 +508,7 @@
             {% blocktrans with state_name=state.name %}Stop calculating late fees manually. InvoiceKits automatically applies {{ state_name }}-compliant late fees, sends payment reminders, and tracks every overdue invoice.{% endblocktrans %}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+            <a href="{% url 'try_invoice' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
                 {% trans "Try InvoiceKits Free" %}
             </a>
             <a href="{% url 'pricing' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
