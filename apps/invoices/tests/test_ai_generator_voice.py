@@ -81,6 +81,46 @@ class TestGenerateFromAudio(TestCase):
         self.assertFalse(result['success'])
         self.assertIn('format', result['error'].lower())
 
+    @patch.object(AIInvoiceGenerator, '_call_claude_audio_api')
+    def test_webm_with_codec_parameter_accepted(self, mock_api):
+        """Chrome (Chromebook/Android) reports 'audio/webm;codecs=opus' — must be accepted."""
+        mock_api.return_value = {
+            'line_items': [{'description': 'Work', 'quantity': 1, 'unit_price': 100}],
+            'transcript': 'Test',
+        }
+
+        result = self.generator.generate_from_audio(self.audio_data, 'audio/webm;codecs=opus')
+
+        self.assertTrue(result['success'])
+        # Codec parameter must be stripped before forwarding to Claude API
+        mock_api.assert_called_once_with(self.audio_data, 'audio/webm')
+
+    @patch.object(AIInvoiceGenerator, '_call_claude_audio_api')
+    def test_mp4_with_codec_parameter_accepted(self, mock_api):
+        """Safari/iOS reports 'audio/mp4;codecs=mp4a.40.2' — must be accepted."""
+        mock_api.return_value = {
+            'line_items': [{'description': 'Work', 'quantity': 1, 'unit_price': 100}],
+            'transcript': 'Test',
+        }
+
+        result = self.generator.generate_from_audio(self.audio_data, 'audio/mp4;codecs=mp4a.40.2')
+
+        self.assertTrue(result['success'])
+        mock_api.assert_called_once_with(self.audio_data, 'audio/mp4')
+
+    @patch.object(AIInvoiceGenerator, '_call_claude_audio_api')
+    def test_media_type_normalized_to_lowercase(self, mock_api):
+        """Mixed-case media types are normalized before validation."""
+        mock_api.return_value = {
+            'line_items': [{'description': 'Work', 'quantity': 1, 'unit_price': 100}],
+            'transcript': 'Test',
+        }
+
+        result = self.generator.generate_from_audio(self.audio_data, 'AUDIO/WEBM;Codecs=Opus')
+
+        self.assertTrue(result['success'])
+        mock_api.assert_called_once_with(self.audio_data, 'audio/webm')
+
     def test_oversized_audio_rejected(self):
         """Rejects audio data over 10MB."""
         huge_audio = base64.b64encode(b'x' * (11 * 1024 * 1024)).decode('utf-8')

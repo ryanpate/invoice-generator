@@ -337,6 +337,12 @@ RULES:
         if not self.api_key:
             return {'success': False, 'error': 'AI generation is not configured. Please contact support.'}
 
+        # Browsers (notably Chrome on Chromebook/Android) report
+        # MediaRecorder.mimeType with codec parameters appended, e.g.
+        # "audio/webm;codecs=opus". Strip parameters before validating and
+        # before forwarding to the Claude audio API, which expects bare types.
+        media_type = (media_type or '').split(';')[0].strip().lower()
+
         if media_type not in self.ALLOWED_MEDIA_TYPES:
             return {
                 'success': False,
