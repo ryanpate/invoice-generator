@@ -1356,10 +1356,11 @@ Derived from analysis of GSC Performance + Coverage exports (Feb 28–May 27, 20
 - Fixed language-switcher bug that generated the 14 malformed 404 URLs (#309)
 - `/tools/invoice-calculator/` CTAs re-pointed to `/try/` (#310)
 
-### Tier 2 — PLANNED (not started; deferred by user)
-- **Item 5 — Differentiate state late-fee pages** (highest near-term win; they rank pos 13–24, page 2). Add genuinely unique per-state content beyond the templated calculator. NOTE: `STATE_LATE_FEE_DATA` in `apps/invoices/views.py` already holds rich unique fields (`key_rules`, `notes`, `statutes`, `max_late_fee`, `max_interest_rate`, `grace_period`, `common_rate`) for all 10 states, and `templates/tools/state-late-fee-calculator.html` already renders key_rules + notes + a 4-Q FAQ with FAQPage schema. Differentiation work = expand prose depth, add worked examples, add "can I charge interest in [state]" Q&A. Also re-point its bottom CTA (currently `account_signup`, ~line 511) to `/try/`.
-- **Item 6 — Re-point feature pages** `/features/ai-invoice-generator/`, `/features/time-tracking/`, `/features/voice-invoice/` (rank pos 60–90 as brochures). Make tool-first (mini generator above the fold like `/try/`) or consolidate authority into `/try/`. `/try/` currently earns no search traffic — biggest missed alignment. (`/features/voice-invoice/` already links to `try_invoice`.)
-- **Item 7 — CTR title/meta rewrites** on the ~30 pages getting impressions (add "Free", "No Signup", "2026", numbers). Homepage (3.18%) and pricing (3.16%) prove good snippets pull clicks.
+### Tier 2 — status
+- ✅ **Item 5 — Differentiate state late-fee pages** DONE (commit `5bfa08b`). `STATE_LATE_FEE_EXTRA` per-state intro/example/interest-Q&A + 5th FAQPage entry. See deployment-history #313.
+- ✅ **Item 6 (CTA-intent slice)** DONE (commit `502e22b`): tool/feature CTAs re-pointed to `/try/` where `/try/` delivers the action. See #312.
+- ⏸️ **Item 6 (tool-first feature-page rebuild)** DEFERRED to a healthy session (user decision). BLOCKER: `ai_generate_line_items` (text AI) is auth-walled (401 for guests) — only voice AI supports guests, and `/try/` gives guests the manual builder + 1 voice gen, so a working inline AI *text* tool can't be embedded for search visitors without a signup wall. Full plan + reference files in project memory: `feature-page-tool-first-rebuild-plan.md`.
+- ✅ **Item 7 — CTR title/meta rewrites** DONE (commit `44ba3ea`): `/compare/` title/meta/og/twitter lead with searched terms; meta_description rewrites for the 3 top blog posts. See #314. (Blog `<title>` == `{{ post.title }}` == visible H1, so blog title tags were intentionally not changed.)
 
 ### Tier 4 — PLANNED (non-SEO traffic / faster than organic)
 - Google Ads test on "free invoice generator" / "invoice maker" → `/try/` to buy page-1 buyer intent and learn true conversion economics within a week.
