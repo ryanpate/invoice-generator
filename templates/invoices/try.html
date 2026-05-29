@@ -179,7 +179,7 @@
                         <div class="line-item flex flex-wrap gap-4 items-start mb-4 pb-4 border-b border-gray-100 dark:border-gray-700" data-index="0">
                             <div class="flex-1 min-w-[200px]">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description *</label>
-                                <input type="text" name="item_description_0" class="form-input" placeholder="Service or product description" required>
+                                <input type="text" name="item_description_0" class="form-input" placeholder="Service or product description" value="{{ prefill|default:'' }}" required>
                             </div>
                             <div class="w-24">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Qty *</label>
