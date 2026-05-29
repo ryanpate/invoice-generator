@@ -16,9 +16,10 @@ final class AppState {
 
     init() {
         let api = APIClient()
+        let auth = AuthManager(api: api)
         self.api = api
-        self.auth = AuthManager(api: api)
-        self.store = StoreManager(api: api)
+        self.auth = auth
+        self.store = StoreManager(api: api, auth: auth)
         self.biometric = BiometricManager()
     }
 }

@@ -1,4 +1,6 @@
 import SwiftUI
+import UIKit
+import WebKit
 
 struct InvoiceDetailView: View {
     @Environment(AppState.self) private var appState
@@ -15,6 +17,7 @@ struct InvoiceDetailView: View {
     @State private var showRecurringForm = false
     @State private var actionError: String?
     @State private var showActionError = false
+    @State private var pdfData: Data?
 
     // MARK: - Body
 
@@ -56,29 +59,32 @@ struct InvoiceDetailView: View {
             Text(actionError ?? "An unexpected error occurred.")
         }
         .sheet(isPresented: $showPDFPreview) {
-            // Placeholder until PDFPreviewView is implemented
             NavigationStack {
-                Text("PDF Preview")
+                PDFWebView(data: pdfData)
                     .navigationTitle("PDF Preview")
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Done") { showPDFPreview = false }
                         }
+                        if pdfData != nil {
+                            ToolbarItem(placement: .primaryAction) {
+                                Button {
+                                    sharePDF()
+                                } label: {
+                                    Image(systemName: "square.and.arrow.up")
+                                }
+                            }
+                        }
                     }
+                    .task { await loadPDF() }
             }
         }
         .sheet(isPresented: $showRecurringForm) {
-            // Placeholder until RecurringInvoiceFormView is implemented
-            NavigationStack {
-                Text("Make Recurring")
-                    .navigationTitle("Make Recurring")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") { showRecurringForm = false }
-                        }
-                    }
+            if let invoice {
+                MakeRecurringSheet(invoice: invoice, appState: appState) {
+                    showRecurringForm = false
+                }
             }
         }
         .task {
@@ -471,6 +477,30 @@ struct InvoiceDetailView: View {
         }
     }
 
+    private func sharePDF() {
+        guard let pdfData else { return }
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(invoice?.invoiceNumber ?? "Invoice")
+            .appendingPathExtension("pdf")
+        try? pdfData.write(to: tempURL)
+        let controller = UIActivityViewController(activityItems: [tempURL], applicationActivities: nil)
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let root = scene.keyWindow?.rootViewController {
+            root.present(controller, animated: true)
+        }
+    }
+
+    @MainActor
+    private func loadPDF() async {
+        do {
+            let data: Data = try await appState.api.downloadData("invoices/\(invoiceId)/pdf/")
+            pdfData = data
+        } catch {
+            actionError = "Failed to load PDF."
+            showActionError = true
+        }
+    }
+
     // MARK: - Helpers
 
     private func formattedDate(_ dateString: String) -> String {
@@ -648,6 +678,103 @@ private struct LateFeeToggleRow: View {
             onUpdate(updated)
         } catch {
             // Silently revert on failure
+        }
+    }
+}
+
+// MARK: - PDF Web View
+
+private struct PDFWebView: UIViewRepresentable {
+    let data: Data?
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        webView.backgroundColor = .systemBackground
+        return webView
+    }
+
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        if let data {
+            webView.load(data, mimeType: "application/pdf", characterEncodingName: "utf-8", baseURL: URL(fileURLWithPath: "/"))
+        }
+    }
+}
+
+// MARK: - Make Recurring Sheet
+
+private struct MakeRecurringSheet: View {
+    let invoice: InvoiceResponse
+    let appState: AppState
+    let onDismiss: () -> Void
+
+    @State private var frequency = "monthly"
+    @State private var isSaving = false
+    @State private var errorMessage: String?
+
+    private let frequencies = ["weekly", "bi_weekly", "monthly", "quarterly", "yearly"]
+    private let frequencyLabels = [
+        "weekly": "Weekly",
+        "bi_weekly": "Bi-Weekly",
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "yearly": "Yearly",
+    ]
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Invoice") {
+                    LabeledContent("Invoice", value: invoice.invoiceNumber)
+                    LabeledContent("Client", value: invoice.clientName)
+                    LabeledContent("Total", value: "\(invoice.currencySymbol)\(invoice.total)")
+                }
+
+                Section("Recurring Schedule") {
+                    Picker("Frequency", selection: $frequency) {
+                        ForEach(frequencies, id: \.self) { freq in
+                            Text(frequencyLabels[freq] ?? freq).tag(freq)
+                        }
+                    }
+                }
+
+                if let errorMessage {
+                    Section {
+                        Text(errorMessage)
+                            .foregroundStyle(.red)
+                            .font(.caption)
+                    }
+                }
+            }
+            .navigationTitle("Make Recurring")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { onDismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        Task { await save() }
+                    }
+                    .disabled(isSaving)
+                }
+            }
+        }
+    }
+
+    @MainActor
+    private func save() async {
+        isSaving = true
+        defer { isSaving = false }
+        do {
+            struct Body: Encodable { let frequency: String }
+            let _: EmptyResponse = try await appState.api.post(
+                "invoices/\(invoice.id)/make-recurring/",
+                body: Body(frequency: frequency)
+            )
+            HapticManager.notification(.success)
+            onDismiss()
+        } catch {
+            errorMessage = "Failed to create recurring invoice. You may need a Professional plan."
         }
     }
 }

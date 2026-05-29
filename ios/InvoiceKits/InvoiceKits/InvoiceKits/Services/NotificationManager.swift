@@ -47,7 +47,7 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
             let platform: String
         }
         let _: EmptyResponse? = try? await api.post(
-            "devices/register/",
+            "billing/device/register/",
             body: Body(token: token, platform: "ios")
         )
     }

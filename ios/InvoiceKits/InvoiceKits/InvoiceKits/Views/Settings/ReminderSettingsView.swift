@@ -4,16 +4,16 @@ import SwiftUI
 
 struct ReminderSettingsResponse: Codable {
     let remindersEnabled: Bool
-    let reminderDaysBefore3: Bool
-    let reminderDaysBefore1: Bool
-    let reminderOnDueDate: Bool
-    let reminderDaysAfter3: Bool
-    let reminderDaysAfter7: Bool
-    let reminderDaysAfter14: Bool
+    let remind3DaysBefore: Bool
+    let remind1DayBefore: Bool
+    let remindOnDueDate: Bool
+    let remind3DaysAfter: Bool
+    let remind7DaysAfter: Bool
+    let remind14DaysAfter: Bool
     let ccBusinessOwner: Bool
-    let messageBeforeDue: String?
-    let messageOnDueDate: String?
-    let messageOverdue: String?
+    let customMessageBefore: String?
+    let customMessageDue: String?
+    let customMessageOverdue: String?
 }
 
 // MARK: - View
@@ -85,31 +85,28 @@ struct ReminderSettingsView: View {
 
     private var scheduleSection: some View {
         Section("Reminder Schedule") {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text("Before Due Date")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
-                    .padding(.top, 4)
                 Toggle("3 days before", isOn: $daysBefore3)
                 Toggle("1 day before", isOn: $daysBefore1)
             }
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text("On Due Date")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
-                    .padding(.top, 4)
                 Toggle("On the due date", isOn: $onDueDate)
             }
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text("After Due Date")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
-                    .padding(.top, 4)
                 Toggle("3 days after", isOn: $daysAfter3)
                 Toggle("7 days after", isOn: $daysAfter7)
                 Toggle("14 days after", isOn: $daysAfter14)
@@ -201,16 +198,16 @@ struct ReminderSettingsView: View {
         do {
             let settings: ReminderSettingsResponse = try await appState.api.get("settings/reminders/")
             remindersEnabled  = settings.remindersEnabled
-            daysBefore3       = settings.reminderDaysBefore3
-            daysBefore1       = settings.reminderDaysBefore1
-            onDueDate         = settings.reminderOnDueDate
-            daysAfter3        = settings.reminderDaysAfter3
-            daysAfter7        = settings.reminderDaysAfter7
-            daysAfter14       = settings.reminderDaysAfter14
+            daysBefore3       = settings.remind3DaysBefore
+            daysBefore1       = settings.remind1DayBefore
+            onDueDate         = settings.remindOnDueDate
+            daysAfter3        = settings.remind3DaysAfter
+            daysAfter7        = settings.remind7DaysAfter
+            daysAfter14       = settings.remind14DaysAfter
             ccBusinessOwner   = settings.ccBusinessOwner
-            messageBeforeDue  = settings.messageBeforeDue ?? ""
-            messageOnDueDate  = settings.messageOnDueDate ?? ""
-            messageOverdue    = settings.messageOverdue ?? ""
+            messageBeforeDue  = settings.customMessageBefore ?? ""
+            messageOnDueDate  = settings.customMessageDue ?? ""
+            messageOverdue    = settings.customMessageOverdue ?? ""
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -218,16 +215,16 @@ struct ReminderSettingsView: View {
 
     struct ReminderSettingsRequest: Encodable {
         let remindersEnabled: Bool
-        let reminderDaysBefore3: Bool
-        let reminderDaysBefore1: Bool
-        let reminderOnDueDate: Bool
-        let reminderDaysAfter3: Bool
-        let reminderDaysAfter7: Bool
-        let reminderDaysAfter14: Bool
+        let remind3DaysBefore: Bool
+        let remind1DayBefore: Bool
+        let remindOnDueDate: Bool
+        let remind3DaysAfter: Bool
+        let remind7DaysAfter: Bool
+        let remind14DaysAfter: Bool
         let ccBusinessOwner: Bool
-        let messageBeforeDue: String?
-        let messageOnDueDate: String?
-        let messageOverdue: String?
+        let customMessageBefore: String?
+        let customMessageDue: String?
+        let customMessageOverdue: String?
     }
 
     @MainActor
@@ -236,17 +233,17 @@ struct ReminderSettingsView: View {
         defer { isSaving = false }
         do {
             let body = ReminderSettingsRequest(
-                remindersEnabled:    remindersEnabled,
-                reminderDaysBefore3: daysBefore3,
-                reminderDaysBefore1: daysBefore1,
-                reminderOnDueDate:   onDueDate,
-                reminderDaysAfter3:  daysAfter3,
-                reminderDaysAfter7:  daysAfter7,
-                reminderDaysAfter14: daysAfter14,
-                ccBusinessOwner:     ccBusinessOwner,
-                messageBeforeDue:    messageBeforeDue.isEmpty ? nil : messageBeforeDue,
-                messageOnDueDate:    messageOnDueDate.isEmpty ? nil : messageOnDueDate,
-                messageOverdue:      messageOverdue.isEmpty ? nil : messageOverdue
+                remindersEnabled:     remindersEnabled,
+                remind3DaysBefore:    daysBefore3,
+                remind1DayBefore:     daysBefore1,
+                remindOnDueDate:      onDueDate,
+                remind3DaysAfter:     daysAfter3,
+                remind7DaysAfter:     daysAfter7,
+                remind14DaysAfter:    daysAfter14,
+                ccBusinessOwner:      ccBusinessOwner,
+                customMessageBefore:  messageBeforeDue.isEmpty ? nil : messageBeforeDue,
+                customMessageDue:     messageOnDueDate.isEmpty ? nil : messageOnDueDate,
+                customMessageOverdue: messageOverdue.isEmpty ? nil : messageOverdue
             )
             let _: ReminderSettingsResponse = try await appState.api.put("settings/reminders/", body: body)
             withAnimation { showSuccessBanner = true }

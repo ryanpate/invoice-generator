@@ -74,6 +74,15 @@ final class AuthManager {
         isLoggedIn = true
     }
 
+    func refreshProfile() async {
+        do {
+            let user: UserInfo = try await api.get("auth/profile/")
+            await MainActor.run { currentUser = user }
+        } catch {
+            // Profile refresh is best-effort; don't disrupt the user flow
+        }
+    }
+
     func logout() {
         api.clearTokens()
         currentUser = nil

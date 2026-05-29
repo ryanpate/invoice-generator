@@ -28,6 +28,7 @@ struct SubscriptionView: View {
             currentPlanSection
             subscriptionsSection
             creditPacksSection
+            legalSection
             restoreSection
         }
         .navigationTitle("Subscription & Billing")
@@ -119,6 +120,17 @@ struct SubscriptionView: View {
         }
     }
 
+    private var legalSection: some View {
+        Section {
+            Link(destination: URL(string: "https://www.invoicekits.com/terms/")!) {
+                Label("Terms of Use (EULA)", systemImage: "doc.text")
+            }
+            Link(destination: URL(string: "https://www.invoicekits.com/privacy/")!) {
+                Label("Privacy Policy", systemImage: "lock.shield")
+            }
+        }
+    }
+
     private var restoreSection: some View {
         Section {
             Button {
@@ -145,7 +157,15 @@ struct SubscriptionView: View {
     private func isCurrentPlan(_ product: Product) -> Bool {
         let tier = currentTier.lowercased()
         let productID = product.id.lowercased()
-        return productID.contains(tier) && tier != "free"
+        // Map API tier names to StoreKit product ID fragments
+        switch tier {
+        case "starter", "professional":
+            return productID.contains("pro")
+        case "business":
+            return productID.contains("business")
+        default:
+            return false
+        }
     }
 
     private func planDescription(for tier: String) -> String {
@@ -216,6 +236,14 @@ private struct SubscriptionProductRow: View {
     let isPurchasing: Bool
     let onPurchase: () -> Void
 
+    private var periodLabel: String {
+        if product.id.contains("annual") {
+            return "/year"
+        } else {
+            return "/month"
+        }
+    }
+
     var body: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
@@ -239,7 +267,7 @@ private struct SubscriptionProductRow: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
-                Text(product.displayPrice + "/month")
+                Text(product.displayPrice + periodLabel)
                     .font(.caption)
                     .foregroundStyle(Color.accentColor)
             }

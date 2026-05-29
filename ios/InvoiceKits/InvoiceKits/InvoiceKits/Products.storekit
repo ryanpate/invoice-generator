@@ -1,0 +1,161 @@
+{
+  "identifier" : "D7E3F8A1-2B4C-4D5E-9F6A-1C2D3E4F5A6B",
+  "type" : "local",
+  "version" : 3,
+  "subscriptionGroups" : [
+    {
+      "id" : "invoicekits_plans",
+      "localizations" : [
+        {
+          "description" : "InvoiceKits subscription plans",
+          "displayName" : "InvoiceKits Plans",
+          "locale" : "en_US"
+        }
+      ],
+      "name" : "InvoiceKits Plans",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "12.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "pro_monthly_001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "200 invoices/month, recurring invoices, batch upload, all templates",
+              "displayName" : "Pro Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.invoicekits.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Pro Monthly",
+          "subscriptionGroupID" : "invoicekits_plans",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "109.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "pro_annual_001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "200 invoices/month, recurring invoices, batch upload, all templates",
+              "displayName" : "Pro Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.invoicekits.pro.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Pro Annual",
+          "subscriptionGroupID" : "invoicekits_plans",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "business_monthly_001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited invoices, API access, 3 team seats, all templates",
+              "displayName" : "Business Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.invoicekits.business.monthly.v2",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Business Monthly",
+          "subscriptionGroupID" : "invoicekits_plans",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "479.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "business_annual_001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited invoices, API access, 3 team seats, all templates",
+              "displayName" : "Business Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.invoicekits.business.annual",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Business Annual",
+          "subscriptionGroupID" : "invoicekits_plans",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "credits_10_001",
+      "localizations" : [
+        {
+          "description" : "10 invoice credits, never expire",
+          "displayName" : "10 Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.invoicekits.credits.10",
+      "referenceName" : "10 Credits",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "credits_25_001",
+      "localizations" : [
+        {
+          "description" : "25 invoice credits, never expire",
+          "displayName" : "25 Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.invoicekits.credits.25",
+      "referenceName" : "25 Credits",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "17.99",
+      "familyShareable" : false,
+      "internalID" : "credits_50_001",
+      "localizations" : [
+        {
+          "description" : "50 invoice credits, never expire",
+          "displayName" : "50 Credits",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.invoicekits.credits.50",
+      "referenceName" : "50 Credits",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      }
+    ]
+  }
+}

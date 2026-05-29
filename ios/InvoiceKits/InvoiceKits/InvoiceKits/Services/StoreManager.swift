@@ -8,10 +8,12 @@ final class StoreManager {
     private(set) var purchasedProductIDs: Set<String> = []
 
     private let api: APIClient
+    private let auth: AuthManager
     private var updateListenerTask: Task<Void, Never>?
 
-    init(api: APIClient) {
+    init(api: APIClient, auth: AuthManager) {
         self.api = api
+        self.auth = auth
         updateListenerTask = listenForTransactions()
     }
 
@@ -62,9 +64,17 @@ final class StoreManager {
     }
 
     private func verifyWithBackend(_ transaction: Transaction) async {
-        struct Body: Encodable { let transactionJws: String }
+        struct Body: Encodable {
+            let transactionJws: String
+            let productId: String
+        }
         let jws = String(data: transaction.jsonRepresentation, encoding: .utf8) ?? ""
-        let _: EmptyResponse? = try? await api.post("billing/verify-receipt/", body: Body(transactionJws: jws))
+        let _: EmptyResponse? = try? await api.post(
+            "billing/apple/verify-receipt/",
+            body: Body(transactionJws: jws, productId: transaction.productID)
+        )
+        // Refresh user profile so tier/credits update immediately in the UI
+        await auth.refreshProfile()
     }
 
     private func refreshEntitlements() async {

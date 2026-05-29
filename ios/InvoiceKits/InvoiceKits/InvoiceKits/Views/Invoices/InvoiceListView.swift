@@ -52,16 +52,11 @@ struct InvoiceListView: View {
             }
         }
         .sheet(isPresented: $showCreateForm) {
-            // Placeholder until InvoiceFormView is implemented
             NavigationStack {
-                Text("New Invoice")
-                    .navigationTitle("New Invoice")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") { showCreateForm = false }
-                        }
-                    }
+                InvoiceFormView(onSuccess: { newInvoice in
+                    invoices.insert(newInvoice, at: 0)
+                    showCreateForm = false
+                })
             }
         }
         .alert("Delete Invoice", isPresented: $showDeleteConfirm, presenting: deleteTarget) { invoice in

@@ -144,12 +144,12 @@ struct InvoiceFormView: View {
 
     var body: some View {
         Form {
+            aiGenerateSection
             clientInfoSection
             lineItemsSection
             financialSection
             detailsSection
             notesSection
-            aiGenerateSection
         }
         .navigationTitle(isEditing ? "Edit Invoice" : "New Invoice")
         .navigationBarTitleDisplayMode(.inline)

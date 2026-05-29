@@ -45,16 +45,6 @@ struct SignUpView: View {
                     .signInWithAppleButtonStyle(.black)
                     .frame(height: 50)
                     .cornerRadius(10)
-
-                    GoogleSignUpButton {
-                        // GoogleSignIn SDK integration point — replace with GIDSignIn call
-                        // when the GoogleSignIn package is added to the project.
-                        // Example:
-                        //   GIDSignIn.sharedInstance.signIn(withPresenting: rootVC) { result, error in
-                        //       guard let idToken = result?.user.idToken?.tokenString else { return }
-                        //       Task { try await authManager.signInWithGoogle(idToken: idToken) }
-                        //   }
-                    }
                 }
                 .padding(.horizontal, 24)
 
@@ -137,12 +127,23 @@ struct SignUpView: View {
                 .padding(.top, 20)
 
                 // MARK: - Terms Note
-                Text("By creating an account, you agree to our Terms of Service and Privacy Policy.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 32)
-                    .padding(.top, 16)
+                VStack(spacing: 4) {
+                    Text("By creating an account, you agree to our")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    HStack(spacing: 4) {
+                        Link("Terms of Service", destination: URL(string: "https://www.invoicekits.com/terms/")!)
+                            .font(.caption)
+                        Text("and")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Link("Privacy Policy", destination: URL(string: "https://www.invoicekits.com/privacy/")!)
+                            .font(.caption)
+                    }
+                }
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .padding(.top, 16)
 
                 // MARK: - Sign In Link
                 Button {
@@ -233,33 +234,6 @@ struct SignUpView: View {
                 errorMessage = error.localizedDescription
                 showError = true
             }
-        }
-    }
-}
-
-// MARK: - Google Sign-Up Button
-
-private struct GoogleSignUpButton: View {
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 10) {
-                Image(systemName: "globe")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(.blue)
-                Text("Sign up with Google")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.primary)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color(.separator), lineWidth: 1)
-            )
         }
     }
 }

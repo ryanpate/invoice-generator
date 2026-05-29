@@ -33,18 +33,42 @@ struct InvoiceKitsApp: App {
 
 private struct RootView: View {
     @Environment(AppState.self) private var appState
+    @State private var showSplash = true
+    @State private var showOnboarding = false
+
+    private var hasCompletedOnboarding: Bool {
+        UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+    }
 
     var body: some View {
-        Group {
-            if !appState.auth.isLoggedIn {
-                SignInView()
-            } else if appState.isFaceIDEnabled && !appState.isUnlocked {
-                LockScreenView()
-            } else {
-                MainTabView()
+        ZStack {
+            Group {
+                if !appState.auth.isLoggedIn {
+                    SignInView()
+                } else if showOnboarding {
+                    OnboardingView {
+                        withAnimation { showOnboarding = false }
+                    }
+                } else if appState.isFaceIDEnabled && !appState.isUnlocked {
+                    LockScreenView()
+                } else {
+                    MainTabView()
+                }
+            }
+            .animation(.easeInOut(duration: 0.3), value: appState.auth.isLoggedIn)
+            .animation(.easeInOut(duration: 0.3), value: appState.isUnlocked)
+            .animation(.easeInOut(duration: 0.3), value: showOnboarding)
+
+            if showSplash {
+                SplashScreenView {
+                    showSplash = false
+                }
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: appState.auth.isLoggedIn)
-        .animation(.easeInOut(duration: 0.3), value: appState.isUnlocked)
+        .onChange(of: appState.auth.isLoggedIn) { _, isLoggedIn in
+            if isLoggedIn && !hasCompletedOnboarding {
+                showOnboarding = true
+            }
+        }
     }
 }

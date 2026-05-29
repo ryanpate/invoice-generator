@@ -79,7 +79,9 @@ final class APIClient {
         }
 
         let (data, response) = try await session.data(for: request)
-        let httpResponse = response as! HTTPURLResponse
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
 
         if httpResponse.statusCode == 401 {
             if try await refreshAccessToken() {
@@ -107,6 +109,29 @@ final class APIClient {
         try await request("PUT", path: path, body: body)
     }
 
+    func downloadData(_ path: String) async throws -> Data {
+        let url = Constants.apiBaseURL.appendingPathComponent(path)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        if let token = accessToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        let (data, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+        if httpResponse.statusCode == 401 {
+            if try await refreshAccessToken() {
+                return try await downloadData(path)
+            }
+            throw APIError.unauthorized
+        }
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.httpError(httpResponse.statusCode, data)
+        }
+        return data
+    }
+
     func delete(_ path: String) async throws {
         let _: EmptyResponse = try await request("DELETE", path: path)
     }
@@ -125,7 +150,8 @@ final class APIClient {
         request.httpBody = try encoder.encode(RefreshBody(refresh: refresh))
 
         let (data, response) = try await session.data(for: request)
-        guard (response as! HTTPURLResponse).statusCode == 200 else {
+        guard let refreshResponse = response as? HTTPURLResponse,
+              refreshResponse.statusCode == 200 else {
             clearTokens()
             return false
         }
@@ -158,8 +184,11 @@ final class APIClient {
         request.httpBody = body
 
         let (data, response) = try await session.data(for: request)
-        guard (200...299).contains((response as! HTTPURLResponse).statusCode) else {
-            throw APIError.httpError((response as! HTTPURLResponse).statusCode, data)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw APIError.httpError(httpResponse.statusCode, data)
         }
         return try decoder.decode(T.self, from: data)
     }
@@ -168,6 +197,7 @@ final class APIClient {
 enum APIError: Error {
     case unauthorized
     case httpError(Int, Data)
+    case invalidResponse
 }
 
 struct EmptyResponse: Decodable {}

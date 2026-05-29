@@ -24,7 +24,7 @@ struct AIGenerateSection: View {
 
     @Environment(AppState.self) private var appState
 
-    @State private var isExpanded: Bool = false
+    @State private var isExpanded: Bool = true
     @State private var description: String = ""
     @State private var isGenerating: Bool = false
     @State private var generatedItems: [LineItemRequest] = []
@@ -305,8 +305,8 @@ struct AIGenerateSection: View {
         Form {
             Section {
                 AIGenerateSection(
-                    onAddItems: { items in print("Add:", items) },
-                    onVoiceResult: { result in print("Voice result:", result) }
+                    onAddItems: { _ in },
+                    onVoiceResult: { _ in }
                 )
             }
         }

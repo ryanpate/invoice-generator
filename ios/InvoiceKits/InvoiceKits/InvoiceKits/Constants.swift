@@ -6,7 +6,7 @@ enum Constants {
     enum StoreKit {
         static let proMonthly = "com.invoicekits.pro.monthly"
         static let proAnnual = "com.invoicekits.pro.annual"
-        static let businessMonthly = "com.invoicekits.business.monthly"
+        static let businessMonthly = "com.invoicekits.business.monthly.v2"
         static let businessAnnual = "com.invoicekits.business.annual"
         static let credits10 = "com.invoicekits.credits.10"
         static let credits25 = "com.invoicekits.credits.25"

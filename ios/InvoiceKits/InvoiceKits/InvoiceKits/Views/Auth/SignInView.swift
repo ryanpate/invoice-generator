@@ -45,16 +45,6 @@ struct SignInView: View {
                         .signInWithAppleButtonStyle(.black)
                         .frame(height: 50)
                         .cornerRadius(10)
-
-                        GoogleSignInButton {
-                            // GoogleSignIn SDK integration point — replace with GIDSignIn call
-                            // when the GoogleSignIn package is added to the project.
-                            // Example:
-                            //   GIDSignIn.sharedInstance.signIn(withPresenting: rootVC) { result, error in
-                            //       guard let idToken = result?.user.idToken?.tokenString else { return }
-                            //       Task { try await authManager.signInWithGoogle(idToken: idToken) }
-                            //   }
-                        }
                     }
                     .padding(.horizontal, 24)
 
@@ -200,34 +190,6 @@ struct SignInView: View {
                 errorMessage = error.localizedDescription
                 showError = true
             }
-        }
-    }
-}
-
-// MARK: - Google Sign-In Button
-
-private struct GoogleSignInButton: View {
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 10) {
-                // Google "G" logo using SF Symbols fallback until the asset is added.
-                Image(systemName: "globe")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundStyle(.blue)
-                Text("Sign in with Google")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.primary)
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color(.separator), lineWidth: 1)
-            )
         }
     }
 }

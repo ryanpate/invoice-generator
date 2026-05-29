@@ -67,3 +67,7 @@ celerybeat.pid
 # Secrets
 *.pem
 *.key
+
+# Xcode
+*.xcuserstate
+xcuserdata/
