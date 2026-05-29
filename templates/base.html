@@ -26,25 +26,25 @@
     <title>{% block title %}Free Invoice Generator — Create & Download PDF Invoices | InvoiceKits{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Create professional PDF invoices in under 60 seconds. Add line items, apply tax, download as PDF or email to clients. No credit card required.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}ai invoice generator, free invoice maker, time tracking invoice software, PDF invoice, batch invoice generator, online invoicing, freelancer invoice, small business invoice, ai billing software{% endblock %}">
-    <meta name="robots" content="index, follow">
     <meta name="msvalidate.01" content="29ACAC7E27CA9CB577CE5708757F488A">
     <meta name="author" content="InvoiceKits">
-    <link rel="canonical" href="{% block canonical_url %}https://www.invoicekits.com/{% endblock %}">
 
-    <!-- Hreflang tags for multi-language SEO -->
-    {% with clean_path=request.path %}
-    {% if clean_path|slice:":4" == "/es/" or clean_path|slice:":4" == "/fr/" %}
-    {% with stripped_path=clean_path|slice:"3:" %}
-    <link rel="alternate" hreflang="en" href="https://www.invoicekits.com{{ stripped_path }}" />
-    <link rel="alternate" hreflang="es" href="https://www.invoicekits.com/es{{ stripped_path }}" />
-    <link rel="alternate" hreflang="fr" href="https://www.invoicekits.com/fr{{ stripped_path }}" />
-    <link rel="alternate" hreflang="x-default" href="https://www.invoicekits.com{{ stripped_path }}" />
-    {% endwith %}
+    {% comment %}
+    Indexing, canonical & hreflang:
+    - English pages: self-referencing canonical that defaults to the current path (not the homepage),
+      so each page consolidates its own ranking signals. Override per-page via the canonical_url block.
+    - /es/ and /fr/ pages: noindex,follow with canonical pointed at the English equivalent. These locales
+      were deprioritized (near-zero clicks) to stop diluting crawl/index budget on the English pages.
+    {% endcomment %}
+    {% with current_path=request.path %}
+    {% if current_path|slice:":4" == "/es/" or current_path|slice:":4" == "/fr/" %}
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://www.invoicekits.com{{ current_path|slice:'3:' }}">
     {% else %}
-    <link rel="alternate" hreflang="en" href="https://www.invoicekits.com{{ clean_path }}" />
-    <link rel="alternate" hreflang="es" href="https://www.invoicekits.com/es{{ clean_path }}" />
-    <link rel="alternate" hreflang="fr" href="https://www.invoicekits.com/fr{{ clean_path }}" />
-    <link rel="alternate" hreflang="x-default" href="https://www.invoicekits.com{{ clean_path }}" />
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical_url %}https://www.invoicekits.com{{ current_path }}{% endblock %}">
+    <link rel="alternate" hreflang="en" href="https://www.invoicekits.com{{ current_path }}" />
+    <link rel="alternate" hreflang="x-default" href="https://www.invoicekits.com{{ current_path }}" />
     {% endif %}
     {% endwith %}
 
@@ -242,11 +242,11 @@
                             </button>
                             <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700">
                                 <!-- English: strip language prefix if present -->
-                                <a href="{% if LANGUAGE_CODE == 'en' %}{{ request.path }}{% else %}{{ request.path|slice:'3:' }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'en' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">English</a>
+                                <a href="{% if request.path|slice:':4' == '/es/' or request.path|slice:':4' == '/fr/' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'en' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">English</a>
                                 <!-- Spanish: add /es prefix, strip existing prefix if switching from another language -->
-                                <a href="{% if LANGUAGE_CODE == 'en' %}/es{{ request.path }}{% elif LANGUAGE_CODE == 'es' %}{{ request.path }}{% else %}/es{{ request.path|slice:'3:' }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'es' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Español</a>
+                                <a href="/es{% if request.path|slice:':4' == '/es/' or request.path|slice:':4' == '/fr/' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'es' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Español</a>
                                 <!-- French: add /fr prefix, strip existing prefix if switching from another language -->
-                                <a href="{% if LANGUAGE_CODE == 'en' %}/fr{{ request.path }}{% elif LANGUAGE_CODE == 'fr' %}{{ request.path }}{% else %}/fr{{ request.path|slice:'3:' }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'fr' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Français</a>
+                                <a href="/fr{% if request.path|slice:':4' == '/es/' or request.path|slice:':4' == '/fr/' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'fr' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Français</a>
                             </div>
                         </div>
                         <!-- Theme Toggle (for non-authenticated users) -->
