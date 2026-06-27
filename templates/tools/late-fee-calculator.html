@@ -344,12 +344,12 @@
                     </svg>
                     {% trans "Print Results" %}
                 </button>
-                <a href="{% url 'try_invoice' %}"
+                <a href="{% url 'try_invoice' %}?prefill=Late+fee"
                    class="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    {% trans "Send Late Payment Reminder" %}
+                    {% trans "Create an Invoice With This Fee" %}
                 </a>
             </div>
         </div>
@@ -505,7 +505,7 @@
         <p class="text-primary-100 mb-8 max-w-2xl mx-auto">{% trans "Stop chasing late payments manually. InvoiceKits helps you track overdue invoices and send professional payment reminders with one click." %}</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{% url 'try_invoice' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
-                {% trans "Start Free - 5 Invoices Included" %}
+                {% trans "Create Your Invoice Free — No Signup" %}
             </a>
             <a href="{% url 'invoice_calculator' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
                 {% trans "Try Invoice Calculator" %}

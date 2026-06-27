@@ -325,12 +325,12 @@
                     </svg>
                     {% trans "Print Results" %}
                 </button>
-                <a href="{% url 'try_invoice' %}"
+                <a href="{% url 'try_invoice' %}" onclick="goToTryWithPrefill(event, this)"
                    class="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    {% trans "Create a Real Invoice" %}
+                    {% trans "Turn This Into a Real Invoice" %}
                 </a>
             </div>
         </div>
@@ -405,7 +405,7 @@
         <p class="text-primary-100 mb-8 max-w-2xl mx-auto">{% trans "Turn your calculations into professional PDF invoices. Track payments, send reminders, and get paid faster with InvoiceKits." %}</p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="{% url 'try_invoice' %}" class="inline-flex items-center justify-center px-8 py-4 bg-white text-primary-600 rounded-lg font-semibold hover:bg-gray-100 transition">
-                {% trans "Start Free - 5 Invoices Included" %}
+                {% trans "Create Your Invoice Free — No Signup" %}
             </a>
             <a href="{% url 'late_fee_calculator' %}" class="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-lg font-semibold hover:bg-primary-700 transition">
                 {% trans "Try Late Fee Calculator" %}
@@ -416,6 +416,27 @@
 
 <script>
 let currentMode = 'simple';
+
+// Carry what the visitor calculated into the /try/ builder via ?prefill=
+function goToTryWithPrefill(e, el) {
+    e.preventDefault();
+    const base = el.getAttribute('href');
+    let desc = '';
+    if (currentMode === 'hourly') {
+        const rate = document.getElementById('hourly-rate').value;
+        const hours = document.getElementById('hours-worked').value;
+        if (parseFloat(hours) > 0 && parseFloat(rate) > 0) {
+            desc = hours + ' hours at $' + rate + '/hr';
+        }
+    } else {
+        const firstDesc = document.querySelector('#line-items-body .line-item input[type="text"]');
+        if (firstDesc) { desc = firstDesc.value.trim(); }
+    }
+    const url = desc
+        ? base + (base.indexOf('?') === -1 ? '?' : '&') + 'prefill=' + encodeURIComponent(desc)
+        : base;
+    window.location.href = url;
+}
 
 function switchMode(mode) {
     currentMode = mode;

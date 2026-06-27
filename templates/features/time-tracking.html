@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}Time Tracking Invoice Software - Track Hours & Bill Clients | InvoiceKits{% endblock %}
+{% block title %}Time Tracking & Invoicing Software — Track Hours, Bill Clients Free | InvoiceKits{% endblock %}
 
-{% block meta_description %}Time tracking invoice software with built-in billing. Start a timer, log billable hours, and convert entries to professional invoices in one click. Free to try.{% endblock %}
+{% block meta_description %}Free time tracking and invoicing software in one tool. Start a timer, log billable hours, and turn invoice time tracking into a professional invoice with one click. No signup to try.{% endblock %}
 
-{% block meta_keywords %}time tracking invoice software, invoice time tracker, billable hours tracking, freelance time tracking, time tracking billing software, track hours invoice clients{% endblock %}
+{% block meta_keywords %}time tracking and invoicing, invoice time tracking, time tracking and invoice software, time billing and invoicing software, free time tracking and invoicing, invoice and time tracking software, hourly billing software, time tracker with invoicing, time tracking invoice software{% endblock %}
 
 {% block canonical_url %}https://www.invoicekits.com/features/time-tracking/{% endblock %}
 
-{% block og_title %}Time Tracking Invoice Software - Track Hours & Bill Clients | InvoiceKits{% endblock %}
+{% block og_title %}Time Tracking & Invoicing Software in One Tool | InvoiceKits{% endblock %}
 
-{% block og_description %}Built-in time tracking with one-click invoicing. Track billable hours and convert to professional invoices instantly.{% endblock %}
+{% block og_description %}Track billable hours and convert them to invoices with one click. Free time tracking and invoicing — plus AI line items and voice-to-invoice. No signup to try.{% endblock %}
 
-{% block twitter_title %}Time Tracking Invoice Software | InvoiceKits{% endblock %}
+{% block twitter_title %}Time Tracking & Invoicing Software | InvoiceKits{% endblock %}
 
-{% block twitter_description %}Track billable hours and convert to invoices with one click. Built-in timer and bill-to-invoice workflow.{% endblock %}
+{% block twitter_description %}Time tracking and invoicing in one place. Start a timer, then bill the hours as a professional invoice in one click. Free to try, no signup.{% endblock %}
 
 {% block extra_schema %}
 <script type="application/ld+json">
@@ -38,7 +38,7 @@
         {
             "@type": "ListItem",
             "position": 3,
-            "name": "Time Tracking",
+            "name": "Time Tracking and Invoicing",
             "item": "https://www.invoicekits.com/features/time-tracking/"
         }
     ]
@@ -48,8 +48,8 @@
 {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "How to Track Time and Create Invoices",
-    "description": "Track billable hours with a built-in timer and convert time entries to professional invoices with one click.",
+    "name": "How to Track Time and Create an Invoice",
+    "description": "Track billable hours with a built-in timer and convert time entries to a professional invoice with one click.",
     "totalTime": "PT2M",
     "estimatedCost": {
         "@type": "MonetaryAmount",
@@ -58,7 +58,7 @@
     },
     "tool": {
         "@type": "HowToTool",
-        "name": "InvoiceKits Time Tracking"
+        "name": "InvoiceKits Time Tracking and Invoicing"
     },
     "step": [
         {
@@ -89,10 +89,18 @@
     "mainEntity": [
         {
             "@type": "Question",
-            "name": "What is time tracking invoice software?",
+            "name": "What is time tracking and invoicing software?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Time tracking invoice software combines a timer for tracking billable hours with invoicing capabilities. Instead of using separate tools for time tracking and billing, you can track time and create invoices in one place. InvoiceKits lets you start a timer, log hours, and convert time entries directly into professional invoices."
+                "text": "Time tracking and invoicing software combines a timer for billable hours with invoicing in one tool. Instead of tracking time in one app and billing in another, you start a timer, log hours against a client, and convert those entries straight into a professional invoice. InvoiceKits does all of this in one place, so every tracked hour gets billed."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is there free time tracking and invoicing software?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. InvoiceKits includes free time tracking and invoicing. The free plan gives you one active timer, manual time entry, the bill-to-invoice workflow, and professional invoice PDFs. You can create your first invoice without even signing up, and no credit card is required to start."
             }
         },
         {
@@ -100,7 +108,23 @@
             "name": "How does the bill-to-invoice feature work?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "After tracking time, select the unbilled entries you want to invoice and click 'Bill Time'. You can choose to create detailed line items (one per time entry) or summarized items (grouped by description). The invoice is automatically populated with your time entries, rates, and totals."
+                "text": "After tracking time, select the unbilled entries you want to invoice and click 'Bill Time'. You can choose detailed line items (one per time entry) or summarized items (grouped by description). The invoice is automatically populated with your hours, rates, and totals."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "How is InvoiceKits different from Toggl, Harvest, or Clockify?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Most time trackers are built around reporting and integrations, then bolt on invoicing or push you to a separate billing tool. InvoiceKits is invoicing-first: time tracking feeds directly into professional invoices, and you also get AI line-item generation, voice-to-invoice, and a no-signup invoice creator. It's the fastest path from a tracked hour to an invoice your client can pay."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I use it as hourly billing software for clients?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Set a default hourly rate, track time against each client, and the timer shows the billable amount in real time. When you're ready to bill, convert the hours to an invoice with your rate already applied. It works for hourly billing, retainers, and mixed fixed-fee plus hourly invoices."
             }
         },
         {
@@ -108,15 +132,7 @@
             "name": "Can I track time for multiple clients?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Each time entry can be associated with a specific client. When billing, you can filter by client and create separate invoices for each. The time entry list shows all your tracked time organized by client and status."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "How many timers can I run at once?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "The number of simultaneous timers depends on your plan: Free and Starter plans allow 1 active timer, Professional allows up to 5 timers, and Business plan offers unlimited simultaneous timers for teams working on multiple projects."
+                "text": "Yes. Each time entry can be associated with a specific client. When billing, you filter by client and create a separate invoice for each. The time entry list shows all of your tracked time organized by client and status."
             }
         },
         {
@@ -124,15 +140,7 @@
             "name": "Can I add time entries manually?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! In addition to the real-time timer, you can manually add time entries by entering hours and minutes. This is useful for logging time retroactively or when you forget to start the timer."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Does the timer work across page navigation?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes, the timer persists as you navigate through the application. You can start a timer on the dashboard, work on other pages, and the timer will continue running until you stop it."
+                "text": "Yes. In addition to the real-time timer, you can add entries manually by entering hours and minutes. This is useful for logging time retroactively or when you forget to start the timer."
             }
         }
     ]
@@ -142,23 +150,25 @@
 {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "InvoiceKits Time Tracking",
+    "name": "InvoiceKits Time Tracking and Invoicing",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD",
-        "description": "Free tier includes 1 active timer"
+        "description": "Free time tracking and invoicing — 1 active timer included"
     },
     "featureList": [
         "Real-time timer with live display",
         "Manual time entry",
         "Client association",
-        "Bill-to-invoice workflow",
+        "One-click bill-to-invoice workflow",
         "Detailed or summary invoicing",
         "Time entry status tracking",
-        "Unbilled hours dashboard"
+        "Unbilled hours dashboard",
+        "AI line-item generation",
+        "Voice-to-invoice"
     ]
 }
 </script>
@@ -180,7 +190,7 @@
                 <li><span class="mx-2">/</span></li>
                 <li><span>Features</span></li>
                 <li><span class="mx-2">/</span></li>
-                <li class="text-white">Time Tracking</li>
+                <li class="text-white">Time Tracking & Invoicing</li>
             </ol>
         </nav>
 
@@ -191,20 +201,20 @@
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        Built-In Time Tracking
+                        Time Tracking + Invoicing
                     </span>
                     <span class="inline-flex items-center px-3 py-1 bg-green-500/30 text-green-100 rounded-full text-xs font-medium">
-                        NEW
+                        FREE TO TRY
                     </span>
                 </div>
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-                    Time Tracking Invoice Software
+                    Time Tracking and Invoicing Software in One Tool
                 </h1>
                 <p class="text-xl md:text-2xl text-blue-100 mb-4">
                     Track time. Bill clients. Get paid.
                 </p>
                 <p class="text-lg text-blue-200 mb-8">
-                    Stop juggling between time trackers and invoicing tools. Start a timer, track your billable hours, and convert time entries to professional invoices with one click.
+                    Stop paying for one app to track hours and another to invoice them. InvoiceKits puts invoice time tracking and billing in the same place — start a timer, log your billable hours, and turn them into a professional invoice with one click.
                 </p>
                 <form method="get" action="{% url 'try_invoice' %}" class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                     <label for="hero-prefill" class="block text-left text-blue-100 text-sm font-medium mb-2">Turn hours worked into an invoice — start now</label>
@@ -279,6 +289,24 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Intro / Semantic Content Section -->
+<section class="py-16 bg-white dark:bg-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">Time Tracking and Invoicing, Finally in the Same Place</h2>
+        <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 space-y-4">
+            <p>
+                Most freelancers and small teams piece together their workflow from two or three tools: a time tracker for billable hours, a separate invoice generator for billing, and a spreadsheet to make sure nothing slips through. Every handoff between those tools is a place to lose money — hours that never get copied over, a client who gets under-billed, a subscription you forgot you were paying for.
+            </p>
+            <p>
+                InvoiceKits is <strong>time tracking and invoicing software</strong> built as a single workflow. You start a timer against a client, watch the billable amount add up in real time, and when the work is done you convert those entries into a professional invoice without retyping a thing. That's the whole point of <strong>invoice time tracking</strong> — the hours you track are the hours you bill, automatically.
+            </p>
+            <p>
+                It works as <strong>hourly billing software</strong> for consultants and agencies, as a <strong>time tracker with invoicing</strong> for freelancers, and as <strong>free time tracking and invoicing</strong> for anyone just getting started. And because it's part of the full InvoiceKits suite, the same time entries can flow through AI line-item generation, voice-to-invoice, recurring billing, and automated payment reminders.
+            </p>
         </div>
     </div>
 </section>
@@ -383,7 +411,7 @@
 <section id="how-it-works" class="py-20 bg-white dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">How Time Tracking Works</h2>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">How Time Tracking and Invoicing Works</h2>
             <p class="text-xl text-gray-600 dark:text-gray-300">From timer to invoice in three simple steps</p>
         </div>
 
@@ -455,8 +483,110 @@
     </div>
 </section>
 
-<!-- Features Section -->
+<!-- Comparison Section -->
 <section class="py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Time Tracking and Invoicing Software Compared</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                Plenty of tools track time. Most make you bill somewhere else. Here's how InvoiceKits stacks up against popular time trackers and standalone invoice generators.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <table class="w-full text-sm bg-white dark:bg-gray-800">
+                <thead>
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <th class="text-left p-4 font-semibold text-gray-900 dark:text-white">Capability</th>
+                        <th class="p-4 font-semibold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20">InvoiceKits</th>
+                        <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Toggl Track</th>
+                        <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Harvest</th>
+                        <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Clockify</th>
+                        <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Wave / generic generators</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 dark:text-gray-300">
+                    {% comment %} ✓ = yes, ~ = partial/limited, — = no {% endcomment %}
+                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                        <td class="p-4 font-medium text-gray-900 dark:text-white">Built-in time tracking</td>
+                        <td class="p-4 text-center bg-blue-50 dark:bg-blue-900/20 text-green-600 dark:text-green-400 font-semibold">✓</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                        <td class="p-4 font-medium text-gray-900 dark:text-white">Built-in invoicing</td>
+                        <td class="p-4 text-center bg-blue-50 dark:bg-blue-900/20 text-green-600 dark:text-green-400 font-semibold">✓</td>
+                        <td class="p-4 text-center text-gray-400">— (integrations)</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                        <td class="p-4 text-center text-yellow-600 dark:text-yellow-400">~ (paid)</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                        <td class="p-4 font-medium text-gray-900 dark:text-white">One-click time → invoice</td>
+                        <td class="p-4 text-center bg-blue-50 dark:bg-blue-900/20 text-green-600 dark:text-green-400 font-semibold">✓</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                        <td class="p-4 text-center text-yellow-600 dark:text-yellow-400">~</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                        <td class="p-4 font-medium text-gray-900 dark:text-white">AI line-item generation</td>
+                        <td class="p-4 text-center bg-blue-50 dark:bg-blue-900/20 text-green-600 dark:text-green-400 font-semibold">✓</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                        <td class="p-4 font-medium text-gray-900 dark:text-white">Voice-to-invoice</td>
+                        <td class="p-4 text-center bg-blue-50 dark:bg-blue-900/20 text-green-600 dark:text-green-400 font-semibold">✓</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                    </tr>
+                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                        <td class="p-4 font-medium text-gray-900 dark:text-white">Create an invoice with no signup</td>
+                        <td class="p-4 text-center bg-blue-50 dark:bg-blue-900/20 text-green-600 dark:text-green-400 font-semibold">✓</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-gray-400">—</td>
+                        <td class="p-4 text-center text-yellow-600 dark:text-yellow-400">~</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-medium text-gray-900 dark:text-white">Free plan</td>
+                        <td class="p-4 text-center bg-blue-50 dark:bg-blue-900/20 text-green-600 dark:text-green-400 font-semibold">✓</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                        <td class="p-4 text-center text-yellow-600 dark:text-yellow-400">~ (limited)</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                        <td class="p-4 text-center text-green-600 dark:text-green-400">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-3">
+            ✓ built in &nbsp;·&nbsp; ~ partial or paid-tier &nbsp;·&nbsp; — not available. Competitor capabilities as of 2026; check each vendor for current details.
+        </p>
+        <p class="text-center text-gray-600 dark:text-gray-300 mt-6 max-w-3xl mx-auto">
+            The takeaway: dedicated time trackers like Toggl are great at tracking but hand billing off to another tool. Full suites like Harvest do both but cost more and skip AI. InvoiceKits is the one place you can track an hour and turn it into a paid invoice — with AI and voice along the way.
+        </p>
+        <div class="text-center mt-8">
+            <form method="get" action="{% url 'try_invoice' %}" class="inline-flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
+                <input type="text" name="prefill" maxlength="500"
+                       placeholder="Describe the work you did, e.g. 6 hours consulting at $140/hr"
+                       class="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition shadow whitespace-nowrap">
+                    Try it free →
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-white dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Powerful Time Tracking Features</h2>
@@ -465,7 +595,7 @@
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Real-time Timer -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -476,7 +606,7 @@
             </div>
 
             <!-- Manual Entry -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -487,7 +617,7 @@
             </div>
 
             <!-- Client Association -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -498,7 +628,7 @@
             </div>
 
             <!-- Bill-to-Invoice -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -509,7 +639,7 @@
             </div>
 
             <!-- Status Tracking -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
@@ -520,7 +650,7 @@
             </div>
 
             <!-- Dashboard Widget -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 shadow-sm">
                 <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
@@ -534,7 +664,7 @@
 </section>
 
 <!-- Billing Modes Section -->
-<section class="py-20 bg-white dark:bg-gray-800">
+<section class="py-20 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Two Ways to Bill Your Time</h2>
@@ -543,7 +673,7 @@
 
         <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <!-- Detailed Mode -->
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center">
                         <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -555,7 +685,7 @@
                 <p class="text-gray-600 dark:text-gray-300 mb-4">
                     Creates one line item per time entry. Perfect for clients who want to see exactly what you worked on.
                 </p>
-                <div class="bg-white dark:bg-gray-600 rounded-lg p-4 text-sm">
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-sm">
                     <div class="space-y-2">
                         <div class="flex justify-between">
                             <span class="text-gray-700 dark:text-gray-200">Homepage redesign (2.5 hrs)</span>
@@ -578,7 +708,7 @@
             </div>
 
             <!-- Summary Mode -->
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6">
                 <div class="flex items-center gap-3 mb-4">
                     <div class="w-10 h-10 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center">
                         <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -590,7 +720,7 @@
                 <p class="text-gray-600 dark:text-gray-300 mb-4">
                     Groups entries by description into single line items. Cleaner invoices for clients who prefer simplicity.
                 </p>
-                <div class="bg-white dark:bg-gray-600 rounded-lg p-4 text-sm">
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-sm">
                     <div class="space-y-2">
                         <div class="flex justify-between">
                             <span class="text-gray-700 dark:text-gray-200">Development Work (4 hrs @ $150)</span>
@@ -607,12 +737,36 @@
     </div>
 </section>
 
+<!-- Who It's For Section -->
+<section class="py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Who Uses Time Tracking and Invoicing</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300">If you bill by the hour, this is for you</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="rounded-xl p-6 bg-gray-50 dark:bg-gray-900">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Freelancers &amp; Contractors</h3>
+                <p class="text-gray-600 dark:text-gray-300">A free time tracker with invoicing built in. Track the hours you work, then bill them as a polished invoice — no copy-paste, no second subscription.</p>
+            </div>
+            <div class="rounded-xl p-6 bg-gray-50 dark:bg-gray-900">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Consultants &amp; Agencies</h3>
+                <p class="text-gray-600 dark:text-gray-300">Hourly billing software for multi-client work. Run separate timers per project, keep retainers organized, and invoice each client from their own tracked hours.</p>
+            </div>
+            <div class="rounded-xl p-6 bg-gray-50 dark:bg-gray-900">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Small Service Teams</h3>
+                <p class="text-gray-600 dark:text-gray-300">Time billing and invoicing software the whole team can use. Shared clients, shared invoices, and a clear view of unbilled hours across everyone.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Pricing Section -->
 <section class="py-20 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Time Tracking Plans</h2>
-            <p class="text-xl text-gray-600 dark:text-gray-300">Included with all InvoiceKits plans</p>
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Time Tracking on Every Plan</h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300">Active timer limits by plan — invoicing included on all of them</p>
         </div>
 
         <div class="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
@@ -629,7 +783,7 @@
                 <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Starter</h3>
                 <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">1</p>
                 <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">active timer</p>
-                <p class="text-gray-600 dark:text-gray-300 text-sm">$9/month</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">For steady solo billing</p>
             </div>
 
             <!-- Professional -->
@@ -638,7 +792,7 @@
                 <h3 class="font-semibold text-white mb-2">Professional</h3>
                 <p class="text-3xl font-bold text-white mb-1">5</p>
                 <p class="text-blue-200 text-sm mb-4">active timers</p>
-                <p class="text-blue-100 text-sm">$29/month</p>
+                <p class="text-blue-100 text-sm">For multi-project work</p>
             </div>
 
             <!-- Business -->
@@ -646,8 +800,12 @@
                 <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Business</h3>
                 <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">Unlimited</p>
                 <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">active timers</p>
-                <p class="text-gray-600 dark:text-gray-300 text-sm">$79/month</p>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">For teams</p>
             </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="{% url 'pricing' %}" class="text-blue-600 dark:text-blue-400 font-medium underline hover:text-blue-700">See full pricing &amp; current rates →</a>
         </div>
 
         <div class="text-center mt-8">
@@ -670,40 +828,45 @@
 
         <div class="space-y-6">
             <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">What is time tracking invoice software?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Time tracking invoice software combines a timer for tracking billable hours with invoicing capabilities. Instead of using separate tools for time tracking and billing, you can track time and create invoices in one place. InvoiceKits lets you start a timer, log hours, and convert time entries directly into professional invoices.</p>
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">What is time tracking and invoicing software?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Time tracking and invoicing software combines a timer for billable hours with invoicing in one tool. Instead of tracking time in one app and billing in another, you start a timer, log hours against a client, and convert those entries straight into a professional invoice. InvoiceKits does all of this in one place, so every tracked hour gets billed.</p>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Is there free time tracking and invoicing software?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Yes. InvoiceKits includes free time tracking and invoicing. The free plan gives you one active timer, manual time entry, the bill-to-invoice workflow, and professional invoice PDFs. You can create your first invoice without even signing up, and no credit card is required to start.</p>
             </div>
 
             <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
                 <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How does the bill-to-invoice feature work?</h3>
-                <p class="text-gray-600 dark:text-gray-300">After tracking time, select the unbilled entries you want to invoice and click 'Bill Time'. You can choose to create detailed line items (one per time entry) or summarized items (grouped by description). The invoice is automatically populated with your time entries, rates, and totals.</p>
+                <p class="text-gray-600 dark:text-gray-300">After tracking time, select the unbilled entries you want to invoice and click 'Bill Time'. You can choose detailed line items (one per time entry) or summarized items (grouped by description). The invoice is automatically populated with your hours, rates, and totals.</p>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How is InvoiceKits different from Toggl, Harvest, or Clockify?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Most time trackers are built around reporting and integrations, then bolt on invoicing or push you to a separate billing tool. InvoiceKits is invoicing-first: time tracking feeds directly into professional invoices, and you also get AI line-item generation, voice-to-invoice, and a no-signup invoice creator. It's the fastest path from a tracked hour to an invoice your client can pay.</p>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I use it as hourly billing software for clients?</h3>
+                <p class="text-gray-600 dark:text-gray-300">Yes. Set a default hourly rate, track time against each client, and the timer shows the billable amount in real time. When you're ready to bill, convert the hours to an invoice with your rate already applied. It works for hourly billing, retainers, and mixed fixed-fee plus hourly invoices.</p>
             </div>
 
             <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
                 <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I track time for multiple clients?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Yes! Each time entry can be associated with a specific client. When billing, you can filter by client and create separate invoices for each. The time entry list shows all your tracked time organized by client and status.</p>
-            </div>
-
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">How many timers can I run at once?</h3>
-                <p class="text-gray-600 dark:text-gray-300">The number of simultaneous timers depends on your plan: Free and Starter plans allow 1 active timer, Professional allows up to 5 timers, and Business plan offers unlimited simultaneous timers for teams working on multiple projects.</p>
+                <p class="text-gray-600 dark:text-gray-300">Yes. Each time entry can be associated with a specific client. When billing, you filter by client and create a separate invoice for each. The time entry list shows all of your tracked time organized by client and status.</p>
             </div>
 
             <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
                 <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Can I add time entries manually?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Yes! In addition to the real-time timer, you can manually add time entries by entering hours and minutes. This is useful for logging time retroactively or when you forget to start the timer.</p>
-            </div>
-
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
-                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Does the timer work across page navigation?</h3>
-                <p class="text-gray-600 dark:text-gray-300">Yes, the timer persists as you navigate through the application. You can start a timer on the dashboard, work on other pages, and the timer will continue running until you stop it.</p>
+                <p class="text-gray-600 dark:text-gray-300">Yes. In addition to the real-time timer, you can add entries manually by entering hours and minutes. This is useful for logging time retroactively or when you forget to start the timer.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Related Features -->
-<section class="py-16 bg-white dark:bg-gray-800">
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-10">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Part of the Complete AI Invoicing Suite</h2>
@@ -769,7 +932,7 @@
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Built-In Time Tracking
+            Time Tracking + Invoicing
         </div>
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
             Stop Losing Billable Hours
@@ -777,11 +940,16 @@
         <p class="text-xl text-blue-100 mb-8">
             Track every minute of work and convert it to invoices with one click. Never leave money on the table again.
         </p>
-        <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-white text-blue-700 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
-            Start Tracking Time Free
-        </a>
+        <form method="get" action="{% url 'try_invoice' %}" class="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
+            <input type="text" name="prefill" maxlength="500"
+                   placeholder="e.g. 6 hours of consulting at $140/hr"
+                   class="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400 outline-none focus:ring-2 focus:ring-blue-300">
+            <button type="submit" class="px-8 py-3 bg-white text-blue-700 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg whitespace-nowrap">
+                Create my invoice free →
+            </button>
+        </form>
         <p class="mt-6 text-blue-200 text-sm">
-            1 active timer on free plan. No credit card required.
+            No signup to create an invoice. Or <a href="{% url 'account_signup' %}" class="underline hover:text-white">sign up free</a> to start the live timer — 1 active timer, no credit card.
         </p>
     </div>
 </section>
