@@ -4,7 +4,7 @@ Views for billing and subscription management.
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.contrib import messages
 from django.conf import settings
 from django.http import JsonResponse
@@ -30,16 +30,7 @@ class BillingOverviewView(LoginRequiredMixin, TemplateView):
             'api_calls': user.api_calls_this_month,
             'usage_percentage': user.get_usage_percentage(),
         }
-
-        # Credit system info
         context['is_subscriber'] = user.is_active_subscriber()
-        context['credits'] = {
-            'total_available': user.get_available_credits(),
-            'free_remaining': user.free_credits_remaining,
-            'purchased_balance': user.credits_balance,
-            'total_purchased': user.total_credits_purchased,
-        }
-        context['credit_packs'] = settings.CREDIT_PACKS
 
         return context
 
@@ -74,16 +65,15 @@ def create_checkout_session(request, plan):
     # Initialize Stripe
     stripe.api_key = settings.STRIPE_TEST_SECRET_KEY if not settings.STRIPE_LIVE_MODE else settings.STRIPE_LIVE_SECRET_KEY
 
-    # Stripe price IDs (from Stripe Dashboard)
+    # Stripe price IDs (set via env after creating the products in Stripe Dashboard)
     price_ids = {
-        'starter': 'price_1Smy2w6oOlORkbTyjs4TGG8s',       # $9/month
-        'professional': 'price_1Smy3O6oOlORkbTySI4fCIod',  # $29/month
-        'business': 'price_1Smy4p6oOlORkbTyXe9hIMKE',      # $79/month
+        'professional': settings.STRIPE_PRO_PRICE_ID,  # $12/month
+        'business': settings.STRIPE_BUSINESS_PRICE_ID,  # $49/month
     }
 
     price_id = price_ids.get(plan)
     if not price_id:
-        messages.error(request, 'Plan not available for purchase.')
+        messages.error(request, 'This plan is not available for purchase yet. Please try again later.')
         return redirect('billing:plans')
 
     try:
@@ -381,86 +371,17 @@ def handle_connect_account_updated(account):
 
 # Credit Purchase Views
 
-class CreditsView(LoginRequiredMixin, TemplateView):
-    """View and purchase credit packs."""
-    template_name = 'billing/credits.html'
+class CreditsView(LoginRequiredMixin, View):
+    """Credits/pay-as-you-go was retired — send users to the simplified plans page."""
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-
-        context['credit_packs'] = settings.CREDIT_PACKS
-        context['credits_balance'] = user.credits_balance
-        context['free_credits_remaining'] = user.free_credits_remaining
-        context['total_available'] = user.get_available_credits()
-        context['total_purchased'] = user.total_credits_purchased
-        context['is_subscriber'] = user.is_active_subscriber()
-        context['subscription_tiers'] = settings.SUBSCRIPTION_TIERS
-
-        return context
+    def get(self, request, *args, **kwargs):
+        return redirect('billing:plans')
 
 
 @login_required
 def purchase_credits(request, pack_id):
-    """Create Stripe checkout session for credit pack purchase."""
-    pack = settings.CREDIT_PACKS.get(pack_id)
-    if not pack:
-        messages.error(request, 'Invalid credit pack selected.')
-        return redirect('billing:credits')
-
-    # Check if Stripe price ID is configured
-    if not pack.get('stripe_price_id'):
-        messages.error(request, 'Credit packs are not yet available. Please try again later.')
-        return redirect('billing:credits')
-
-    # Initialize Stripe
-    stripe.api_key = settings.STRIPE_TEST_SECRET_KEY if not settings.STRIPE_LIVE_MODE else settings.STRIPE_LIVE_SECRET_KEY
-
-    try:
-        # Create or get Stripe customer
-        if not request.user.stripe_customer_id:
-            customer = stripe.Customer.create(
-                email=request.user.email,
-                metadata={'user_id': request.user.id}
-            )
-            request.user.stripe_customer_id = customer.id
-            request.user.save()
-
-        # Create checkout session for one-time payment
-        checkout_session = stripe.checkout.Session.create(
-            customer=request.user.stripe_customer_id,
-            payment_method_types=['card'],
-            line_items=[{
-                'price': pack['stripe_price_id'],
-                'quantity': 1,
-            }],
-            mode='payment',  # One-time payment, not subscription
-            success_url=request.build_absolute_uri('/billing/credits/success/'),
-            cancel_url=request.build_absolute_uri('/billing/credits/'),
-            metadata={
-                'user_id': str(request.user.id),
-                'pack_id': pack_id,
-                'credits': str(pack['credits']),
-                'type': 'credit_purchase',
-            }
-        )
-
-        # Create pending purchase record
-        from .models import CreditPurchase
-        CreditPurchase.objects.create(
-            user=request.user,
-            stripe_session_id=checkout_session.id,
-            pack_id=pack_id,
-            credits_amount=pack['credits'],
-            price_paid=pack['price'],
-            status='pending',
-        )
-
-        return redirect(checkout_session.url)
-
-    except stripe.error.StripeError as e:
-        messages.error(request, f'Error creating checkout: {str(e)}')
-        return redirect('billing:credits')
+    """Credit purchases are retired — redirect to the plans page."""
+    return redirect('billing:plans')
 
 
 class CreditPurchaseSuccessView(LoginRequiredMixin, TemplateView):
@@ -491,143 +412,26 @@ class CreditPurchaseSuccessView(LoginRequiredMixin, TemplateView):
 # Premium Template Purchase Views
 # ============================================================================
 
-class TemplateStoreView(LoginRequiredMixin, TemplateView):
-    """View and purchase premium templates."""
-    template_name = 'billing/templates.html'
+# The premium template store was retired — every plan (including Free) now includes
+# all templates, so these routes just redirect to the plans page.
+class TemplateStoreView(LoginRequiredMixin, View):
+    """Template store retired — all templates are included with every plan."""
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-
-        context['premium_templates'] = settings.PREMIUM_TEMPLATES
-        context['bundle'] = settings.PREMIUM_TEMPLATE_BUNDLE
-        context['free_templates'] = getattr(settings, 'FREE_TEMPLATES', ['clean_slate'])
-        context['invoice_templates'] = settings.INVOICE_TEMPLATES
-        context['unlocked_templates'] = user.unlocked_templates or []
-        context['available_templates'] = user.get_available_templates()
-        context['is_subscriber'] = user.is_active_subscriber()
-        context['current_tier'] = user.subscription_tier
-
-        # Check if user has all premium templates (via subscription or purchase)
-        all_premium = all(
-            t in user.get_available_templates()
-            for t in settings.PREMIUM_TEMPLATES.keys()
-        )
-        context['has_all_premium'] = all_premium
-
-        return context
+    def get(self, request, *args, **kwargs):
+        return redirect('billing:plans')
 
 
 @login_required
 def purchase_template(request, template_id):
-    """Create Stripe checkout session for template purchase."""
-    # Check if it's a bundle purchase
-    is_bundle = template_id == 'bundle'
-
-    if is_bundle:
-        item_config = settings.PREMIUM_TEMPLATE_BUNDLE
-        price_id = item_config.get('stripe_price_id')
-        price = item_config['price']
-    else:
-        # Individual template purchase
-        item_config = settings.PREMIUM_TEMPLATES.get(template_id)
-        if not item_config:
-            messages.error(request, 'Invalid template selected.')
-            return redirect('billing:templates')
-        price_id = item_config.get('stripe_price_id')
-        price = item_config['price']
-
-    # Check if already owned (individual template)
-    if not is_bundle and request.user.has_unlocked_template(template_id):
-        messages.info(request, 'You already own this template.')
-        return redirect('billing:templates')
-
-    # Check if user already has all premium (via subscription)
-    if request.user.is_active_subscriber():
-        tier_templates = settings.SUBSCRIPTION_TIERS.get(
-            request.user.subscription_tier, {}
-        ).get('templates')
-        if tier_templates == 'all':
-            messages.info(request, 'Your subscription includes all templates.')
-            return redirect('billing:templates')
-
-    if not price_id:
-        messages.error(request, 'Template purchases are not yet available.')
-        return redirect('billing:templates')
-
-    # Initialize Stripe
-    stripe.api_key = settings.STRIPE_TEST_SECRET_KEY if not settings.STRIPE_LIVE_MODE else settings.STRIPE_LIVE_SECRET_KEY
-
-    try:
-        # Create or get Stripe customer
-        if not request.user.stripe_customer_id:
-            customer = stripe.Customer.create(
-                email=request.user.email,
-                metadata={'user_id': request.user.id}
-            )
-            request.user.stripe_customer_id = customer.id
-            request.user.save()
-
-        # Create checkout session for one-time payment
-        checkout_session = stripe.checkout.Session.create(
-            customer=request.user.stripe_customer_id,
-            payment_method_types=['card'],
-            line_items=[{
-                'price': price_id,
-                'quantity': 1,
-            }],
-            mode='payment',
-            success_url=request.build_absolute_uri('/billing/templates/success/'),
-            cancel_url=request.build_absolute_uri('/billing/templates/'),
-            metadata={
-                'user_id': str(request.user.id),
-                'template_id': template_id,
-                'is_bundle': str(is_bundle),
-                'type': 'template_purchase',
-            }
-        )
-
-        # Create pending purchase record
-        from .models import TemplatePurchase
-        TemplatePurchase.objects.create(
-            user=request.user,
-            stripe_session_id=checkout_session.id,
-            template_id=template_id,
-            is_bundle=is_bundle,
-            price_paid=price,
-            status='pending',
-        )
-
-        return redirect(checkout_session.url)
-
-    except stripe.error.StripeError as e:
-        messages.error(request, f'Error creating checkout: {str(e)}')
-        return redirect('billing:templates')
+    """Template purchases are retired — all templates are free for every plan."""
+    return redirect('billing:plans')
 
 
-class TemplatePurchaseSuccessView(LoginRequiredMixin, TemplateView):
-    """Template purchase success page."""
-    template_name = 'billing/templates_success.html'
+class TemplatePurchaseSuccessView(LoginRequiredMixin, View):
+    """Template store retired — redirect to the plans page."""
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-
-        context['unlocked_templates'] = user.unlocked_templates or []
-        context['available_templates'] = user.get_available_templates()
-
-        # Get the most recent completed purchase
-        from .models import TemplatePurchase
-        recent_purchase = TemplatePurchase.objects.filter(
-            user=user,
-            status='completed'
-        ).order_by('-completed_at').first()
-
-        context['recent_purchase'] = recent_purchase
-        context['premium_templates'] = settings.PREMIUM_TEMPLATES
-        context['invoice_templates'] = settings.INVOICE_TEMPLATES
-
-        return context
+    def get(self, request, *args, **kwargs):
+        return redirect('billing:plans')
 
 
 # ============================================================================

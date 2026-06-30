@@ -12,8 +12,7 @@ class CustomUser(AbstractUser):
 
     SUBSCRIPTION_TIERS = [
         ('free', 'Free'),
-        ('starter', 'Starter'),
-        ('professional', 'Professional'),
+        ('professional', 'Pro'),
         ('business', 'Business'),
         ('enterprise', 'Enterprise'),
     ]
@@ -151,37 +150,31 @@ class CustomUser(AbstractUser):
         if self.usage_reset_date.month != today.month or self.usage_reset_date.year != today.year:
             self.reset_monthly_usage()
 
-    def can_create_invoice(self):
-        """Check if user can create another invoice.
+    def effective_tier(self):
+        """Tier whose limits actually apply. A lapsed paid subscription falls back to free."""
+        if self.subscription_tier != 'free' and self.subscription_status != 'active':
+            return 'free'
+        return self.subscription_tier
 
-        For active subscribers: Uses monthly quota from subscription tier.
-        For credit users (free tier or inactive subscription): Uses credits.
-        """
+    def can_create_invoice(self):
+        """Check if user can create another invoice against their tier's monthly quota."""
         from django.conf import settings
 
-        # Active subscribers use monthly quota
-        if self.is_active_subscriber():
-            self.check_usage_reset()
-            tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
-            limit = tier_config.get('invoices_per_month', 0)
+        self.check_usage_reset()
+        tier_config = settings.SUBSCRIPTION_TIERS.get(
+            self.effective_tier(), settings.SUBSCRIPTION_TIERS['free']
+        )
+        limit = tier_config.get('invoices_per_month', 0)
 
-            if limit == -1:  # Unlimited
-                return True
-            return self.invoices_created_this_month < limit
-
-        # Credit users (free tier or canceled subscription) use credits
-        return self.get_available_credits() > 0
+        if limit == -1:  # Unlimited
+            return True
+        return self.invoices_created_this_month < limit
 
     def increment_invoice_count(self):
-        """Increment invoice count (subscribers) or deduct credit (credit users)."""
-        # Active subscribers use monthly quota
-        if self.is_active_subscriber():
-            self.check_usage_reset()
-            self.invoices_created_this_month += 1
-            self.save(update_fields=['invoices_created_this_month'])
-        else:
-            # Credit users deduct from credits
-            self.deduct_credit()
+        """Increment the monthly invoice count."""
+        self.check_usage_reset()
+        self.invoices_created_this_month += 1
+        self.save(update_fields=['invoices_created_this_month'])
 
     def can_make_api_call(self):
         """Check if user can make another API call this month."""
@@ -272,34 +265,20 @@ class CustomUser(AbstractUser):
     def shows_watermark(self):
         """Check if invoices should show watermark.
 
-        Watermarks shown only for users using free credits (never purchased).
-        Subscribers and users who have purchased credits get no watermark.
-        """
-        # Active subscribers never see watermarks
-        if self.is_active_subscriber():
-            return False
-        # Users who have purchased credits don't see watermarks
-        if self.total_credits_purchased > 0:
-            return False
-        # Users who have purchased credits balance don't see watermarks
-        if self.credits_balance > 0:
-            return False
-        # Only show watermark for users on free credits only
-        return True
-
-    def get_usage_percentage(self):
-        """Get percentage of invoice limit used.
-
-        For subscribers: percentage of monthly quota used.
-        For credit users: returns 0 (credits don't have a percentage concept).
+        Watermarks are config-driven per tier. With the simplified model no
+        authenticated tier carries a watermark — it applies only to the
+        anonymous /try/ flow, which sets it explicitly.
         """
         from django.conf import settings
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.effective_tier(), {})
+        return tier_config.get('watermark', False)
 
-        # Credit users don't have a percentage-based limit
-        if not self.is_active_subscriber():
-            return 0
+    def get_usage_percentage(self):
+        """Get percentage of monthly invoice quota used (applies to all tiers, incl. free)."""
+        from django.conf import settings
 
-        tier_config = settings.SUBSCRIPTION_TIERS.get(self.subscription_tier, {})
+        self.check_usage_reset()
+        tier_config = settings.SUBSCRIPTION_TIERS.get(self.effective_tier(), {})
         limit = tier_config.get('invoices_per_month', 0)
 
         if limit == -1:

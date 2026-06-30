@@ -216,6 +216,9 @@ REST_FRAMEWORK = {
 STRIPE_LIVE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY', default='')
 STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY', default='')
 STRIPE_LIVE_MODE = config('STRIPE_LIVE_MODE', default=False, cast=bool)
+# Subscription price IDs (live products on acct RPateInc). Env vars override the defaults.
+STRIPE_PRO_PRICE_ID = config('STRIPE_PRO_PRICE_ID', default='price_1To19p6oOlORkbTyuHcbauox')  # $12/mo
+STRIPE_BUSINESS_PRICE_ID = config('STRIPE_BUSINESS_PRICE_ID', default='price_1To19z6oOlORkbTy0oTTGvN6')  # $49/mo
 DJSTRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='')
 DJSTRIPE_USE_NATIVE_JSONFIELD = True
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = 'id'
@@ -237,29 +240,11 @@ SUBSCRIPTION_TIERS = {
     'free': {
         'name': 'Free',
         'price': 0,
-        'invoices_per_month': 0,  # Uses credits instead of monthly quota
-        'uses_credits': True,  # Indicates this tier uses credit system
-        'templates': ['clean_slate'],
+        'invoices_per_month': 3,
+        'templates': 'all',
         'batch_upload': False,
         'api_access': False,
-        'watermark': True,  # Only for users who haven't purchased credits
-        'api_calls_per_month': 0,
-        'recurring_invoices': False,
-        'max_recurring': 0,
-        'team_seats': 0,
-        'time_tracking': True,
-        'max_active_timers': 1,
-        'time_tracking_reports': False,
-        'team_time_tracking': False,
-    },
-    'starter': {
-        'name': 'Starter',
-        'price': 9,
-        'invoices_per_month': 50,
-        'templates': ['clean_slate', 'classic_professional'],
-        'batch_upload': False,
-        'api_access': False,
-        'watermark': False,
+        'watermark': False,  # Watermark is now anonymous /try/ only
         'api_calls_per_month': 0,
         'recurring_invoices': False,
         'max_recurring': 0,
@@ -270,9 +255,9 @@ SUBSCRIPTION_TIERS = {
         'team_time_tracking': False,
     },
     'professional': {
-        'name': 'Professional',
-        'price': 29,
-        'invoices_per_month': 200,
+        'name': 'Pro',
+        'price': 12,
+        'invoices_per_month': -1,  # Unlimited
         'templates': 'all',
         'batch_upload': True,
         'api_access': False,
@@ -288,7 +273,7 @@ SUBSCRIPTION_TIERS = {
     },
     'business': {
         'name': 'Business',
-        'price': 79,
+        'price': 49,
         'invoices_per_month': -1,  # Unlimited
         'templates': 'all',
         'batch_upload': True,
@@ -305,34 +290,10 @@ SUBSCRIPTION_TIERS = {
     },
 }
 
-# Credit Packs Configuration (Pay-as-you-go option)
-# Stripe price IDs need to be created in Stripe Dashboard and added here
-CREDIT_PACKS = {
-    'pack_10': {
-        'name': '10 Credits',
-        'credits': 10,
-        'price': 9,
-        'price_per_credit': 0.90,
-        'stripe_price_id': config('STRIPE_CREDIT_PACK_10_PRICE_ID', default='price_1SnqlJ6oOlORkbTyjaW6sjR4'),
-        'popular': False,
-    },
-    'pack_25': {
-        'name': '25 Credits',
-        'credits': 25,
-        'price': 19,
-        'price_per_credit': 0.76,
-        'stripe_price_id': config('STRIPE_CREDIT_PACK_25_PRICE_ID', default='price_1Snqlh6oOlORkbTyeaL4R5dQ'),
-        'popular': True,  # Best value indicator
-    },
-    'pack_50': {
-        'name': '50 Credits',
-        'credits': 50,
-        'price': 35,
-        'price_per_credit': 0.70,
-        'stripe_price_id': config('STRIPE_CREDIT_PACK_50_PRICE_ID', default='price_1Snqm46oOlORkbTycROhS9fV'),
-        'popular': False,
-    },
-}
+# Credits / pay-as-you-go was retired in favor of the simplified 3-tier model.
+# Kept as an empty dict so legacy references resolve; the buy path is removed from the UI.
+# Existing users' credit balances remain in the DB but are no longer used for gating.
+CREDIT_PACKS = {}
 
 # Client Portal Configuration
 CLIENT_PORTAL_MAGIC_LINK_EXPIRY_MINUTES = 30  # Magic link expires after 30 minutes
@@ -438,7 +399,6 @@ APPLE_CLIENT_ID = config('APPLE_CLIENT_ID', default='')
 # AI generation limits per subscription tier (None = unlimited)
 AI_GENERATION_LIMITS = {
     'free': 3,
-    'starter': 10,
     'professional': None,  # Unlimited
     'business': None,  # Unlimited
 }

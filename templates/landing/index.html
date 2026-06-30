@@ -41,7 +41,7 @@
                 </a>
             </div>
             <p class="mt-6 text-primary-200 text-sm">
-                {% trans "Start with 5 free credits. Pay-as-you-go or subscribe for better value." %}
+                {% trans "Free plan includes 3 invoices a month with no watermark. No credit card required." %}
             </p>
         </div>
     </div>
@@ -544,83 +544,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Simple, Transparent Pricing" %}</h2>
-            <p class="text-xl text-gray-600">{% trans "Pay-as-you-go with credits or subscribe monthly for better value. Start with 5 free credits." %}</p>
+            <p class="text-xl text-gray-600">{% trans "Start free with 3 invoices a month. Upgrade to Pro or Business as you grow." %}</p>
         </div>
 
-        <!-- Pay-As-You-Go Credits -->
-        <div class="mb-16">
-            <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">{% trans "Pay-As-You-Go Credits" %}</h3>
-            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">{% trans "Buy credits when you need them. No monthly commitment, no expiration. Perfect for occasional invoicing." %}</p>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                <!-- Free Credits -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                    <div class="text-sm font-medium text-green-600 mb-2">{% trans "Free Starter" %}</div>
-                    <div class="text-4xl font-bold text-gray-900 mb-1">5</div>
-                    <div class="text-gray-500 mb-4">{% trans "credits" %}</div>
-                    <div class="text-2xl font-bold text-gray-900 mb-4">$0</div>
-                    <ul class="text-sm text-gray-600 space-y-2 mb-6">
-                        <li>{% trans "1 template" %}</li>
-                        <li>{% trans "Watermark on PDFs" %}</li>
-                        <li>{% trans "Never expires" %}</li>
-                    </ul>
-                    <a href="{% url 'account_signup' %}" class="block w-full btn-outline text-sm py-2">{% trans "Sign Up Free" %}</a>
-                </div>
-
-                <!-- 10 Credits -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                    <div class="text-sm font-medium text-primary-600 mb-2">{% trans "Starter Pack" %}</div>
-                    <div class="text-4xl font-bold text-gray-900 mb-1">10</div>
-                    <div class="text-gray-500 mb-4">{% trans "credits" %}</div>
-                    <div class="text-2xl font-bold text-gray-900 mb-1">$9</div>
-                    <div class="text-sm text-gray-500 mb-4">{% trans "$0.90/invoice" %}</div>
-                    <ul class="text-sm text-gray-600 space-y-2 mb-6">
-                        <li>{% trans "All 5 templates" %}</li>
-                        <li>{% trans "No watermark" %}</li>
-                        <li>{% trans "Never expires" %}</li>
-                    </ul>
-                    <a href="{% url 'billing:purchase_credits' '10_credits' %}" class="block w-full btn-outline text-sm py-2">{% trans "Buy Credits" %}</a>
-                </div>
-
-                <!-- 25 Credits - Popular -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 text-center ring-2 ring-primary-600">
-                    <div class="text-sm font-medium text-primary-600 mb-2">{% trans "Popular" %}</div>
-                    <div class="text-4xl font-bold text-gray-900 mb-1">25</div>
-                    <div class="text-gray-500 mb-4">{% trans "credits" %}</div>
-                    <div class="text-2xl font-bold text-gray-900 mb-1">$19</div>
-                    <div class="text-sm text-gray-500 mb-4">{% trans "$0.76/invoice" %}</div>
-                    <ul class="text-sm text-gray-600 space-y-2 mb-6">
-                        <li>{% trans "All 5 templates" %}</li>
-                        <li>{% trans "No watermark" %}</li>
-                        <li>{% trans "Never expires" %}</li>
-                    </ul>
-                    <a href="{% url 'billing:purchase_credits' '25_credits' %}" class="block w-full btn-primary text-sm py-2">{% trans "Buy Credits" %}</a>
-                </div>
-
-                <!-- 50 Credits -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                    <div class="text-sm font-medium text-primary-600 mb-2">{% trans "Best Value" %}</div>
-                    <div class="text-4xl font-bold text-gray-900 mb-1">50</div>
-                    <div class="text-gray-500 mb-4">{% trans "credits" %}</div>
-                    <div class="text-2xl font-bold text-gray-900 mb-1">$35</div>
-                    <div class="text-sm text-gray-500 mb-4">{% trans "$0.70/invoice" %}</div>
-                    <ul class="text-sm text-gray-600 space-y-2 mb-6">
-                        <li>{% trans "All 5 templates" %}</li>
-                        <li>{% trans "No watermark" %}</li>
-                        <li>{% trans "Never expires" %}</li>
-                    </ul>
-                    <a href="{% url 'billing:purchase_credits' '50_credits' %}" class="block w-full btn-outline text-sm py-2">{% trans "Buy Credits" %}</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Monthly Subscriptions -->
-        <div class="mb-12">
-            <h3 class="text-2xl font-bold text-gray-900 text-center mb-4">{% trans "Monthly Subscriptions" %}</h3>
-            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">{% trans "Create invoices regularly? Subscriptions offer the best per-invoice value, plus batch upload and recurring invoices." %}</p>
-        </div>
-
-        <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {% for key, tier in subscription_tiers.items %}
             {% if key != 'enterprise' %}
             <div class="{% if key == 'professional' %}ring-2 ring-primary-600 scale-105{% endif %} bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -660,7 +587,7 @@
                         </li>
                     </ul>
                     <a href="{% url 'account_signup' %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
-                        {% if tier.price == 0 %}{% trans "Get Started Free" %}{% else %}{% trans "Start Free Trial" %}{% endif %}
+                        {% if tier.price == 0 %}{% trans "Get Started Free" %}{% else %}{% trans "Start Free" %}{% endif %}
                     </a>
                 </div>
             </div>
@@ -688,7 +615,7 @@
                     </svg>
                 </button>
                 <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Yes! Our free plan lets you create up to 5 professional invoices per month at no cost. No credit card required to sign up. You can upgrade to a paid plan anytime for additional features like batch processing and API access." %}</p>
+                    <p class="text-gray-600">{% trans "Yes! Our free plan lets you create up to 3 professional invoices per month at no cost, with no watermark. No credit card required to sign up. You can upgrade to a paid plan anytime for additional features like batch processing and API access." %}</p>
                 </div>
             </div>
 
@@ -740,7 +667,7 @@
                     </svg>
                 </button>
                 <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Batch processing lets you create multiple invoices at once by uploading a CSV file. Simply download our template, fill in your invoice data, and upload it. InvoiceKits will generate PDF invoices for each row, which you can download as a ZIP file. This feature is available on Professional and Business plans." %}</p>
+                    <p class="text-gray-600">{% trans "Batch processing lets you create multiple invoices at once by uploading a CSV file. Simply download our template, fill in your invoice data, and upload it. InvoiceKits will generate PDF invoices for each row, which you can download as a ZIP file. This feature is available on Pro and Business plans." %}</p>
                 </div>
             </div>
 
@@ -754,45 +681,6 @@
                 </button>
                 <div class="px-6 pb-4 hidden">
                     <p class="text-gray-600">{% trans "Yes! Our Business plan includes REST API access with 1,000 API calls per month. You can programmatically create invoices, retrieve invoice data, and download PDFs. API documentation is available at /api/docs/ for authenticated users." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 7 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "What are invoice credits and how do they work?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Credits are our pay-as-you-go option. Each credit lets you create one invoice. New users get 5 free credits to start. You can buy more credits in packs of 10, 25, or 50 whenever you need them. Credits never expire, so you only pay for what you use." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 8 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "Should I use credits or subscribe monthly?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Credits are ideal if you create invoices occasionally or unpredictably. Monthly subscriptions offer better per-invoice value (as low as $0.15/invoice vs $0.70-0.90 with credits) and include premium features like batch upload and recurring invoices. If you create more than 15 invoices per month, a subscription is more cost-effective." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 9 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "Do invoice credits ever expire?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "No, credits never expire! Once you purchase a credit pack, those credits stay in your account until you use them. This makes credits perfect for occasional invoicing needs without worrying about a monthly subscription." %}</p>
                 </div>
             </div>
         </div>
@@ -810,7 +698,7 @@
             "name": "Is InvoiceKits really free to use?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Our free plan lets you create up to 5 professional invoices per month at no cost. No credit card required to sign up. You can upgrade to a paid plan anytime for additional features like batch processing and API access."
+                "text": "Yes! Our free plan lets you create up to 3 professional invoices per month at no cost, with no watermark. No credit card required to sign up. You can upgrade to a paid plan anytime for additional features like batch processing and API access."
             }
         },
         {
@@ -842,7 +730,7 @@
             "name": "What is batch invoice processing?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Batch processing lets you create multiple invoices at once by uploading a CSV file. Simply download our template, fill in your invoice data, and upload it. InvoiceKits will generate PDF invoices for each row, which you can download as a ZIP file. This feature is available on Professional and Business plans."
+                "text": "Batch processing lets you create multiple invoices at once by uploading a CSV file. Simply download our template, fill in your invoice data, and upload it. InvoiceKits will generate PDF invoices for each row, which you can download as a ZIP file. This feature is available on Pro and Business plans."
             }
         },
         {
@@ -851,30 +739,6 @@
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Yes! Our Business plan includes REST API access with 1,000 API calls per month. You can programmatically create invoices, retrieve invoice data, and download PDFs. API documentation is available at /api/docs/ for authenticated users."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What are invoice credits and how do they work?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Credits are our pay-as-you-go option. Each credit lets you create one invoice. New users get 5 free credits to start. You can buy more credits in packs of 10, 25, or 50 whenever you need them. Credits never expire, so you only pay for what you use."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Should I use credits or subscribe monthly?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Credits are ideal if you create invoices occasionally or unpredictably. Monthly subscriptions offer better per-invoice value (as low as $0.15/invoice vs $0.70-0.90 with credits) and include premium features like batch upload and recurring invoices. If you create more than 15 invoices per month, a subscription is more cost-effective."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Do invoice credits ever expire?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "No, credits never expire! Once you purchase a credit pack, those credits stay in your account until you use them. This makes credits perfect for occasional invoicing needs without worrying about a monthly subscription."
             }
         }
     ]

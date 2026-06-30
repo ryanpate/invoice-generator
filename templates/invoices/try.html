@@ -27,7 +27,23 @@
         <p class="text-gray-600 dark:text-gray-400">No signup needed. Fill in the details below and download your PDF invoice.</p>
     </div>
 
-    <form method="post" id="try-invoice-form">
+    <!-- Post-download success banner (revealed after the PDF opens in a new tab) -->
+    <div id="try-success-banner" class="hidden mb-6 bg-gradient-to-r from-green-50 to-primary-50 dark:from-green-900/30 dark:to-primary-900/30 border border-green-200 dark:border-green-700 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+            <div>
+                <p class="font-semibold text-gray-900 dark:text-white">Your invoice opened in a new tab.</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Create a free account to save it, remove the watermark, and send it straight to your client.</p>
+            </div>
+        </div>
+        <a href="{% url 'account_signup' %}" class="btn-primary whitespace-nowrap text-center flex-shrink-0">Save &amp; Remove Watermark</a>
+    </div>
+
+    <div id="try-lineitem-error" class="hidden mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+        <p>Please add at least one line item before downloading.</p>
+    </div>
+
+    <form method="post" id="try-invoice-form" target="_blank">
         {% csrf_token %}
 
         {% if form.non_field_errors %}
@@ -286,7 +302,7 @@
                             Create Free Account
                         </a>
                         <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
-                            5 free invoices included. No credit card.
+                            3 free invoices every month. No credit card.
                         </p>
                     </div>
                 </div>
@@ -399,8 +415,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const tryForm = document.getElementById('try-invoice-form');
     if (tryForm) {
         tryForm.addEventListener('submit', function(e) {
+            // Mirror the server's requirement: at least one line item with a description.
+            // Without this guard, an empty submit would open the error page in a new tab
+            // (target="_blank") while this tab falsely showed the success banner.
+            const hasLineItem = Array.from(
+                tryForm.querySelectorAll('[name^="item_description_"]')
+            ).some(function(el) { return el.value.trim() !== ''; });
+            if (!hasLineItem) {
+                e.preventDefault();
+                const err = document.getElementById('try-lineitem-error');
+                if (err) {
+                    err.classList.remove('hidden');
+                    err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'try_pdf_downloaded', { event_category: 'conversion' });
+            }
+            // The PDF opens in a new tab (target="_blank"), so this page stays put.
+            // Surface the signup ask at the aha moment.
+            const banner = document.getElementById('try-success-banner');
+            if (banner) {
+                banner.classList.remove('hidden');
+                banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
     }

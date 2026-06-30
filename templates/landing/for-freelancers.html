@@ -48,7 +48,7 @@
             "name": "Is InvoiceKits free for freelancers?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Every new user gets 5 free credits (one credit = one invoice). Need more? Buy credit packs starting at $9 for 10 credits, or subscribe monthly for better value if you invoice regularly."
+                "text": "Yes! The Free plan includes 3 invoices a month with no watermark and access to all 5 templates - no credit card required. Need more? Upgrade to Pro at $12/month for unlimited invoices, AI invoice generation, and recurring invoices."
             }
         },
         {
@@ -73,14 +73,6 @@
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Yes! Track invoice status (Draft, Sent, Paid, Overdue) from your dashboard. When you mark an invoice as paid, your client automatically receives a payment receipt."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Should I use credits or subscribe monthly?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "It depends on how often you invoice. Credits are perfect if you invoice sporadically - they never expire and there's no commitment. If you invoice 15+ times per month, subscriptions offer better value (as low as $0.15/invoice vs $0.70-0.90 with credits)."
             }
         }
     ]
@@ -123,7 +115,7 @@
                     </a>
                 </div>
                 <p class="mt-6 text-primary-200 text-sm">
-                    {% trans "Start with 5 free credits. Buy more as needed or subscribe for better value." %}
+                    {% trans "Free plan includes 3 invoices a month, no watermark. Upgrade as you grow." %}
                 </p>
             </div>
             <div class="hidden lg:block">
@@ -396,112 +388,50 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Simple Pricing for Freelancers" %}</h2>
-            <p class="text-xl text-gray-600">{% trans "Pay-as-you-go with credits or subscribe for better value" %}</p>
+            <p class="text-xl text-gray-600">{% trans "Start free, upgrade when you need more" %}</p>
         </div>
 
-        <!-- Pay-As-You-Go Credits -->
-        <div class="mb-12">
-            <h3 class="text-xl font-semibold text-gray-700 text-center mb-6">{% trans "Pay-As-You-Go Credits" %}</h3>
-            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">{% trans "Perfect for freelancers with irregular invoicing. Buy credits when you need them - they never expire." %}</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-                <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-                    <div class="text-green-600 text-sm font-medium mb-1">{% trans "Free" %}</div>
-                    <p class="text-2xl font-bold text-gray-900">5</p>
-                    <p class="text-gray-500 text-sm mb-2">{% trans "credits" %}</p>
-                    <p class="text-lg font-bold text-gray-900">$0</p>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-                    <p class="text-2xl font-bold text-gray-900">10</p>
-                    <p class="text-gray-500 text-sm mb-2">{% trans "credits" %}</p>
-                    <p class="text-lg font-bold text-gray-900">$9</p>
-                    <p class="text-xs text-gray-500">{% trans "$0.90/invoice" %}</p>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-4 text-center ring-2 ring-primary-500">
-                    <div class="text-primary-600 text-sm font-medium mb-1">{% trans "Popular" %}</div>
-                    <p class="text-2xl font-bold text-gray-900">25</p>
-                    <p class="text-gray-500 text-sm mb-2">{% trans "credits" %}</p>
-                    <p class="text-lg font-bold text-gray-900">$19</p>
-                    <p class="text-xs text-gray-500">{% trans "$0.76/invoice" %}</p>
-                </div>
-                <div class="bg-white rounded-xl shadow-sm p-4 text-center">
-                    <p class="text-2xl font-bold text-gray-900">50</p>
-                    <p class="text-gray-500 text-sm mb-2">{% trans "credits" %}</p>
-                    <p class="text-lg font-bold text-gray-900">$35</p>
-                    <p class="text-xs text-gray-500">{% trans "$0.70/invoice" %}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Monthly Subscriptions -->
+        <!-- Plans -->
         <div>
-            <h3 class="text-xl font-semibold text-gray-700 text-center mb-6">{% trans "Monthly Subscriptions (Better Value)" %}</h3>
-            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">{% trans "Invoice regularly? Subscriptions offer as low as $0.15/invoice plus recurring invoices for retainer clients." %}</p>
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <!-- Starter Plan -->
+                <!-- Free Plan -->
                 <div class="bg-white rounded-2xl shadow-lg p-8">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "Starter" %}</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "Free" %}</h3>
                     <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">$9</span>
+                        <span class="text-4xl font-bold text-gray-900">$0</span>
                         <span class="text-gray-500">/{% trans "month" %}</span>
                     </div>
-                    <p class="text-gray-600 mb-6">{% trans "For growing freelance businesses" %}</p>
+                    <p class="text-gray-600 mb-6">{% trans "Perfect for getting started" %}</p>
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            {% trans "50 invoices per month" %}
+                            {% trans "3 invoices per month" %}
                         </li>
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            {% trans "All 5 templates" %}
+                            {% trans "All 5 templates, no watermark" %}
                         </li>
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            {% trans "No watermark" %}
+                            {% trans "Basic time tracking (1 timer)" %}
                         </li>
                     </ul>
                     <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-primary-600 text-primary-600 font-semibold rounded-lg hover:bg-primary-50 transition">
-                        {% trans "Start Free Trial" %}
+                        {% trans "Get Started Free" %}
                     </a>
                 </div>
 
-                <!-- Professional Plan -->
+                <!-- Pro Plan -->
                 <div class="bg-white rounded-2xl shadow-lg p-8 ring-2 ring-primary-600 relative">
                     <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary-600 text-white text-sm font-medium px-4 py-1 rounded-full">
-                        {% trans "Best for Freelancers" %}
+                        {% trans "Most Popular" %}
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "Professional" %}</h3>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "Pro" %}</h3>
                     <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">$29</span>
+                        <span class="text-4xl font-bold text-gray-900">$12</span>
                         <span class="text-gray-500">/{% trans "month" %}</span>
                     </div>
                     <p class="text-gray-600 mb-6">{% trans "For busy freelancers with retainer clients" %}</p>
-                    <ul class="space-y-3 mb-8 text-sm">
-                        <li class="flex items-center text-gray-600">
-                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            {% trans "200 invoices per month" %}
-                        </li>
-                        <li class="flex items-center text-gray-600">
-                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            {% trans "Recurring invoices (retainers)" %}
-                        </li>
-                        <li class="flex items-center text-gray-600">
-                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            {% trans "CSV batch upload" %}
-                        </li>
-                    </ul>
-                    <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition">
-                        {% trans "Start Free Trial" %}
-                    </a>
-                </div>
-
-                <!-- Business Plan -->
-                <div class="bg-white rounded-2xl shadow-lg p-8">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "Business" %}</h3>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">$79</span>
-                        <span class="text-gray-500">/{% trans "month" %}</span>
-                    </div>
-                    <p class="text-gray-600 mb-6">{% trans "For agencies and high-volume freelancers" %}</p>
                     <ul class="space-y-3 mb-8 text-sm">
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -509,15 +439,42 @@
                         </li>
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            {% trans "AI invoice generator & recurring invoices" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            {% trans "Time tracking (5 timers) & CSV batch upload" %}
+                        </li>
+                    </ul>
+                    <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition">
+                        {% trans "Start Free" %}
+                    </a>
+                </div>
+
+                <!-- Business Plan -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{% trans "Business" %}</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">$49</span>
+                        <span class="text-gray-500">/{% trans "month" %}</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">{% trans "For agencies and high-volume freelancers" %}</p>
+                    <ul class="space-y-3 mb-8 text-sm">
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            {% trans "Everything in Pro, plus 3 team seats" %}
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             {% trans "API access (1,000 calls/mo)" %}
                         </li>
                         <li class="flex items-center text-gray-600">
                             <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            {% trans "Unlimited recurring invoices" %}
+                            {% trans "Unlimited recurring invoices & timers" %}
                         </li>
                     </ul>
                     <a href="{% url 'account_signup' %}" class="block w-full text-center py-3 px-6 border-2 border-primary-600 text-primary-600 font-semibold rounded-lg hover:bg-primary-50 transition">
-                        {% trans "Start Free Trial" %}
+                        {% trans "Start Free" %}
                     </a>
                 </div>
             </div>
@@ -539,7 +496,7 @@
         <div class="space-y-6">
             <div class="bg-gray-50 rounded-xl p-6">
                 <h3 class="font-semibold text-gray-900 mb-2">{% trans "Is InvoiceKits free for freelancers?" %}</h3>
-                <p class="text-gray-600">{% trans "Yes! Every new user gets 5 free credits (one credit = one invoice). Need more? Buy credit packs starting at $9 for 10 credits, or subscribe monthly for better value if you invoice regularly." %}</p>
+                <p class="text-gray-600">{% trans "Yes! The Free plan includes 3 invoices a month with no watermark and access to all 5 templates - no credit card required. Need more? Upgrade to Pro at $12/month for unlimited invoices, AI invoice generation, and recurring invoices." %}</p>
             </div>
 
             <div class="bg-gray-50 rounded-xl p-6">
@@ -555,11 +512,6 @@
             <div class="bg-gray-50 rounded-xl p-6">
                 <h3 class="font-semibold text-gray-900 mb-2">{% trans "Can I track which invoices are paid?" %}</h3>
                 <p class="text-gray-600">{% trans "Yes! Track invoice status (Draft, Sent, Paid, Overdue) from your dashboard. When you mark an invoice as paid, your client automatically receives a payment receipt." %}</p>
-            </div>
-
-            <div class="bg-gray-50 rounded-xl p-6">
-                <h3 class="font-semibold text-gray-900 mb-2">{% trans "Should I use credits or subscribe monthly?" %}</h3>
-                <p class="text-gray-600">{% trans "It depends on how often you invoice. Credits are perfect if you invoice sporadically - they never expire and there's no commitment. If you invoice 15+ times per month, subscriptions offer better value (as low as $0.15/invoice vs $0.70-0.90 with credits)." %}</p>
             </div>
         </div>
     </div>

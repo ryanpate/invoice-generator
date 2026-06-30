@@ -667,28 +667,23 @@ invoice_generator/
 
 ---
 
-## Pricing Model (Hybrid Credits + Subscriptions)
+## Pricing Model (Simplified 3-Tier — June 2026)
 
-### Credit Packs (Pay-as-you-go)
-| Pack | Price | Credits | Per-Invoice | Features |
-|------|-------|---------|-------------|----------|
-| Free | $0 | 5 (lifetime) | — | 1 template, watermark |
-| 10 Credits | $9 | 10 | $0.90 | All templates, no watermark |
-| 25 Credits | $19 | 25 | $0.76 | All templates, no watermark |
-| 50 Credits | $35 | 50 | $0.70 | All templates, no watermark |
+Credits / pay-as-you-go was **retired** in June 2026 to kill decision paralysis (the funnel had 0 paid users). The model is now three simple monthly tiers:
 
-### Subscriptions (Monthly)
-| Tier | Price | Invoices/mo | Per-Invoice | Features |
-|------|-------|-------------|-------------|----------|
-| Starter | $9/mo | 50 | $0.18 | All templates, no watermark |
-| Professional | $29/mo | 200 | $0.15 | + Batch upload, recurring invoices (up to 10) |
-| Business | $79/mo | Unlimited | — | + API access (1000 calls/mo), unlimited recurring, 3 team seats |
+| Tier | Price | Invoices/mo | Watermark | Key Features |
+|------|-------|-------------|-----------|--------------|
+| Free | $0 | 3 / month | No | All 5 templates, PDF/email, time tracking (1 timer), 3 AI generations/mo |
+| Pro | $12/mo | Unlimited | No | + AI generator (unlimited), batch upload, recurring (up to 10), time tracking (5 timers), reminders & late fees |
+| Business | $49/mo | Unlimited | No | Everything in Pro + 3 team seats, API (1000 calls/mo), unlimited recurring, unlimited timers, client portal |
 
 **Notes:**
-- Credits never expire
-- New users get 5 free lifetime credits
-- Watermark removed after any credit purchase
-- Subscriptions offer better per-invoice value for regular users
+- The watermark now applies **only** to the anonymous `/try/` flow. Every authenticated tier (incl. Free) is watermark-free.
+- Free metering is a **monthly** quota (3/mo, resets on the 1st), not lifetime credits. Tier key for Pro is still `professional` internally.
+- Credit fields remain on `CustomUser` (existing balances preserved) but are no longer used for gating; the buy path redirects to `/billing/plans/`.
+- **Stripe products (live) created June 2026** on acct RPateInc: Pro `price_1To19p6oOlORkbTyuHcbauox` ($12/mo), Business `price_1To19z6oOlORkbTy0oTTGvN6` ($49/mo). Wired as the `config()` defaults for `STRIPE_PRO_PRICE_ID` / `STRIPE_BUSINESS_PRICE_ID` in `base.py` (env overrides). Old $9/$29/$79 products left in Stripe but unreferenced.
+- Annual billing was dropped during simplification (can be re-added later with annual Stripe products).
+- **Premium template store retired** — every plan (incl. Free) now includes all 5 templates, so the $4.99/$9.99 store is gone. `TemplateStoreView`/`purchase_template`/`TemplatePurchaseSuccessView` redirect to `billing:plans`; `billing/templates.html` is orphaned; `TemplatePurchase` model + webhook handler kept dormant for data preservation.
 
 ---
 
