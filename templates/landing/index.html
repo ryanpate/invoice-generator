@@ -17,786 +17,443 @@
 
 {% block twitter_description %}{% trans "Create invoices by voice, AI text, or manually. Track time, send reminders, get paid faster. Start free." %}{% endblock %}
 
-{% block footer %}{% endblock %}
+{% block extra_head %}
+<style>
+  .lp{
+    --accent:#2563eb; --accent-hover:#1d4ed8; --accent-soft:#dbeafe;
+    --ink:#0f172a; --line:#e5e7eb; --soft:#f8fafc; --muted:#64748b;
+    --shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);
+    --shadow-xl:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);
+    --shadow-2xl:0 25px 50px -12px rgba(0,0,0,.25);
+    color:var(--ink); font-family:'Inter',system-ui,-apple-system,sans-serif;
+  }
+  .lp a{ text-decoration:none; }
+  /* Button color rules must out-specify .lp a, so anchors-as-buttons keep their own color */
+  .lp a.lp-btn--primary{ color:#fff; }
+  .lp a.lp-btn--outline{ color:var(--accent); }
+  .lp a.lp-btn--white{ color:var(--accent); }
+  .lp a.lp-navlink{ color:var(--muted); }
+  .lp a.lp-navlink:hover{ color:var(--ink); }
+  .lp a.lp-flink{ color:rgba(255,255,255,.75); }
+  .lp a.lp-flink:hover{ color:#fff; }
+  /* Buttons */
+  .lp-btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-weight:600; font-size:14.5px; line-height:1; border-radius:8px; padding:11px 18px;
+    cursor:pointer; border:2px solid transparent; white-space:nowrap;
+    transition:background-color .15s ease,color .15s ease,border-color .15s ease,box-shadow .15s ease; }
+  .lp-btn:focus-visible{ outline:none; box-shadow:0 0 0 4px rgba(37,99,235,.30); }
+  .lp-btn--lg{ font-size:16px; padding:15px 24px; }
+  .lp-btn--full{ width:100%; }
+  .lp-btn--primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .lp-btn--primary:hover{ background:var(--accent-hover); border-color:var(--accent-hover); }
+  .lp-btn--outline{ background:transparent; color:var(--accent); border-color:var(--accent); }
+  .lp-btn--outline:hover{ background:var(--accent-soft); }
+  .lp-btn--white{ background:#fff; color:var(--accent); border-color:#fff; }
+  .lp-btn--white:hover{ background:#eff6ff; border-color:#eff6ff; }
+  /* Nav + links */
+  .lp-navlink{ font-size:14.5px; font-weight:500; color:var(--muted); transition:color .15s ease; }
+  .lp-navlink:hover{ color:var(--ink); }
+  .lp-annc-link{ color:#bfdbfe; font-weight:600; display:inline-flex; align-items:center; gap:4px; transition:color .15s ease; }
+  .lp-annc-link:hover{ color:#fff; }
+  .lp-flink{ color:rgba(255,255,255,.75); transition:color .15s ease; }
+  .lp-flink:hover{ color:#fff; }
+  /* Feature card hover */
+  .lp-feature{ transition:box-shadow .2s ease,transform .2s ease; }
+  .lp-feature:hover{ box-shadow:var(--shadow-lg); transform:translateY(-3px); }
+  /* Smooth scroll for in-page anchors */
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .lp-feature:hover{ transform:none; }
+  }
+  /* Responsive */
+  @media (max-width:860px){
+    .lp-hero{ grid-template-columns:1fr !important; gap:40px !important; padding-top:48px !important; }
+    .lp-3col{ grid-template-columns:1fr !important; }
+    .lp-voice{ grid-template-columns:1fr !important; gap:36px !important; }
+    .lp-pricing{ grid-template-columns:1fr !important; }
+    .lp-footer-grid{ grid-template-columns:1fr 1fr !important; }
+    .lp-navlinks{ display:none !important; }
+    .lp-h1{ font-size:40px !important; }
+  }
+  @media (max-width:520px){ .lp-footer-grid{ grid-template-columns:1fr !important; } }
+</style>
+{% endblock %}
+
+{% block nav %}
+<div class="lp">
+  <!-- Announcement bar -->
+  <div x-data="{ show: true }" x-init="show = (localStorage.getItem('ik_annc') !== '0')" x-show="show" x-cloak
+       style="background:var(--ink); color:#fff; text-align:center; padding:10px 16px; font-size:13.5px;">
+    <span style="display:inline-flex; align-items:center; gap:8px; justify-content:center; flex-wrap:wrap;">
+      <span style="font-size:11px; font-weight:700; background:var(--accent); color:#fff; padding:2px 8px; border-radius:9999px; letter-spacing:.04em;">{% trans "NEW" %}</span>
+      {% trans "Voice-to-Invoice is here — dictate a complete invoice in seconds." %}
+      <a href="#features" class="lp-annc-link">{% trans "See how" %}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button type="button" @click="show=false; localStorage.setItem('ik_annc','0')" aria-label="{% trans 'Dismiss' %}"
+              style="position:absolute; right:16px; background:none; border:none; color:rgba(255,255,255,.6); cursor:pointer; line-height:0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </span>
+  </div>
+
+  <!-- Sticky nav -->
+  <header style="position:sticky; top:0; z-index:50; background:rgba(255,255,255,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line);">
+    <nav style="max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; justify-content:space-between;">
+      <a href="{% url 'landing' %}" style="display:inline-flex; align-items:center; gap:9px;">
+        <span style="width:30px; height:30px; border-radius:8px; background:var(--accent); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; letter-spacing:-.03em;">IK</span>
+        <span style="font-size:19px; font-weight:800; letter-spacing:-.02em; color:var(--ink);">Invoice<span style="color:var(--accent);">Kits</span></span>
+      </a>
+      <div class="lp-navlinks" style="display:flex; align-items:center; gap:32px;">
+        <a href="#features" class="lp-navlink">{% trans "Features" %}</a>
+        <a href="#how" class="lp-navlink">{% trans "How it works" %}</a>
+        <a href="{% url 'pricing' %}" class="lp-navlink">{% trans "Pricing" %}</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:dashboard' %}" class="lp-navlink">{% trans "Dashboard" %}</a>
+          <a href="{% url 'accounts:dashboard' %}" class="lp-btn lp-btn--primary">{% trans "Go to dashboard" %}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        {% else %}
+          <a href="{% url 'account_login' %}" class="lp-navlink">{% trans "Log in" %}</a>
+          <a href="{% url 'account_signup' %}" class="lp-btn lp-btn--primary">{% trans "Start free" %}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        {% endif %}
+      </div>
+      <!-- Mobile: always show the primary CTA -->
+      <a href="{% if user.is_authenticated %}{% url 'accounts:dashboard' %}{% else %}{% url 'account_signup' %}{% endif %}"
+         class="lp-btn lp-btn--primary" style="display:none;" x-data x-init="if(window.innerWidth<=860)$el.style.display='inline-flex'">{% if user.is_authenticated %}{% trans "Dashboard" %}{% else %}{% trans "Start free" %}{% endif %}</a>
+    </nav>
+  </header>
+</div>
+{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="relative bg-gradient-to-br from-primary-600 to-primary-800 overflow-hidden">
-    <div class="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-        <div class="text-center">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                {% trans "AI-Powered Invoice Generator" %}<br>
-                <span class="text-primary-200">{% trans "With Voice, Text & Time Tracking" %}</span>
-            </h1>
-            <p class="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-                {% trans "The smartest invoice generator for freelancers and small businesses. Tap the mic and dictate your invoice — or type in plain English. Track billable hours with our live timer. Create professional PDF invoices instantly." %}
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{% url 'try_invoice' %}" class="px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
-                    {% trans "Create Free Invoice Now" %}
-                </a>
-                <a href="#features" class="px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition">
-                    {% trans "See Features" %}
-                </a>
-            </div>
-            <p class="mt-6 text-primary-200 text-sm">
-                {% trans "Free plan includes 3 invoices a month with no watermark. No credit card required." %}
-            </p>
-        </div>
-    </div>
-</section>
+<div class="lp">
 
-<!-- NEW: AI & Time Tracking Highlight Section -->
-<section class="py-16 bg-gradient-to-b from-gray-50 to-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <span class="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 mb-4">
-                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clip-rule="evenodd"/>
-                </svg>
-                {% trans "New Features" %}
-            </span>
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Work Smarter with AI & Time Tracking" %}</h2>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">{% trans "Revolutionary features that save hours on invoicing" %}</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <!-- AI Invoice Generator Card -->
-            <a href="{% url 'feature_ai_invoice_generator' %}" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-700 p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                <div class="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-purple-400/20 rounded-full blur-3xl"></div>
-                <div class="relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                            </svg>
-                        </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm">
-                            {% trans "BETA" %}
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">{% trans "AI Invoice Generator" %}</h3>
-                    <p class="text-purple-100 mb-6">
-                        {% trans "Describe your work in plain English — \"Built React dashboard, 12 hours at $150/hr\" — and our AI instantly creates invoice line items. No more manual data entry." %}
-                    </p>
-                    <div class="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform">
-                        {% trans "Learn More" %}
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Voice Invoice Card (NEW) -->
-            <a href="{% url 'feature_voice_invoice' %}" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                <div class="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-blue-400/20 rounded-full blur-3xl"></div>
-                <div class="relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
-                            </svg>
-                        </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm">
-                            {% trans "NEW" %}
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">{% trans "Voice-to-Invoice" %}</h3>
-                    <p class="text-blue-100 mb-6">
-                        {% trans "Tap the mic and dictate — \"Invoice for Acme Corp, website redesign, 15 hours at $100/hr, Net 30\" — and Claude fills every invoice field instantly." %}
-                    </p>
-                    <div class="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform">
-                        {% trans "Learn More" %}
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Time Tracking Card -->
-            <a href="{% url 'feature_time_tracking' %}" class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-cyan-600 to-teal-700 p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                <div class="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-cyan-400/20 rounded-full blur-3xl"></div>
-                <div class="relative">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-sm">
-                            {% trans "NEW" %}
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-3">{% trans "Built-In Time Tracking" %}</h3>
-                    <p class="text-cyan-100 mb-6">
-                        {% trans "Start a timer, track your hours, and convert time entries into invoices with one click. No more guessing how long you worked or switching between apps." %}
-                    </p>
-                    <div class="flex items-center text-white font-medium group-hover:translate-x-2 transition-transform">
-                        {% trans "Learn More" %}
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Features Section -->
-<section id="features" class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "The Most Powerful Invoice Generator" %}</h2>
-            <p class="text-xl text-gray-600">{% trans "Everything you need to create professional invoices and get paid faster" %}</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Feature 1 - AI Invoice Generator -->
-            <a href="{% url 'feature_ai_invoice_generator' %}" class="p-8 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border-2 border-purple-200 hover:border-purple-400 transition-all hover:shadow-lg group">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs font-bold text-purple-600 bg-purple-100 px-2 py-1 rounded">BETA</span>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors">{% trans "AI Invoice Generator" %}</h3>
-                <p class="text-gray-600">{% trans "Describe your work in plain English and let AI create invoice line items instantly. Save hours on data entry." %}</p>
-            </a>
-
-            <!-- Feature - Voice Invoice -->
-            <a href="{% url 'feature_voice_invoice' %}" class="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-200 hover:border-blue-400 transition-all hover:shadow-lg group">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
-                        </svg>
-                    </div>
-                    <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded">NEW</span>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors">{% trans "Voice-to-Invoice" %}</h3>
-                <p class="text-gray-600">{% trans "Tap the mic and speak your invoice details. Claude transcribes and fills every field — client, items, rates, and payment terms." %}</p>
-            </a>
-
-            <!-- Feature - Instant PDF -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Instant PDF Generation" %}</h3>
-                <p class="text-gray-600">{% trans "Create professional PDF invoices instantly with your company branding and logo." %}</p>
-            </div>
-
-            <!-- Feature 2 -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Batch Invoice Generator" %}</h3>
-                <p class="text-gray-600">{% trans "Upload a CSV file for bulk invoice generation. Create 100+ invoices in minutes with our batch invoice processing feature." %}</p>
-            </div>
-
-            <!-- Feature 3 -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "5 Beautiful Templates" %}</h3>
-                <p class="text-gray-600">{% trans "Choose from professionally designed templates that match your brand style." %}</p>
-            </div>
-
-            <!-- Feature 4 -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Custom Logo" %}</h3>
-                <p class="text-gray-600">{% trans "Upload your company logo and customize colors to match your brand identity." %}</p>
-            </div>
-
-            <!-- Feature 5 -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Developer API" %}</h3>
-                <p class="text-gray-600">{% trans "Integrate invoice generation into your apps with our powerful REST API." %}</p>
-            </div>
-
-            <!-- Feature 6 -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Multi-Currency" %}</h3>
-                <p class="text-gray-600">{% trans "Support for USD, EUR, GBP, and more currencies for international invoicing." %}</p>
-            </div>
-
-            <!-- Feature 7 - Time Tracking -->
-            <a href="{% url 'feature_time_tracking' %}" class="p-8 bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl border-2 border-cyan-200 hover:border-cyan-400 transition-all hover:shadow-lg group">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <span class="text-xs font-bold text-cyan-600 bg-cyan-100 px-2 py-1 rounded">NEW</span>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3 group-hover:text-cyan-700 transition-colors">{% trans "Time Tracking" %}</h3>
-                <p class="text-gray-600">{% trans "Track billable hours with a live timer. Convert time entries into invoices with one click." %}</p>
-            </a>
-
-            <!-- Feature 8 - Payment Reminders -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Payment Reminders" %}</h3>
-                <p class="text-gray-600">{% trans "Automated email reminders before and after due dates. Never chase payments again." %}</p>
-            </div>
-
-            <!-- Feature 9 - Recurring Invoices -->
-            <div class="p-8 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">{% trans "Recurring Invoices" %}</h3>
-                <p class="text-gray-600">{% trans "Set up automatic invoicing on any schedule. Perfect for retainer clients and subscriptions." %}</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Templates Preview -->
-<section class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "5 Professional Invoice Templates" %}</h2>
-            <p class="text-xl text-gray-600">{% trans "Our invoice generator offers the perfect template style for your business" %}</p>
-        </div>
-
-        <div class="grid md:grid-cols-5 gap-4">
-            <!-- Clean Slate Template -->
-            <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition group">
-                <div class="aspect-[8.5/11] bg-white border border-gray-200 rounded-lg mb-4 p-3 overflow-hidden">
-                    <div class="h-full flex flex-col text-[6px]">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="w-8 h-3 bg-gray-200 rounded"></div>
-                            <div class="text-right">
-                                <div class="font-semibold text-gray-800">{% trans "INVOICE" %}</div>
-                                <div class="text-gray-400">#001</div>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="w-16 h-1.5 bg-gray-100 rounded mb-1"></div>
-                            <div class="w-12 h-1.5 bg-gray-100 rounded mb-3"></div>
-                            <div class="border-t border-gray-100 pt-2">
-                                <div class="flex justify-between mb-1">
-                                    <div class="w-20 h-1.5 bg-gray-100 rounded"></div>
-                                    <div class="w-6 h-1.5 bg-gray-100 rounded"></div>
-                                </div>
-                                <div class="flex justify-between mb-1">
-                                    <div class="w-16 h-1.5 bg-gray-100 rounded"></div>
-                                    <div class="w-6 h-1.5 bg-gray-100 rounded"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="border-t border-gray-200 pt-2 flex justify-between">
-                            <span class="font-semibold text-gray-600">{% trans "Total" %}</span>
-                            <span class="font-semibold text-gray-800">$1,250</span>
-                        </div>
-                    </div>
-                </div>
-                <h4 class="font-semibold text-gray-900">{% trans "Clean Slate" %}</h4>
-                <p class="text-sm text-gray-500">{% trans "Tech companies, startups" %}</p>
-            </div>
-
-            <!-- Executive Template -->
-            <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition group">
-                <div class="aspect-[8.5/11] bg-white border-2 border-blue-900 rounded-lg mb-4 p-3 overflow-hidden">
-                    <div class="h-full flex flex-col text-[6px]">
-                        <div class="bg-blue-900 -mx-3 -mt-3 px-3 py-2 mb-2">
-                            <div class="text-amber-400 font-serif font-bold text-[8px]">{% trans "INVOICE" %}</div>
-                        </div>
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="w-8 h-3 bg-blue-100 rounded"></div>
-                            <div class="text-right text-blue-900">
-                                <div class="font-serif">#001</div>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="w-16 h-1.5 bg-blue-50 rounded mb-1"></div>
-                            <div class="w-12 h-1.5 bg-blue-50 rounded mb-3"></div>
-                            <div class="border-t border-blue-200 pt-2">
-                                <div class="flex justify-between mb-1">
-                                    <div class="w-20 h-1.5 bg-blue-50 rounded"></div>
-                                    <div class="w-6 h-1.5 bg-blue-50 rounded"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="border-t-2 border-amber-400 pt-2 flex justify-between">
-                            <span class="font-serif text-blue-900">{% trans "Total" %}</span>
-                            <span class="font-bold text-blue-900">$1,250</span>
-                        </div>
-                    </div>
-                </div>
-                <h4 class="font-semibold text-gray-900">{% trans "Executive" %}</h4>
-                <p class="text-sm text-gray-500">{% trans "Consulting, legal, finance" %}</p>
-            </div>
-
-            <!-- Bold Modern Template -->
-            <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition group">
-                <div class="aspect-[8.5/11] bg-white border border-gray-200 rounded-lg mb-4 p-3 overflow-hidden">
-                    <div class="h-full flex flex-col text-[6px]">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="w-10 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded"></div>
-                            <div class="text-right">
-                                <div class="font-black text-[10px] text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">{% trans "INVOICE" %}</div>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="w-16 h-1.5 bg-purple-100 rounded mb-1"></div>
-                            <div class="w-12 h-1.5 bg-pink-100 rounded mb-3"></div>
-                            <div class="border-t-2 border-purple-200 pt-2">
-                                <div class="flex justify-between mb-1">
-                                    <div class="w-20 h-1.5 bg-purple-50 rounded"></div>
-                                    <div class="w-6 h-1.5 bg-pink-100 rounded"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 -mx-3 -mb-3 px-3 py-2 flex justify-between text-white">
-                            <span class="font-bold">{% trans "Total" %}</span>
-                            <span class="font-black">$1,250</span>
-                        </div>
-                    </div>
-                </div>
-                <h4 class="font-semibold text-gray-900">{% trans "Bold Modern" %}</h4>
-                <p class="text-sm text-gray-500">{% trans "Creative agencies, designers" %}</p>
-            </div>
-
-            <!-- Classic Professional Template -->
-            <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition group">
-                <div class="aspect-[8.5/11] bg-gray-50 border border-gray-300 rounded-lg mb-4 p-3 overflow-hidden">
-                    <div class="h-full flex flex-col text-[6px]">
-                        <div class="flex justify-between items-start mb-2 pb-2 border-b border-gray-300">
-                            <div class="w-8 h-3 bg-gray-300 rounded"></div>
-                            <div class="text-right">
-                                <div class="font-semibold text-gray-700 text-[8px]">{% trans "INVOICE" %}</div>
-                                <div class="text-gray-500">#001</div>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="w-16 h-1.5 bg-gray-200 rounded mb-1"></div>
-                            <div class="w-12 h-1.5 bg-gray-200 rounded mb-3"></div>
-                            <div class="bg-gray-100 -mx-3 px-3 py-1">
-                                <div class="flex justify-between mb-1">
-                                    <div class="w-20 h-1.5 bg-gray-200 rounded"></div>
-                                    <div class="w-6 h-1.5 bg-gray-200 rounded"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="border-t border-gray-300 pt-2 flex justify-between">
-                            <span class="font-semibold text-gray-600">{% trans "Total" %}</span>
-                            <span class="font-bold text-gray-800">$1,250</span>
-                        </div>
-                    </div>
-                </div>
-                <h4 class="font-semibold text-gray-900">{% trans "Classic Professional" %}</h4>
-                <p class="text-sm text-gray-500">{% trans "General business, accounting" %}</p>
-            </div>
-
-            <!-- Neon Edge Template -->
-            <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition group">
-                <div class="aspect-[8.5/11] bg-gray-900 border border-gray-700 rounded-lg mb-4 p-3 overflow-hidden">
-                    <div class="h-full flex flex-col text-[6px]">
-                        <div class="flex justify-between items-start mb-2">
-                            <div class="w-8 h-3 bg-gray-700 rounded"></div>
-                            <div class="text-right">
-                                <div class="font-bold text-[8px] text-cyan-400">{% trans "INVOICE" %}</div>
-                                <div class="text-gray-500">#001</div>
-                            </div>
-                        </div>
-                        <div class="flex-1">
-                            <div class="w-16 h-1.5 bg-gray-700 rounded mb-1"></div>
-                            <div class="w-12 h-1.5 bg-gray-700 rounded mb-3"></div>
-                            <div class="border-t border-gray-700 pt-2">
-                                <div class="flex justify-between mb-1">
-                                    <div class="w-20 h-1.5 bg-gray-700 rounded"></div>
-                                    <div class="w-6 h-1.5 bg-cyan-900 rounded"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="border-t border-cyan-400 pt-2 flex justify-between">
-                            <span class="text-gray-400">{% trans "Total" %}</span>
-                            <span class="font-bold text-cyan-400">$1,250</span>
-                        </div>
-                    </div>
-                </div>
-                <h4 class="font-semibold text-gray-900">{% trans "Neon Edge" %}</h4>
-                <p class="text-sm text-gray-500">{% trans "Gaming, tech, entertainment" %}</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- AdSense - Landing Page Ad (for all visitors) -->
-<!-- Testimonials Section -->
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Trusted by Freelancers & Small Businesses" %}</h2>
-            <p class="text-xl text-gray-600">{% trans "See why thousands choose InvoiceKits for their invoicing needs" %}</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Testimonial 1 -->
-            <div class="bg-gray-50 p-8 rounded-2xl">
-                <div class="flex items-center mb-4">
-                    <div class="flex text-yellow-400">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 mb-6">{% trans "The batch invoice generator saved me hours every month. I used to spend an entire day creating invoices for my 50+ clients. Now it takes 10 minutes with the CSV upload feature." %}</p>
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-semibold">SM</div>
-                    <div class="ml-3">
-                        <p class="font-semibold text-gray-900">Sarah M.</p>
-                        <p class="text-sm text-gray-500">{% trans "Freelance Designer" %}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimonial 2 -->
-            <div class="bg-gray-50 p-8 rounded-2xl">
-                <div class="flex items-center mb-4">
-                    <div class="flex text-yellow-400">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 mb-6">{% trans "Finally, a simple invoice maker that doesn't try to be full accounting software. I just needed to create professional invoices quickly, and InvoiceKits does exactly that." %}</p>
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-semibold">JT</div>
-                    <div class="ml-3">
-                        <p class="font-semibold text-gray-900">James T.</p>
-                        <p class="text-sm text-gray-500">{% trans "IT Consultant" %}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimonial 3 -->
-            <div class="bg-gray-50 p-8 rounded-2xl">
-                <div class="flex items-center mb-4">
-                    <div class="flex text-yellow-400">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    </div>
-                </div>
-                <p class="text-gray-600 mb-6">{% trans "The recurring invoice feature is a game-changer for my retainer clients. Set it up once and forget about it. My invoices go out automatically every month." %}</p>
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-semibold">AL</div>
-                    <div class="ml-3">
-                        <p class="font-semibold text-gray-900">Amanda L.</p>
-                        <p class="text-sm text-gray-500">{% trans "Marketing Agency Owner" %}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Pricing Section -->
-<section id="pricing" class="py-20 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Simple, Transparent Pricing" %}</h2>
-            <p class="text-xl text-gray-600">{% trans "Start free with 3 invoices a month. Upgrade to Pro or Business as you grow." %}</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {% for key, tier in subscription_tiers.items %}
-            {% if key != 'enterprise' %}
-            <div class="{% if key == 'professional' %}ring-2 ring-primary-600 scale-105{% endif %} bg-white rounded-2xl shadow-lg overflow-hidden">
-                {% if key == 'professional' %}
-                <div class="bg-primary-600 text-white text-center py-2 text-sm font-medium">{% trans "Most Popular" %}</div>
-                {% endif %}
-                <div class="p-8">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ tier.name }}</h3>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">${{ tier.price }}</span>
-                        <span class="text-gray-500">{% trans "/month" %}</span>
-                    </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center text-gray-600">
-                            <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            {% if tier.invoices_per_month == -1 %}{% trans "Unlimited" %}{% else %}{{ tier.invoices_per_month }}{% endif %} {% trans "invoices/month" %}
-                        </li>
-                        <li class="flex items-center text-gray-600">
-                            <svg class="w-5 h-5 {% if tier.watermark %}text-red-500{% else %}text-green-500{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{% if tier.watermark %}M6 18L18 6M6 6l12 12{% else %}M5 13l4 4L19 7{% endif %}"></path>
-                            </svg>
-                            {% if tier.watermark %}{% trans "Watermark on PDFs" %}{% else %}{% trans "No watermark" %}{% endif %}
-                        </li>
-                        <li class="flex items-center text-gray-600">
-                            <svg class="w-5 h-5 {% if tier.batch_upload %}text-green-500{% else %}text-gray-300{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            {% if tier.batch_upload %}{% trans "Batch upload" %}{% else %}{% trans "No batch upload" %}{% endif %}
-                        </li>
-                        <li class="flex items-center text-gray-600">
-                            <svg class="w-5 h-5 {% if tier.api_access %}text-green-500{% else %}text-gray-300{% endif %} mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            {% if tier.api_access %}{% trans "API access" %} ({{ tier.api_calls_per_month }} {% trans "calls" %}){% else %}{% trans "No API access" %}{% endif %}
-                        </li>
-                    </ul>
-                    <a href="{% url 'account_signup' %}" class="block w-full text-center {% if key == 'professional' %}btn-primary{% else %}btn-outline{% endif %}">
-                        {% if tier.price == 0 %}{% trans "Get Started Free" %}{% else %}{% trans "Start Free" %}{% endif %}
-                    </a>
-                </div>
-            </div>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- FAQ Section -->
-<section id="faq" class="py-20 bg-gray-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">{% trans "Frequently Asked Questions" %}</h2>
-            <p class="text-xl text-gray-600">{% trans "Everything you need to know about InvoiceKits" %}</p>
-        </div>
-
-        <div class="space-y-4">
-            <!-- FAQ 1 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "Is InvoiceKits really free to use?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Yes! Our free plan lets you create up to 3 professional invoices per month at no cost, with no watermark. No credit card required to sign up. You can upgrade to a paid plan anytime for additional features like batch processing and API access." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 2 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "How do I create an invoice with InvoiceKits?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Creating an invoice is simple: 1) Sign up for a free account, 2) Enter your company details once, 3) Fill in client information and line items, 4) Choose a professional template, 5) Download your PDF invoice instantly. You can also upload a CSV file for batch invoice creation." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 3 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "Can I add my company logo to invoices?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Absolutely! All plans allow you to upload your company logo. Go to Settings > Company and upload your logo once. It will automatically appear on all your invoices, creating a professional branded look." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 4 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "What currencies does InvoiceKits support?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "InvoiceKits supports multiple currencies including USD, EUR, GBP, CAD, AUD, JPY, and INR. You can set a default currency in your company settings and change it per invoice as needed for international clients." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 5 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "What is batch invoice processing?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Batch processing lets you create multiple invoices at once by uploading a CSV file. Simply download our template, fill in your invoice data, and upload it. InvoiceKits will generate PDF invoices for each row, which you can download as a ZIP file. This feature is available on Pro and Business plans." %}</p>
-                </div>
-            </div>
-
-            <!-- FAQ 6 -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button class="w-full px-6 py-4 text-left flex justify-between items-center focus:outline-none" onclick="this.nextElementSibling.classList.toggle('hidden')">
-                    <h3 class="text-lg font-semibold text-gray-900">{% trans "Do you offer an API for developers?" %}</h3>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div class="px-6 pb-4 hidden">
-                    <p class="text-gray-600">{% trans "Yes! Our Business plan includes REST API access with 1,000 API calls per month. You can programmatically create invoices, retrieve invoice data, and download PDFs. API documentation is available at /api/docs/ for authenticated users." %}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FAQ Schema.org structured data -->
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-            "@type": "Question",
-            "name": "Is InvoiceKits really free to use?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes! Our free plan lets you create up to 3 professional invoices per month at no cost, with no watermark. No credit card required to sign up. You can upgrade to a paid plan anytime for additional features like batch processing and API access."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "How do I create an invoice with InvoiceKits?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Creating an invoice is simple: 1) Sign up for a free account, 2) Enter your company details once, 3) Fill in client information and line items, 4) Choose a professional template, 5) Download your PDF invoice instantly. You can also upload a CSV file for batch invoice creation."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Can I add my company logo to invoices?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Absolutely! All plans allow you to upload your company logo. Go to Settings > Company and upload your logo once. It will automatically appear on all your invoices, creating a professional branded look."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What currencies does InvoiceKits support?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "InvoiceKits supports multiple currencies including USD, EUR, GBP, CAD, AUD, JPY, and INR. You can set a default currency in your company settings and change it per invoice as needed for international clients."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "What is batch invoice processing?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Batch processing lets you create multiple invoices at once by uploading a CSV file. Simply download our template, fill in your invoice data, and upload it. InvoiceKits will generate PDF invoices for each row, which you can download as a ZIP file. This feature is available on Pro and Business plans."
-            }
-        },
-        {
-            "@type": "Question",
-            "name": "Do you offer an API for developers?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes! Our Business plan includes REST API access with 1,000 API calls per month. You can programmatically create invoices, retrieve invoice data, and download PDFs. API documentation is available at /api/docs/ for authenticated users."
-            }
-        }
-    ]
-}
-</script>
-
-<!-- CTA Section -->
-<section class="py-20 bg-primary-600">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold text-white mb-6">{% trans "Ready to Get Started?" %}</h2>
-        <p class="text-xl text-primary-100 mb-8">
-            {% trans "Join thousands of freelancers and businesses using our free invoice generator to create professional invoices." %}
-        </p>
-        <a href="{% url 'account_signup' %}" class="inline-block px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg">
-            {% trans "Try Our Invoice Generator Free" %}
+  <!-- Hero -->
+  <section class="lp-hero" style="max-width:1200px; margin:0 auto; padding:80px 24px 72px; display:grid; grid-template-columns:1.05fr 1fr; gap:64px; align-items:center;">
+    <div>
+      <span style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:9999px; background:var(--soft); border:1px solid var(--line); font-size:13px; font-weight:600; color:var(--muted); margin-bottom:24px;">
+        <span style="color:var(--accent); display:inline-flex;"><svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 011.4-1.4l3.1 3.1 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg></span>
+        {% trans "Invoicing built for freelancers &amp; small business" %}
+      </span>
+      <h1 class="lp-h1" style="font-size:56px; line-height:1.05; letter-spacing:-0.03em; font-weight:800; margin:0 0 22px; color:var(--ink);">
+        {% trans "Invoicing that gets your business" %} <span style="color:var(--accent);">{% trans "paid faster." %}</span>
+      </h1>
+      <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 32px; max-width:520px;">
+        {% trans "InvoiceKits turns hours of admin into a 60-second task. Create polished, professional invoices, send them in a click, and track every payment — all from one clean dashboard." %}
+      </p>
+      <div style="display:flex; gap:14px; margin-bottom:28px; flex-wrap:wrap;">
+        <a href="{% url 'account_signup' %}" class="lp-btn lp-btn--primary lp-btn--lg">{% trans "Start invoicing free" %}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
+        <a href="{% url 'try_invoice' %}" class="lp-btn lp-btn--outline lp-btn--lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.6a1 1 0 01.7.3l5.4 5.4a1 1 0 01.3.7V19a2 2 0 01-2 2z"/></svg>
+          {% trans "Try it — no signup" %}
+        </a>
+      </div>
+      <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+        <span style="display:flex; align-items:center; gap:8px; font-size:14.5px; font-weight:500; color:var(--ink);">
+          <span style="color:var(--accent); display:inline-flex;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "Free to start" %}
+        </span>
+        <span style="display:flex; align-items:center; gap:8px; font-size:14.5px; font-weight:500; color:var(--ink);">
+          <span style="color:var(--accent); display:inline-flex;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "No card required" %}
+        </span>
+        <span style="display:flex; align-items:center; gap:8px; font-size:14.5px; font-weight:500; color:var(--ink);">
+          <span style="color:var(--accent); display:inline-flex;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "Cancel anytime" %}
+        </span>
+      </div>
+      <p style="font-size:13.5px; color:var(--muted); margin:20px 0 0;">{% trans "Set up in under a minute · 3 free invoices every month" %}</p>
     </div>
-</section>
 
-<!-- Footer -->
-<footer class="bg-gray-900 text-gray-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-                <h3 class="text-white font-semibold mb-4">{% trans "Product" %}</h3>
-                <ul class="space-y-2">
-                    <li><a href="#features" class="hover:text-white transition">{% trans "Features" %}</a></li>
-                    <li><a href="#pricing" class="hover:text-white transition">{% trans "Pricing" %}</a></li>
-                    <li><a href="{% url 'api_docs' %}" class="hover:text-white transition">{% trans "API" %}</a></li>
-                    <li><a href="{% url 'affiliates:program' %}" class="hover:text-white transition">{% trans "Affiliate Program" %}</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="text-white font-semibold mb-4">{% trans "Resources" %}</h3>
-                <ul class="space-y-2">
-                    <li><a href="{% url 'blog:list' %}" class="hover:text-white transition">{% trans "Blog" %}</a></li>
-                    <li><a href="{% url 'invoice_calculator' %}" class="hover:text-white transition">{% trans "Invoice Calculator" %}</a></li>
-                    <li><a href="{% url 'late_fee_calculator' %}" class="hover:text-white transition">{% trans "Late Fee Calculator" %}</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="text-white font-semibold mb-4">{% trans "Support" %}</h3>
-                <ul class="space-y-2">
-                    <li><a href="{% url 'help' %}" class="hover:text-white transition">{% trans "Help Center" %}</a></li>
-                    <li><a href="{% url 'contact' %}" class="hover:text-white transition">{% trans "Contact" %}</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="text-white font-semibold mb-4">{% trans "Legal" %}</h3>
-                <ul class="space-y-2">
-                    <li><a href="{% url 'privacy' %}" class="hover:text-white transition">{% trans "Privacy" %}</a></li>
-                    <li><a href="{% url 'terms' %}" class="hover:text-white transition">{% trans "Terms" %}</a></li>
-                </ul>
-            </div>
+    <!-- Invoice mockup -->
+    <div style="position:relative;">
+      <div style="position:absolute; inset:18px -10px -16px 24px; background:linear-gradient(135deg, var(--accent), #1e3a8a); border-radius:24px; opacity:.12; filter:blur(8px);"></div>
+      <div style="position:relative; background:#fff; border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow-2xl); padding:32px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:22px; border-bottom:1px solid var(--line);">
+          <div>
+            <div style="width:44px; height:44px; border-radius:11px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; letter-spacing:-.04em; margin-bottom:12px;">AB</div>
+            <div style="font-weight:700; font-size:15px; color:var(--ink); white-space:nowrap;">Anderson &amp; Brown</div>
+            <div style="font-size:12.5px; color:var(--muted);">{% trans "Studio &amp; Consulting" %}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:26px; font-weight:800; letter-spacing:-.02em; color:var(--ink);">{% trans "INVOICE" %}</div>
+            <div style="font-size:12.5px; color:var(--muted); margin-top:2px;">#INV-2026-0234</div>
+            <span style="display:inline-flex; align-items:center; gap:5px; margin-top:10px; padding:3px 10px; border-radius:9999px; background:#ecfdf5; color:#047857; font-size:12px; font-weight:600;">
+              <span style="width:6px; height:6px; border-radius:50%; background:currentColor;"></span>{% trans "Paid" %}
+            </span>
+          </div>
         </div>
-        <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500">
-            &copy; {% now "Y" %} InvoiceKits. {% trans "All rights reserved." %}
+        <div style="display:flex; justify-content:space-between; gap:16px; padding:18px 0; font-size:12.5px;">
+          <div><div style="text-transform:uppercase; letter-spacing:.06em; font-size:10px; color:var(--muted); margin-bottom:5px;">{% trans "Bill to" %}</div><div style="font-weight:600; color:var(--ink); white-space:nowrap;">Johnson Manufacturing</div><div style="color:var(--muted);">Detroit, MI</div></div>
+          <div style="text-align:right;"><div style="text-transform:uppercase; letter-spacing:.06em; font-size:10px; color:var(--muted); margin-bottom:5px;">{% trans "Due" %}</div><div style="font-weight:600; color:var(--ink); white-space:nowrap;">Feb 8, 2026</div><div style="color:var(--muted);">Net 30</div></div>
         </div>
+        <div style="border-top:1px solid var(--line);">
+          <div style="display:flex; justify-content:space-between; padding:12px 0; font-size:13px; border-bottom:1px solid var(--soft);"><span style="color:var(--ink);">{% trans "Monthly bookkeeping" %}</span><span style="font-weight:600; color:var(--ink);">$1,200.00</span></div>
+          <div style="display:flex; justify-content:space-between; padding:12px 0; font-size:13px; border-bottom:1px solid var(--soft);"><span style="color:var(--ink);">{% trans "Q4 statement prep" %}</span><span style="font-weight:600; color:var(--ink);">$1,400.00</span></div>
+          <div style="display:flex; justify-content:space-between; padding:12px 0; font-size:13px;"><span style="color:var(--ink);">{% trans "Tax consultation" %}</span><span style="font-weight:600; color:var(--ink);">$600.00</span></div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:16px; border-top:2px solid var(--accent);">
+          <span style="font-weight:700; color:var(--ink); font-size:15px;">{% trans "Total due" %}</span>
+          <span style="font-weight:800; color:var(--ink); font-size:24px; letter-spacing:-.02em;">$3,200.00</span>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" style="max-width:1100px; margin:0 auto; padding:88px 24px;">
+    <div style="text-align:center; max-width:640px; margin:0 auto 56px;">
+      <div style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:12px;">{% trans "How it works" %}</div>
+      <h2 style="font-size:38px; font-weight:800; letter-spacing:-.02em; color:var(--ink); margin:0 0 14px;">{% trans "From blank page to paid in three steps" %}</h2>
+      <p style="font-size:18px; color:var(--muted); margin:0; line-height:1.6;">{% trans "No accounting degree, no clunky software. Just a clean, fast path to getting paid." %}</p>
+    </div>
+    <div class="lp-3col" style="display:grid; grid-template-columns:repeat(3,1fr); gap:28px;">
+      <div>
+        <div style="width:48px; height:48px; border-radius:12px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        </div>
+        <div style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:6px;">{% trans "Step 1" %}</div>
+        <h3 style="font-size:20px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "Create in seconds" %}</h3>
+        <p style="font-size:15.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Pick a professional template, or describe the work in plain English and let AI build the line items for you." %}</p>
+      </div>
+      <div>
+        <div style="width:48px; height:48px; border-radius:12px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l7.9 5.3a2 2 0 002.2 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
+        <div style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:6px;">{% trans "Step 2" %}</div>
+        <h3 style="font-size:20px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "Send with a click" %}</h3>
+        <p style="font-size:15.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Email a polished PDF or share a payment link. Your branding, your terms, every time." %}</p>
+      </div>
+      <div>
+        <div style="width:48px; height:48px; border-radius:12px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-1.7 0-3 .9-3 2s1.3 2 3 2 3 .9 3 2-1.3 2-3 2m0-8c1.1 0 2.1.4 2.6 1M12 8V7m0 1v8m0 0v1m0-1c-1.1 0-2.1-.4-2.6-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:6px;">{% trans "Step 3" %}</div>
+        <h3 style="font-size:20px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "Get paid faster" %}</h3>
+        <p style="font-size:15.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Accept online payments and let automatic reminders chase late invoices, so you never have to." %}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" style="background:var(--soft); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div style="max-width:1100px; margin:0 auto; padding:88px 24px;">
+      <div style="text-align:center; max-width:640px; margin:0 auto 56px;">
+        <div style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:12px;">{% trans "Features" %}</div>
+        <h2 style="font-size:38px; font-weight:800; letter-spacing:-.02em; color:var(--ink); margin:0 0 14px;">{% trans "Everything you need to bill with confidence" %}</h2>
+        <p style="font-size:18px; color:var(--muted); margin:0; line-height:1.6;">{% trans "Powerful where it counts, simple everywhere else." %}</p>
+      </div>
+      <div class="lp-3col" style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;">
+
+        <div class="lp-feature" style="background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px;">
+          <div style="width:44px; height:44px; border-radius:11px; background:#f3e8ff; color:#9333ea; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.7 17h4.7M12 3v1m6.4 1.6l-.7.7M21 12h-1M4 12H3m3.3-5.7l-.7-.7m2.8 9.9a5 5 0 117.1 0l-.5.5a3.4 3.4 0 00-1 2.4V19a2 2 0 11-4 0v-.5c0-.9-.4-1.8-1-2.4l-.5-.5z"/></svg>
+          </div>
+          <h3 style="font-size:18px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "AI Invoice Generator" %}</h3>
+          <p style="font-size:14.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Describe the work — &quot;12 hours at $150/hr&quot; — and AI writes the line items instantly." %}</p>
+        </div>
+
+        <div class="lp-feature" style="background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px;">
+          <div style="width:44px; height:44px; border-radius:11px; background:#cffafe; color:#0891b2; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 style="font-size:18px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "Built-in Time Tracking" %}</h3>
+          <p style="font-size:14.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Track billable hours with a live timer, then turn them into an invoice in one click." %}</p>
+        </div>
+
+        <div class="lp-feature" style="background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px;">
+          <div style="width:44px; height:44px; border-radius:11px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.6a1 1 0 01.7.3l5.4 5.4a1 1 0 01.3.7V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <h3 style="font-size:18px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "5 Professional Templates" %}</h3>
+          <p style="font-size:14.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "From clean and minimal to bold and modern — a polished look for every client." %}</p>
+        </div>
+
+        <div class="lp-feature" style="background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px;">
+          <div style="width:44px; height:44px; border-radius:11px; background:#ccfbf1; color:#0d9488; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.6M20 20v-5h-.6m0 0a8 8 0 01-15.4-2m15.4 2H15M4.6 9A8 8 0 0120 11m-15.4-2H9"/></svg>
+          </div>
+          <h3 style="font-size:18px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "Recurring Invoices" %}</h3>
+          <p style="font-size:14.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Set retainer clients on autopilot. Invoices go out on schedule, every time." %}</p>
+        </div>
+
+        <div class="lp-feature" style="background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px;">
+          <div style="width:44px; height:44px; border-radius:11px; background:#ffedd5; color:#ea580c; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 17h5l-1.4-1.4a2 2 0 01-.6-1.4V11a6 6 0 00-4-5.7V5a2 2 0 10-4 0v.3C7.7 6.2 6 8.4 6 11v3.2c0 .5-.2 1-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          </div>
+          <h3 style="font-size:18px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "Automatic Reminders" %}</h3>
+          <p style="font-size:14.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Friendly nudges before and after the due date mean you never chase a payment again." %}</p>
+        </div>
+
+        <div class="lp-feature" style="background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px;">
+          <div style="width:44px; height:44px; border-radius:11px; background:#dcfce7; color:#16a34a; display:flex; align-items:center; justify-content:center; margin-bottom:18px;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.7 0 3-4 3-9s-1.3-9-3-9m0 18c-1.7 0-3-4-3-9s1.3-9 3-9m-9 9a9 9 0 019-9"/></svg>
+          </div>
+          <h3 style="font-size:18px; font-weight:700; color:var(--ink); margin:0 0 8px;">{% trans "Multi-currency &amp; Tax" %}</h3>
+          <p style="font-size:14.5px; color:var(--muted); line-height:1.6; margin:0;">{% trans "Bill clients anywhere in their currency, with tax and discounts handled automatically." %}</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Voice + AI highlight band (dark) -->
+  <section id="voice" style="background:var(--ink); color:#fff; overflow:hidden;">
+    <div class="lp-voice" style="max-width:1100px; margin:0 auto; padding:88px 24px; display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
+      <div>
+        <span style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:9999px; background:rgba(255,255,255,0.1); font-size:12.5px; font-weight:700; letter-spacing:.04em; color:#bfdbfe; margin-bottom:22px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+          {% trans "VOICE + AI" %}
+        </span>
+        <h2 style="font-size:40px; font-weight:800; letter-spacing:-.02em; line-height:1.1; margin:0 0 18px;">{% trans "Bill in your own voice. Literally." %}</h2>
+        <p style="font-size:18px; line-height:1.65; color:rgba(255,255,255,0.75); margin:0 0 28px; max-width:460px;">
+          {% trans "Tap the mic and say &quot;Invoice Acme Corp, website redesign, 15 hours at $100 an hour, Net 30.&quot; InvoiceKits fills every field — client, line items, rates, terms — before you've put your phone down." %}
+        </p>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="{% url 'try_invoice' %}" class="lp-btn lp-btn--white lp-btn--lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+            {% trans "Try AI invoicing" %}
+          </a>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:26px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+          <div style="width:42px; height:42px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+          </div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6);">{% trans "Listening…" %}</div>
+          <div style="margin-left:auto; display:flex; gap:3px; align-items:center;">
+            <span style="width:3px; height:12px; border-radius:2px; background:#bfdbfe;"></span>
+            <span style="width:3px; height:20px; border-radius:2px; background:#93c5fd;"></span>
+            <span style="width:3px; height:28px; border-radius:2px; background:var(--accent);"></span>
+            <span style="width:3px; height:16px; border-radius:2px; background:#93c5fd;"></span>
+            <span style="width:3px; height:10px; border-radius:2px; background:#bfdbfe;"></span>
+          </div>
+        </div>
+        <p style="font-size:16px; line-height:1.6; color:#fff; margin:0 0 20px;">"{% trans "Invoice" %} <span style="color:#93c5fd;">Acme Corp</span>, {% trans "website redesign" %}, <span style="color:#93c5fd;">{% trans "15 hours" %}</span> {% trans "at" %} <span style="color:#93c5fd;">$100/hr</span>, <span style="color:#93c5fd;">Net 30</span>."</p>
+        <div style="border-top:1px solid rgba(255,255,255,0.12); padding-top:18px; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:rgba(255,255,255,0.6);">{% trans "Client" %}</span><span style="font-weight:600;">Acme Corp</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:rgba(255,255,255,0.6);">{% trans "Website redesign — 15 hrs × $100" %}</span><span style="font-weight:600;">$1,500.00</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:14px;"><span style="color:rgba(255,255,255,0.6);">{% trans "Terms" %}</span><span style="font-weight:600;">Net 30</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:17px; margin-top:6px; padding-top:12px; border-top:2px solid var(--accent);"><span style="font-weight:700;">{% trans "Total" %}</span><span style="font-weight:800;">$1,500.00</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" style="background:var(--soft); border-top:1px solid var(--line);">
+    <div style="max-width:1080px; margin:0 auto; padding:88px 24px;">
+      <div style="text-align:center; max-width:600px; margin:0 auto 52px;">
+        <div style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin-bottom:12px;">{% trans "Pricing" %}</div>
+        <h2 style="font-size:38px; font-weight:800; letter-spacing:-.02em; color:var(--ink); margin:0 0 14px;">{% trans "Simple pricing that scales with you" %}</h2>
+        <p style="font-size:18px; color:var(--muted); margin:0;">{% trans "Start free. Upgrade only when invoicing pays for it." %}</p>
+      </div>
+      <div class="lp-pricing" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; align-items:stretch;">
+
+        <!-- Free -->
+        <div style="background:#fff; border:1px solid var(--line); border-radius:18px; padding:32px; display:flex; flex-direction:column;">
+          <div style="font-size:15px; font-weight:700; color:var(--ink);">{% trans "Free" %}</div>
+          <div style="font-size:13px; color:var(--muted); margin:4px 0 20px;">{% trans "For getting started" %}</div>
+          <div style="display:flex; align-items:baseline; gap:4px; margin-bottom:24px;"><span style="font-size:44px; font-weight:800; letter-spacing:-.02em; color:var(--ink);">$0</span><span style="color:var(--muted); font-size:15px;">/{% trans "mo" %}</span></div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:28px; flex:1;">
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "3 invoices / month" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "All 5 templates" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "No watermark" %}</div>
+          </div>
+          <a href="{% url 'account_signup' %}" class="lp-btn lp-btn--outline lp-btn--full">{% trans "Start free" %}</a>
+        </div>
+
+        <!-- Pro -->
+        <div style="background:#fff; border:2px solid var(--accent); border-radius:18px; padding:32px; display:flex; flex-direction:column; position:relative; box-shadow:var(--shadow-xl);">
+          <span style="position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; font-size:12px; font-weight:700; padding:4px 14px; border-radius:9999px; letter-spacing:.03em; white-space:nowrap;">{% trans "MOST POPULAR" %}</span>
+          <div style="font-size:15px; font-weight:700; color:var(--ink);">{% trans "Pro" %}</div>
+          <div style="font-size:13px; color:var(--muted); margin:4px 0 20px;">{% trans "For freelancers &amp; solo pros" %}</div>
+          <div style="display:flex; align-items:baseline; gap:4px; margin-bottom:24px;"><span style="font-size:44px; font-weight:800; letter-spacing:-.02em; color:var(--ink);">$12</span><span style="color:var(--muted); font-size:15px;">/{% trans "mo" %}</span></div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:28px; flex:1;">
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "Unlimited invoices" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "All 5 templates · no watermark" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "AI generator + time tracking" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "Automatic reminders" %}</div>
+          </div>
+          <a href="{% url 'account_signup' %}" class="lp-btn lp-btn--primary lp-btn--full">{% trans "Start free" %}</a>
+        </div>
+
+        <!-- Business -->
+        <div style="background:#fff; border:1px solid var(--line); border-radius:18px; padding:32px; display:flex; flex-direction:column;">
+          <div style="font-size:15px; font-weight:700; color:var(--ink);">{% trans "Business" %}</div>
+          <div style="font-size:13px; color:var(--muted); margin:4px 0 20px;">{% trans "For small teams" %}</div>
+          <div style="display:flex; align-items:baseline; gap:4px; margin-bottom:24px;"><span style="font-size:44px; font-weight:800; letter-spacing:-.02em; color:var(--ink);">$49</span><span style="color:var(--muted); font-size:15px;">/{% trans "mo" %}</span></div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:28px; flex:1;">
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "Everything in Pro" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "3 team seats" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "API access (1,000 calls/mo)" %}</div>
+            <div style="display:flex; gap:10px; font-size:14.5px; color:var(--ink);"><span style="color:var(--accent); flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "Client portal &amp; Stripe Connect" %}</div>
+          </div>
+          <a href="{% url 'account_signup' %}" class="lp-btn lp-btn--outline lp-btn--full">{% trans "Start free" %}</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section style="max-width:1100px; margin:0 auto; padding:96px 24px; text-align:center;">
+    <h2 style="font-size:44px; font-weight:800; letter-spacing:-.025em; color:var(--ink); margin:0 0 18px;">{% trans "Ready to get paid faster?" %}</h2>
+    <p style="font-size:19px; color:var(--muted); margin:0 auto 32px; max-width:520px; line-height:1.6;">{% trans "Turn invoicing from a chore into a 60-second task — and get paid faster." %}</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <a href="{% url 'account_signup' %}" class="lp-btn lp-btn--primary lp-btn--lg">{% trans "Start invoicing free" %}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+    <p style="font-size:13.5px; color:var(--muted); margin:22px 0 0;">{% trans "No credit card required · Set up in under a minute" %}</p>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer class="lp" style="background:var(--ink); color:#fff;">
+  <div style="max-width:1100px; margin:0 auto; padding:56px 24px 40px;">
+    <div class="lp-footer-grid" style="display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px;">
+      <div>
+        <a href="{% url 'landing' %}" style="display:inline-flex; align-items:center; gap:9px;">
+          <span style="width:28px; height:28px; border-radius:8px; background:var(--accent); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; letter-spacing:-.03em;">IK</span>
+          <span style="font-size:18px; font-weight:800; letter-spacing:-.02em; color:#fff;">Invoice<span style="color:#93c5fd;">Kits</span></span>
+        </a>
+        <p style="font-size:14px; line-height:1.6; color:rgba(255,255,255,0.6); margin:16px 0 0; max-width:240px;">{% trans "Professional invoicing for freelancers and small businesses. Get paid faster." %}</p>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,0.45); margin-bottom:16px;">{% trans "Product" %}</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:14px;">
+          <a href="#features" class="lp-flink">{% trans "Features" %}</a>
+          <a href="{% url 'pricing' %}" class="lp-flink">{% trans "Pricing" %}</a>
+          <a href="/templates/clean-slate/" class="lp-flink">{% trans "Templates" %}</a>
+          <a href="{% url 'api_docs' %}" class="lp-flink">{% trans "API" %}</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,0.45); margin-bottom:16px;">{% trans "Free tools" %}</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:14px;">
+          <a href="{% url 'invoice_calculator' %}" class="lp-flink">{% trans "Invoice Calculator" %}</a>
+          <a href="{% url 'late_fee_calculator' %}" class="lp-flink">{% trans "Late Fee Calculator" %}</a>
+          <a href="{% url 'tools_index' %}" class="lp-flink">{% trans "All tools" %}</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,0.45); margin-bottom:16px;">{% trans "Company" %}</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:14px;">
+          <a href="{% url 'help' %}" class="lp-flink">{% trans "Help Center" %}</a>
+          <a href="{% url 'contact' %}" class="lp-flink">{% trans "Contact" %}</a>
+          <a href="{% url 'privacy' %}" class="lp-flink">{% trans "Privacy" %}</a>
+          <a href="{% url 'terms' %}" class="lp-flink">{% trans "Terms" %}</a>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:44px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); font-size:13px; color:rgba(255,255,255,0.5);">&copy; {% now "Y" %} InvoiceKits. {% trans "All rights reserved." %}</div>
+  </div>
 </footer>
 {% endblock %}

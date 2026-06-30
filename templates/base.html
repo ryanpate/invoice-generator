@@ -110,7 +110,7 @@
     <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- HTMX (deferred for performance) -->
     <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -189,6 +189,7 @@
     {% block extra_schema %}{% endblock %}
 </head>
 <body class="h-full bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    {% block nav %}
     <!-- Navigation -->
     <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -297,6 +298,7 @@
             </div>
         </div>
     </nav>
+    {% endblock %}
 
     <!-- Flash Messages -->
     {% if messages %}
