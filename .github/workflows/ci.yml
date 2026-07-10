@@ -25,5 +25,5 @@ jobs:
       - name: Django system checks
         run: python manage.py check
 
-      - name: Template compile + critical page render tests
-        run: python manage.py test apps.accounts.tests.test_templates -v 2
+      - name: Full test suite
+        run: python manage.py test

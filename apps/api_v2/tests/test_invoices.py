@@ -161,15 +161,16 @@ class InvoiceListTests(InvoiceTestBase):
     def test_list_returns_200_and_invoices(self):
         response = self.client.get(INVOICES_URL)
         self.assertEqual(response.status_code, 200)
-        data = response.json()
-        # DRF pagination wraps results
-        results = data.get('results', data)
+        results = response.json()
+        # Flat array, not a paginated dict — iOS depends on this shape
+        # (pagination_class = None on all api_v2 viewsets).
+        self.assertIsInstance(results, list)
         self.assertGreaterEqual(len(results), 1)
 
     def test_list_uses_list_serializer_fields(self):
         """List serializer must NOT include client_phone or line_items."""
         response = self.client.get(INVOICES_URL)
-        results = response.json().get('results', response.json())
+        results = response.json()
         first = results[0]
         self.assertIn('invoice_number', first)
         self.assertIn('currency_symbol', first)
@@ -180,7 +181,7 @@ class InvoiceListTests(InvoiceTestBase):
     def test_list_filtered_by_status(self):
         make_invoice(self.company, invoice_number='INV-00002', status='paid')
         response = self.client.get(INVOICES_URL, {'status': 'paid'})
-        results = response.json().get('results', response.json())
+        results = response.json()
         self.assertTrue(all(r['status'] == 'paid' for r in results))
 
     def test_list_filtered_by_search(self):
@@ -190,7 +191,7 @@ class InvoiceListTests(InvoiceTestBase):
             client_name='Unique Client XYZ',
         )
         response = self.client.get(INVOICES_URL, {'search': 'XYZ'})
-        results = response.json().get('results', response.json())
+        results = response.json()
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]['client_name'], 'Unique Client XYZ')
 
@@ -201,7 +202,7 @@ class InvoiceListTests(InvoiceTestBase):
         make_invoice(other_company, invoice_number='INV-OTHER-001')
 
         response = self.client.get(INVOICES_URL)
-        results = response.json().get('results', response.json())
+        results = response.json()
         invoice_numbers = [r['invoice_number'] for r in results]
         self.assertNotIn('INV-OTHER-001', invoice_numbers)
 
@@ -260,10 +261,10 @@ class InvoiceCreateTests(InvoiceTestBase):
         self.assertEqual(float(invoice.total), 440.0)
 
     def test_create_denied_when_invoice_limit_reached(self):
+        # Free tier is metered as a monthly quota (credits were retired June 2026)
         self.user.subscription_tier = 'free'
         self.user.subscription_status = 'inactive'
-        self.user.free_credits_remaining = 0
-        self.user.credits_balance = 0
+        self.user.invoices_created_this_month = 999
         self.user.save()
 
         payload = self.create_payload()

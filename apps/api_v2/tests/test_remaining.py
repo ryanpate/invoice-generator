@@ -155,9 +155,11 @@ class RecurringInvoiceListTests(TestCase):
         make_recurring(self.company, name='Quarterly Report', frequency='quarterly')
         response = self.client.get(RECURRING_URL)
         self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertIn('results', data)
-        self.assertEqual(len(data['results']), 2)
+        results = response.json()
+        # Flat array, not a paginated dict — iOS depends on this shape
+        # (pagination_class = None on all api_v2 viewsets).
+        self.assertIsInstance(results, list)
+        self.assertEqual(len(results), 2)
 
     def test_list_unauthenticated_returns_401(self):
         anon = APIClient()
@@ -178,7 +180,7 @@ class RecurringInvoiceListTests(TestCase):
         make_recurring(self.company, name='My Recurring')
         response = self.client.get(RECURRING_URL)
         self.assertEqual(response.status_code, 200)
-        names = [r['name'] for r in response.json()['results']]
+        names = [r['name'] for r in response.json()]
         self.assertIn('My Recurring', names)
         self.assertNotIn('Other Recurring', names)
 

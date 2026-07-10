@@ -157,7 +157,7 @@ class TimeEntryListTests(TimeTrackingTestBase):
 
     def test_list_includes_own_entries(self):
         response = self.client.get(ENTRIES_URL)
-        results = response.json().get('results', response.json())
+        results = response.json()
         ids = [r['id'] for r in results]
         self.assertIn(self.entry.pk, ids)
 
@@ -167,14 +167,14 @@ class TimeEntryListTests(TimeTrackingTestBase):
         other_entry = make_time_entry(other_user, other_company)
 
         response = self.client.get(ENTRIES_URL)
-        results = response.json().get('results', response.json())
+        results = response.json()
         ids = [r['id'] for r in results]
         self.assertNotIn(other_entry.pk, ids)
 
     def test_list_filter_by_status(self):
         make_time_entry(self.user, self.company, description='Done task', status='invoiced')
         response = self.client.get(ENTRIES_URL, {'status': 'invoiced'})
-        results = response.json().get('results', response.json())
+        results = response.json()
         self.assertTrue(all(r['status'] == 'invoiced' for r in results))
 
     def test_list_filter_by_search(self):
@@ -183,13 +183,13 @@ class TimeEntryListTests(TimeTrackingTestBase):
             description='Very unique task XYZZY',
         )
         response = self.client.get(ENTRIES_URL, {'search': 'XYZZY'})
-        results = response.json().get('results', response.json())
+        results = response.json()
         self.assertEqual(len(results), 1)
         self.assertIn('XYZZY', results[0]['description'])
 
     def test_list_response_has_expected_fields(self):
         response = self.client.get(ENTRIES_URL)
-        results = response.json().get('results', response.json())
+        results = response.json()
         first = results[0]
         for field in ('id', 'description', 'duration_seconds', 'hourly_rate',
                       'billable_amount', 'status', 'date', 'created_at'):
@@ -197,7 +197,7 @@ class TimeEntryListTests(TimeTrackingTestBase):
 
     def test_list_duration_seconds_matches_model(self):
         response = self.client.get(ENTRIES_URL)
-        results = response.json().get('results', response.json())
+        results = response.json()
         entry_data = next(r for r in results if r['id'] == self.entry.pk)
         self.assertEqual(entry_data['duration_seconds'], self.entry.duration)
 
@@ -713,10 +713,10 @@ class BillTimeTests(TimeTrackingTestBase):
 
     def test_bill_time_denied_when_invoice_limit_reached(self):
         """User at invoice limit must receive 403."""
+        # Free tier is metered as a monthly quota (credits were retired June 2026)
         self.user.subscription_tier = 'free'
         self.user.subscription_status = 'inactive'
-        self.user.free_credits_remaining = 0
-        self.user.credits_balance = 0
+        self.user.invoices_created_this_month = 999
         self.user.save()
 
         response = self.client.post(
