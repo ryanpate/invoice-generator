@@ -1,0 +1,41 @@
+name: Uptime check
+
+# The signup page served 500s for five months with nothing watching it.
+# This polls the pages every visitor funnels through; a failed run emails
+# the repo owner. Note: GitHub disables scheduled workflows after 60 days
+# without repo activity — a commit or a manual "Run workflow" re-arms it.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check critical pages return 200
+        run: |
+          urls=(
+            "https://www.invoicekits.com/"
+            "https://www.invoicekits.com/try/"
+            "https://www.invoicekits.com/pricing/"
+            "https://www.invoicekits.com/accounts/signup/"
+            "https://www.invoicekits.com/accounts/login/"
+          )
+          failed=0
+          for url in "${urls[@]}"; do
+            # retry once after 10s so a deploy blip doesn't page
+            code=$(curl -sL -o /dev/null -w "%{http_code}" --max-time 30 "$url")
+            if [ "$code" != "200" ]; then
+              sleep 10
+              code=$(curl -sL -o /dev/null -w "%{http_code}" --max-time 30 "$url")
+            fi
+            if [ "$code" = "200" ]; then
+              echo "OK   $url"
+            else
+              echo "FAIL $url -> $code"
+              failed=1
+            fi
+          done
+          exit $failed
