@@ -4,7 +4,8 @@
 [phases.setup]
 nixPkgs = [
     "python311",
-    "gcc"
+    "gcc",
+    "nodejs"
 ]
 
 [phases.install]
@@ -15,6 +16,7 @@ cmds = [
 
 [phases.build]
 cmds = [
+    "npm ci && npx tailwindcss -i static/src/input.css -o static/css/tailwind.css --minify",
     ". /opt/venv/bin/activate && python manage.py collectstatic --noinput --clear"
 ]
 

@@ -71,3 +71,6 @@ celerybeat.pid
 # Xcode
 *.xcuserstate
 xcuserdata/
+node_modules/
+.playwright-mcp/
+static/css/tailwind.css
