@@ -16,7 +16,9 @@ cmds = [
 
 [phases.build]
 cmds = [
-    "npm ci && npx tailwindcss -i static/src/input.css -o static/css/tailwind.css --minify",
+    # npm install, not npm ci: nixpacks mounts a Docker cache at
+    # node_modules/.cache and npm ci EBUSYs trying to rmdir node_modules.
+    "npm install --no-audit --no-fund --prefer-offline && npx tailwindcss -i static/src/input.css -o static/css/tailwind.css --minify",
     ". /opt/venv/bin/activate && python manage.py collectstatic --noinput --clear"
 ]
 
