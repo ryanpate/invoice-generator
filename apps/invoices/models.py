@@ -1025,3 +1025,24 @@ class ActiveTimer(models.Model):
     def discard(self):
         """Discard the timer without saving."""
         self.delete()
+
+
+class TryLead(models.Model):
+    """
+    Email captured on /try/ via "Email me this PDF".
+
+    A visitor who won't sign up but wants their invoice emailed is a warm
+    lead — this is the only trace they leave. Surfaced in admin for manual
+    outreach; a nurture hook can attach here later.
+    """
+
+    email = models.EmailField(unique=True)
+    send_count = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_sent_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-last_sent_at']
+
+    def __str__(self):
+        return self.email

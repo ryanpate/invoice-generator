@@ -1,6 +1,8 @@
 """
 Views for invoices app.
 """
+import logging
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,6 +14,8 @@ from django.db.models import Q
 from django.conf import settings
 
 from .models import Invoice, LineItem, InvoiceBatch, RecurringInvoice, TimeEntry, ActiveTimer, TimeTrackingSettings
+
+logger = logging.getLogger(__name__)
 
 
 class TeamAwareQuerysetMixin:
@@ -509,7 +513,15 @@ class TryInvoiceView(View):
                 })
             idx += 1
 
+        wants_email = request.POST.get('action') == 'email'
+
         if not form.is_valid() or not line_items:
+            if wants_email:
+                return JsonResponse(
+                    {'success': False,
+                     'error': 'Please fill in the required fields and add at least one line item.'},
+                    status=400,
+                )
             if not line_items:
                 form.add_error(None, 'Please add at least one line item.')
             return render(request, 'invoices/try.html', {'form': form})
@@ -581,11 +593,78 @@ class TryInvoiceView(View):
             'line_items': line_items,
         }
 
+        if wants_email:
+            return self._email_pdf(request, invoice_data, TryCompany())
+
         pdf_bytes = InvoicePDFGenerator.generate_preview(invoice_data, TryCompany())
 
         response = HttpResponse(pdf_bytes, content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="invoice-preview.pdf"'
         return response
+
+    # Cap per anonymous session so /try/ can't be used to spam PDFs.
+    EMAIL_SEND_LIMIT = 3
+
+    def _email_pdf(self, request, invoice_data, company):
+        """Email the watermarked preview PDF to the visitor and record the lead."""
+        from django.core.exceptions import ValidationError
+        from django.core.mail import EmailMessage
+        from django.core.validators import validate_email
+        from django.template.loader import render_to_string
+
+        from .models import TryLead
+        from .services.pdf_generator import InvoicePDFGenerator
+
+        visitor_email = (request.POST.get('visitor_email') or '').strip()
+        try:
+            validate_email(visitor_email)
+        except ValidationError:
+            return JsonResponse(
+                {'success': False, 'error': 'Please enter a valid email address.'},
+                status=400,
+            )
+
+        sends = request.session.get('try_email_sends', 0)
+        if sends >= self.EMAIL_SEND_LIMIT:
+            return JsonResponse(
+                {'success': False,
+                 'error': 'Send limit reached — create a free account to keep emailing invoices.'},
+                status=429,
+            )
+
+        pdf_bytes = InvoicePDFGenerator.generate_preview(invoice_data, company)
+
+        html_content = render_to_string('emails/try_invoice_pdf.html', {
+            'client_name': invoice_data['client_name'],
+            'total': invoice_data['total'],
+            'currency': invoice_data['currency'],
+            'site_url': getattr(settings, 'SITE_URL', 'https://www.invoicekits.com'),
+        })
+        message = EmailMessage(
+            subject=f"Your invoice for {invoice_data['client_name']} is attached",
+            body=html_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[visitor_email],
+        )
+        message.content_subtype = 'html'
+        message.attach('invoice-preview.pdf', pdf_bytes, 'application/pdf')
+        try:
+            message.send(fail_silently=False)
+        except Exception:
+            logger.exception('Failed to email /try/ PDF to %s', visitor_email)
+            return JsonResponse(
+                {'success': False,
+                 'error': 'We could not send the email right now. Please try downloading instead.'},
+                status=500,
+            )
+
+        lead, created = TryLead.objects.get_or_create(email=visitor_email)
+        if not created:
+            lead.send_count += 1
+            lead.save(update_fields=['send_count', 'last_sent_at'])
+
+        request.session['try_email_sends'] = sends + 1
+        return JsonResponse({'success': True})
 
 
 class InvoiceListView(LoginRequiredMixin, TeamAwareQuerysetMixin, ListView):

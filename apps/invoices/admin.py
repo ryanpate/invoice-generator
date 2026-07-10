@@ -5,7 +5,7 @@ from django.contrib import admin
 from .models import (
     Invoice, LineItem, InvoiceBatch, RecurringInvoice, RecurringLineItem,
     PaymentReminderSettings, PaymentReminderLog, LateFeeLog,
-    TimeEntry, ActiveTimer, TimeTrackingSettings
+    TimeEntry, ActiveTimer, TimeTrackingSettings, TryLead
 )
 
 
@@ -285,3 +285,10 @@ class TimeTrackingSettingsAdmin(admin.ModelAdmin):
             'fields': ('default_hourly_rate', 'rounding_increment')
         }),
     )
+
+@admin.register(TryLead)
+class TryLeadAdmin(admin.ModelAdmin):
+    list_display = ['email', 'send_count', 'created_at', 'last_sent_at']
+    search_fields = ['email']
+    ordering = ['-last_sent_at']
+    readonly_fields = ['created_at', 'last_sent_at']

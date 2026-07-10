@@ -267,6 +267,22 @@
                         <p class="text-xs text-gray-500 dark:text-gray-400 text-center">
                             Free preview with watermark
                         </p>
+
+                        <!-- Email me this PDF -->
+                        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2 text-center">
+                                or get it in your inbox
+                            </p>
+                            <div class="flex gap-2">
+                                <input type="email" id="try-visitor-email" placeholder="you@example.com"
+                                       class="flex-1 min-w-0 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white text-sm px-3 py-2 border focus:ring-primary-500 focus:border-primary-500">
+                                <button type="button" id="try-email-btn"
+                                        class="flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600">
+                                    Email it to me
+                                </button>
+                            </div>
+                            <p id="try-email-status" class="hidden mt-2 text-sm text-center"></p>
+                        </div>
                     </div>
 
                     <!-- Signup CTA -->
@@ -440,6 +456,67 @@ document.addEventListener('DOMContentLoaded', function() {
                 banner.classList.remove('hidden');
                 banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+        });
+    }
+
+    // "Email it to me" — same form data, AJAX, inline status
+    const emailBtn = document.getElementById('try-email-btn');
+    if (emailBtn && tryForm) {
+        const emailInput = document.getElementById('try-visitor-email');
+        const emailStatus = document.getElementById('try-email-status');
+
+        function showEmailStatus(text, ok) {
+            emailStatus.textContent = text;
+            emailStatus.classList.remove('hidden', 'text-green-600', 'text-red-600',
+                                         'dark:text-green-400', 'dark:text-red-400');
+            emailStatus.classList.add(ok ? 'text-green-600' : 'text-red-600',
+                                      ok ? 'dark:text-green-400' : 'dark:text-red-400');
+        }
+
+        emailBtn.addEventListener('click', function() {
+            const email = emailInput.value.trim();
+            if (!email || !email.includes('@')) {
+                showEmailStatus('Please enter your email address.', false);
+                return;
+            }
+            const hasLineItem = Array.from(
+                tryForm.querySelectorAll('[name^="item_description_"]')
+            ).some(function(el) { return el.value.trim() !== ''; });
+            if (!hasLineItem) {
+                showEmailStatus('Add at least one line item first.', false);
+                return;
+            }
+
+            const formData = new FormData(tryForm);
+            formData.set('action', 'email');
+            formData.set('visitor_email', email);
+
+            emailBtn.disabled = true;
+            emailBtn.textContent = 'Sending…';
+
+            fetch(window.location.pathname, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+            .then(function(result) {
+                if (result.ok && result.data.success) {
+                    showEmailStatus('Sent! Check your inbox.', true);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'try_pdf_emailed', { event_category: 'conversion' });
+                    }
+                } else {
+                    showEmailStatus(result.data.error || 'Something went wrong. Try downloading instead.', false);
+                }
+            })
+            .catch(function() {
+                showEmailStatus('Something went wrong. Try downloading instead.', false);
+            })
+            .finally(function() {
+                emailBtn.disabled = false;
+                emailBtn.textContent = 'Email it to me';
+            });
         });
     }
 
