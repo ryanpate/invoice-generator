@@ -81,31 +81,8 @@
     <meta name="twitter:title" content="{% block twitter_title %}InvoiceKits - Create Professional Invoices in Seconds{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}Create beautiful, professional invoices instantly. Upload CSV for batch processing or enter details manually. Download as PDF.{% endblock %}">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Tailwind CSS (compiled from static/src/input.css — see tailwind.config.js) -->
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
 
     <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -117,30 +94,6 @@
 
     <!-- Alpine.js for dropdowns (already deferred) -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <style>
-        /* Hide Alpine.js elements until loaded */
-        [x-cloak] { display: none !important; }
-        body { font-family: 'Inter', sans-serif; }
-        .form-input {
-            @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition;
-        }
-        .form-select {
-            @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition bg-white;
-        }
-        .form-textarea {
-            @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition resize-none;
-        }
-        .btn-primary {
-            @apply px-6 py-2.5 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:ring-4 focus:ring-primary-300 transition;
-        }
-        .btn-secondary {
-            @apply px-6 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-300 transition;
-        }
-        .btn-outline {
-            @apply px-6 py-2.5 border-2 border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 focus:ring-4 focus:ring-primary-300 transition;
-        }
-    </style>
 
     {% block extra_head %}{% endblock %}
 

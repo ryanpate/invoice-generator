@@ -1,5 +1,5 @@
-// InvoiceKits Service Worker v1.0.0
-const CACHE_NAME = 'invoicekits-v1';
+// InvoiceKits Service Worker v1.1.0
+const CACHE_NAME = 'invoicekits-v2';
 const OFFLINE_URL = '/offline/';
 
 // Assets to cache on install
@@ -7,7 +7,7 @@ const STATIC_ASSETS = [
   '/',
   '/offline/',
   '/static/manifest.json',
-  'https://cdn.tailwindcss.com',
+  '/static/css/tailwind.css',
   'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
 ];
 
@@ -89,8 +89,7 @@ self.addEventListener('fetch', (event) => {
   if (
     event.request.url.includes('/static/') ||
     event.request.url.includes('fonts.googleapis.com') ||
-    event.request.url.includes('fonts.gstatic.com') ||
-    event.request.url.includes('cdn.tailwindcss.com')
+    event.request.url.includes('fonts.gstatic.com')
   ) {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) => {
