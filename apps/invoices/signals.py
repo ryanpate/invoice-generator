@@ -5,6 +5,8 @@ import logging
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from allauth.account.signals import user_signed_up
+
 from .models import Invoice
 from .services.email_sender import InvoiceEmailService
 
@@ -42,3 +44,64 @@ def send_payment_receipt_on_paid(sender, instance, **kwargs):
 
         # Update the original status after processing
         instance._original_status = instance.status
+
+
+@receiver(user_signed_up)
+def redeem_try_draft_on_signup(sender, request, user, **kwargs):
+    """
+    Save the /try/ draft invoice to the new account.
+
+    A visitor who built an invoice on /try/ has it stashed in their session;
+    signup should keep that work, not discard it. Creates their company (named
+    from the draft) and the invoice, then records the pk so the dashboard can
+    land them on it. Must never break signup — any failure is logged and
+    swallowed.
+    """
+    from datetime import date
+    from decimal import Decimal
+
+    from .views import TRY_DRAFT_SESSION_KEY, TRY_SAVED_INVOICE_SESSION_KEY
+
+    draft = request.session.pop(TRY_DRAFT_SESSION_KEY, None)
+    if not draft:
+        return
+
+    try:
+        from apps.companies.models import Company
+        from .models import LineItem
+
+        company = Company.objects.create(
+            user=user,
+            owner=user,
+            name=draft['company_name'],
+            email=draft.get('company_email') or user.email or '',
+        )
+        invoice = Invoice.objects.create(
+            company=company,
+            invoice_number=company.get_next_invoice_number(),
+            client_name=draft['client_name'],
+            client_email=draft.get('client_email', ''),
+            invoice_date=date.fromisoformat(draft['invoice_date']),
+            due_date=date.fromisoformat(draft['due_date']),
+            payment_terms=draft.get('payment_terms', 'net_30'),
+            currency=draft.get('currency', 'USD'),
+            tax_rate=Decimal(str(draft.get('tax_rate', 0))),
+            notes=draft.get('notes', ''),
+            template_style=draft.get('template_style', 'clean_slate'),
+        )
+        for order, item in enumerate(draft['line_items']):
+            LineItem.objects.create(
+                invoice=invoice,
+                description=str(item['description'])[:500],
+                quantity=Decimal(str(item['quantity'])),
+                rate=Decimal(str(item['rate'])),
+                order=order,
+            )
+        user.increment_invoice_count()
+        request.session[TRY_SAVED_INVOICE_SESSION_KEY] = invoice.pk
+        logger.info(
+            f"Redeemed /try/ draft as invoice {invoice.invoice_number} "
+            f"for new user {user.pk}"
+        )
+    except Exception:
+        logger.exception(f"Failed to redeem /try/ draft for new user {user.pk}")

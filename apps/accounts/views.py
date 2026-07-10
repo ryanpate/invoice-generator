@@ -16,6 +16,20 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     """Main dashboard view after login."""
     template_name = 'dashboard/index.html'
 
+    def get(self, request, *args, **kwargs):
+        # A /try/ draft redeemed at signup lands the new user on their saved
+        # invoice (their aha moment) instead of an empty dashboard. One-shot.
+        from apps.invoices.views import TRY_SAVED_INVOICE_SESSION_KEY
+        saved_pk = request.session.pop(TRY_SAVED_INVOICE_SESSION_KEY, None)
+        if saved_pk:
+            messages.success(
+                request,
+                'Welcome to InvoiceKits! The invoice you built is saved below — '
+                'watermark removed.'
+            )
+            return redirect('invoices:detail', pk=saved_pk)
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user

@@ -460,6 +460,14 @@ class StateLateFeePage(FreeToolView):
         return context
 
 
+# Session keys for carrying a /try/ draft through signup: the draft is stashed
+# when the visitor generates their PDF, redeemed into a real invoice by the
+# user_signed_up receiver in signals.py, and the saved pk triggers a one-shot
+# dashboard redirect to the new invoice.
+TRY_DRAFT_SESSION_KEY = 'try_invoice_draft'
+TRY_SAVED_INVOICE_SESSION_KEY = 'try_invoice_saved_pk'
+
+
 class TryInvoiceView(View):
     """No-signup invoice creator at /try/ — lets visitors build and download a PDF."""
 
@@ -556,6 +564,22 @@ class TryInvoiceView(View):
                 @staticmethod
                 def shows_watermark():
                     return True  # Always watermark on /try/
+
+        # Stash the draft so signup can save this exact invoice to the new account
+        request.session[TRY_DRAFT_SESSION_KEY] = {
+            'company_name': cd['company_name'],
+            'company_email': cd.get('company_email', ''),
+            'client_name': cd['client_name'],
+            'client_email': cd.get('client_email', ''),
+            'invoice_date': invoice_date.isoformat(),
+            'due_date': due_date.isoformat(),
+            'payment_terms': cd['payment_terms'],
+            'currency': cd['currency'],
+            'tax_rate': tax_rate,
+            'notes': cd.get('notes', ''),
+            'template_style': cd['template_style'],
+            'line_items': line_items,
+        }
 
         pdf_bytes = InvoicePDFGenerator.generate_preview(invoice_data, TryCompany())
 
