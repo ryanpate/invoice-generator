@@ -207,6 +207,19 @@ def handle_checkout_completed(session):
     if not user_id:
         return
 
+    # This Stripe account is shared with the owner's other products, and Stripe
+    # sends every event to every enabled endpoint. Only act on sessions whose
+    # customer belongs to the InvoiceKits user we are about to modify.
+    customer_id = session.get('customer')
+    try:
+        owns_session = customer_id and CustomUser.objects.filter(
+            id=user_id, stripe_customer_id=customer_id
+        ).exists()
+    except (ValueError, TypeError):
+        owns_session = False
+    if not owns_session:
+        return
+
     # Check if this is a template purchase
     if metadata.get('type') == 'template_purchase':
         try:
