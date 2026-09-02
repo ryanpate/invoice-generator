@@ -4,6 +4,10 @@ module.exports = {
   content: [
     './templates/**/*.html',
     './static/js/**/*.js',
+    // Django form widgets set their own CSS classes (e.g. form-textarea is
+    // applied only from here), so the scan must cover Python too or those
+    // component rules get dropped from the build.
+    './apps/**/*.py',
   ],
   // Classes assembled at runtime via JS string concatenation — the content
   // scan can't see these, so they must be pinned here or styling silently
