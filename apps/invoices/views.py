@@ -477,11 +477,38 @@ class TryInvoiceView(View):
 
     def get(self, request):
         from datetime import date
-        form = TryInvoiceForm(initial={'invoice_date': date.today()})
-        # Optional ?prefill= seeds the first line item's description so feature-page
-        # heroes can hand a visitor's typed work straight into the working builder.
-        prefill = request.GET.get('prefill', '').strip()[:500]
-        return render(request, 'invoices/try.html', {'form': form, 'prefill': prefill})
+
+        def text(name, limit=255):
+            return request.GET.get(name, '').strip()[:limit]
+
+        def number(name):
+            """Only echo back something that is actually a number."""
+            raw = request.GET.get(name, '').strip()[:16]
+            if not raw:
+                return ''
+            try:
+                value = float(raw)
+            except (TypeError, ValueError):
+                return ''
+            if value <= 0:
+                return ''
+            # Render 12 rather than 12.0, but keep 12.5 intact.
+            return str(int(value)) if value == int(value) else str(value)
+
+        initial = {'invoice_date': date.today()}
+        for field in ('company_name', 'client_name'):
+            if text(field):
+                initial[field] = text(field)
+
+        # The homepage hero and the feature/calculator pages hand a visitor's
+        # own words straight into the working builder. ?prefill= (the first
+        # line item's description) predates the rest and is still used alone.
+        return render(request, 'invoices/try.html', {
+            'form': TryInvoiceForm(initial=initial),
+            'prefill': text('prefill', 500),
+            'prefill_qty': number('qty'),
+            'prefill_rate': number('rate'),
+        })
 
     def post(self, request):
         from datetime import date, timedelta

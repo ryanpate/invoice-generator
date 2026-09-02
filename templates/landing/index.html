@@ -57,6 +57,21 @@
   .lp-annc-link:hover{ color:#fff; }
   .lp-flink{ color:rgba(255,255,255,.75); transition:color .15s ease; }
   .lp-flink:hover{ color:#fff; }
+  /* Hero builder fields: underlines, not boxes, so the card still reads as
+     an invoice document rather than a signup form. */
+  .lp-field{ width:100%; min-width:0; box-sizing:border-box; background:transparent;
+    border:none; border-bottom:1.5px solid var(--line); border-radius:0; padding:6px 2px;
+    color:var(--ink); font-family:inherit; transition:border-color .15s ease; }
+  .lp-field::placeholder{ color:#94a3b8; font-weight:400; }
+  .lp-field:hover{ border-bottom-color:#cbd5e1; }
+  /* Firefox puts a red glow on :invalid, and every empty required field is
+     invalid on load. Suppress it, but never at the cost of the focus ring --
+     hence :not(:focus), and the focus rule comes after so it always wins. */
+  .lp-field:invalid:not(:focus){ box-shadow:none; }
+  .lp-field:focus{ outline:none; border-bottom-color:var(--accent); box-shadow:0 2px 0 0 var(--accent); }
+  .lp-li-label{ display:block; text-transform:uppercase; letter-spacing:.06em;
+    font-size:10px; font-weight:700; color:var(--muted); margin-bottom:6px; }
+  .lp-lineitem{ display:grid; grid-template-columns:1fr 62px 90px; gap:10px; align-items:end; }
   /* Feature card hover */
   .lp-feature{ transition:box-shadow .2s ease,transform .2s ease; }
   .lp-feature:hover{ box-shadow:var(--shadow-lg); transform:translateY(-3px); }
@@ -74,7 +89,26 @@
     .lp-pricing{ grid-template-columns:1fr !important; }
     .lp-footer-grid{ grid-template-columns:1fr 1fr !important; }
     .lp-navlinks{ display:none !important; }
-    .lp-h1{ font-size:40px !important; }
+    .lp-h1{ font-size:34px !important; }
+    /* One column, and the builder jumps ahead of the reassurance list so the
+       product is what a phone meets first. Headline still leads. */
+    .lp-hero-copy, .lp-hero-form, .lp-hero-trust{ grid-column:1 !important; grid-row:auto !important; }
+    .lp-hero-copy{ order:1; }
+    .lp-hero-form{ order:2; }
+    .lp-hero-trust{ order:3; gap:14px !important; }
+    /* Buy back vertical space so the builder itself clears the fold. */
+    .lp-hero{ padding-top:24px !important; gap:24px !important; }
+    .lp-hero-eyebrow{ display:none !important; }
+    .lp-h1{ margin-bottom:14px !important; }
+    .lp-hero-sub{ font-size:16.5px !important; margin-bottom:0 !important; }
+    /* Description needs a full row on a phone; qty and rate share the next. */
+    .lp-lineitem{ grid-template-columns:1fr 1fr !important; row-gap:14px !important; }
+    .lp-li-desc{ grid-column:1 / -1; }
+    /* Tighter card so the running total still lands above the fold. */
+    #hero-builder{ padding:22px !important; }
+    .lp-billto{ padding:14px 0 2px !important; }
+    .lp-lineitem{ margin-top:12px !important; padding-top:12px !important; }
+    .lp-hero-sub{ margin-bottom:0 !important; }
   }
   @media (max-width:520px){ .lp-footer-grid{ grid-template-columns:1fr !important; } }
 </style>
@@ -133,27 +167,21 @@
 <div class="lp">
 
   <!-- Hero -->
-  <section class="lp-hero" style="max-width:1200px; margin:0 auto; padding:80px 24px 72px; display:grid; grid-template-columns:1.05fr 1fr; gap:64px; align-items:center;">
-    <div>
-      <span style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:9999px; background:var(--soft); border:1px solid var(--line); font-size:13px; font-weight:600; color:var(--muted); margin-bottom:24px;">
+  <section class="lp-hero" style="max-width:1200px; margin:0 auto; padding:80px 24px 72px; display:grid; grid-template-columns:1.05fr 1fr; gap:28px 64px; align-items:center;">
+    <div class="lp-hero-copy" style="grid-column:1; grid-row:1; align-self:end;">
+      <span class="lp-hero-eyebrow" style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:9999px; background:var(--soft); border:1px solid var(--line); font-size:13px; font-weight:600; color:var(--muted); margin-bottom:24px;">
         <span style="color:var(--accent); display:inline-flex;"><svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 011.4-1.4l3.1 3.1 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg></span>
         {% trans "Invoicing built for freelancers &amp; small business" %}
       </span>
       <h1 class="lp-h1" style="font-size:56px; line-height:1.05; letter-spacing:-0.03em; font-weight:800; margin:0 0 22px; color:var(--ink);">
-        {% trans "Invoicing that gets your business" %} <span style="color:var(--accent);">{% trans "paid faster." %}</span>
+        {% trans "Make a professional invoice." %} <span style="color:var(--accent);">{% trans "Free, no signup." %}</span>
       </h1>
-      <p style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 32px; max-width:520px;">
-        {% trans "InvoiceKits turns hours of admin into a 60-second task. Create polished, professional invoices, send them in a click, and track every payment — all from one clean dashboard." %}
+      <p class="lp-hero-sub" style="font-size:19px; line-height:1.6; color:var(--muted); margin:0 0 32px; max-width:520px;">
+        {% trans "Fill in the invoice on this page and download the PDF — no account, no card. AI line items, time tracking and automatic payment reminders are here when you want them." %}
       </p>
-      <div style="display:flex; gap:14px; margin-bottom:28px; flex-wrap:wrap;">
-        <a href="{% url 'account_signup' %}" class="lp-btn lp-btn--primary lp-btn--lg">{% trans "Start invoicing free" %}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a href="{% url 'try_invoice' %}" class="lp-btn lp-btn--outline lp-btn--lg">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.6a1 1 0 01.7.3l5.4 5.4a1 1 0 01.3.7V19a2 2 0 01-2 2z"/></svg>
-          {% trans "Try it — no signup" %}
-        </a>
-      </div>
+    </div>
+
+    <div class="lp-hero-trust" style="grid-column:1; grid-row:2; align-self:start;">
       <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
         <span style="display:flex; align-items:center; gap:8px; font-size:14.5px; font-weight:500; color:var(--ink);">
           <span style="color:var(--accent); display:inline-flex;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>{% trans "Free to start" %}
@@ -168,38 +196,64 @@
       <p style="font-size:13.5px; color:var(--muted); margin:20px 0 0;">{% trans "Set up in under a minute · 3 free invoices every month" %}</p>
     </div>
 
-    <!-- Invoice mockup -->
-    <div style="position:relative;">
+    <!-- Working invoice builder: the hero IS the product. Plain GET so it
+         works with no JS; hands off to /try/ with every field prefilled,
+         which reuses the tested PDF pipeline instead of duplicating it. -->
+    <div class="lp-hero-form" style="position:relative; grid-column:2; grid-row:1 / span 2;">
       <div style="position:absolute; inset:18px -10px -16px 24px; background:linear-gradient(135deg, var(--accent), #1e3a8a); border-radius:24px; opacity:.12; filter:blur(8px);"></div>
-      <div style="position:relative; background:#fff; border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow-2xl); padding:32px;">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:22px; border-bottom:1px solid var(--line);">
-          <div>
-            <div style="width:44px; height:44px; border-radius:11px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; letter-spacing:-.04em; margin-bottom:12px;">AB</div>
-            <div style="font-weight:700; font-size:15px; color:var(--ink); white-space:nowrap;">Anderson &amp; Brown</div>
-            <div style="font-size:12.5px; color:var(--muted);">{% trans "Studio &amp; Consulting" %}</div>
+      <form id="hero-builder" method="get" action="{% url 'try_invoice' %}"
+            style="position:relative; background:#fff; border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow-2xl); padding:30px;">
+
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:20px; border-bottom:1px solid var(--line);">
+          <div style="flex:1; min-width:0;">
+            <label for="hero-company" style="display:block; text-transform:uppercase; letter-spacing:.06em; font-size:10px; font-weight:700; color:var(--muted); margin-bottom:6px;">{% trans "From" %}</label>
+            <input id="hero-company" name="company_name" type="text" required maxlength="255"
+                   placeholder="{% trans 'Your business name' %}" autocomplete="organization"
+                   class="lp-field" style="font-weight:700; font-size:15px;">
           </div>
-          <div style="text-align:right;">
-            <div style="font-size:26px; font-weight:800; letter-spacing:-.02em; color:var(--ink);">{% trans "INVOICE" %}</div>
-            <div style="font-size:12.5px; color:var(--muted); margin-top:2px;">#INV-2026-0234</div>
-            <span style="display:inline-flex; align-items:center; gap:5px; margin-top:10px; padding:3px 10px; border-radius:9999px; background:#ecfdf5; color:#047857; font-size:12px; font-weight:600;">
-              <span style="width:6px; height:6px; border-radius:50%; background:currentColor;"></span>{% trans "Paid" %}
-            </span>
+          <div style="text-align:right; padding-left:16px;">
+            <div style="font-size:24px; font-weight:800; letter-spacing:-.02em; color:var(--ink);">{% trans "INVOICE" %}</div>
+            <div style="font-size:12.5px; color:var(--muted); margin-top:2px;">{% trans "Draft" %}</div>
           </div>
         </div>
-        <div style="display:flex; justify-content:space-between; gap:16px; padding:18px 0; font-size:12.5px;">
-          <div><div style="text-transform:uppercase; letter-spacing:.06em; font-size:10px; color:var(--muted); margin-bottom:5px;">{% trans "Bill to" %}</div><div style="font-weight:600; color:var(--ink); white-space:nowrap;">Johnson Manufacturing</div><div style="color:var(--muted);">Detroit, MI</div></div>
-          <div style="text-align:right;"><div style="text-transform:uppercase; letter-spacing:.06em; font-size:10px; color:var(--muted); margin-bottom:5px;">{% trans "Due" %}</div><div style="font-weight:600; color:var(--ink); white-space:nowrap;">Feb 8, 2026</div><div style="color:var(--muted);">Net 30</div></div>
+
+        <div class="lp-billto" style="padding:18px 0 4px;">
+          <label for="hero-client" style="display:block; text-transform:uppercase; letter-spacing:.06em; font-size:10px; font-weight:700; color:var(--muted); margin-bottom:6px;">{% trans "Bill to" %}</label>
+          <input id="hero-client" name="client_name" type="text" required maxlength="255"
+                 placeholder="{% trans 'Client name' %}" class="lp-field" style="font-weight:600; font-size:15px;">
         </div>
-        <div style="border-top:1px solid var(--line);">
-          <div style="display:flex; justify-content:space-between; padding:12px 0; font-size:13px; border-bottom:1px solid var(--soft);"><span style="color:var(--ink);">{% trans "Monthly bookkeeping" %}</span><span style="font-weight:600; color:var(--ink);">$1,200.00</span></div>
-          <div style="display:flex; justify-content:space-between; padding:12px 0; font-size:13px; border-bottom:1px solid var(--soft);"><span style="color:var(--ink);">{% trans "Q4 statement prep" %}</span><span style="font-weight:600; color:var(--ink);">$1,400.00</span></div>
-          <div style="display:flex; justify-content:space-between; padding:12px 0; font-size:13px;"><span style="color:var(--ink);">{% trans "Tax consultation" %}</span><span style="font-weight:600; color:var(--ink);">$600.00</span></div>
+
+        <div class="lp-lineitem" style="border-top:1px solid var(--line); margin-top:16px; padding-top:16px;">
+          <div class="lp-li-desc">
+            <label for="hero-desc" class="lp-li-label">{% trans "Description" %}</label>
+            <input id="hero-desc" name="prefill" type="text" required maxlength="500"
+                   placeholder="{% trans 'Design work' %}" class="lp-field" style="font-size:14px;">
+          </div>
+          <div class="lp-li-qty">
+            <label for="hero-qty" class="lp-li-label">{% trans "Qty" %}</label>
+            <input id="hero-qty" name="qty" type="number" min="0.01" step="0.01" value="1"
+                   inputmode="decimal" class="lp-field" style="font-size:14px;">
+          </div>
+          <div class="lp-li-rate">
+            <label for="hero-rate" class="lp-li-label" style="text-align:right;">{% trans "Rate" %}</label>
+            <input id="hero-rate" name="rate" type="number" min="0" step="0.01"
+                   inputmode="decimal" placeholder="0.00" class="lp-field" style="font-size:14px; text-align:right;">
+          </div>
         </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:16px; border-top:2px solid var(--accent);">
-          <span style="font-weight:700; color:var(--ink); font-size:15px;">{% trans "Total due" %}</span>
-          <span style="font-weight:800; color:var(--ink); font-size:24px; letter-spacing:-.02em;">$3,200.00</span>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:16px; border-top:2px solid var(--accent);">
+          <span style="font-weight:700; color:var(--ink); font-size:15px;">{% trans "Total" %}</span>
+          <span id="hero-total" style="font-weight:800; color:var(--ink); font-size:26px; letter-spacing:-.02em; font-variant-numeric:tabular-nums;">$0.00</span>
         </div>
-      </div>
+
+        <button type="submit" class="lp-btn lp-btn--primary lp-btn--lg" style="width:100%; margin-top:20px; justify-content:center;">
+          {% trans "Create my invoice" %}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p style="font-size:12.5px; color:var(--muted); text-align:center; margin:12px 0 0;">
+          {% trans "Next step: add tax, notes and more items, then download your PDF." %}
+        </p>
+      </form>
     </div>
   </section>
 
@@ -458,4 +512,43 @@
     <div style="margin-top:44px; padding-top:24px; border-top:1px solid rgba(255,255,255,0.12); font-size:13px; color:rgba(255,255,255,0.5);">&copy; {% now "Y" %} InvoiceKits. {% trans "All rights reserved." %}</div>
   </div>
 </footer>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Live total in the hero builder. Progressive enhancement only -- the form is
+// a plain GET and works fine without this.
+(function () {
+  var form = document.getElementById('hero-builder');
+  if (!form) return;
+  var qty = document.getElementById('hero-qty');
+  var rate = document.getElementById('hero-rate');
+  var out = document.getElementById('hero-total');
+  if (!qty || !rate || !out) return;
+
+  var money = new Intl.NumberFormat(undefined, {
+    style: 'currency', currency: 'USD', minimumFractionDigits: 2
+  });
+
+  function update() {
+    var q = parseFloat(qty.value);
+    var r = parseFloat(rate.value);
+    if (!isFinite(q) || q < 0) q = 0;
+    if (!isFinite(r) || r < 0) r = 0;
+    out.textContent = money.format(q * r);
+  }
+
+  ['input', 'change'].forEach(function (evt) {
+    qty.addEventListener(evt, update);
+    rate.addEventListener(evt, update);
+  });
+  update();
+
+  form.addEventListener('submit', function () {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'hero_builder_submitted', { event_category: 'conversion' });
+    }
+  });
+})();
+</script>
 {% endblock %}
