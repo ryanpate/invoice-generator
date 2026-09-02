@@ -4,6 +4,7 @@ Forms for invoices app.
 from django import forms
 from django.conf import settings
 from django.forms import inlineformset_factory
+from datetime import date
 from decimal import Decimal
 
 from .models import Invoice, LineItem, RecurringInvoice, RecurringLineItem, TimeEntry
@@ -553,3 +554,73 @@ class TryInvoiceForm(forms.Form):
         initial='clean_slate',
         widget=forms.Select(attrs={'class': 'form-select'})
     )
+
+
+class PastDueNoticeForm(forms.Form):
+    """Standalone form for /tools/past-due-notice/ — no login, no model binding.
+
+    Deliberately has no field for the client's email address: the notice is
+    only ever emailed to the visitor, who sends it on from their own mailbox.
+    An anonymous endpoint that mails a debt-collection notice to an arbitrary
+    third party from our domain is a harassment vector.
+    """
+
+    business_name = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Your business name'}),
+    )
+    business_email = forms.EmailField(
+        required=False,
+        widget=forms.EmailInput(attrs={'class': 'form-input', 'placeholder': 'you@yourbusiness.com'}),
+    )
+    client_name = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Client or company name'}),
+    )
+    invoice_number = forms.CharField(
+        max_length=64, required=False,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'INV-2026-0042'}),
+    )
+    original_amount = forms.DecimalField(
+        min_value=Decimal('0.01'), max_digits=12, decimal_places=2,
+        widget=forms.NumberInput(attrs={'class': 'form-input', 'step': '0.01', 'placeholder': '0.00'}),
+    )
+    due_date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-input', 'type': 'date'}),
+    )
+    late_fee = forms.DecimalField(
+        min_value=Decimal('0'), max_digits=12, decimal_places=2, initial=Decimal('0'),
+        widget=forms.NumberInput(attrs={'class': 'form-input', 'step': '0.01', 'placeholder': '0.00'}),
+    )
+    currency = forms.ChoiceField(
+        choices=settings.CURRENCIES, initial='USD',
+        widget=forms.Select(attrs={'class': 'form-select'}),
+    )
+    state = forms.ChoiceField(
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+    )
+    notes = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-textarea', 'rows': 3,
+            'placeholder': 'Payment instructions, or a note to your client',
+        }),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from apps.invoices.views import STATE_LATE_FEE_DATA
+        self.fields['state'].choices = [('', 'Not state-specific')] + [
+            (slug, data['name']) for slug, data in sorted(
+                STATE_LATE_FEE_DATA.items(), key=lambda kv: kv[1]['name']
+            )
+        ]
+
+    def clean_due_date(self):
+        due_date = self.cleaned_data['due_date']
+        if due_date > date.today():
+            raise forms.ValidationError(
+                'That date is in the future — nothing is past due yet.'
+            )
+        return due_date

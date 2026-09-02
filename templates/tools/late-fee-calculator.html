@@ -344,12 +344,21 @@
                     </svg>
                     {% trans "Print Results" %}
                 </button>
-                <a href="{% url 'try_invoice' %}?prefill=Late+fee"
+                {% comment %}
+                Primary action is the notice, not a new invoice: someone who just
+                computed a late fee already has an invoice -- they want to collect
+                on it. Figures are computed client-side, so JS carries them over.
+                {% endcomment %}
+                <a href="{% url 'past_due_notice' %}" id="send-notice-cta"
                    class="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-medium">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
-                    {% trans "Create an Invoice With This Fee" %}
+                    {% trans "Send a Past Due Notice" %}
+                </a>
+                <a href="{% url 'try_invoice' %}?prefill=Late+fee"
+                   class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                    {% trans "Create a New Invoice" %}
                 </a>
             </div>
         </div>
@@ -615,6 +624,18 @@ function calculateLateFee() {
 
     // Update display
     document.getElementById('result-days').textContent = daysOverdue;
+
+    // Hand the computed figures to the past-due notice generator.
+    const noticeCta = document.getElementById('send-notice-cta');
+    if (noticeCta) {
+        const params = new URLSearchParams();
+        if (amount > 0) params.set('amount', amount.toFixed(2));
+        if (totalFee > 0) params.set('fee', totalFee.toFixed(2));
+        const dueVal = document.getElementById('due-date').value;
+        if (dueVal) params.set('due_date', dueVal);
+        const qs = params.toString();
+        noticeCta.setAttribute('href', '{% url 'past_due_notice' %}' + (qs ? '?' + qs : ''));
+    }
     document.getElementById('result-original').textContent = formatCurrency(amount);
     document.getElementById('result-fee').textContent = formatCurrency(totalFee);
     document.getElementById('result-total').textContent = formatCurrency(totalDue);

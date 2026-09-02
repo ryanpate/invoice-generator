@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    {% comment %}
+    xhtml2pdf supports a narrow subset of CSS: no flexbox, no grid, no
+    position:fixed in flow. Tables and simple block layout only, which is why
+    this looks nothing like the Tailwind templates elsewhere.
+    {% endcomment %}
+    <style>
+        @page { size: letter portrait; margin: 1.5cm 1.8cm; }
+        body { font-family: Helvetica, sans-serif; font-size: 10.5pt; color: #1F2937; line-height: 1.5; }
+        .header { border-bottom: 2px solid #1F2937; padding-bottom: 10px; margin-bottom: 16px; }
+        .business { font-size: 15pt; font-weight: bold; color: #1F2937; }
+        .business-email { font-size: 9.5pt; color: #6B7280; }
+        .doc-title { font-size: 20pt; font-weight: bold; color: #B91C1C; text-align: right; }
+        .doc-date { font-size: 9.5pt; color: #6B7280; text-align: right; }
+        .meta { margin-bottom: 14px; }
+        .label { font-size: 8pt; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5pt; }
+        .value { font-size: 11pt; font-weight: bold; color: #1F2937; }
+        .callout { background-color: #FEF2F2; border: 1px solid #FCA5A5; padding: 10px; margin-bottom: 14px; }
+        .callout-text { color: #991B1B; font-size: 11pt; font-weight: bold; }
+        table.figures { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+        table.figures td { padding: 6px 0; border-bottom: 1px solid #E5E7EB; }
+        table.figures td.amount { text-align: right; }
+        table.figures tr.total td { border-bottom: none; border-top: 2px solid #1F2937; font-size: 13pt; font-weight: bold; padding-top: 10px; }
+        .section-title { font-size: 11pt; font-weight: bold; margin-bottom: 6px; color: #1F2937; }
+        .body-text { margin-bottom: 12px; }
+        .statute { background-color: #F9FAFB; border-left: 3px solid #9CA3AF; padding: 8px 10px; margin-bottom: 12px; font-size: 9pt; color: #374151; }
+        .statute-item { margin-bottom: 3px; }
+        .notes { border: 1px solid #E5E7EB; padding: 10px 12px; margin-bottom: 14px; font-size: 10pt; }
+        .disclaimer { margin-top: 14px; padding-top: 8px; border-top: 1px solid #E5E7EB; font-size: 7.5pt; color: #9CA3AF; }
+    </style>
+</head>
+<body>
+
+<table class="header" width="100%">
+    <tr>
+        <td width="55%">
+            <div class="business">{{ business_name }}</div>
+            {% if business_email %}<div class="business-email">{{ business_email }}</div>{% endif %}
+        </td>
+        <td width="45%">
+            <div class="doc-title">PAST DUE NOTICE</div>
+            <div class="doc-date">Issued {{ issue_date|date:"F j, Y" }}</div>
+        </td>
+    </tr>
+</table>
+
+<table class="meta" width="100%">
+    <tr>
+        <td width="50%">
+            <div class="label">To</div>
+            <div class="value">{{ client_name }}</div>
+        </td>
+        <td width="25%">
+            <div class="label">Invoice</div>
+            <div class="value">{% if invoice_number %}{{ invoice_number }}{% else %}&mdash;{% endif %}</div>
+        </td>
+        <td width="25%">
+            <div class="label">Was due</div>
+            <div class="value">{{ due_date|date:"M j, Y" }}</div>
+        </td>
+    </tr>
+</table>
+
+<div class="callout">
+    <div class="callout-text">
+        This invoice is {{ days_overdue }} day{{ days_overdue|pluralize }} past due.
+    </div>
+</div>
+
+<div class="body-text">
+    Our records show invoice{% if invoice_number %} {{ invoice_number }}{% endif %} remains unpaid.
+    It was due on {{ due_date|date:"F j, Y" }}. A late fee has been applied in line with the
+    payment terms, and the amount now outstanding is set out below.
+</div>
+
+<table class="figures">
+    <tr>
+        <td>Original invoice amount</td>
+        <td class="amount">{{ original_amount_display }}</td>
+    </tr>
+    <tr>
+        <td>Late fee ({{ days_overdue }} day{{ days_overdue|pluralize }} overdue)</td>
+        <td class="amount">{{ late_fee_display }}</td>
+    </tr>
+    <tr class="total">
+        <td>Total now due</td>
+        <td class="amount">{{ total_due_display }}</td>
+    </tr>
+</table>
+
+{% if notes %}
+<div class="section-title">Payment instructions</div>
+<div class="notes">{{ notes|linebreaksbr }}</div>
+{% endif %}
+
+{% if state_info %}
+<div class="section-title">{{ state_info.name }} late payment rules</div>
+<div class="statute">
+    <div class="statute-item"><strong>Maximum late fee:</strong> {{ state_info.max_late_fee }}</div>
+    <div class="statute-item"><strong>Interest:</strong> {{ state_info.max_interest_rate }}</div>
+    {% for statute in state_info.statutes %}
+    <div class="statute-item"><strong>Reference:</strong> {{ statute }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="body-text">
+    Please arrange payment of {{ total_due_display }} at your earliest
+    convenience. If payment has already been sent, please disregard this notice
+    {% if business_email %}or reply to {{ business_email }}{% endif %} so we can update our records.
+</div>
+
+<div class="disclaimer">
+    This notice was generated by {{ business_name }} using InvoiceKits. It is a request for payment,
+    not a legal demand, and is not legal advice. Late fee limits and enforceability vary by
+    jurisdiction and by the terms of your agreement.
+</div>
+
+</body>
+</html>
