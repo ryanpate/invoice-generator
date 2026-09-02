@@ -2,10 +2,10 @@
 URL configuration for Invoice Generator Pro.
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from django.shortcuts import redirect
 from django.conf import settings
 from django.conf.urls.static import static
-from django.conf.urls.i18n import i18n_patterns
 from django.http import JsonResponse, HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.sitemaps import Sitemap
@@ -183,8 +183,25 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
 ]
 
-# Internationalized URLs (public pages - supports /es/, /fr/ prefixes)
-urlpatterns += i18n_patterns(
+# Retired locale prefixes (ES/FR, removed September 2026). These URLs were
+# live and returning 200, so redirect them to the English page instead of
+# 404ing -- a 301 passes on whatever authority they accumulated. Must be
+# declared before the un-prefixed patterns so /es/... matches here first.
+urlpatterns += [
+    re_path(
+        r'^(?:es|fr)(?P<rest>/.*)$',
+        lambda request, rest: redirect(rest, permanent=True),
+        name='retired_locale_redirect',
+    ),
+    re_path(
+        r'^(?:es|fr)$',
+        lambda request: redirect('/', permanent=True),
+    ),
+]
+
+# Public URLs
+
+urlpatterns += [
     # Landing page - explicit pattern to ensure 'landing' URL name is available
     path('', LandingPageView.as_view(), name='landing'),
 
@@ -200,10 +217,7 @@ urlpatterns += i18n_patterns(
     path('privacy/', TemplateView.as_view(template_name='pages/privacy.html'), name='privacy'),
     path('terms/', TemplateView.as_view(template_name='pages/terms.html'), name='terms'),
     path('api/docs/', TemplateView.as_view(template_name='pages/api_docs.html'), name='api_docs'),
-
-    # Don't prefix English URLs (/ stays as /, not /en/)
-    prefix_default_language=False,
-)
+]
 
 # Stripe webhooks - only if djstripe is installed
 if 'djstripe' in settings.INSTALLED_APPS:
