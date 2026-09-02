@@ -103,6 +103,8 @@ def create_checkout_session(request, plan):
             }
         )
 
+        # Lets CheckoutSuccessView fire subscription_started exactly once.
+        request.session['ga_pending_subscription'] = plan
         return redirect(checkout_session.url)
 
     except stripe.error.StripeError as e:
@@ -133,6 +135,25 @@ def customer_portal(request):
 class CheckoutSuccessView(LoginRequiredMixin, TemplateView):
     """Checkout success page."""
     template_name = 'billing/success.html'
+
+    def get(self, request, *args, **kwargs):
+        # Fire the conversion once per checkout. create_checkout_session sets
+        # the pending flag; popping it here means a refresh of this page (or a
+        # bookmark) cannot double-count revenue, while a genuine second
+        # purchase -- an upgrade -- sets the flag again and does count.
+        plan = request.session.pop('ga_pending_subscription', None)
+        if plan:
+            from apps.accounts.analytics import queue_event
+            tier = settings.SUBSCRIPTION_TIERS.get(plan, {})
+            queue_event(
+                request, 'subscription_started',
+                event_category='conversion',
+                plan=plan,
+                value=tier.get('price', 0),
+                currency='USD',
+            )
+            request.session.modified = True
+        return super().get(request, *args, **kwargs)
 
 
 class CheckoutCancelView(LoginRequiredMixin, TemplateView):

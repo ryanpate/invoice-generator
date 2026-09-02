@@ -153,3 +153,50 @@ class CheckoutRequiresLoginTest(TestCase):
                 checkout, location,
                 f'Anonymous checkout for {plan} lost the plan on redirect.',
             )
+
+
+class BillingPagesExistTest(TestCase):
+    """Every template the billing views name must actually exist.
+
+    /billing/success/ is where Stripe returns a customer after they pay, and
+    billing/success.html did not exist -- so the first person to complete a
+    checkout would have been charged and then shown a 500. Nothing caught it
+    because no checkout has ever completed. billing/cancel.html was missing
+    the same way.
+    """
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='billing', email='billing@example.test',
+            password='Str0ngPass!2026',
+        )
+        self.client.force_login(self.user)
+
+    def test_success_and_cancel_pages_render(self):
+        for name in ('billing:success', 'billing:cancel'):
+            response = self.client.get(reverse(name))
+            self.assertEqual(
+                response.status_code, 200,
+                f'{name} returned {response.status_code} — a paying customer sees this.',
+            )
+
+    def test_every_billing_template_referenced_can_be_loaded(self):
+        """Catch the next missing template before a customer does."""
+        import re
+        from pathlib import Path
+
+        from django.conf import settings as dj_settings
+        from django.template.loader import get_template
+
+        source = (Path(dj_settings.BASE_DIR) / 'apps' / 'billing' / 'views.py').read_text()
+        referenced = set(re.findall(r"template_name\s*=\s*['\"]([^'\"]+)['\"]", source))
+        referenced |= set(re.findall(r"render\(request,\s*['\"]([^'\"]+\.html)['\"]", source))
+        self.assertTrue(referenced, 'No templates found in billing/views.py')
+
+        missing = []
+        for name in sorted(referenced):
+            try:
+                get_template(name)
+            except Exception:
+                missing.append(name)
+        self.assertEqual(missing, [], f'billing/views.py names templates that do not exist: {missing}')

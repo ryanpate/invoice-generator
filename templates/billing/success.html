@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscription Active - InvoiceKits{% endblock %}
+{% block meta_robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center">
+        <div class="mx-auto w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">You're all set</h1>
+        <p class="text-gray-600 dark:text-gray-300 mb-8">
+            Your payment went through and your plan is active. A receipt is on its way to
+            {{ user.email }}.
+        </p>
+
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-8 text-left">
+            <div class="text-sm font-medium text-gray-900 dark:text-white mb-3">What you can do now</div>
+            <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                <li class="flex gap-2"><span class="text-green-500">&check;</span> Create unlimited invoices &mdash; no monthly cap</li>
+                <li class="flex gap-2"><span class="text-green-500">&check;</span> Generate line items with AI, by text or voice</li>
+                <li class="flex gap-2"><span class="text-green-500">&check;</span> Track time and bill it straight to an invoice</li>
+                <li class="flex gap-2"><span class="text-green-500">&check;</span> Let payment reminders and late fees chase overdue invoices for you</li>
+            </ul>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="{% url 'invoices:create' %}" class="btn-primary">Create an invoice</a>
+            <a href="{% url 'billing:overview' %}" class="btn-secondary">View billing</a>
+        </div>
+
+        <p class="mt-6 text-xs text-gray-500 dark:text-gray-400">
+            If anything looks wrong, <a href="{% url 'contact' %}" class="text-primary-600 hover:underline">get in touch</a>
+            and we'll sort it out.
+        </p>
+    </div>
+</div>
+{% endblock %}

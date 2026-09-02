@@ -35,5 +35,17 @@ def send_welcome_email(request, user, **kwargs):
         pass
 
 
-# Connect signal
+def queue_signup_complete_event(request, user, **kwargs):
+    """Queue the GA4 conversion so it fires on whatever page comes next.
+
+    Not tied to the dashboard on purpose: a buyer arriving from /pricing/
+    redirects straight to Stripe checkout and never loads it.
+    """
+    from .analytics import queue_event
+
+    queue_event(request, 'signup_complete', event_category='conversion')
+
+
+# Connect signals
 user_signed_up.connect(send_welcome_email)
+user_signed_up.connect(queue_signup_complete_event)

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout Cancelled - InvoiceKits{% endblock %}
+{% block meta_robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 text-center">
+        <div class="mx-auto w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </div>
+
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">No payment was taken</h1>
+        <p class="text-gray-600 dark:text-gray-300 mb-8">
+            You cancelled before finishing checkout, so you haven't been charged. Your account
+            is exactly as it was.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="{% url 'billing:plans' %}" class="btn-primary">Back to plans</a>
+            <a href="{% url 'accounts:dashboard' %}" class="btn-secondary">Go to dashboard</a>
+        </div>
+
+        <p class="mt-6 text-xs text-gray-500 dark:text-gray-400">
+            Ran into a problem? <a href="{% url 'contact' %}" class="text-primary-600 hover:underline">Tell us what happened</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}
