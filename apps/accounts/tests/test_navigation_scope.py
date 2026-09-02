@@ -133,3 +133,55 @@ class LocalesRemovedTest(TestCase):
         html = self.client.get(reverse('landing')).content.decode()
         self.assertNotIn('Español', html)
         self.assertNotIn('Français', html)
+
+
+class LocaleRedirectIsNotAnOpenRedirectTest(TestCase):
+    """The retired-locale redirect must never send anyone off-site.
+
+    The first version reflected the matched path straight into redirect(), so
+    /es//evil.com produced `Location: //evil.com` -- a protocol-relative URL
+    that browsers resolve as https://evil.com. That turns invoicekits.com into
+    a phishing hop: a link whose visible prefix is the real domain lands the
+    victim somewhere else. Caught by automated review before it shipped.
+    """
+
+    HOSTILE = [
+        '/es//evil.example.com',
+        '/fr//evil.example.com',
+        '/es//evil.example.com/path',
+        '/es///evil.example.com',
+        '/es/\\evil.example.com',
+        '/es/\\\\evil.example.com',
+        '/fr//evil.example.com?next=/',
+        '/es//user:pass@evil.example.com',
+    ]
+
+    def test_never_redirects_to_another_host(self):
+        for path in self.HOSTILE:
+            response = self.client.get(path)
+            location = response.get('Location', '')
+            self.assertNotIn(
+                'evil.example.com', location,
+                f'{path} redirected to {location}',
+            )
+            self.assertTrue(
+                location.startswith('/') and not location.startswith('//'),
+                f'{path} produced a non-relative Location: {location}',
+            )
+
+    def test_hostile_paths_land_on_the_homepage(self):
+        for path in self.HOSTILE:
+            self.assertEqual(self.client.get(path)['Location'], '/')
+
+    def test_legitimate_locale_paths_still_redirect_normally(self):
+        cases = {
+            '/es/pricing/': '/pricing/',
+            '/fr/blog/': '/blog/',
+            '/es/tools/late-fee-calculator/': '/tools/late-fee-calculator/',
+            '/fr/': '/',
+            '/es': '/',
+        }
+        for path, expected in cases.items():
+            response = self.client.get(path)
+            self.assertEqual(response.status_code, 301, f'{path} -> {response.status_code}')
+            self.assertEqual(response['Location'], expected, f'{path} -> {response["Location"]}')

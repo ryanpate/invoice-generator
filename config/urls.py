@@ -4,6 +4,7 @@ URL configuration for Invoice Generator Pro.
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.shortcuts import redirect
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
 from django.conf.urls.static import static
 from django.http import JsonResponse, HttpResponse
@@ -187,16 +188,36 @@ urlpatterns = [
 # live and returning 200, so redirect them to the English page instead of
 # 404ing -- a 301 passes on whatever authority they accumulated. Must be
 # declared before the un-prefixed patterns so /es/... matches here first.
+def retired_locale_redirect(request, rest='/'):
+    """301 a retired /es/ or /fr/ URL to its English equivalent.
+
+    `rest` comes straight from the URL, so it must be proven to be a plain
+    relative path before it reaches redirect(). Reflecting it unchecked made
+    /es//evil.com emit `Location: //evil.com`, a protocol-relative URL that
+    browsers resolve as https://evil.com -- an open redirect that let a link
+    beginning with our own domain deposit someone on an attacker's site.
+
+    Anything not a single-slash relative path falls back to the homepage.
+    """
+    candidate = rest or '/'
+    looks_relative = (
+        candidate.startswith('/')
+        # // and /\ are both read as protocol-relative by browsers.
+        and not candidate.startswith('//')
+        and not candidate.startswith('/\\')
+        and '\\' not in candidate
+    )
+    if not looks_relative or not url_has_allowed_host_and_scheme(
+        candidate, allowed_hosts=None
+    ):
+        return redirect('/', permanent=True)
+    return redirect(candidate, permanent=True)
+
+
 urlpatterns += [
-    re_path(
-        r'^(?:es|fr)(?P<rest>/.*)$',
-        lambda request, rest: redirect(rest, permanent=True),
-        name='retired_locale_redirect',
-    ),
-    re_path(
-        r'^(?:es|fr)$',
-        lambda request: redirect('/', permanent=True),
-    ),
+    re_path(r'^(?:es|fr)(?P<rest>/.*)$', retired_locale_redirect,
+            name='retired_locale_redirect'),
+    re_path(r'^(?:es|fr)$', retired_locale_redirect),
 ]
 
 # Public URLs
