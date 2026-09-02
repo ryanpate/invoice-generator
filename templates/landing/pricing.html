@@ -263,7 +263,10 @@
                             <a href="{% url 'billing:checkout' 'professional' %}" class="block w-full text-center btn-primary">{% trans "Upgrade to Pro" %}</a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-primary">{% trans "Start Free, Upgrade Later" %}</a>
+                        {# Carry the plan through signup so checkout is the next stop, not the dashboard. #}
+                        {% url 'billing:checkout' 'professional' as pro_checkout %}
+                        <a href="{% url 'account_signup' %}?plan=professional&amp;next={{ pro_checkout|urlencode:'' }}" class="block w-full text-center btn-primary">{% trans "Get Pro — $12/mo" %}</a>
+                        <p class="mt-2 text-xs text-center text-gray-500">{% trans "Create your account, then pay. Cancel anytime." %}</p>
                     {% endif %}
                 </div>
             </div>
@@ -322,7 +325,9 @@
                             <a href="{% url 'billing:checkout' 'business' %}" class="block w-full text-center btn-outline">{% trans "Upgrade to Business" %}</a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'account_signup' %}" class="block w-full text-center btn-outline">{% trans "Start Free, Upgrade Later" %}</a>
+                        {% url 'billing:checkout' 'business' as business_checkout %}
+                        <a href="{% url 'account_signup' %}?plan=business&amp;next={{ business_checkout|urlencode:'' }}" class="block w-full text-center btn-outline">{% trans "Get Business — $49/mo" %}</a>
+                        <p class="mt-2 text-xs text-center text-gray-500">{% trans "Create your account, then pay. Cancel anytime." %}</p>
                     {% endif %}
                 </div>
             </div>

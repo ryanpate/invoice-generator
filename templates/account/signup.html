@@ -24,14 +24,31 @@
             </p>
         </div>
 
-        <!-- Free Plan Badge -->
+        <!-- Plan Badge: a buyer arriving from a paid CTA sees what they picked,
+             not a pitch for the free plan they didn't choose. -->
+        {% if request.GET.plan == 'professional' or request.GET.plan == 'business' %}
+        <div class="bg-gradient-to-r from-primary-50 to-indigo-100 dark:from-blue-900/50 dark:to-indigo-900/50 border border-primary-300 dark:border-blue-500/50 rounded-lg p-4 text-center">
+            <p class="text-primary-800 dark:text-blue-200 font-medium">
+                {% if request.GET.plan == 'professional' %}Pro — $12/month{% else %}Business — $49/month{% endif %}
+            </p>
+            <p class="text-sm text-primary-700 dark:text-blue-300 mt-1">Create your account, then you'll go straight to payment.</p>
+        </div>
+        {% else %}
         <div class="bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/50 dark:to-emerald-900/50 border border-green-400 dark:border-green-500/50 rounded-lg p-4 text-center">
             <p class="text-green-700 dark:text-green-400 font-medium">3 free invoices every month — no credit card required</p>
         </div>
+        {% endif %}
 
         <!-- Signup Form -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
             <form class="space-y-5" method="POST" action="{% url 'account_signup' %}">
+                {% comment %}
+                The action carries no query string, so the plan a buyer picked
+                has to ride along in the body or checkout is lost on submit.
+                allauth validates `next` is same-origin before redirecting.
+                {% endcomment %}
+                {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+                {% if request.GET.plan %}<input type="hidden" name="plan" value="{{ request.GET.plan }}">{% endif %}
                 {% csrf_token %}
 
                 {% if form.non_field_errors %}

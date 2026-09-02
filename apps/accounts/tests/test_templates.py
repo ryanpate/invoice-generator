@@ -51,6 +51,13 @@ class CriticalPageRenderTest(TestCase):
     def assert_renders(self, url):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200, f'{url} returned {response.status_code}')
+        # {# #} is single-line only; spread it over two lines and Django prints
+        # it to the page instead of stripping it. Same for an unclosed {% %}.
+        leaked = re.findall(r'\{#|\{%\s*\w+', response.content.decode())
+        self.assertEqual(
+            leaked, [],
+            f'{url} leaked unrendered template syntax into the page: {leaked[:3]}',
+        )
 
     def test_landing(self):
         self.assert_renders('/')
