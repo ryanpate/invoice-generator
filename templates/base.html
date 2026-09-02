@@ -167,7 +167,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{% url 'landing' %}" class="flex items-center space-x-2">
+                    <a href="{% if user.is_authenticated %}{% url 'accounts:dashboard' %}{% else %}{% url 'landing' %}{% endif %}" class="flex items-center space-x-2">
                         <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -177,10 +177,14 @@
 
                 <div class="hidden md:flex items-center space-x-4">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'accounts:dashboard' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Dashboard" %}</a>
+                        {% comment %}
+                        Four destinations. Billing moved under Settings, which links
+                        to it; the logo goes to the dashboard so it is not orphaned.
+                        {% endcomment %}
+                        <a href="{% url 'invoices:create' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Create" %}</a>
                         <a href="{% url 'invoices:list' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Invoices" %}</a>
                         <a href="{% url 'invoices:time_list' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Time" %}</a>
-                        <a href="{% url 'billing:overview' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Billing" %}</a>
+                        <a href="{% url 'accounts:settings' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Settings" %}</a>
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">
                                 <span>{{ user.email }}</span>
@@ -205,23 +209,6 @@
                     {% else %}
                         <a href="{% url 'pricing' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Pricing" %}</a>
                         <a href="{% url 'account_login' %}" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2">{% trans "Login" %}</a>
-                        <!-- Language Switcher (for non-authenticated users) -->
-                        <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg px-2 py-2 transition-colors" title="{% trans 'Change language' %}">
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-                                </svg>
-                                <span class="uppercase text-sm">{{ LANGUAGE_CODE|default:'en' }}</span>
-                            </button>
-                            <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-36 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700">
-                                <!-- English: strip language prefix if present -->
-                                <a href="{% if request.path|slice:':4' == '/es/' or request.path|slice:':4' == '/fr/' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'en' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">English</a>
-                                <!-- Spanish: add /es prefix, strip existing prefix if switching from another language -->
-                                <a href="/es{% if request.path|slice:':4' == '/es/' or request.path|slice:':4' == '/fr/' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'es' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Español</a>
-                                <!-- French: add /fr prefix, strip existing prefix if switching from another language -->
-                                <a href="/fr{% if request.path|slice:':4' == '/es/' or request.path|slice:':4' == '/fr/' %}{{ request.path|slice:'3:' }}{% else %}{{ request.path }}{% endif %}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {% if LANGUAGE_CODE == 'fr' %}font-bold bg-gray-50 dark:bg-gray-700{% endif %}">Français</a>
-                            </div>
-                        </div>
                         <!-- Theme Toggle (for non-authenticated users) -->
                         <button id="theme-toggle-guest" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2.5 transition-colors" title="Toggle dark/light mode">
                             <svg id="theme-toggle-light-icon-guest" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -257,10 +244,10 @@
              @toggle-mobile-menu.window="open = !open">
             <div class="px-4 pt-2 pb-4 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'accounts:dashboard' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Dashboard" %}</a>
+                    <a href="{% url 'invoices:create' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Create" %}</a>
                     <a href="{% url 'invoices:list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Invoices" %}</a>
                     <a href="{% url 'invoices:time_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Time" %}</a>
-                    <a href="{% url 'billing:overview' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Billing" %}</a>
+                    <a href="{% url 'accounts:settings' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Settings" %}</a>
                     <a href="{% url 'account_logout' %}" class="block px-3 py-2 rounded-md text-base font-medium text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Logout" %}</a>
                 {% else %}
                     <a href="{% url 'pricing' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">{% trans "Pricing" %}</a>
@@ -300,7 +287,6 @@
                         <li><a href="{% url 'landing' %}#features" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "Features" %}</a></li>
                         <li><a href="{% url 'api_docs' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "API" %}</a></li>
                         <li><a href="{% url 'blog:list' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "Blog" %}</a></li>
-                        <li><a href="{% url 'affiliates:program' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">{% trans "Affiliate Program" %}</a></li>
                     </ul>
                 </div>
                 <div>

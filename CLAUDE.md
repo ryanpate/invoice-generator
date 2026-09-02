@@ -88,15 +88,13 @@
   - Day 5: "3 features that help you get paid faster" (AI Generator, Time Tracking, Reminders)
   - Celery Beat task at 8:00 AM UTC daily (`process_nurture_emails`)
   - `nurture_email_step` field on CustomUser for tracking progress
-- **Multi-Language Support (i18n):**
-  - Languages: English (default), Spanish (es), French (fr)
-  - URL strategy: `/es/pricing/`, `/fr/pricing/`, `/pricing/` (English - no prefix)
-  - Scope: Public pages only (landing, pricing, templates, tools, blog, footer pages)
-  - Authenticated routes (dashboard, invoices, billing) remain English-only
-  - Language switcher dropdown in navigation
-  - hreflang tags for SEO
-  - ~1,077 translatable strings per language
-  - Translation files: `locale/es/LC_MESSAGES/django.po`, `locale/fr/LC_MESSAGES/django.po`
+- **Multi-Language Support (i18n): REMOVED September 2026**
+  - ES and FR drew 5 and 3 users in August 2026 and had been noindexed since May.
+  - `locale/es` and `locale/fr` deleted; `LANGUAGES` is now `en` only; the
+    language switcher and `i18n_patterns` are gone.
+  - `/es/<path>` and `/fr/<path>` **301 to the English page** rather than 404 —
+    those URLs were live and returning 200.
+  - The `.po` files are recoverable from git history if ever revisited.
 - **Affiliate Program (20% commission):**
   - Referral tracking via cookies (30-day duration)
   - Commission on all purchases (subscriptions, credit packs, templates)
@@ -234,7 +232,17 @@
 | `ios/InvoiceKits/InvoiceKits/InvoiceKits/Views/SplashScreenView.swift` | Animated splash screen |
 | `ios/InvoiceKits/InvoiceKits/InvoiceKits/Products.storekit` | Local StoreKit testing config |
 
-### iOS App - Remaining TODOs
+### iOS App — FROZEN (September 2026)
+
+**Status: development paused until the web funnel produces a paying customer.**
+
+The app is blocked on two unbuilt server endpoints (receipt verification and
+App Store notifications), and there is no point converting web users to an
+app when the web funnel has produced zero paying users. The code is complete
+through Phase 5 and untouched — resume by building the two endpoints below.
+Do not spend further hours here until there is revenue to defend.
+
+### iOS App - Remaining TODOs (frozen)
 
 #### App Store Compliance (Blocking - Must Fix Before Submission)
 - [ ] Build server-side `/api/v2/billing/verify-receipt/` endpoint (purchases silently fail to sync without it)
@@ -664,6 +672,41 @@ invoice_generator/
 | `templates/affiliates/program.html` | Public affiliate program landing page |
 | `templates/features/ai-invoice-generator.html` | AI Invoice Generator feature landing page |
 | `templates/features/time-tracking.html` | Time Tracking feature landing page |
+
+---
+
+## Surface Reduction (September 2026)
+
+The app carried 460 URL routes, 31 models and 9 apps while serving four PDF
+downloads a month. Features cost attention as well as maintenance: a new user
+met time tracking, recurring invoices, batch CSV, affiliates, team seats and
+an AI generator before making a single invoice.
+
+**Signed-in navigation is now four items:** Create · Invoices · Time · Settings.
+Billing moved under Settings (which links to it); the logo routes to the
+dashboard when signed in so it is not orphaned.
+
+**Hidden from the UI, code and data intact — reversible in an afternoon:**
+
+| Feature | What changed | Still works? |
+|---------|--------------|--------------|
+| Affiliate program | Footer link removed | Yes — `/affiliate/` routes live |
+| Team seats | Settings tab removed from all 5 settings pages | Yes — `/settings/team/` live |
+| Client portal | Already had no UI entry point | Yes — `/portal/` live |
+| Template store | Already retired and unlinked | Yes — redirects to plans |
+
+`test_hidden_routes_still_resolve` asserts these keep responding, so hiding
+never becomes accidental breakage for anyone mid-flow.
+
+**Deleted outright:** the ES and FR locales (see i18n note above).
+
+**Frozen:** the iOS app (see iOS section above).
+
+Guarded by `apps/accounts/tests/test_navigation_scope.py`. Two of those tests
+were vacuous on the first pass — the affiliate assertion ran against the
+landing page, which overrides base.html's footer, and the team-tab assertion
+ran as a free user, who never sees that tab. Both now target a page and a
+tier where the element would actually render.
 
 ---
 

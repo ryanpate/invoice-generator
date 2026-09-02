@@ -121,10 +121,12 @@ USE_I18N = True
 USE_TZ = True
 
 # Multi-language support
+# ES and FR were retired in September 2026: 5 and 3 users respectively in
+# August, already noindexed since May, and every translated string was one
+# more thing to keep in step for no measurable return. The .po files remain
+# in git history if the decision is ever revisited.
 LANGUAGES = [
     ('en', _('English')),
-    ('es', _('Spanish')),
-    ('fr', _('French')),
 ]
 
 LOCALE_PATHS = [
