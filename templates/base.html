@@ -12,6 +12,25 @@
       gtag('config', 'G-0NR5NZMNBF');
     </script>
 
+    {% if ga_events %}
+    {# Conversions that complete on a redirect (signup, return from Stripe) are
+       queued server-side and fired here, once. json_script escapes the payload. #}
+    {{ ga_events|json_script:"ga-queued-events" }}
+    <script>
+      (function () {
+        var node = document.getElementById('ga-queued-events');
+        if (!node) return;
+        try {
+          JSON.parse(node.textContent).forEach(function (event) {
+            if (typeof gtag !== 'undefined') {
+              gtag('event', event.name, event.params || {});
+            }
+          });
+        } catch (e) { /* never let analytics break the page */ }
+      })();
+    </script>
+    {% endif %}
+
     <!-- Theme initialization (prevents flash) -->
     <script>
         (function() {

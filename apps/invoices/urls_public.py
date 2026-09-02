@@ -39,6 +39,8 @@ urlpatterns = [
     path('tools/', views.ToolsIndexView.as_view(), name='tools_index'),
     path('tools/invoice-calculator/', views.InvoiceCalculatorView.as_view(), name='invoice_calculator'),
     path('tools/late-fee-calculator/', views.LateFeeCalculatorView.as_view(), name='late_fee_calculator'),
+    # Reached from the late-fee calculators with the computed figures attached.
+    path('tools/past-due-notice/', views.PastDueNoticeView.as_view(), name='past_due_notice'),
 
     # State-specific late fee calculator pages (programmatic SEO)
     path('tools/late-fee-calculator/<slug:state>/', views.StateLateFeePage.as_view(), name='state_late_fee_calculator'),

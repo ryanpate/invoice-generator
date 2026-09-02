@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Free Past Due Notice Generator — Send an Overdue Invoice Reminder" %} | InvoiceKits{% endblock %}
+
+{% block meta_description %}{% trans "Create a professional past due notice for an unpaid invoice. Free PDF, no signup — includes the original amount, days overdue, late fee, and your state's late payment rules." %}{% endblock %}
+
+{% block meta_keywords %}{% trans "past due notice, overdue invoice letter, past due invoice template, late payment notice, demand for payment letter, unpaid invoice notice" %}{% endblock %}
+
+{% block canonical_url %}https://www.invoicekits.com/tools/past-due-notice/{% endblock %}
+
+{% block og_title %}{% trans "Free Past Due Notice Generator" %} | InvoiceKits{% endblock %}
+{% block og_description %}{% trans "Turn an overdue invoice into a professional past due notice. Free PDF, no account needed." %}{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.invoicekits.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Free Tools", "item": "https://www.invoicekits.com/tools/"},
+        {"@type": "ListItem", "position": 3, "name": "Past Due Notice", "item": "https://www.invoicekits.com/tools/past-due-notice/"}
+    ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 lg:pb-8">
+
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        <a href="{% url 'landing' %}" class="hover:text-primary-600">Home</a>
+        <span class="mx-2">/</span>
+        <a href="{% url 'tools_index' %}" class="hover:text-primary-600">Free Tools</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-700 dark:text-gray-300">Past Due Notice</span>
+    </nav>
+
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Past Due Notice</h1>
+        <p class="text-gray-600 dark:text-gray-400">
+            You calculated the fee — now ask for the money. Fill this in and download a
+            professional past-due notice as a PDF. No signup, no card.
+        </p>
+    </div>
+
+    <div id="notice-success" class="hidden mb-6 bg-gradient-to-r from-green-50 to-primary-50 dark:from-green-900/30 dark:to-primary-900/30 border border-green-200 dark:border-green-700 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+            <div>
+                <p class="font-semibold text-gray-900 dark:text-white">Your notice has downloaded.</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">Send it to your client from your own email, so replies come back to you.</p>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" id="notice-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+            {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="space-y-6">
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Who it's from</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.business_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your business name *</label>
+                        {{ form.business_name }}
+                        {% if form.business_name.errors %}<p class="text-red-500 text-sm mt-1">{{ form.business_name.errors.0 }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.business_email.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your email</label>
+                        {{ form.business_email }}
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Printed on the notice so your client can reply to you.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">The overdue invoice</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.client_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Client name *</label>
+                        {{ form.client_name }}
+                        {% if form.client_name.errors %}<p class="text-red-500 text-sm mt-1">{{ form.client_name.errors.0 }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.invoice_number.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Invoice number</label>
+                        {{ form.invoice_number }}
+                    </div>
+                    <div>
+                        <label for="{{ form.original_amount.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Original amount *</label>
+                        {{ form.original_amount }}
+                        {% if form.original_amount.errors %}<p class="text-red-500 text-sm mt-1">{{ form.original_amount.errors.0 }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.due_date.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date it was due *</label>
+                        {{ form.due_date }}
+                        {% if form.due_date.errors %}<p class="text-red-500 text-sm mt-1">{{ form.due_date.errors.0 }}</p>{% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.late_fee.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Late fee</label>
+                        {{ form.late_fee }}
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            Not sure? <a href="{% url 'late_fee_calculator' %}" class="text-primary-600 hover:underline">Work it out first</a>.
+                        </p>
+                    </div>
+                    <div>
+                        <label for="{{ form.currency.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Currency</label>
+                        {{ form.currency }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Optional</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="{{ form.state.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cite a state's rules</label>
+                        {{ form.state }}
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Adds that state's late payment limits and statute references to the notice.</p>
+                    </div>
+                    <div>
+                        <label for="{{ form.notes.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment instructions</label>
+                        {{ form.notes }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+                <div class="flex justify-between items-center pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
+                    <span class="text-lg font-semibold text-gray-900 dark:text-white">Total now due</span>
+                    <span id="notice-total" class="text-2xl font-bold text-primary-600 dark:text-primary-400">$0.00</span>
+                </div>
+
+                <button type="submit" class="btn-primary w-full text-center mb-4">
+                    Download Past Due Notice
+                </button>
+
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <label for="notice-visitor-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Or email it to yourself</label>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="email" id="notice-visitor-email" placeholder="you@example.com"
+                               class="form-input flex-1" autocomplete="email">
+                        <button type="button" id="notice-email-btn" class="btn-secondary whitespace-nowrap">Email it to me</button>
+                    </div>
+                    <p id="notice-email-status" class="hidden mt-2 text-sm"></p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                        We send it to you, not to your client — a demand for payment should come
+                        from your own mailbox so replies reach you.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile sticky footer, same pattern as /try/ -->
+        <div id="notice-sticky-bar"
+             class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
+            <div class="min-w-0">
+                <div class="text-xs text-gray-500 dark:text-gray-400 leading-tight">Total due</div>
+                <div id="notice-sticky-total" class="text-xl font-bold text-gray-900 dark:text-white leading-tight truncate">$0.00</div>
+            </div>
+            <button type="submit" class="btn-primary flex-1 text-center whitespace-nowrap">Download</button>
+        </div>
+    </form>
+
+    <div class="mt-8 bg-gradient-to-r from-primary-50 to-indigo-50 dark:from-primary-900/20 dark:to-indigo-900/20 border border-primary-200 dark:border-primary-800 rounded-xl p-6">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Tired of chasing this by hand?</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">
+            InvoiceKits can send reminders for you — before the due date, on it, and after —
+            and apply late fees automatically once an invoice goes overdue.
+        </p>
+        <a href="{% url 'pricing' %}" class="btn-primary inline-block">See how automatic reminders work</a>
+    </div>
+
+    <p class="mt-6 text-xs text-gray-500 dark:text-gray-400">
+        This tool produces a request for payment, not a legal demand, and is not legal advice.
+        Late fee limits and enforceability vary by state and by the terms of your agreement.
+    </p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const amount = document.getElementById('{{ form.original_amount.id_for_label }}');
+    const fee = document.getElementById('{{ form.late_fee.id_for_label }}');
+    const currency = document.getElementById('{{ form.currency.id_for_label }}');
+    const totals = [document.getElementById('notice-total'), document.getElementById('notice-sticky-total')];
+    const SYMBOLS = {USD:'$', EUR:'€', GBP:'£', CAD:'C$', AUD:'A$', JPY:'¥', INR:'₹'};
+
+    function recalc() {
+        const a = parseFloat(amount.value) || 0;
+        const f = parseFloat(fee.value) || 0;
+        const sym = SYMBOLS[currency.value] || currency.value;
+        const text = sym + (a + f).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        totals.forEach(function (el) { if (el) el.textContent = text; });
+    }
+    [amount, fee, currency].forEach(function (el) {
+        if (!el) return;
+        el.addEventListener('input', recalc);
+        el.addEventListener('change', recalc);
+    });
+    recalc();
+
+    const form = document.getElementById('notice-form');
+    form.addEventListener('submit', function () {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'past_due_notice_downloaded', { event_category: 'conversion' });
+        }
+        const banner = document.getElementById('notice-success');
+        if (banner) banner.classList.remove('hidden');
+    });
+
+    // Email to the visitor only.
+    const emailBtn = document.getElementById('notice-email-btn');
+    const emailInput = document.getElementById('notice-visitor-email');
+    const status = document.getElementById('notice-email-status');
+
+    function show(text, ok) {
+        status.textContent = text;
+        status.classList.remove('hidden', 'text-green-600', 'text-red-600');
+        status.classList.add(ok ? 'text-green-600' : 'text-red-600');
+    }
+
+    emailBtn.addEventListener('click', function () {
+        if (!emailInput.value.trim()) { show('Enter your email address first.', false); return; }
+        if (!form.reportValidity()) return;
+
+        const data = new FormData(form);
+        data.set('action', 'email');
+        data.set('visitor_email', emailInput.value.trim());
+
+        emailBtn.disabled = true;
+        emailBtn.textContent = 'Sending...';
+        fetch(form.action || window.location.href, {
+            method: 'POST',
+            body: data,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+            .then(function (res) {
+                if (res.ok && res.body.success) {
+                    show('Sent — check your inbox.', true);
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'past_due_notice_emailed', { event_category: 'conversion' });
+                    }
+                } else {
+                    show(res.body.error || 'Could not send that. Try downloading instead.', false);
+                }
+            })
+            .catch(function () { show('Could not send that. Try downloading instead.', false); })
+            .finally(function () {
+                emailBtn.disabled = false;
+                emailBtn.textContent = 'Email it to me';
+            });
+    });
+});
+</script>
+{% endblock %}

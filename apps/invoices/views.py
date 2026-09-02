@@ -49,8 +49,9 @@ class TeamAwareQuerysetMixin:
 from .forms import (
     InvoiceForm, LineItemFormSet, BatchUploadForm, SendInvoiceEmailForm,
     RecurringInvoiceForm, RecurringLineItemFormSet, TimeEntryForm,
-    TryInvoiceForm,
+    TryInvoiceForm, PastDueNoticeForm,
 )
+from decimal import Decimal
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
 from .services.email_sender import InvoiceEmailService
@@ -2130,3 +2131,146 @@ def timer_status(request):
         'can_start_new': request.user.can_start_timer(),
         'max_timers': request.user.get_max_active_timers(),
     })
+
+
+class PastDueNoticeView(View):
+    """Turn a computed late fee into a notice that asks for the money.
+
+    Public and login-free, like /try/ and the calculators it is reached from.
+
+    The PDF is emailed ONLY to the visitor, never to their client. An
+    anonymous endpoint that mails a debt-collection notice to an arbitrary
+    address from our domain would be a harassment and deliverability vector;
+    the visitor sends it on from their own mailbox, which is where a demand
+    for payment should come from anyway.
+    """
+
+    EMAIL_SEND_LIMIT = 3
+
+    def get(self, request):
+        from datetime import date as _date
+        from decimal import InvalidOperation
+
+        def money(name):
+            raw = (request.GET.get(name) or '').strip()[:16]
+            try:
+                value = Decimal(raw)
+            except (InvalidOperation, TypeError, ValueError):
+                return None
+            return value if value >= 0 else None
+
+        initial = {'currency': 'USD'}
+        # Handed over from the late-fee calculators, which computed these.
+        amount = money('amount')
+        if amount is not None:
+            initial['original_amount'] = amount
+        fee = money('fee')
+        if fee is not None:
+            initial['late_fee'] = fee
+
+        raw_due = (request.GET.get('due_date') or '').strip()[:10]
+        try:
+            parsed = _date.fromisoformat(raw_due)
+            if parsed <= _date.today():
+                initial['due_date'] = parsed
+        except ValueError:
+            pass
+
+        state = (request.GET.get('state') or '').strip().lower()[:40]
+        if state in STATE_LATE_FEE_DATA:
+            initial['state'] = state
+
+        return render(request, 'tools/past-due-notice.html', {
+            'form': PastDueNoticeForm(initial=initial),
+        })
+
+    def post(self, request):
+        from .services.past_due_notice import (
+            build_notice_context, notice_filename, render_notice_pdf,
+        )
+
+        form = PastDueNoticeForm(request.POST)
+        wants_email = request.POST.get('action') == 'email'
+
+        if not form.is_valid():
+            if wants_email:
+                return JsonResponse(
+                    {'success': False, 'error': 'Please fill in the required fields.'},
+                    status=400,
+                )
+            return render(request, 'tools/past-due-notice.html', {'form': form})
+
+        context = build_notice_context(form.cleaned_data)
+
+        if wants_email:
+            return self._email_notice(request, context, form.cleaned_data)
+
+        pdf_bytes = render_notice_pdf(context)
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = (
+            f'attachment; filename="{notice_filename(form.cleaned_data["client_name"])}"'
+        )
+        return response
+
+    def _email_notice(self, request, context, cleaned):
+        """Send the notice to the visitor's own address. Only ever theirs."""
+        from django.core.exceptions import ValidationError
+        from django.core.mail import EmailMessage
+        from django.core.validators import validate_email
+        from django.template.loader import render_to_string
+
+        from .models import TryLead
+        from .services.past_due_notice import notice_filename, render_notice_pdf
+
+        visitor_email = (request.POST.get('visitor_email') or '').strip()
+        try:
+            validate_email(visitor_email)
+        except ValidationError:
+            return JsonResponse(
+                {'success': False, 'error': 'Please enter a valid email address.'},
+                status=400,
+            )
+
+        sends = request.session.get('notice_email_sends', 0)
+        if sends >= self.EMAIL_SEND_LIMIT:
+            return JsonResponse(
+                {'success': False,
+                 'error': 'Send limit reached — create a free account to keep sending notices.'},
+                status=429,
+            )
+
+        pdf_bytes = render_notice_pdf(context)
+        html_content = render_to_string('emails/past_due_notice.html', {
+            **context,
+            'site_url': getattr(settings, 'SITE_URL', 'https://www.invoicekits.com'),
+        })
+
+        # `to` is the visitor and nothing else -- no cc, no bcc, and no
+        # recipient is ever read from user-supplied fields other than this one.
+        message = EmailMessage(
+            subject=f'Past-due notice for {context["client_name"]}',
+            body=html_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[visitor_email],
+        )
+        message.content_subtype = 'html'
+        message.attach(
+            notice_filename(cleaned['client_name']), pdf_bytes, 'application/pdf'
+        )
+        try:
+            message.send(fail_silently=False)
+        except Exception:
+            logger.exception('Failed to email past-due notice to %s', visitor_email)
+            return JsonResponse(
+                {'success': False,
+                 'error': 'We could not send that right now. Please download it instead.'},
+                status=500,
+            )
+
+        lead, created = TryLead.objects.get_or_create(email=visitor_email)
+        if not created:
+            lead.send_count += 1
+            lead.save(update_fields=['send_count', 'last_sent_at'])
+
+        request.session['notice_email_sends'] = sends + 1
+        return JsonResponse({'success': True})

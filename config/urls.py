@@ -30,6 +30,7 @@ class StaticViewSitemap(Sitemap):
             '/templates/clean-slate/', '/templates/executive/', '/templates/bold-modern/',
             '/templates/classic-professional/', '/templates/neon-edge/',
             '/tools/', '/tools/invoice-calculator/', '/tools/late-fee-calculator/',
+            '/tools/past-due-notice/',
             '/tools/late-fee-calculator/california/',
             '/tools/late-fee-calculator/texas/',
             '/tools/late-fee-calculator/new-york/',
