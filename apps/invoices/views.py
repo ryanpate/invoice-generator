@@ -626,8 +626,22 @@ class TryInvoiceView(View):
         pdf_bytes = InvoicePDFGenerator.generate_preview(invoice_data, TryCompany())
 
         response = HttpResponse(pdf_bytes, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="invoice-preview.pdf"'
+        # attachment, not inline: on mobile Safari an inline PDF renders in a
+        # tab with no obvious way to save it -- a dead end at the moment the
+        # visitor finally has their invoice. Name it after the client too, so
+        # a Downloads folder does not fill up with invoice-preview(3).pdf.
+        response['Content-Disposition'] = (
+            f'attachment; filename="{self._download_filename(cd["client_name"])}"'
+        )
         return response
+
+    @staticmethod
+    def _download_filename(client_name):
+        """A safe, readable filename. Never lets a quote or ; split the header."""
+        from django.utils.text import slugify
+
+        slug = slugify(client_name)[:60]
+        return f'invoice-{slug}.pdf' if slug else 'invoice.pdf'
 
     # Cap per anonymous session so /try/ can't be used to spam PDFs.
     EMAIL_SEND_LIMIT = 3

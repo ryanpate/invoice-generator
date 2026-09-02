@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 lg:pb-8">
     <!-- Header -->
     <div class="mb-8 text-center">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Your Invoice</h1>
@@ -32,7 +32,7 @@
         <div class="flex items-start gap-3">
             <svg class="w-6 h-6 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
             <div>
-                <p class="font-semibold text-gray-900 dark:text-white">Your invoice opened in a new tab.</p>
+                <p class="font-semibold text-gray-900 dark:text-white">Your invoice has downloaded.</p>
                 <p class="text-sm text-gray-600 dark:text-gray-400">Create a free account to save it, remove the watermark, and send it straight to your client.</p>
             </div>
         </div>
@@ -43,7 +43,7 @@
         <p>Please add at least one line item before downloading.</p>
     </div>
 
-    <form method="post" id="try-invoice-form" target="_blank">
+    <form method="post" id="try-invoice-form">
         {% csrf_token %}
 
         {% if form.non_field_errors %}
@@ -324,6 +324,21 @@
                 </div>
             </div>
         </div>
+
+        <!-- Mobile sticky footer: the sidebar summary is 2,000px down a phone
+             screen, so mirror the running total and the download here. Hidden
+             at lg, where the real sidebar is visible. Inside the form so the
+             submit needs no form= wiring. -->
+        <div id="try-sticky-bar"
+             class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
+            <div class="min-w-0">
+                <div class="text-xs text-gray-500 dark:text-gray-400 leading-tight">Total</div>
+                <div id="sticky-total" class="text-xl font-bold text-gray-900 dark:text-white leading-tight truncate">$0.00</div>
+            </div>
+            <button type="submit" class="btn-primary flex-1 text-center whitespace-nowrap">
+                Download PDF
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}
@@ -360,6 +375,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('subtotal').textContent = sym + subtotal.toFixed(2);
         document.getElementById('tax-amount').textContent = sym + taxAmount.toFixed(2);
         document.getElementById('total').textContent = sym + total.toFixed(2);
+
+        // Mirror into the mobile sticky footer.
+        const sticky = document.getElementById('sticky-total');
+        if (sticky) sticky.textContent = sym + total.toFixed(2);
     }
 
     function attachListeners() {
@@ -432,8 +451,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (tryForm) {
         tryForm.addEventListener('submit', function(e) {
             // Mirror the server's requirement: at least one line item with a description.
-            // Without this guard, an empty submit would open the error page in a new tab
-            // (target="_blank") while this tab falsely showed the success banner.
+            // Without this guard the page would navigate to a re-rendered form with
+            // errors while the success banner had already claimed a download.
             const hasLineItem = Array.from(
                 tryForm.querySelectorAll('[name^="item_description_"]')
             ).some(function(el) { return el.value.trim() !== ''; });
@@ -449,7 +468,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'try_pdf_downloaded', { event_category: 'conversion' });
             }
-            // The PDF opens in a new tab (target="_blank"), so this page stays put.
+            // A download response does not navigate, so this page stays put.
             // Surface the signup ask at the aha moment.
             const banner = document.getElementById('try-success-banner');
             if (banner) {
