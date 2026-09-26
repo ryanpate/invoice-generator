@@ -1046,3 +1046,23 @@ class TryLead(models.Model):
 
     def __str__(self):
         return self.email
+
+
+class AnonymousEmailSend(models.Model):
+    """
+    One row per email sent from a no-login page (/try/, past-due notice).
+
+    Those pages email a PDF to any address typed in, so they were used to
+    relay spam. A session cap alone is useless against a bot that drops its
+    cookie; these rows back per-IP, per-recipient and site-wide daily caps.
+    """
+
+    ip_address = models.GenericIPAddressField(null=True, blank=True, db_index=True)
+    recipient = models.EmailField(db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.recipient} from {self.ip_address}'

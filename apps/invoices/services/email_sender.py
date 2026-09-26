@@ -8,6 +8,23 @@ from django.utils.html import strip_tags
 
 from .pdf_generator import InvoicePDFGenerator
 
+UNVERIFIED_SENDER_ERROR = (
+    'Please verify your email address before sending invoices. '
+    'You can resend the verification email from /accounts/email/.'
+)
+
+
+def sender_is_verified(user) -> bool:
+    """
+    Bot signups used throwaway accounts to email spam invoices to strangers.
+    When verification is mandatory, only a verified owner may email clients.
+    """
+    if getattr(settings, 'ACCOUNT_EMAIL_VERIFICATION', 'none') != 'mandatory':
+        return True
+    from allauth.account.models import EmailAddress
+
+    return EmailAddress.objects.filter(user=user, verified=True).exists()
+
 
 class InvoiceEmailService:
     """Service for sending invoices via email with PDF attachment."""
@@ -46,6 +63,9 @@ class InvoiceEmailService:
         Returns:
             dict with 'success' boolean and 'error' message if failed
         """
+        if not sender_is_verified(self.company.user):
+            return {'success': False, 'error': UNVERIFIED_SENDER_ERROR}
+
         try:
             # Generate PDF
             pdf_generator = InvoicePDFGenerator(self.invoice)
@@ -104,7 +124,7 @@ class InvoiceEmailService:
         try:
             # Collect recipients - both client and business owner
             recipients = []
-            if self.invoice.client_email:
+            if self.invoice.client_email and sender_is_verified(self.company.user):
                 recipients.append(self.invoice.client_email)
 
             # Always send to business owner

@@ -82,6 +82,11 @@ class PaymentReminderService:
         """
         from apps.invoices.models import PaymentReminderLog
 
+        from .email_sender import UNVERIFIED_SENDER_ERROR, sender_is_verified
+
+        if not sender_is_verified(self.invoice.company.user):
+            return {'success': False, 'error': UNVERIFIED_SENDER_ERROR}
+
         # Validate invoice state
         if self.invoice.status in ['paid', 'cancelled', 'draft']:
             return {

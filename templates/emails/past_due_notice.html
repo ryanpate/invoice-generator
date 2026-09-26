@@ -10,8 +10,7 @@
             </td></tr>
             <tr><td style="padding:8px 32px 0; font-size:15px; line-height:1.6; color:#374151;">
                 <p style="margin:0 0 16px;">
-                    Here is the past-due notice for <strong>{{ client_name }}</strong>
-                    {% if invoice_number %}(invoice {{ invoice_number }}){% endif %} —
+                    Here is the past-due notice you created —
                     {{ days_overdue }} day{{ days_overdue|pluralize }} overdue,
                     <strong>{{ total_due_display }}</strong> now outstanding.
                 </p>

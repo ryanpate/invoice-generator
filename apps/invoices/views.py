@@ -54,6 +54,7 @@ from .forms import (
 from decimal import Decimal
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
+from .services import anon_email_guard
 from .services.email_sender import InvoiceEmailService
 
 
@@ -666,8 +667,12 @@ class TryInvoiceView(View):
                 status=400,
             )
 
+        # A filled honeypot is a bot: report success so it learns nothing.
+        if anon_email_guard.is_bot(request):
+            return JsonResponse({'success': True})
+
         sends = request.session.get('try_email_sends', 0)
-        if sends >= self.EMAIL_SEND_LIMIT:
+        if sends >= self.EMAIL_SEND_LIMIT or anon_email_guard.limit_reached(request, visitor_email):
             return JsonResponse(
                 {'success': False,
                  'error': 'Send limit reached — create a free account to keep emailing invoices.'},
@@ -677,13 +682,12 @@ class TryInvoiceView(View):
         pdf_bytes = InvoicePDFGenerator.generate_preview(invoice_data, company)
 
         html_content = render_to_string('emails/try_invoice_pdf.html', {
-            'client_name': invoice_data['client_name'],
             'total': invoice_data['total'],
             'currency': invoice_data['currency'],
             'site_url': getattr(settings, 'SITE_URL', 'https://www.invoicekits.com'),
         })
         message = EmailMessage(
-            subject=f"Your invoice for {invoice_data['client_name']} is attached",
+            subject='Your invoice PDF from InvoiceKits',
             body=html_content,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[visitor_email],
@@ -705,6 +709,7 @@ class TryInvoiceView(View):
             lead.send_count += 1
             lead.save(update_fields=['send_count', 'last_sent_at'])
 
+        anon_email_guard.record_send(request, visitor_email)
         request.session['try_email_sends'] = sends + 1
         return JsonResponse({'success': True})
 
@@ -2213,7 +2218,7 @@ class PastDueNoticeView(View):
         return response
 
     def _email_notice(self, request, context, cleaned):
-        """Send the notice to the visitor's own address. Only ever theirs."""
+        """Email the notice to the address the visitor typed in (unverified)."""
         from django.core.exceptions import ValidationError
         from django.core.mail import EmailMessage
         from django.core.validators import validate_email
@@ -2231,8 +2236,12 @@ class PastDueNoticeView(View):
                 status=400,
             )
 
+        # A filled honeypot is a bot: report success so it learns nothing.
+        if anon_email_guard.is_bot(request):
+            return JsonResponse({'success': True})
+
         sends = request.session.get('notice_email_sends', 0)
-        if sends >= self.EMAIL_SEND_LIMIT:
+        if sends >= self.EMAIL_SEND_LIMIT or anon_email_guard.limit_reached(request, visitor_email):
             return JsonResponse(
                 {'success': False,
                  'error': 'Send limit reached — create a free account to keep sending notices.'},
@@ -2248,7 +2257,7 @@ class PastDueNoticeView(View):
         # `to` is the visitor and nothing else -- no cc, no bcc, and no
         # recipient is ever read from user-supplied fields other than this one.
         message = EmailMessage(
-            subject=f'Past-due notice for {context["client_name"]}',
+            subject='Your past-due notice from InvoiceKits',
             body=html_content,
             from_email=settings.DEFAULT_FROM_EMAIL,
             to=[visitor_email],
@@ -2272,5 +2281,6 @@ class PastDueNoticeView(View):
             lead.send_count += 1
             lead.save(update_fields=['send_count', 'last_sent_at'])
 
+        anon_email_guard.record_send(request, visitor_email)
         request.session['notice_email_sends'] = sends + 1
         return JsonResponse({'success': True})

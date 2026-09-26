@@ -45,6 +45,10 @@
 
     <form method="post" id="try-invoice-form">
         {% csrf_token %}
+        {# Honeypot: hidden from people, filled in by bots. Checked in anon_email_guard. #}
+        <div style="position:absolute; left:-10000px;" aria-hidden="true">
+            <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
 
         {% if form.non_field_errors %}
         <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
