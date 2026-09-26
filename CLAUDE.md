@@ -183,7 +183,6 @@
 
 | Feature | Status | Reason | To Enable |
 |---------|--------|--------|-----------|
-| Email Verification | Disabled | Not required for MVP | Change `ACCOUNT_EMAIL_VERIFICATION` to `'mandatory'` in `config/settings/production.py` |
 | S3 Media Storage | Disabled | No AWS credentials | Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_STORAGE_BUCKET_NAME` |
 | Healthcheck | Removed | Startup time exceeds Railway timeout | Re-add to `railway.json` if startup is optimized |
 
@@ -701,6 +700,28 @@ never becomes accidental breakage for anyone mid-flow.
 **Deleted outright:** the ES and FR locales (see i18n note above).
 
 **Frozen:** the iOS app (see iOS section above).
+
+---
+
+## Spam Defenses (September 2026)
+
+Bots were sending junk invoices from `noreply@invoicekits.com` (visible in
+Resend and as junk rows in admin). Two routes, both closed:
+
+- **No-login "email me this PDF"** on `/try/` and `/tools/past-due-notice/`:
+  the only limit was 3 per session, which a bot resets by dropping its cookie.
+  Now `apps/invoices/services/anon_email_guard.py` caps sends over a rolling
+  24h in the database (`AnonymousEmailSend`): 3 per IP (`X-Real-IP`, set by
+  Railway's edge), 3 per recipient, 30 site-wide. A hidden `website`
+  honeypot field returns fake success to bots. Subjects and bodies no longer
+  contain visitor-typed text (client name, invoice number).
+- **Unverified signups:** `ACCOUNT_EMAIL_VERIFICATION = 'mandatory'` in
+  production. `sender_is_verified()` in `email_sender.py` also blocks
+  unverified owners from emailing clients (invoice send, payment receipts,
+  reminders, late-fee notices) — existing bot sessions stay logged in, so the
+  login gate alone was not enough.
+
+Guarded by `apps/invoices/tests/test_spam_defenses.py`.
 
 Guarded by `apps/accounts/tests/test_navigation_scope.py`. Two of those tests
 were vacuous on the first pass — the affiliate assertion ran against the

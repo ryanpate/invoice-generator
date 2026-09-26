@@ -146,8 +146,10 @@ def _send_late_fee_owner_notification(invoice, fee_amount):
 
 
 def _send_late_fee_client_notification(invoice, fee_amount):
+    from apps.invoices.services.email_sender import sender_is_verified
+
     try:
-        if not invoice.client_email:
+        if not invoice.client_email or not sender_is_verified(invoice.company.user):
             return
         subject = f"Late Fee Notice: Invoice {invoice.invoice_number}"
         html_message = render_to_string('emails/late_fee_client_notice.html', {

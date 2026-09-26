@@ -103,9 +103,9 @@ LOGGING = {
     },
 }
 
-# Email verification disabled until SMTP credentials are configured
-# Change to 'mandatory' once EMAIL_HOST_USER and EMAIL_HOST_PASSWORD are set
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+# Mandatory since Sept 2026: unverified bot signups were sending spam invoices.
+# Google/GitHub logins arrive with provider-verified addresses and skip this.
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 # Sign in with Apple (iOS app)
 APPLE_CLIENT_ID = os.environ.get('APPLE_CLIENT_ID', 'com.invoicekits.InvoiceKits')
