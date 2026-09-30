@@ -15,6 +15,9 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    # One year, this host only. Not includeSubDomains/preload: those are hard
+    # to undo and would bind every subdomain of invoicekits.com.
+    SECURE_HSTS_SECONDS = 31536000
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_BROWSER_XSS_FILTER = True

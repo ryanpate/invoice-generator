@@ -52,14 +52,16 @@
                 </span>
                 <span class="ml-4 text-sm text-gray-600">Due: {{ invoice.due_date|date:"F d, Y" }}</span>
             </div>
-            {% if invoice.status != 'paid' and invoice.status != 'cancelled' %}
+            {% if invoice.status != 'paid' and invoice.status != 'cancelled' and invoice.payment_reported_at %}
+            <p class="text-sm text-gray-600">Payment reported. {{ company.name }} has been notified and will confirm it.</p>
+            {% elif invoice.status != 'paid' and invoice.status != 'cancelled' %}
             <form method="post" action="{% url 'invoices:public_mark_paid' token=invoice.public_token %}" id="markPaidForm">
                 {% csrf_token %}
                 <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm font-medium">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    Mark as Paid
+                    I've paid this
                 </button>
             </form>
             {% endif %}
@@ -178,9 +180,9 @@
     </main>
 
     <script>
-    // Handle mark as paid with AJAX for better UX
+    // Confirm before telling the business this invoice was paid
     document.getElementById('markPaidForm')?.addEventListener('submit', function(e) {
-        if (!confirm('Mark this invoice as paid?')) {
+        if (!confirm('Tell the business you have paid this invoice?')) {
             e.preventDefault();
         }
     });

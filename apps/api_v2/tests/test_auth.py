@@ -11,6 +11,8 @@ Covers:
 """
 from unittest.mock import patch, MagicMock
 
+from allauth.account.models import EmailAddress
+from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
@@ -105,6 +107,57 @@ class RegisterViewTests(TestCase):
 
     def test_register_missing_fields_returns_400(self):
         response = self.client.post(REGISTER_URL, {'email': 'x@x.com'}, format='json')
+        self.assertEqual(response.status_code, 400)
+
+
+@override_settings(ACCOUNT_EMAIL_VERIFICATION='mandatory')
+class MandatoryVerificationApiTests(TestCase):
+    """
+    The web signup requires a verified email; the API handed out tokens
+    straight away, which let bots skip that check.
+    """
+
+    def setUp(self):
+        self.client = APIClient()
+        self.payload = {
+            'email': 'newuser@example.com',
+            'password': 'strongpass1',
+            'password_confirm': 'strongpass1',
+        }
+
+    def test_register_sends_confirmation_and_returns_no_tokens(self):
+        response = self.client.post(REGISTER_URL, self.payload, format='json')
+
+        self.assertEqual(response.status_code, 201)
+        data = response.json()
+        self.assertTrue(data['verification_required'])
+        self.assertNotIn('access', data)
+        self.assertNotIn('refresh', data)
+        self.assertTrue(any('newuser@example.com' in m.to for m in mail.outbox))
+        self.assertFalse(EmailAddress.objects.get(email='newuser@example.com').verified)
+
+    def test_unverified_user_cannot_log_in(self):
+        self.client.post(REGISTER_URL, self.payload, format='json')
+        response = self.client.post(
+            LOGIN_URL, {'email': 'newuser@example.com', 'password': 'strongpass1'}, format='json'
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertNotIn('access', response.json())
+
+    def test_verified_user_can_log_in(self):
+        self.client.post(REGISTER_URL, self.payload, format='json')
+        EmailAddress.objects.filter(email='newuser@example.com').update(verified=True)
+        response = self.client.post(
+            LOGIN_URL, {'email': 'newuser@example.com', 'password': 'strongpass1'}, format='json'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('access', response.json())
+
+    def test_wrong_password_is_still_a_400(self):
+        self.client.post(REGISTER_URL, self.payload, format='json')
+        response = self.client.post(
+            LOGIN_URL, {'email': 'newuser@example.com', 'password': 'wrong-password'}, format='json'
+        )
         self.assertEqual(response.status_code, 400)
 
 

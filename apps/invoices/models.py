@@ -123,6 +123,11 @@ class Invoice(models.Model):
         blank=True,
         help_text='Timestamp when invoice was marked as paid'
     )
+    payment_reported_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text='When the client last said, from the public link, that they had paid'
+    )
     sent_at = models.DateTimeField(
         null=True,
         blank=True,

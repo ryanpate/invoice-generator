@@ -2,6 +2,7 @@
 Views for invoices app.
 """
 import logging
+from datetime import timedelta
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -12,6 +13,8 @@ from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django.db.models import Q
 from django.conf import settings
+from django.core.mail import send_mail
+from django.utils import timezone
 
 from .models import Invoice, LineItem, InvoiceBatch, RecurringInvoice, TimeEntry, ActiveTimer, TimeTrackingSettings
 
@@ -1596,29 +1599,60 @@ class PublicInvoiceView(DetailView):
 
 
 class PublicInvoiceMarkPaidView(View):
-    """Allow clients to mark invoice as paid from public view."""
+    """
+    Let a client tell the business they have paid, from the public view.
+
+    The link is not proof of payment, so this never changes the invoice. It
+    emails the owner, at most once per invoice per 24 hours, to confirm in
+    their dashboard.
+    """
 
     def post(self, request, token):
         invoice = get_object_or_404(Invoice, public_token=token)
 
-        # Only allow marking as paid if not already paid or cancelled
         if invoice.status in ['paid', 'cancelled']:
             return JsonResponse({
                 'success': False,
                 'error': 'Invoice is already paid or cancelled'
             }, status=400)
 
-        invoice.mark_as_paid()
+        day_ago = timezone.now() - timedelta(hours=24)
+        if not invoice.payment_reported_at or invoice.payment_reported_at < day_ago:
+            invoice.payment_reported_at = timezone.now()
+            invoice.save(update_fields=['payment_reported_at'])
+            self.notify_owner(invoice)
 
         # Check if request is AJAX
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({
                 'success': True,
-                'message': 'Invoice marked as paid'
+                'message': 'The business has been told you paid'
             })
 
-        # For non-AJAX, redirect back to public view
+        # The public page shows a "payment reported" note from payment_reported_at.
         return redirect('invoices:public_invoice', token=token)
+
+    def notify_owner(self, invoice):
+        owner = invoice.company.user
+        if not owner.email:
+            return
+        site_url = getattr(settings, 'SITE_URL', 'https://www.invoicekits.com')
+        try:
+            send_mail(
+                subject=f'Your client says invoice {invoice.invoice_number} is paid',
+                message=(
+                    f'Someone using the public link for invoice {invoice.invoice_number} '
+                    'reported that it has been paid.\n\n'
+                    'The invoice has NOT been marked as paid. Check that the payment '
+                    'arrived, then mark it paid here:\n'
+                    f'{site_url}{reverse("invoices:detail", args=[invoice.pk])}\n\n'
+                    'The InvoiceKits Team'
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[owner.email],
+            )
+        except Exception:
+            logger.exception('Failed to send payment-reported email for invoice %s', invoice.pk)
 
 
 def public_invoice_pdf(request, token):

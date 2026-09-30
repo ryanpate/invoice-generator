@@ -1,5 +1,6 @@
 import jwt
 import requests
+from allauth.account.utils import send_email_confirmation
 from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -8,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from apps.accounts.models import CustomUser
+from apps.invoices.services.email_sender import sender_is_verified
 from apps.api_v2.serializers.auth import (
     RegisterSerializer,
     LoginSerializer,
@@ -35,6 +37,16 @@ def register_view(request):
     serializer = RegisterSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = serializer.save()
+    if settings.ACCOUNT_EMAIL_VERIFICATION == 'mandatory':
+        # Same rule as the web signup: no session until the address is verified.
+        send_email_confirmation(request._request, user, signup=True)
+        return Response(
+            {
+                'verification_required': True,
+                'detail': 'Check your email to verify your account, then log in.',
+            },
+            status=status.HTTP_201_CREATED,
+        )
     return Response(get_tokens_for_user(user), status=status.HTTP_201_CREATED)
 
 
@@ -44,6 +56,12 @@ def login_view(request):
     serializer = LoginSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = serializer.validated_data['user']
+    if not sender_is_verified(user):
+        send_email_confirmation(request._request, user)
+        return Response(
+            {'error': 'Please verify your email address. We have sent you a new link.'},
+            status=status.HTTP_403_FORBIDDEN,
+        )
     return Response(get_tokens_for_user(user), status=status.HTTP_200_OK)
 
 

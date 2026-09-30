@@ -71,26 +71,13 @@ class RequestAccessView(View):
             messages.error(request, 'Please enter your email address.')
             return render(request, self.template_name)
 
-        # Check if this email has any invoices
-        has_invoices = Invoice.objects.filter(client_email__iexact=email).exists()
+        # Same response whether or not the address has invoices (and whether or
+        # not the send succeeded), so the form cannot be used to test which
+        # addresses are clients.
+        if Invoice.objects.filter(client_email__iexact=email).exists():
+            MagicLinkService(request).send_magic_link_email(email)
 
-        if not has_invoices:
-            messages.error(
-                request,
-                'No invoices found for this email address. '
-                'Please check your email or contact the business that sent your invoice.'
-            )
-            return render(request, self.template_name, {'email': email})
-
-        # Send magic link
-        service = MagicLinkService(request)
-        result = service.send_magic_link_email(email)
-
-        if result['success']:
-            return redirect('clients:check_email')
-        else:
-            messages.error(request, result.get('error', 'Unable to send access link.'))
-            return render(request, self.template_name, {'email': email})
+        return redirect('clients:check_email')
 
 
 class CheckEmailView(TemplateView):

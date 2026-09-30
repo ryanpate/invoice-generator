@@ -74,3 +74,8 @@ xcuserdata/
 node_modules/
 .playwright-mcp/
 static/css/tailwind.css
+
+# Search Console / Bing exports (this repo is public)
+Reports_snapshot.csv
+invoicekits-bing.csv
+invoicekits.com-Performance/
