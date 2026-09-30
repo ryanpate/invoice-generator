@@ -1089,3 +1089,22 @@ class InvoiceEmailSend(models.Model):
 
     def __str__(self):
         return f'{self.recipient} by {self.user_id}'
+
+
+class GuestVoiceGeneration(models.Model):
+    """
+    One row per guest (no-login) voice-invoice request sent to Claude.
+
+    Backs the per-IP and site-wide daily caps; the session cap alone is
+    useless against a bot that drops its cookie.
+    """
+
+    ip_address = models.GenericIPAddressField(null=True, blank=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.ip_address} at {self.created_at}'
+

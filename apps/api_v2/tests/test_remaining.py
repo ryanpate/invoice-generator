@@ -676,40 +676,26 @@ class AppleReceiptVerificationTests(TestCase):
         self.user = make_user(email='apple@example.com', tier='free', status='inactive')
         self.client = auth_client(self.user)
 
-    def test_verify_known_product_upgrades_tier(self):
-        payload = {
-            'transaction_jws': 'eyJzdHViIjoidHJ1ZSJ9',
-            'product_id': 'com.invoicekits.pro.monthly',
-        }
-        response = self.client.post(APPLE_RECEIPT_URL, payload, format='json')
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(data['subscription_tier'], 'professional')
-        self.assertEqual(data['payment_source'], 'apple')
+    def test_verification_is_disabled_and_never_changes_the_tier(self):
+        """
+        The endpoint trusted the client-supplied product_id with no receipt
+        check, so any account could grant itself a paid plan. It stays off
+        until real App Store verification exists.
+        """
+        for product_id in ('com.invoicekits.pro.monthly', 'com.invoicekits.business.annual'):
+            payload = {'transaction_jws': 'eyJzdHViIjoidHJ1ZSJ9', 'product_id': product_id}
+            response = self.client.post(APPLE_RECEIPT_URL, payload, format='json')
+            self.assertEqual(response.status_code, 503)
         self.user.refresh_from_db()
-        self.assertEqual(self.user.subscription_tier, 'professional')
-        self.assertEqual(self.user.payment_source, 'apple')
+        self.assertEqual(self.user.subscription_tier, 'free')
+        self.assertNotEqual(self.user.payment_source, 'apple')
 
-    def test_verify_business_product(self):
-        payload = {
-            'transaction_jws': 'eyJzdHViIjoidHJ1ZSJ9',
-            'product_id': 'com.invoicekits.business.annual',
-        }
+    def test_credit_packs_are_not_granted(self):
+        payload = {'transaction_jws': 'x', 'product_id': 'com.invoicekits.credits.50'}
         response = self.client.post(APPLE_RECEIPT_URL, payload, format='json')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['subscription_tier'], 'business')
-
-    def test_verify_unknown_product_returns_400(self):
-        payload = {
-            'transaction_jws': 'eyJzdHViIjoidHJ1ZSJ9',
-            'product_id': 'com.invoicekits.unknown',
-        }
-        response = self.client.post(APPLE_RECEIPT_URL, payload, format='json')
-        self.assertEqual(response.status_code, 400)
-
-    def test_verify_missing_fields_returns_400(self):
-        response = self.client.post(APPLE_RECEIPT_URL, {}, format='json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 503)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.credits_balance, 0)
 
     def test_verify_unauthenticated_returns_401(self):
         anon = APIClient()

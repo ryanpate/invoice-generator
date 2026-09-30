@@ -113,9 +113,16 @@ def google_social_auth_view(request):
     except Exception:
         return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
+    # tokeninfo only proves Google signed the token. Without these checks a
+    # token a user gave to any other app would log in as them here.
+    if payload.get('aud') not in settings.GOOGLE_ID_TOKEN_AUDIENCES:
+        return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
     email = payload.get('email')
     if not email:
         return Response({'error': 'Email not provided'}, status=status.HTTP_400_BAD_REQUEST)
+    if str(payload.get('email_verified')).lower() != 'true':
+        return Response({'error': 'Email not verified'}, status=status.HTTP_400_BAD_REQUEST)
 
     user, created = CustomUser.objects.get_or_create(
         email=email,

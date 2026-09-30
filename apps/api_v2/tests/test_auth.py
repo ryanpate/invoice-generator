@@ -11,7 +11,7 @@ Covers:
 """
 from unittest.mock import patch, MagicMock
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from rest_framework.test import APIClient
@@ -243,9 +243,47 @@ class AppleSocialAuthViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+def google_payload(**overrides):
+    payload = {
+        'aud': 'our-app.apps.googleusercontent.com',
+        'email': 'googleuser@gmail.com',
+        'email_verified': 'true',
+        'given_name': 'Google',
+        'family_name': 'User',
+    }
+    payload.update(overrides)
+    return MagicMock(status_code=200, json=lambda: payload)
+
+
+@override_settings(GOOGLE_ID_TOKEN_AUDIENCES=['our-app.apps.googleusercontent.com'])
 class GoogleSocialAuthViewTests(TestCase):
     def setUp(self):
         self.client = APIClient()
+
+    @patch('apps.api_v2.views.auth.requests.get')
+    def test_google_token_issued_for_another_app_is_rejected(self, mock_get):
+        """A valid Google token minted for someone else's app must not log in here."""
+        make_user(email='victim@example.com')
+        mock_get.return_value = google_payload(
+            aud='attacker-app.apps.googleusercontent.com', email='victim@example.com'
+        )
+        response = self.client.post(GOOGLE_URL, {'id_token': 'valid-google-token'}, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertNotIn('access', response.json())
+
+    @patch('apps.api_v2.views.auth.requests.get')
+    def test_google_unverified_email_is_rejected(self, mock_get):
+        mock_get.return_value = google_payload(email_verified='false')
+        response = self.client.post(GOOGLE_URL, {'id_token': 'valid-google-token'}, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(CustomUser.objects.filter(email='googleuser@gmail.com').exists())
+
+    @override_settings(GOOGLE_ID_TOKEN_AUDIENCES=[])
+    @patch('apps.api_v2.views.auth.requests.get')
+    def test_google_sign_in_fails_closed_with_no_client_id_configured(self, mock_get):
+        mock_get.return_value = google_payload(aud='')
+        response = self.client.post(GOOGLE_URL, {'id_token': 'valid-google-token'}, format='json')
+        self.assertEqual(response.status_code, 400)
 
     def test_google_invalid_token_returns_400(self):
         """Google tokeninfo endpoint returning non-200 must yield 400."""
@@ -262,14 +300,7 @@ class GoogleSocialAuthViewTests(TestCase):
 
     @patch('apps.api_v2.views.auth.requests.get')
     def test_google_valid_token_new_user_returns_201(self, mock_get):
-        mock_get.return_value = MagicMock(
-            status_code=200,
-            json=lambda: {
-                'email': 'googleuser@gmail.com',
-                'given_name': 'Google',
-                'family_name': 'User',
-            },
-        )
+        mock_get.return_value = google_payload()
         response = self.client.post(GOOGLE_URL, {'id_token': 'valid-google-token'}, format='json')
 
         self.assertEqual(response.status_code, 201)
@@ -285,10 +316,7 @@ class GoogleSocialAuthViewTests(TestCase):
     def test_google_valid_token_existing_user_returns_200(self, mock_get):
         email = 'existing-google@example.com'
         make_user(email=email)
-        mock_get.return_value = MagicMock(
-            status_code=200,
-            json=lambda: {'email': email, 'given_name': 'Google', 'family_name': 'User'},
-        )
+        mock_get.return_value = google_payload(email=email)
         response = self.client.post(GOOGLE_URL, {'id_token': 'valid-google-token'}, format='json')
 
         self.assertEqual(response.status_code, 200)

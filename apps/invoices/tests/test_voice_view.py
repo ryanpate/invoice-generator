@@ -3,9 +3,15 @@ import base64
 import json
 from unittest.mock import patch
 
-from django.test import TestCase
+from datetime import timedelta
+
+from django.test import Client, TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.utils import timezone
+
+from apps.invoices.models import GuestVoiceGeneration
+from apps.invoices.services import guest_voice_guard
 
 User = get_user_model()
 
@@ -115,3 +121,58 @@ class TestAiVoiceGenerateView(TestCase):
         )
         data = resp.json()
         self.assertFalse(data['success'])
+
+
+@patch('apps.invoices.services.ai_generator.AIInvoiceGenerator.generate_from_audio')
+class GuestVoiceLimitTest(TestCase):
+    """
+    The guest cap was one per session cookie, so a bot that dropped its cookie
+    could send unlimited audio to Claude. Guest use is now counted in the
+    database per IP and site-wide over 24 hours.
+    """
+
+    def setUp(self):
+        self.url = reverse('invoices:ai_voice_generate')
+        self.payload = json.dumps({
+            'audio_data': base64.b64encode(b'fake-audio').decode('utf-8'),
+            'media_type': 'audio/webm',
+        })
+
+    def post(self, ip='203.0.113.1'):
+        # A fresh Client per request is a bot discarding its cookie.
+        return Client().post(
+            self.url, self.payload, content_type='application/json',
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest', HTTP_X_REAL_IP=ip,
+        ).json()
+
+    def test_dropping_the_session_cookie_does_not_reset_the_limit(self, mock_gen):
+        mock_gen.return_value = {'success': True, 'invoice_data': {}}
+        for _ in range(guest_voice_guard.PER_IP_DAILY):
+            self.assertTrue(self.post()['success'])
+        self.assertFalse(self.post()['success'])
+        self.assertEqual(mock_gen.call_count, guest_voice_guard.PER_IP_DAILY)
+
+    def test_failed_generations_still_count(self, mock_gen):
+        mock_gen.return_value = {'success': False, 'error': 'upstream error'}
+        for _ in range(guest_voice_guard.PER_IP_DAILY + 2):
+            self.post()
+        self.assertEqual(mock_gen.call_count, guest_voice_guard.PER_IP_DAILY)
+
+    def test_site_wide_cap_stops_a_bot_rotating_ips(self, mock_gen):
+        mock_gen.return_value = {'success': True, 'invoice_data': {}}
+        GuestVoiceGeneration.objects.bulk_create(
+            GuestVoiceGeneration(ip_address=f'10.0.0.{n}')
+            for n in range(guest_voice_guard.SITE_WIDE_DAILY)
+        )
+        self.assertFalse(self.post(ip='198.51.100.77')['success'])
+        mock_gen.assert_not_called()
+
+    def test_uses_older_than_a_day_do_not_count(self, mock_gen):
+        mock_gen.return_value = {'success': True, 'invoice_data': {}}
+        GuestVoiceGeneration.objects.bulk_create(
+            GuestVoiceGeneration(ip_address='203.0.113.1')
+            for _ in range(guest_voice_guard.PER_IP_DAILY)
+        )
+        GuestVoiceGeneration.objects.update(created_at=timezone.now() - timedelta(days=2))
+        self.assertTrue(self.post()['success'])
+

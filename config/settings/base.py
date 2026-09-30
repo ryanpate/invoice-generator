@@ -402,6 +402,13 @@ PAYMENT_TERMS = [
 # AI Invoice Generator Configuration
 ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
 APPLE_CLIENT_ID = config('APPLE_CLIENT_ID', default='')
+# Google client IDs whose ID tokens /api/v2/auth/social/google/ accepts. A token
+# issued to any other app is refused; with none configured, all are refused.
+GOOGLE_ID_TOKEN_AUDIENCES = config(
+    'GOOGLE_ID_TOKEN_AUDIENCES',
+    default=config('GOOGLE_OAUTH_CLIENT_ID', default=''),
+    cast=Csv(),
+)
 
 # AI generation limits per subscription tier (None = unlimited)
 AI_GENERATION_LIMITS = {

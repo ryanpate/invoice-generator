@@ -54,7 +54,7 @@ from .forms import (
 from decimal import Decimal
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
-from .services import anon_email_guard
+from .services import anon_email_guard, guest_voice_guard
 from .services.email_sender import InvoiceEmailService
 
 
@@ -1720,11 +1720,13 @@ def ai_voice_generate(request):
             })
     else:
         used = request.session.get('voice_generations_used', 0)
-        if used >= 1:
+        if used >= 1 or guest_voice_guard.limit_reached(request):
             return JsonResponse({
                 'success': False,
                 'error': 'Sign up free to keep using voice invoicing.'
             })
+        # Counted before the call: a failed generation still costs us.
+        guest_voice_guard.record_use(request)
 
     # Generate invoice data from audio
     from .services.ai_generator import AIInvoiceGenerator

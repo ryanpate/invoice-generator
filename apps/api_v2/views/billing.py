@@ -154,7 +154,7 @@ def verify_apple_receipt(request):
     POST /api/v2/billing/apple/verify-receipt/
 
     Accepts a signed transaction from StoreKit 2 (transaction_jws string).
-    Updates the user's subscription tier and marks payment_source as 'apple'.
+    Will update the user's subscription tier once verification is implemented.
 
     Body:
       {
@@ -171,65 +171,18 @@ def verify_apple_receipt(request):
       5. Use the originalTransactionId to detect renewals and cancellations
       6. Handle Apple Server Notifications V2 for real-time status updates
     """
-    user = request.user
-    transaction_jws = request.data.get('transaction_jws')
-    product_id = request.data.get('product_id')
-
-    if not transaction_jws or not product_id:
-        return Response(
-            {'error': 'Both transaction_jws and product_id are required.'},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    # TODO: Replace stub with real Apple App Store Server API verification.
-    # For now, trust the client-supplied product_id after basic validation.
-    # SECURITY RISK: A malicious client could send any product_id to gain access.
-    # Post-launch, implement JWS verification using Apple's public keys.
+    # DISABLED. The stub that lived here trusted the client-supplied product_id
+    # with no receipt check, so any signed-in account could grant itself a paid
+    # plan or credits. Nothing is granted until the JWS is verified server-side
+    # (steps above); APPLE_PRODUCT_TIER_MAP / APPLE_CREDIT_PACK_MAP are kept for
+    # that implementation.
     logger.warning(
-        'Apple receipt verification is stubbed. '
-        'Processing product_id=%s for user=%s without server-side JWS validation.',
-        product_id,
-        user.email,
+        'Rejected Apple receipt for user=%s: verification is not implemented.',
+        request.user.pk,
     )
-
-    # Handle credit pack purchases
-    credit_amount = APPLE_CREDIT_PACK_MAP.get(product_id)
-    if credit_amount:
-        user.add_credits(credit_amount)
-        user.payment_source = 'apple'
-        user.save(update_fields=['payment_source'])
-        return Response(
-            {
-                'type': 'credits',
-                'credits_added': credit_amount,
-                'credits_balance': user.credits_balance,
-                'product_id': product_id,
-            },
-            status=status.HTTP_200_OK,
-        )
-
-    # Handle subscription purchases
-    tier = APPLE_PRODUCT_TIER_MAP.get(product_id)
-    if not tier:
-        return Response(
-            {'error': f'Unknown product_id: {product_id}'},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    user.subscription_tier = tier
-    user.subscription_status = 'active'
-    user.payment_source = 'apple'
-    user.save(update_fields=['subscription_tier', 'subscription_status', 'payment_source'])
-
     return Response(
-        {
-            'type': 'subscription',
-            'subscription_tier': user.subscription_tier,
-            'subscription_status': user.subscription_status,
-            'payment_source': user.payment_source,
-            'product_id': product_id,
-        },
-        status=status.HTTP_200_OK,
+        {'error': 'In-app purchases are not available yet.'},
+        status=status.HTTP_503_SERVICE_UNAVAILABLE,
     )
 
 
