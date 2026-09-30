@@ -51,6 +51,21 @@
                 {% endif %}
             </div>
 
+            {% if fixed_message %}
+            <!-- Free plan: fixed subject and message -->
+            <div>
+                <p class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</p>
+                <p class="text-gray-900 dark:text-white">{{ fixed_subject }}</p>
+            </div>
+            <div>
+                <p class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</p>
+                <p class="text-gray-900 dark:text-white whitespace-pre-line">{{ fixed_message }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-xs mt-2">
+                    <a href="{% url 'billing:plans' %}" class="text-primary-600 dark:text-primary-400 hover:underline">Upgrade</a>
+                    to write your own subject and message and add CC recipients.
+                </p>
+            </div>
+            {% else %}
             <!-- CC Emails -->
             <div>
                 <label for="id_cc_emails" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -86,6 +101,7 @@
                 <p class="text-red-500 dark:text-red-400 text-sm mt-1">{{ form.message.errors.0 }}</p>
                 {% endif %}
             </div>
+            {% endif %}
 
             <!-- Attachment Notice -->
             <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4">

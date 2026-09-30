@@ -1066,3 +1066,26 @@ class AnonymousEmailSend(models.Model):
 
     def __str__(self):
         return f'{self.recipient} from {self.ip_address}'
+
+
+class InvoiceEmailSend(models.Model):
+    """
+    One row per address a signed-in account emailed an invoice to.
+
+    A logged-in bot looped the send page thousands of times an hour; these
+    rows back the per-account and per-invoice daily caps. The invoice link is
+    SET_NULL so deleting an invoice does not hand the sends back.
+    """
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='invoice_email_sends'
+    )
+    invoice = models.ForeignKey(Invoice, null=True, blank=True, on_delete=models.SET_NULL)
+    recipient = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.recipient} by {self.user_id}'

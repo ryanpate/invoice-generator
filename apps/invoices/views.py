@@ -1158,17 +1158,29 @@ class InvoiceSendEmailView(LoginRequiredMixin, TeamAwareQuerysetMixin, FormView)
             'message': email_service.get_default_message(),
         }
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if InvoiceEmailService(self.invoice).has_fixed_content():
+            for name in ('cc_emails', 'subject', 'message'):
+                del form.fields[name]
+        return form
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['invoice'] = self.invoice
+        email_service = InvoiceEmailService(self.invoice)
+        if email_service.has_fixed_content():
+            context['fixed_subject'] = email_service.get_default_subject()
+            context['fixed_message'] = email_service.get_default_message()
         return context
 
     def form_valid(self, form):
         email_service = InvoiceEmailService(self.invoice)
+        # Free accounts have no subject/message/CC fields; the service fills them.
         result = email_service.send(
             to_email=form.cleaned_data['to_email'],
-            subject=form.cleaned_data['subject'],
-            message=form.cleaned_data['message'],
+            subject=form.cleaned_data.get('subject', ''),
+            message=form.cleaned_data.get('message', ''),
             cc_emails=form.cleaned_data.get('cc_emails', []),
         )
 

@@ -410,6 +410,14 @@ AI_GENERATION_LIMITS = {
     'business': None,  # Unlimited
 }
 
+# Invoice emails an account may send per rolling 24 hours, counted per address
+# (To and each CC). Free accounts create 3 invoices a month, so 10 is generous.
+INVOICE_EMAIL_DAILY_LIMITS = {
+    'free': 10,
+    'professional': 200,
+    'business': 500,
+}
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),

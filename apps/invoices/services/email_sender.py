@@ -1,11 +1,15 @@
 """
 Invoice email sending service.
 """
+from datetime import timedelta
+
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.html import strip_tags
 
+from ..models import InvoiceEmailSend
 from .pdf_generator import InvoicePDFGenerator
 
 UNVERIFIED_SENDER_ERROR = (
@@ -26,12 +30,45 @@ def sender_is_verified(user) -> bool:
     return EmailAddress.objects.filter(user=user, verified=True).exists()
 
 
+# Addresses one invoice may be emailed to per rolling 24 hours, on any plan.
+PER_INVOICE_DAILY = 10
+
+
+def send_limit_error(invoice, recipient_count):
+    """
+    A signed-in account looped the send page to relay spam. Sends are counted
+    in the database over 24 hours, per account owner and per invoice.
+    Returns an error message when this send would pass a cap, else None.
+    """
+    owner = invoice.company.user
+    limits = settings.INVOICE_EMAIL_DAILY_LIMITS
+    daily_limit = limits.get(owner.effective_tier(), limits['free'])
+    recent = InvoiceEmailSend.objects.filter(
+        user=owner, created_at__gte=timezone.now() - timedelta(hours=24)
+    )
+    if recent.count() + recipient_count > daily_limit:
+        return (
+            f'You have reached the limit of {daily_limit} invoice emails per day. '
+            'Please try again tomorrow.'
+        )
+    if recent.filter(invoice=invoice).count() + recipient_count > PER_INVOICE_DAILY:
+        return (
+            f'This invoice has already been emailed {PER_INVOICE_DAILY} times today. '
+            'Please try again tomorrow.'
+        )
+    return None
+
+
 class InvoiceEmailService:
     """Service for sending invoices via email with PDF attachment."""
 
     def __init__(self, invoice):
         self.invoice = invoice
         self.company = invoice.company
+
+    def has_fixed_content(self) -> bool:
+        """Free accounts send the default subject and message, with no CC."""
+        return self.company.user.effective_tier() == 'free'
 
     def get_default_subject(self) -> str:
         """Generate default email subject."""
@@ -63,8 +100,20 @@ class InvoiceEmailService:
         Returns:
             dict with 'success' boolean and 'error' message if failed
         """
-        if not sender_is_verified(self.company.user):
+        owner = self.company.user
+        if not sender_is_verified(owner):
             return {'success': False, 'error': UNVERIFIED_SENDER_ERROR}
+
+        if self.has_fixed_content():
+            # Free-form text and CC made the free tier a spam relay.
+            subject = self.get_default_subject()
+            message = self.get_default_message()
+            cc_emails = []
+
+        recipients = [to_email, *(cc_emails or [])]
+        limit_error = send_limit_error(self.invoice, len(recipients))
+        if limit_error:
+            return {'success': False, 'error': limit_error}
 
         try:
             # Generate PDF
@@ -100,6 +149,10 @@ class InvoiceEmailService:
 
             # Send email
             email.send(fail_silently=False)
+            InvoiceEmailSend.objects.bulk_create(
+                InvoiceEmailSend(user=owner, invoice=self.invoice, recipient=address)
+                for address in recipients
+            )
 
             # Mark invoice as sent
             self.invoice.mark_as_sent()
