@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from apps.invoices.models import Invoice, LineItem, RecurringInvoice, RecurringLineItem
 from apps.invoices.services import scam_guard
 from apps.invoices.services.email_sender import InvoiceEmailService
-from apps.invoices.services.invoice_quota import LIMIT_ERROR as RETARGET_LIMIT_ERROR, retarget_uses_quota
+from apps.invoices.services.invoice_quota import LIMIT_ERROR as RETARGET_LIMIT_ERROR, plan_edit
 from apps.invoices.services.pdf_generator import InvoicePDFGenerator
 from apps.api_v2.serializers.invoices import (
     InvoiceCreateV2Serializer,
@@ -103,15 +103,15 @@ class InvoiceV2ViewSet(viewsets.ModelViewSet):
         data = serializer.validated_data
         self._reject_scam(data, invoice)
         user = self.request.user
-        uses_quota = retarget_uses_quota(
-            user,
+        uses_quota, (quota_name, quota_email) = plan_edit(
+            user, invoice,
             invoice.client_name, invoice.client_email,
             data.get('client_name', invoice.client_name),
             data.get('client_email', invoice.client_email),
         )
         if uses_quota and not user.can_create_invoice():
             raise PermissionDenied(RETARGET_LIMIT_ERROR)
-        serializer.save()
+        serializer.save(quota_client_name=quota_name, quota_client_email=quota_email)
         if uses_quota:
             user.increment_invoice_count()
 
@@ -146,7 +146,10 @@ class InvoiceV2ViewSet(viewsets.ModelViewSet):
         """Generate and stream the invoice PDF."""
         invoice = self.get_object()
         generator = InvoicePDFGenerator(invoice)
-        pdf_bytes = generator.generate()
+        try:
+            pdf_bytes = generator.generate()
+        except scam_guard.ScamInvoiceError as e:
+            return Response({'detail': str(e)}, status=400)
 
         response = FileResponse(
             iter([pdf_bytes]),

@@ -51,12 +51,24 @@ ERROR = (
 )
 
 
+class ScamInvoiceError(RuntimeError):
+    """Raised by the PDF generator; existing callers already handle RuntimeError."""
+
+
 def looks_like_scam(sender_name, texts):
     """sender_name is the business issuing the invoice; texts is every other field."""
     if sender_name and IMPERSONATED_SENDER.match(sender_name.strip()):
         return True
     combined = '\n'.join(t for t in [sender_name, *texts] if t)
     return bool(PHONE.search(combined) and CALLBACK_LANGUAGE.search(combined))
+
+
+def invoice_looks_like_scam(invoice, company):
+    """Check a saved invoice, e.g. one created before its company was renamed."""
+    texts = [invoice.client_name, invoice.client_email, invoice.client_address,
+             invoice.notes, getattr(invoice, 'invoice_name', '')]
+    texts += [item.description for item in invoice.line_items.all()]
+    return looks_like_scam(company.name, texts)
 
 
 def log_block(request, where, sender_name):

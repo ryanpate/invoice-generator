@@ -44,6 +44,11 @@ class Invoice(models.Model):
     client_email = models.EmailField(blank=True)
     client_phone = models.CharField(max_length=50, blank=True)
     client_address = models.TextField(blank=True)
+    # The client the plan's quota last paid for. Edits are compared against
+    # this, not the current client, so many small "typo fixes" cannot drift
+    # one invoice to a new client for free. Blank until the first edit.
+    quota_client_name = models.CharField(max_length=255, blank=True)
+    quota_client_email = models.EmailField(blank=True)
 
     # Dates
     invoice_date = models.DateField(default=timezone.now)

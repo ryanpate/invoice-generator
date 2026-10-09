@@ -9,6 +9,7 @@ from django.conf import settings
 from django.http import FileResponse
 
 from apps.invoices.models import Invoice, LineItem
+from apps.invoices.services import scam_guard
 from apps.invoices.services.pdf_generator import InvoicePDFGenerator
 from .serializers import (
     InvoiceListSerializer,
@@ -58,7 +59,10 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         invoice = self.get_object()
 
         generator = InvoicePDFGenerator(invoice)
-        pdf_bytes = generator.generate()
+        try:
+            pdf_bytes = generator.generate()
+        except scam_guard.ScamInvoiceError as e:
+            return Response({'detail': str(e)}, status=400)
 
         response = FileResponse(
             iter([pdf_bytes]),

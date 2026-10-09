@@ -13,9 +13,10 @@ from ..models import GuestPdfDownload
 from .anon_email_guard import client_ip
 
 # Room for a person fixing typos and re-downloading, or a shared office IP.
+# No site-wide cap, unlike the email guard: one bot could spend it and shut
+# /try/ for every real visitor. A download sends nothing from our domain, and
+# scam content is refused by scam_guard regardless of volume.
 PER_IP_DAILY = 10
-# Backstop for a bot rotating IPs. Real volume is a handful a day.
-SITE_WIDE_DAILY = 200
 
 LIMIT_ERROR = (
     "You've reached today's limit for free previews. Create a free account "
@@ -24,14 +25,10 @@ LIMIT_ERROR = (
 
 
 def limit_reached(request):
-    recent = GuestPdfDownload.objects.filter(
-        created_at__gte=timezone.now() - timedelta(hours=24)
-    )
     ip = client_ip(request)
-    return (
-        recent.count() >= SITE_WIDE_DAILY
-        or bool(ip and recent.filter(ip_address=ip).count() >= PER_IP_DAILY)
-    )
+    return bool(ip) and GuestPdfDownload.objects.filter(
+        ip_address=ip, created_at__gte=timezone.now() - timedelta(hours=24)
+    ).count() >= PER_IP_DAILY
 
 
 def record_download(request):

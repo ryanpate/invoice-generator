@@ -58,7 +58,7 @@ from decimal import Decimal
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
 from .services import anon_email_guard, guest_pdf_guard, guest_voice_guard, scam_guard
-from .services.invoice_quota import LIMIT_ERROR as RETARGET_LIMIT_ERROR, retarget_uses_quota
+from .services.invoice_quota import LIMIT_ERROR as RETARGET_LIMIT_ERROR, plan_edit
 from .services.email_sender import InvoiceEmailService
 
 
@@ -901,8 +901,8 @@ class InvoiceUpdateView(LoginRequiredMixin, TeamAwareQuerysetMixin, UpdateView):
 
             # The plan belongs to the company owner, not a team member editing.
             user = self.object.company.user
-            uses_quota = retarget_uses_quota(
-                user,
+            uses_quota, quota_client = plan_edit(
+                user, self.object,
                 form.initial.get('client_name'), form.initial.get('client_email'),
                 form.cleaned_data.get('client_name'), form.cleaned_data.get('client_email'),
             )
@@ -910,6 +910,7 @@ class InvoiceUpdateView(LoginRequiredMixin, TeamAwareQuerysetMixin, UpdateView):
                 form.add_error('client_name', RETARGET_LIMIT_ERROR)
                 return self.render_to_response(self.get_context_data(form=form))
 
+            form.instance.quota_client_name, form.instance.quota_client_email = quota_client
             self.object = form.save()
             line_items.save()
 

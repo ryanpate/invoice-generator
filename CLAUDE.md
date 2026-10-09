@@ -729,15 +729,20 @@ invoices without paying, some of them scam-shaped:
 - **Edit reuse:** on a metered plan, editing an invoice to a different client
   (`invoice_quota.is_new_client`: any change of a non-empty email, or a name
   change below 0.8 similarity) counts as a new invoice and is refused at the
-  limit. Charged to the company owner. Web edit view and `/api/v2/` update.
+  limit. Edits are measured from `Invoice.quota_client_name/email` (the client
+  last paid for), not the current client, so chained small edits cannot drift
+  to a new client. Charged to the company owner. Web edit view and `/api/v2/`.
 - **Guest PDF downloads:** `/try/` and `/tools/past-due-notice/` downloads are
-  capped in the DB (`GuestPdfDownload`, `guest_pdf_guard.py`): 10 per IP and
-  200 site-wide per 24h. `/try/` also stops reading line items after 50.
+  capped in the DB (`GuestPdfDownload`, `guest_pdf_guard.py`): 10 per IP per
+  24h. Deliberately no site-wide cap — one bot could spend it and shut `/try/`
+  for everyone. `/try/` also stops reading line items after 50.
 - **Scam patterns** (`scam_guard.py`): refuses invoices whose sender name *is*
   an impersonated brand ("PayPal", "Geek Squad", not "Norton Electric"), or
   that pair a phone number with callback-phishing wording ("did not authorize
   this charge"). Applied on `/try/`, past-due notice, web create/edit, API v2
-  create/update, and the company name field. Blocks log a WARNING with IP.
+  create/update, company name (web form and API v2), and again inside
+  `InvoicePDFGenerator.generate()` — the last gate for every path, e.g. a
+  company renamed after its invoices were made. Blocks log a WARNING.
 
 Guarded by `apps/invoices/tests/test_invoice_abuse_guards.py`.
 

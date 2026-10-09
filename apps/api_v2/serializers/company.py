@@ -17,6 +17,13 @@ class CompanyV2Serializer(serializers.ModelSerializer):
     logo_url = serializers.SerializerMethodField()
     signature_url = serializers.SerializerMethodField()
 
+    def validate_name(self, value):
+        from apps.invoices.services import scam_guard
+
+        if scam_guard.IMPERSONATED_SENDER.match(value.strip()):
+            raise serializers.ValidationError(scam_guard.ERROR)
+        return value
+
     class Meta:
         model = Company
         fields = [

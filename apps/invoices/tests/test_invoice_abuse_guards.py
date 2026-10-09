@@ -225,3 +225,59 @@ class CompanyNameTest(TestCase):
         form = CompanyForm(data={'name': 'Norton Electric'})
         form.is_valid()
         self.assertNotIn('name', form.errors)
+
+
+class SecurityReviewFollowUpTest(TestCase):
+    """Findings from the post-push security review of the first version."""
+
+    def setUp(self):
+        from rest_framework.test import APIClient
+
+        self.user = CustomUser.objects.create_user(
+            username='free', email='free@example.test', password='pw-12345678',
+            invoices_created_this_month=3,
+        )
+        self.company = Company.objects.create(user=self.user, owner=self.user, name='Acme Studio')
+        self.invoice = Invoice.objects.create(
+            company=self.company, invoice_number='INV-1', client_name='Globex',
+            invoice_date=date.today(), due_date=date.today(),
+        )
+        self.api = APIClient()
+        self.api.force_authenticate(self.user)
+
+    def patch_client(self, name):
+        return self.api.patch(f'/api/v2/invoices/{self.invoice.pk}/',
+                              {'client_name': name}, format='json')
+
+    def test_small_edits_cannot_drift_to_a_new_client(self):
+        # Every step is >= 0.86 similar to the previous one; the end is not "Globex".
+        chain = ['Globexa', 'Globeta', 'Glabeta', 'Alabeta', 'Alameta', 'Alameda']
+        responses = [self.patch_client(name).status_code for name in chain]
+        self.assertIn(403, responses)
+        self.invoice.refresh_from_db()
+        self.assertNotEqual(self.invoice.client_name, 'Alameda')
+
+    def test_correction_keeps_the_anchor(self):
+        self.assertEqual(self.patch_client('Globex.').status_code, 200)
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.quota_client_name, 'Globex')
+
+    def test_renamed_company_cannot_download_old_invoices(self):
+        Company.objects.filter(pk=self.company.pk).update(name='PayPal')
+        response = self.api.get(f'/api/v2/invoices/{self.invoice.pk}/pdf/')
+        self.assertEqual(response.status_code, 400)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('invoices:generate_pdf', args=[self.invoice.pk]))
+        self.assertEqual(response.status_code, 302)
+
+    def test_api_rejects_brand_company_name(self):
+        from apps.api_v2.serializers.company import CompanyV2Serializer
+
+        serializer = CompanyV2Serializer(self.company, data={'name': 'Geek Squad'}, partial=True)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn('name', serializer.errors)
+
+    def test_many_visitors_do_not_lock_out_try(self):
+        for i in range(guest_pdf_guard.PER_IP_DAILY * 3):
+            response = Client().post('/try/', try_post_data(), HTTP_X_REAL_IP=f'198.51.100.{i}')
+            self.assertEqual(response['Content-Type'], 'application/pdf')

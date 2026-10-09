@@ -3,6 +3,7 @@ PDF generation service using xhtml2pdf.
 """
 import io
 import base64
+import logging
 from io import BytesIO
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -14,6 +15,8 @@ try:
     HAS_QRCODE = True
 except ImportError:
     HAS_QRCODE = False
+
+logger = logging.getLogger(__name__)
 
 
 class InvoicePDFGenerator:
@@ -125,6 +128,14 @@ class InvoicePDFGenerator:
 
     def generate(self):
         """Generate PDF and return as bytes."""
+        from . import scam_guard
+
+        # Last gate for every path: a company renamed to "PayPal" after its
+        # invoices were created, recurring and batch invoices, the APIs.
+        if scam_guard.invoice_looks_like_scam(self.invoice, self.company):
+            logger.warning('Refused scam-pattern PDF for invoice %s', self.invoice.pk)
+            raise scam_guard.ScamInvoiceError(scam_guard.ERROR)
+
         template_name = f'invoices/pdf/{self.invoice.template_style}.html'
 
         # Fallback to clean_slate if template doesn't exist

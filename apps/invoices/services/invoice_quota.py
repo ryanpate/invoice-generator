@@ -28,8 +28,21 @@ def is_new_client(old_name, old_email, new_name, new_email):
     return SequenceMatcher(None, _norm(old_name), _norm(new_name)).ratio() < SAME_NAME_RATIO
 
 
-def retarget_uses_quota(user, old_name, old_email, new_name, new_email):
-    """True when this edit counts as a new invoice against the user's monthly quota."""
+def plan_edit(user, invoice, cur_name, cur_email, new_name, new_email):
+    """
+    Decide what an edit to the client costs. cur_* are the client before the
+    edit (pass them in: a bound form has already changed the instance).
+
+    Returns (uses_quota, quota_client): whether the edit counts as a new
+    invoice, and the (name, email) to store as the invoice's quota client.
+    """
+    old_name = invoice.quota_client_name or cur_name
+    old_email = invoice.quota_client_email or cur_email
     tiers = settings.SUBSCRIPTION_TIERS
     limit = tiers.get(user.effective_tier(), tiers['free']).get('invoices_per_month', 0)
-    return limit != -1 and is_new_client(old_name, old_email, new_name, new_email)
+    if limit == -1:
+        return False, (new_name, new_email or '')
+    if is_new_client(old_name, old_email, new_name, new_email):
+        return True, (new_name, new_email or '')
+    # A correction keeps the anchor, so the next edit is still measured from it.
+    return False, (old_name, old_email or new_email or '')
