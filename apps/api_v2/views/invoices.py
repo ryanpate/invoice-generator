@@ -10,7 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.invoices.models import Invoice, LineItem, RecurringInvoice, RecurringLineItem
+from apps.invoices.services import scam_guard
 from apps.invoices.services.email_sender import InvoiceEmailService
+from apps.invoices.services.invoice_quota import LIMIT_ERROR as RETARGET_LIMIT_ERROR, retarget_uses_quota
 from apps.invoices.services.pdf_generator import InvoicePDFGenerator
 from apps.api_v2.serializers.invoices import (
     InvoiceCreateV2Serializer,
@@ -93,7 +95,36 @@ class InvoiceV2ViewSet(viewsets.ModelViewSet):
                 'Invoice limit reached for your current plan. '
                 'Please upgrade to create more invoices.'
             )
+        self._reject_scam(serializer.validated_data, None)
         serializer.save()
+
+    def perform_update(self, serializer):
+        invoice = serializer.instance
+        data = serializer.validated_data
+        self._reject_scam(data, invoice)
+        user = self.request.user
+        uses_quota = retarget_uses_quota(
+            user,
+            invoice.client_name, invoice.client_email,
+            data.get('client_name', invoice.client_name),
+            data.get('client_email', invoice.client_email),
+        )
+        if uses_quota and not user.can_create_invoice():
+            raise PermissionDenied(RETARGET_LIMIT_ERROR)
+        serializer.save()
+        if uses_quota:
+            user.increment_invoice_count()
+
+    def _reject_scam(self, data, invoice):
+        def value(field):
+            return data.get(field, getattr(invoice, field, '') if invoice else '')
+
+        company = self.request.user.get_company()
+        texts = [value(f) for f in ('client_name', 'client_email', 'client_address', 'notes')]
+        texts += [item.get('description', '') for item in data.get('line_items') or []]
+        if scam_guard.looks_like_scam(company.name if company else '', texts):
+            scam_guard.log_block(self.request, self.request.path, company.name if company else '')
+            raise ValidationError({'detail': scam_guard.ERROR})
 
     def create(self, request, *args, **kwargs):
         """Override to return detail serializer (with id) after creation."""

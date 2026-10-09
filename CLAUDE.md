@@ -723,6 +723,24 @@ Resend and as junk rows in admin). Two routes, both closed:
 
 Guarded by `apps/invoices/tests/test_spam_defenses.py`.
 
+**Free-generation and scam guards (October 2026)** — users were producing
+invoices without paying, some of them scam-shaped:
+
+- **Edit reuse:** on a metered plan, editing an invoice to a different client
+  (`invoice_quota.is_new_client`: any change of a non-empty email, or a name
+  change below 0.8 similarity) counts as a new invoice and is refused at the
+  limit. Charged to the company owner. Web edit view and `/api/v2/` update.
+- **Guest PDF downloads:** `/try/` and `/tools/past-due-notice/` downloads are
+  capped in the DB (`GuestPdfDownload`, `guest_pdf_guard.py`): 10 per IP and
+  200 site-wide per 24h. `/try/` also stops reading line items after 50.
+- **Scam patterns** (`scam_guard.py`): refuses invoices whose sender name *is*
+  an impersonated brand ("PayPal", "Geek Squad", not "Norton Electric"), or
+  that pair a phone number with callback-phishing wording ("did not authorize
+  this charge"). Applied on `/try/`, past-due notice, web create/edit, API v2
+  create/update, and the company name field. Blocks log a WARNING with IP.
+
+Guarded by `apps/invoices/tests/test_invoice_abuse_guards.py`.
+
 Guarded by `apps/accounts/tests/test_navigation_scope.py`. Two of those tests
 were vacuous on the first pass — the affiliate assertion ran against the
 landing page, which overrides base.html's footer, and the team-tab assertion

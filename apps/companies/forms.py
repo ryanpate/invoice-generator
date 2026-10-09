@@ -10,6 +10,14 @@ from apps.invoices.models import PaymentReminderSettings
 class CompanyForm(forms.ModelForm):
     """Form for editing company profile."""
 
+    def clean_name(self):
+        from apps.invoices.services import scam_guard
+
+        name = self.cleaned_data['name']
+        if scam_guard.IMPERSONATED_SENDER.match(name.strip()):
+            raise forms.ValidationError(scam_guard.ERROR)
+        return name
+
     class Meta:
         model = Company
         fields = [

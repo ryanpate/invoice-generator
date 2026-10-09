@@ -57,7 +57,8 @@ from .forms import (
 from decimal import Decimal
 # PDF generator imported lazily to avoid WeasyPrint startup issues
 from .services.batch_processor import BatchInvoiceProcessor, get_csv_template
-from .services import anon_email_guard, guest_voice_guard
+from .services import anon_email_guard, guest_pdf_guard, guest_voice_guard, scam_guard
+from .services.invoice_quota import LIMIT_ERROR as RETARGET_LIMIT_ERROR, retarget_uses_quota
 from .services.email_sender import InvoiceEmailService
 
 
@@ -525,7 +526,7 @@ class TryInvoiceView(View):
         # Parse line items from POST data
         line_items = []
         idx = 0
-        while True:
+        while idx < self.MAX_LINE_ITEMS:
             desc = request.POST.get(f'item_description_{idx}')
             if desc is None:
                 break
@@ -559,6 +560,16 @@ class TryInvoiceView(View):
             return render(request, 'invoices/try.html', {'form': form})
 
         cd = form.cleaned_data
+        if scam_guard.looks_like_scam(
+            cd['company_name'],
+            [cd['client_name'], cd.get('notes', '')] + [i['description'] for i in line_items],
+        ):
+            scam_guard.log_block(request, '/try/', cd['company_name'])
+            if wants_email:
+                return JsonResponse({'success': False, 'error': scam_guard.ERROR}, status=400)
+            form.add_error(None, scam_guard.ERROR)
+            return render(request, 'invoices/try.html', {'form': form})
+
         tax_rate = float(cd.get('tax_rate') or 0)
         subtotal = sum(item['amount'] for item in line_items)
         tax_amount = round(subtotal * tax_rate / 100, 2)
@@ -628,7 +639,12 @@ class TryInvoiceView(View):
         if wants_email:
             return self._email_pdf(request, invoice_data, TryCompany())
 
+        if guest_pdf_guard.limit_reached(request):
+            form.add_error(None, guest_pdf_guard.LIMIT_ERROR)
+            return render(request, 'invoices/try.html', {'form': form}, status=429)
+
         pdf_bytes = InvoicePDFGenerator.generate_preview(invoice_data, TryCompany())
+        guest_pdf_guard.record_download(request)
 
         response = HttpResponse(pdf_bytes, content_type='application/pdf')
         # attachment, not inline: on mobile Safari an inline PDF renders in a
@@ -650,6 +666,7 @@ class TryInvoiceView(View):
 
     # Cap per anonymous session so /try/ can't be used to spam PDFs.
     EMAIL_SEND_LIMIT = 3
+    MAX_LINE_ITEMS = 50
 
     def _email_pdf(self, request, invoice_data, company):
         """Email the watermarked preview PDF to the visitor and record the lead."""
@@ -813,10 +830,12 @@ class InvoiceCreateView(LoginRequiredMixin, TeamAwareQuerysetMixin, CreateView):
                 name=f"{self.request.user.username}'s Company"
             )
 
-        form.instance.company = company
-        form.instance.invoice_number = company.get_next_invoice_number()
-
         if line_items.is_valid():
+            if invoice_looks_like_scam(self.request, form, line_items, company.name):
+                return self.render_to_response(self.get_context_data(form=form))
+
+            form.instance.company = company
+            form.instance.invoice_number = company.get_next_invoice_number()
             self.object = form.save()
             line_items.instance = self.object
             line_items.save()
@@ -833,6 +852,20 @@ class InvoiceCreateView(LoginRequiredMixin, TeamAwareQuerysetMixin, CreateView):
             return redirect('invoices:detail', pk=self.object.pk)
         else:
             return self.render_to_response(self.get_context_data(form=form))
+
+
+def invoice_looks_like_scam(request, form, line_items, company_name):
+    """Adds the scam error to the form and returns True when the invoice matches."""
+    cd = form.cleaned_data
+    texts = [cd.get('client_name'), cd.get('client_email'), cd.get('client_address'),
+             cd.get('notes'), cd.get('invoice_name')]
+    texts += [f.cleaned_data.get('description') for f in line_items.forms
+              if getattr(f, 'cleaned_data', None)]
+    if not scam_guard.looks_like_scam(company_name, texts):
+        return False
+    scam_guard.log_block(request, request.path, company_name)
+    form.add_error(None, scam_guard.ERROR)
+    return True
 
 
 class InvoiceUpdateView(LoginRequiredMixin, TeamAwareQuerysetMixin, UpdateView):
@@ -863,12 +896,29 @@ class InvoiceUpdateView(LoginRequiredMixin, TeamAwareQuerysetMixin, UpdateView):
         line_items = context['line_items']
 
         if line_items.is_valid():
+            if invoice_looks_like_scam(self.request, form, line_items, self.object.company.name):
+                return self.render_to_response(self.get_context_data(form=form))
+
+            # The plan belongs to the company owner, not a team member editing.
+            user = self.object.company.user
+            uses_quota = retarget_uses_quota(
+                user,
+                form.initial.get('client_name'), form.initial.get('client_email'),
+                form.cleaned_data.get('client_name'), form.cleaned_data.get('client_email'),
+            )
+            if uses_quota and not user.can_create_invoice():
+                form.add_error('client_name', RETARGET_LIMIT_ERROR)
+                return self.render_to_response(self.get_context_data(form=form))
+
             self.object = form.save()
             line_items.save()
 
             # Recalculate totals
             self.object.calculate_totals()
             self.object.save()
+
+            if uses_quota:
+                user.increment_invoice_count()
 
             messages.success(self.request, 'Invoice updated successfully!')
             return redirect('invoices:detail', pk=self.object.pk)
@@ -2258,7 +2308,12 @@ class PastDueNoticeView(View):
         if wants_email:
             return self._email_notice(request, context, form.cleaned_data)
 
+        if guest_pdf_guard.limit_reached(request):
+            form.add_error(None, guest_pdf_guard.LIMIT_ERROR)
+            return render(request, 'tools/past-due-notice.html', {'form': form}, status=429)
+
         pdf_bytes = render_notice_pdf(context)
+        guest_pdf_guard.record_download(request)
         response = HttpResponse(pdf_bytes, content_type='application/pdf')
         response['Content-Disposition'] = (
             f'attachment; filename="{notice_filename(form.cleaned_data["client_name"])}"'

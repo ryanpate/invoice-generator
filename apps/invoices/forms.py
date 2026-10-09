@@ -624,3 +624,14 @@ class PastDueNoticeForm(forms.Form):
                 'That date is in the future — nothing is past due yet.'
             )
         return due_date
+
+    def clean(self):
+        from .services import scam_guard
+
+        cleaned = super().clean()
+        if scam_guard.looks_like_scam(
+            cleaned.get('business_name'),
+            [cleaned.get('client_name'), cleaned.get('invoice_number'), cleaned.get('notes')],
+        ):
+            raise forms.ValidationError(scam_guard.ERROR)
+        return cleaned

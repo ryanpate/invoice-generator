@@ -1113,3 +1113,21 @@ class GuestVoiceGeneration(models.Model):
     def __str__(self):
         return f'{self.ip_address} at {self.created_at}'
 
+
+
+class GuestPdfDownload(models.Model):
+    """
+    One row per no-login PDF download (/try/ and the past-due notice tool).
+
+    Backs the per-IP and site-wide daily caps, so the free preview cannot be
+    used as an unlimited invoice generator by a script.
+    """
+
+    ip_address = models.GenericIPAddressField(null=True, blank=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.ip_address} at {self.created_at}'
