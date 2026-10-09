@@ -742,7 +742,13 @@ invoices without paying, some of them scam-shaped:
   this charge"). Applied on `/try/`, past-due notice, web create/edit, API v2
   create/update, company name (web form and API v2), and again inside
   `InvoicePDFGenerator.generate()` — the last gate for every path, e.g. a
-  company renamed after its invoices were made. Blocks log a WARNING.
+  company renamed after its invoices were made. The public invoice page and
+  its PDF 404 for scam-pattern invoices. Text is normalised first (NFKC,
+  invisible characters, Cyrillic look-alikes; sender names also squashed to
+  letters with 0/1/3/4/5 as o/l/e/a/s), but a word list is never complete —
+  treat it as friction, not proof. Blocks log a WARNING.
+- Guest IP caps (email, voice, PDF) count an IPv6 /64 as one visitor
+  (`anon_email_guard.client_ip`).
 
 Guarded by `apps/invoices/tests/test_invoice_abuse_guards.py`.
 

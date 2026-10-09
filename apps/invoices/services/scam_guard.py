@@ -12,6 +12,7 @@ Two signals, each narrow enough that a real small business does not trip it:
 """
 import logging
 import re
+import unicodedata
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +27,27 @@ _SUFFIXES = (
     r'protection|total\s*protection|antivirus|help\s*desk|customer\s*care|payments?|'
     r'online|store|subscriptions?|renewals?|department|dept'
 )
-IMPERSONATED_SENDER = re.compile(
-    rf'^\W*({_BRANDS})(\W+({_SUFFIXES}))*\W*$', re.IGNORECASE
+# Matched against the name squashed to bare letters, so "P.a.y P a l",
+# "PayPa1" and look-alike Cyrillic letters all reduce to "paypal".
+_SQUASHED_SENDER = re.compile(
+    '^({})({})*$'.format(_BRANDS, _SUFFIXES).replace(r'\s*', '')
 )
+# Cyrillic look-alikes, then digits and symbols used as letters (sender only:
+# phone numbers need their digits).
+_CONFUSABLES = str.maketrans('аеорсухіӏ', 'aeopcyxil')
+_LEETSPEAK = str.maketrans('013457$@|', 'oleastsal')
+
+
+def normalize(text):
+    """Fold the tricks that dodge a word list: width, invisible characters, case."""
+    text = unicodedata.normalize('NFKC', text or '')
+    text = ''.join(c for c in text if unicodedata.category(c) != 'Cf')
+    return text.casefold().translate(_CONFUSABLES)
+
+
+def is_impersonated_sender(name):
+    squashed = re.sub(r'[^a-z]', '', normalize(name).translate(_LEETSPEAK))
+    return bool(squashed) and bool(_SQUASHED_SENDER.match(squashed))
 
 # 10+ digits with the usual separators: +1 (888) 555-0100, 1-888-555-0100, ...
 # No newlines, so digits from separate fields never join into a "number".
@@ -57,9 +76,9 @@ class ScamInvoiceError(RuntimeError):
 
 def looks_like_scam(sender_name, texts):
     """sender_name is the business issuing the invoice; texts is every other field."""
-    if sender_name and IMPERSONATED_SENDER.match(sender_name.strip()):
+    if sender_name and is_impersonated_sender(sender_name):
         return True
-    combined = '\n'.join(t for t in [sender_name, *texts] if t)
+    combined = normalize('\n'.join(t for t in [sender_name, *texts] if t))
     return bool(PHONE.search(combined) and CALLBACK_LANGUAGE.search(combined))
 
 

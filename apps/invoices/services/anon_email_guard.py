@@ -5,6 +5,7 @@ Every limit is counted in the database over a rolling 24 hours: the app runs
 one gunicorn worker that recycles every ~250 requests, so an in-process cache
 would forget counts constantly.
 """
+import ipaddress
 from datetime import timedelta
 
 from django.utils import timezone
@@ -22,7 +23,15 @@ HONEYPOT_FIELD = 'website'
 
 def client_ip(request):
     # Railway's edge sets X-Real-IP; REMOTE_ADDR is the proxy.
-    return request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR')
+    ip = request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR')
+    try:
+        addr = ipaddress.ip_address((ip or '').strip())
+    except ValueError:
+        return None
+    # One IPv6 connection is handed a whole /64, so count the /64 as one visitor.
+    if addr.version == 6:
+        return str(ipaddress.ip_network(f'{addr}/64', strict=False).network_address)
+    return str(addr)
 
 
 def is_bot(request):

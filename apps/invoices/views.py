@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, FormView, View
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponse, JsonResponse, FileResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.db.models import Q
 from django.conf import settings
 from django.core.mail import send_mail
@@ -1642,6 +1642,13 @@ class PublicInvoiceView(DetailView):
     def get_queryset(self):
         return Invoice.objects.select_related('company').prefetch_related('line_items')
 
+    def get_object(self, queryset=None):
+        invoice = super().get_object(queryset)
+        # A link on our own domain is the most convincing way to deliver a scam.
+        if scam_guard.invoice_looks_like_scam(invoice, invoice.company):
+            raise Http404
+        return invoice
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company'] = self.object.company
@@ -1715,6 +1722,8 @@ def public_invoice_pdf(request, token):
     try:
         generator = InvoicePDFGenerator(invoice)
         pdf_bytes = generator.generate()
+    except scam_guard.ScamInvoiceError:
+        raise Http404
     except RuntimeError as e:
         return HttpResponse(f'Error generating PDF: {str(e)}', status=500)
 

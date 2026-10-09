@@ -14,7 +14,7 @@ class CompanyForm(forms.ModelForm):
         from apps.invoices.services import scam_guard
 
         name = self.cleaned_data['name']
-        if scam_guard.IMPERSONATED_SENDER.match(name.strip()):
+        if scam_guard.is_impersonated_sender(name):
             raise forms.ValidationError(scam_guard.ERROR)
         return name
 

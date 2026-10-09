@@ -281,3 +281,44 @@ class SecurityReviewFollowUpTest(TestCase):
         for i in range(guest_pdf_guard.PER_IP_DAILY * 3):
             response = Client().post('/try/', try_post_data(), HTTP_X_REAL_IP=f'198.51.100.{i}')
             self.assertEqual(response['Content-Type'], 'application/pdf')
+
+
+class SecondReviewFollowUpTest(TestCase):
+    """Findings from the review of bfd0824."""
+
+    def test_obfuscated_brand_senders_are_blocked(self):
+        for name in ['P.a.y.P.a.l', 'PayPa1', 'Pаypal',  # Cyrillic а
+                     'Pay​Pal', 'ＰａｙＰａｌ', 'G e e k  S q u a d', 'M c A f e e']:
+            self.assertTrue(scam_guard.looks_like_scam(name, []), repr(name))
+
+    def test_obfuscated_callback_wording_is_blocked(self):
+        self.assertTrue(scam_guard.looks_like_scam('Acme', [
+            'If you did not аuthorize this charge call ８８８-５５５-０１００'  # Cyrillic а, fullwidth digits
+        ]))
+
+    def test_real_names_still_pass_after_normalising(self):
+        for name in ['Norton Electric', 'Best Buys Consulting', 'Studio 54', 'Apple Orchard Farms',
+                     'Iris Design', 'Amazon Cobblers']:
+            self.assertFalse(scam_guard.looks_like_scam(name, []), name)
+
+    def test_public_invoice_page_and_pdf_404_for_scam_invoices(self):
+        user = CustomUser.objects.create_user(username='u', email='u@example.test', password='pw-12345678')
+        company = Company.objects.create(user=user, owner=user, name='PayPal Billing')
+        invoice = Invoice.objects.create(company=company, invoice_number='INV-1', client_name='Victim',
+                                         invoice_date=date.today(), due_date=date.today())
+        page = reverse('invoices:public_invoice', args=[invoice.public_token])
+        pdf = reverse('invoices:public_invoice_pdf', args=[invoice.public_token])
+        self.assertEqual(self.client.get(page).status_code, 404)
+        self.assertEqual(self.client.get(pdf).status_code, 404)
+        # Same invoice under an ordinary name: proves the 404s came from the guard.
+        Company.objects.filter(pk=company.pk).update(name='Acme Studio')
+        self.assertEqual(self.client.get(page).status_code, 200)
+        self.assertEqual(self.client.get(pdf).status_code, 200)
+
+    def test_ipv6_addresses_in_one_64_share_a_cap(self):
+        for i in range(guest_pdf_guard.PER_IP_DAILY):
+            Client().post('/try/', try_post_data(), HTTP_X_REAL_IP=f'2001:db8:1:2::{i + 1:x}')
+        response = Client().post('/try/', try_post_data(), HTTP_X_REAL_IP='2001:db8:1:2:ffff::9')
+        self.assertEqual(response.status_code, 429)
+        response = Client().post('/try/', try_post_data(), HTTP_X_REAL_IP='2001:db8:1:3::1')
+        self.assertEqual(response['Content-Type'], 'application/pdf')
