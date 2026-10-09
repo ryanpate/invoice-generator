@@ -322,3 +322,27 @@ class SecondReviewFollowUpTest(TestCase):
         self.assertEqual(response.status_code, 429)
         response = Client().post('/try/', try_post_data(), HTTP_X_REAL_IP='2001:db8:1:3::1')
         self.assertEqual(response['Content-Type'], 'application/pdf')
+
+
+class ThirdReviewFollowUpTest(TestCase):
+    """Findings from the review of fcdef61."""
+
+    def test_garbage_ip_header_falls_back_and_stays_capped(self):
+        for _ in range(guest_pdf_guard.PER_IP_DAILY):
+            Client().post('/try/', try_post_data(), HTTP_X_REAL_IP='not-an-ip')
+        response = Client().post('/try/', try_post_data(), HTTP_X_REAL_IP='also-garbage')
+        self.assertEqual(response.status_code, 429)
+
+    def test_unknown_addresses_share_one_bucket(self):
+        from django.test import RequestFactory
+        from apps.invoices.models import GuestPdfDownload
+
+        request = RequestFactory().post('/try/', REMOTE_ADDR='', HTTP_X_REAL_IP='junk')
+        for _ in range(guest_pdf_guard.PER_IP_DAILY):
+            GuestPdfDownload.objects.create(ip_address=None)
+        self.assertTrue(guest_pdf_guard.limit_reached(request))
+
+    def test_company_name_uses_the_same_rule_as_invoices(self):
+        form = CompanyForm(data={'name': 'Did not authorize this charge? Call 888-555-0100'})
+        form.is_valid()
+        self.assertIn('name', form.errors)

@@ -23,15 +23,18 @@ HONEYPOT_FIELD = 'website'
 
 def client_ip(request):
     # Railway's edge sets X-Real-IP; REMOTE_ADDR is the proxy.
-    ip = request.META.get('HTTP_X_REAL_IP') or request.META.get('REMOTE_ADDR')
-    try:
-        addr = ipaddress.ip_address((ip or '').strip())
-    except ValueError:
-        return None
-    # One IPv6 connection is handed a whole /64, so count the /64 as one visitor.
-    if addr.version == 6:
-        return str(ipaddress.ip_network(f'{addr}/64', strict=False).network_address)
-    return str(addr)
+    # Returns None only if neither parses; the guards then count every such
+    # request in one shared bucket rather than skipping the per-IP cap.
+    for raw in (request.META.get('HTTP_X_REAL_IP'), request.META.get('REMOTE_ADDR')):
+        try:
+            addr = ipaddress.ip_address((raw or '').strip())
+        except ValueError:
+            continue
+        # One IPv6 connection is handed a whole /64, so count the /64 as one visitor.
+        if addr.version == 6:
+            return str(ipaddress.ip_network(f'{addr}/64', strict=False).network_address)
+        return str(addr)
+    return None
 
 
 def is_bot(request):
@@ -42,10 +45,9 @@ def limit_reached(request, recipient):
     recent = AnonymousEmailSend.objects.filter(
         created_at__gte=timezone.now() - timedelta(hours=24)
     )
-    ip = client_ip(request)
     return (
         recent.count() >= SITE_WIDE_DAILY
-        or (ip and recent.filter(ip_address=ip).count() >= PER_IP_DAILY)
+        or recent.filter(ip_address=client_ip(request)).count() >= PER_IP_DAILY
         or recent.filter(recipient__iexact=recipient).count() >= PER_RECIPIENT_DAILY
     )
 

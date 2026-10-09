@@ -20,7 +20,7 @@ class CompanyV2Serializer(serializers.ModelSerializer):
     def validate_name(self, value):
         from apps.invoices.services import scam_guard
 
-        if scam_guard.is_impersonated_sender(value):
+        if scam_guard.looks_like_scam(value, []):
             raise serializers.ValidationError(scam_guard.ERROR)
         return value
 

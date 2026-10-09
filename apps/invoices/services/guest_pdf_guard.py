@@ -26,7 +26,8 @@ LIMIT_ERROR = (
 
 def limit_reached(request):
     ip = client_ip(request)
-    return bool(ip) and GuestPdfDownload.objects.filter(
+    # ip_address=None matches the shared bucket of unknown addresses.
+    return GuestPdfDownload.objects.filter(
         ip_address=ip, created_at__gte=timezone.now() - timedelta(hours=24)
     ).count() >= PER_IP_DAILY
 

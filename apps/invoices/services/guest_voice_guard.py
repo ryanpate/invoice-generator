@@ -25,7 +25,7 @@ def limit_reached(request):
     ip = client_ip(request)
     return (
         recent.count() >= SITE_WIDE_DAILY
-        or bool(ip and recent.filter(ip_address=ip).count() >= PER_IP_DAILY)
+        or recent.filter(ip_address=ip).count() >= PER_IP_DAILY
     )
 
 
