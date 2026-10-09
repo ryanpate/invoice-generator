@@ -18,6 +18,8 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+WATERMARK_IMAGE = str(settings.BASE_DIR / 'static' / 'images' / 'pdf-watermark.png')
+
 
 class InvoicePDFGenerator:
     """Generate PDF invoices using xhtml2pdf with HTML templates."""
@@ -113,6 +115,7 @@ class InvoicePDFGenerator:
         # Use company's accent color if set
         accent_color = self.company.accent_color or self.style_config['accent_color']
 
+        show_watermark = self.company.user.shows_watermark()
         return {
             'invoice': self.invoice,
             'company': self.company,
@@ -121,7 +124,9 @@ class InvoicePDFGenerator:
                 **self.style_config,
                 'accent_color': accent_color,
             },
-            'show_watermark': self.company.user.shows_watermark(),
+            'show_watermark': show_watermark,
+            # Tiled diagonally behind the whole page, so it cannot be cropped off.
+            'watermark_image': WATERMARK_IMAGE if show_watermark else '',
             'currency_symbol': self.invoice.get_currency_symbol(),
             'qr_code_image': self.generate_qr_code(),
         }

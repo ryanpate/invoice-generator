@@ -346,3 +346,28 @@ class ThirdReviewFollowUpTest(TestCase):
         form = CompanyForm(data={'name': 'Did not authorize this charge? Call 888-555-0100'})
         form.is_valid()
         self.assertIn('name', form.errors)
+
+
+class PreviewWatermarkTest(TestCase):
+    """The /try/ watermark is tiled behind the whole page so it cannot be cropped."""
+
+    def test_try_pdf_carries_the_page_watermark(self):
+        import os
+        from apps.invoices.services.pdf_generator import WATERMARK_IMAGE
+
+        self.assertTrue(os.path.exists(WATERMARK_IMAGE))
+        response = self.client.post('/try/', try_post_data())
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        # The page-background image is the only image in a /try/ PDF.
+        self.assertIn(b'/Subtype /Image', response.content)
+
+    def test_signed_in_invoices_have_no_watermark(self):
+        from apps.invoices.services.pdf_generator import InvoicePDFGenerator
+
+        user = CustomUser.objects.create_user(username='u', email='u@example.test', password='pw-12345678')
+        company = Company.objects.create(user=user, owner=user, name='Acme Studio')
+        invoice = Invoice.objects.create(company=company, invoice_number='INV-1', client_name='Globex',
+                                         invoice_date=date.today(), due_date=date.today())
+        context = InvoicePDFGenerator(invoice).get_context()
+        self.assertFalse(context['show_watermark'])
+        self.assertEqual(context['watermark_image'], '')

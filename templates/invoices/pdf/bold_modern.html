@@ -6,6 +6,7 @@
         @page {
             size: letter;
             margin: 0.5in;
+            {% if watermark_image %}background-image: url("{{ watermark_image }}");{% endif %}
         }
         * {
             margin: 0;
@@ -156,22 +157,6 @@
             font-weight: 700;
             color: #7C3AED;
             margin-bottom: 8px;
-        }
-        .watermark-container {
-            position: absolute;
-            top: 300px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            z-index: -1;
-        }
-        .watermark {
-            font-size: 60pt;
-            font-weight: bold;
-            color: #D1D5DB;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            opacity: 0.5;
         }
         .watermark-footer {
             margin-top: 40px;
@@ -330,11 +315,8 @@
     {% endif %}
 
     {% if show_watermark %}
-    <div class="watermark-container">
-        <div class="watermark">FREE PLAN</div>
-    </div>
     <div class="watermark-footer">
-        Created with InvoiceKits.com - Upgrade to remove watermark
+        Free preview from InvoiceKits.com &mdash; create a free account to remove the watermark
     </div>
     {% endif %}
 </body>

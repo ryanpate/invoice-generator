@@ -1042,7 +1042,11 @@ All templates support:
 - Multi-currency formatting
 - Tax calculations
 - Notes section
-- "FREE PLAN" watermark (for free tier users)
+- Watermark (anonymous `/try/` previews only): "FREE PREVIEW · INVOICEKITS.COM" tiled diagonally
+  behind the whole page via an `@page` background image (`static/images/pdf-watermark.png`,
+  rebuilt by `scripts/make_pdf_watermark.py`), so it cannot be cropped off. Neon Edge keeps
+  the old in-flow "FREE PLAN" block: an `@page` image would replace its dark page colour, and
+  it is not offered on `/try/`.
 - QR code linking to public invoice view page
 
 ---
